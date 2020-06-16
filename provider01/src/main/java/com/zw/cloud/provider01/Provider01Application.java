@@ -1,17 +1,15 @@
-package com.zw.cloud.zuul;
+package com.zw.cloud.provider01;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
 @SpringBootApplication
-@EnableZuulProxy
 @EnableDiscoveryClient
-public class ZuulApplication {
+public class Provider01Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(ZuulApplication.class, args);
+        SpringApplication.run(Provider01Application.class, args);
     }
 
 }

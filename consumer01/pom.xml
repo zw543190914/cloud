@@ -8,9 +8,9 @@
         <version>1.0.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <artifactId>zuul</artifactId>
+    <artifactId>consumer01</artifactId>
     <version>1.0.0</version>
-    <name>zuul</name>
+    <name>consumer01</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -43,15 +43,9 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-ribbon</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 
     </dependencies>
