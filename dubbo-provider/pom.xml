@@ -7,9 +7,9 @@
         <artifactId>cloud-parent</artifactId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>zuul</artifactId>
+    <artifactId>dubbo-provider</artifactId>
     <version>1.0.0</version>
-    <name>zuul</name>
+    <name>dubbo-provider</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -28,6 +28,7 @@
             <scope>test</scope>
         </dependency>
 
+
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
@@ -43,17 +44,17 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+        <!--springcloud - dubbo-->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-ribbon</artifactId>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-dubbo</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+            <groupId>com.zw.cloud</groupId>
+            <artifactId>dubbo-provider-api</artifactId>
+            <version>1.0.0</version>
         </dependency>
-
-
 
     </dependencies>
 
