@@ -71,8 +71,8 @@
 
     </dependencies>
 
-
-    <distributionManagement>
+    <!--自己  nexus 私服配置-->
+    <!--<distributionManagement>
         <repository>
             <id>nexus-public</id>
             <url>http://localhost:8081/nexus/content/repositories/releases</url>
@@ -81,7 +81,7 @@
             <id>nexus-public</id>
             <url>http://localhost:8081/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
-    </distributionManagement>
+    </distributionManagement>-->
 
     <build>
         <plugins>
