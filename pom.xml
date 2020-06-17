@@ -25,6 +25,7 @@
         <dubbo-spring-boot-starter.version>2.7.7</dubbo-spring-boot-starter.version>
         <alibaba.spring-context-support.version>1.0.6</alibaba.spring-context-support.version>
         <mybatis-spring-boot-starter.version>2.1.1</mybatis-spring-boot-starter.version>
+        <pagehelper-spring-boot-starter.version>1.2.13</pagehelper-spring-boot-starter.version>
     </properties>
 
     <dependencyManagement>
@@ -62,6 +63,12 @@
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis-spring-boot-starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>${pagehelper-spring-boot-starter.version}</version>
             </dependency>
 
         </dependencies>

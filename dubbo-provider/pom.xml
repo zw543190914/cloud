@@ -49,13 +49,7 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-dubbo</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.zw.cloud</groupId>
-            <artifactId>dubbo-provider-api</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
+        
     </dependencies>
 
     <build>
