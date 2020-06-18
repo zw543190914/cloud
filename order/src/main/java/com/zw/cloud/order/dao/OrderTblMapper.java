@@ -4,6 +4,7 @@ import com.zw.cloud.order.entity.OrderTbl;
 import com.zw.cloud.order.entity.OrderTblExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 public interface OrderTblMapper {
     long countByExample(OrderTblExample example);

@@ -6,7 +6,8 @@
 进行业务逻辑调用(service)，返回相应数据。api和dao作为单独项目，由service和nexus进行pom引入。
 因为主要使用springcloud http 调用，所以只是简单实现dubbo整合。参考 dubbo相关模块 </br>
   5.使用 feign 进行 http 远程调用,符合开发时接口调用规范。 </br>
-  6.分布式事务 强一致性使用 Seata 性能会较低, 弱一致性使用 MQ 处理分布式事务。 </br>
+  6.分布式事务 强一致性使用 Seata , 弱一致性使用 MQ 处理分布式事务。业务中应尽量避免分布式事务产生。
+  目前仅为测试，api和dao 未单独分离。参考 user、order、account模块 </br>
   7.熔断、降级、限流 使用 Sentinel 代替 Hystrix 更加灵活，代码侵入性更低。 </br>
   8.分布式锁 使用 Zookeeper 实现。 </br>
   9.分布式任务调度使用 xxl-job。 </br>

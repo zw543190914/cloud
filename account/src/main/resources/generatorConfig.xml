@@ -19,7 +19,7 @@
         <!--数据库链接URL，用户名、密码 -->
         <jdbcConnection
                 driverClass="com.mysql.jdbc.Driver"
-                connectionURL="jdbc:mysql://localhost:3306/seata"
+                connectionURL="jdbc:mysql://localhost:3306/account"
                 userId="root"
                 password="password">
         </jdbcConnection>
@@ -27,7 +27,7 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>-->
         <!-- 生成模型的包名和位置-->
-        <javaModelGenerator targetPackage="com.zw.cloud.user.entity" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="com.zw.cloud.account.entity" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
@@ -36,13 +36,13 @@
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
         <!-- 生成DAO的包名和位置-->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.zw.cloud.user.dao" targetProject="src/main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.zw.cloud.account.dao" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!-- 要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名-->
         <!--<table tableName="user" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false">
             <generatedKey column="id" sqlStatement="MySql" identity="true" type="post" />
         </table>-->
-        <table tableName="user"></table>
+        <table tableName="account_tbl"></table>
     </context>
 </generatorConfiguration>

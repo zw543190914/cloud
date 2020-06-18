@@ -1,4 +1,4 @@
-package com.zw.cloud.order;
+package com.zw.cloud.account;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -9,11 +9,11 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-@MapperScan(basePackages = "com.zw.cloud.order.dao")
-public class OrderApplication {
+@MapperScan(basePackages = "com.zw.cloud.account.dao")
+public class AccountApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OrderApplication.class, args);
+        SpringApplication.run(AccountApplication.class, args);
     }
 
 }
