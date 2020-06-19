@@ -7,9 +7,9 @@
         <artifactId>cloud-parent</artifactId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>dubbo-provider-api</artifactId>
+    <artifactId>feign-provider-api</artifactId>
     <version>1.0.0</version>
-    <name>dubbo-provider-api</name>
+    <name>feign-provider-api</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <dependency>
@@ -27,6 +27,18 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.zw.cloud</groupId>
+            <artifactId>common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zw.cloud</groupId>
+            <artifactId>db</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
