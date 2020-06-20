@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface IOrderService {
 
     @GetMapping("/insert/{userId}/{commodityCode}/{count}/{money}")
-    void insert(@PathVariable String userId, @PathVariable String commodityCode,
-                @PathVariable Integer count, @PathVariable Integer money);
+    void insert(@PathVariable("userId") String userId, @PathVariable("commodityCode") String commodityCode,
+                @PathVariable("count") Integer count, @PathVariable("money") Integer money);
 
 }

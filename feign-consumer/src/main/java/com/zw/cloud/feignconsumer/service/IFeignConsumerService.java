@@ -12,5 +12,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface IFeignConsumerService {
 
     @GetMapping("/user/queryAllUser/{pageNo}/{pageSize}")
-    WebResult queryAllUser(@PathVariable Integer pageNo, @PathVariable Integer pageSize);
+    WebResult queryAllUser(@PathVariable("pageNo") Integer pageNo, @PathVariable("pageSize") Integer pageSize);
 }

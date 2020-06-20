@@ -22,6 +22,7 @@
         <module>feign-provider</module>
         <module>feign-provider02</module>
         <module>feign-provider-api</module>
+        <module>feign-consumer</module>
         <module>db</module>
         <module>common</module>
     </modules>
@@ -45,7 +46,7 @@
         <zing-core.version>3.3.0</zing-core.version>
         <zing-javase.version>3.3.3</zing-javase.version>
         <commons-lang3.version>3.8</commons-lang3.version>
-        <druid.version>1.1.22</druid.version>
+        <druid.version>1.1.21</druid.version>
     </properties>
 
     <dependencyManagement>

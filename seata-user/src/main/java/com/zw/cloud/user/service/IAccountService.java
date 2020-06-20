@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface IAccountService {
 
     @PutMapping("/{userId}/{money}")
-    void update(@PathVariable String userId, @PathVariable Integer money);
+    void update(@PathVariable("userId") String userId, @PathVariable("money") Integer money);
 
 }

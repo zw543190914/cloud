@@ -16,7 +16,8 @@ public class FeignConsumerController {
 
     private Logger logger = LoggerFactory.getLogger(FeignConsumerController.class);
 
-    @GetMapping("/feign/consumer/queryAllUser/{pageNo}/{pageSize}")
+    @GetMapping("/queryAllUser/{pageNo}/{pageSize}")
+    //http://localhost:9010//feign/consumer/queryAllUser/1/10
     public WebResult queryAllUser(@PathVariable Integer pageNo, @PathVariable Integer pageSize){
         return feignConsumerService.queryAllUser(pageNo, pageSize);
     }
