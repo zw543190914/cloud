@@ -16,8 +16,6 @@ import java.time.LocalDate;
 public class FeignSentinelController {
     @Autowired
     private ISentinelService sentinelService;
-    @Autowired
-    private DateTimeUtils dateTimeUtils;
 
     @GetMapping("/{pageNo}/{pageSize}")
     //http://localhost:8090/sentinel/feign/1/10

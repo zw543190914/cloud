@@ -9,10 +9,12 @@
   6.分布式事务 强一致性使用 Seata , 弱一致性使用 MQ 处理分布式事务。业务中应尽量避免分布式事务产生。
   目前仅为测试，api和dao 未单独分离。参考 seata 相关模块 </br>
   7.熔断、降级、限流 使用 Sentinel 代替 Hystrix 更加灵活，代码侵入性更低。参考 sentinel 相关模块 </br>
-  8.分布式锁 使用 Zookeeper 实现。 </br>
-  9.分布式任务调度使用 xxl-job。 </br>
-  10.分布式链路监控与追踪系统使用 Zipkin。 </br>
-  11.一些开发常用工具，比如 二维码生成和解析，时间相关转换，参考 common 模块。</br>
+  8.分布式链路追踪 Zipkin ,参考 feign 相关模块。 </br>
+  9.分布式锁 使用 Zookeeper 实现。 </br>
+  10.分布式任务调度使用 xxl-job。 </br>
+  11.分布式链路监控与追踪系统使用 Zipkin。 </br>
+  12.一些开发常用工具，比如 二维码生成和解析，时间相关转换，HttpUtils 参考 common 模块。
+  Mybatis 代码生成插件 参考db 模块。多数据源整合参考 feign-consumer 模块</br>
 
   父POM中配置了自己nexus私服，已注释，settings-nexus.xml 为自己私服对应配置文件，方便后期查找使用。</br> 
 
