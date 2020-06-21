@@ -2,6 +2,7 @@ package com.zw.cloud.feignprovider.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zw.cloud.common.utils.MyPermissionCheckException;
 import com.zw.cloud.common.utils.WebResult;
 import com.zw.cloud.db.dao.UserMapper;
 import com.zw.cloud.db.entity.User;
@@ -27,6 +28,7 @@ public class FeignProviderImpl implements IFeignProviderService {
         logger.info("[FeignProviderImpl][queryAllUser] server.port is {}",port);
         PageHelper.startPage(pageNo,pageSize);
         List<User> users = mapper.selectByExampleWithBLOBs(new UserExample());
-        return WebResult.success().withData(new PageInfo<>(users));
+        throw new MyPermissionCheckException("wwww");
+        //return WebResult.success().withData(new PageInfo<>(users));
     }
 }

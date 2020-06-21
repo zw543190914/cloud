@@ -47,6 +47,7 @@
         <zing-javase.version>3.3.3</zing-javase.version>
         <commons-lang3.version>3.8</commons-lang3.version>
         <druid.version>1.1.21</druid.version>
+        <dubbo-serialization-kryo.version>2.7.7</dubbo-serialization-kryo.version>
     </properties>
 
     <dependencyManagement>
@@ -123,6 +124,12 @@
                 <groupId>com.google.zxing</groupId>
                 <artifactId>javase</artifactId>
                 <version>${zing-javase.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.dubbo/dubbo-serialization-kryo -->
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-serialization-kryo</artifactId>
+                <version>${dubbo-serialization-kryo.version}</version>
             </dependency>
 
         </dependencies>

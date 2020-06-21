@@ -1,4 +1,4 @@
-package com.zw.cloud.dubboconsumer.base;
+package com.zw.cloud.dubboprovider.base;
 
 import org.springframework.stereotype.Component;
 

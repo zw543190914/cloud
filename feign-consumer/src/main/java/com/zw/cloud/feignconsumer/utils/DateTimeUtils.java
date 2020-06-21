@@ -1,4 +1,4 @@
-package com.zw.cloud.common.utils;
+package com.zw.cloud.feignconsumer.utils;
 import org.springframework.stereotype.Service;
 
 import java.time.*;

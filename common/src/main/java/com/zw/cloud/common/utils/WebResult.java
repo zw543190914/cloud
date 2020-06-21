@@ -75,6 +75,7 @@ public class WebResult implements Serializable {
         PARAMETER_ILLEGAL(11),
         PERSISTENT_ERROR(21),
         RESOURCE_BUSY(31),
+        METHOD_NOT_ALLOWED(405),
         ACCESS_DENIED(999);
 
         private Integer code;

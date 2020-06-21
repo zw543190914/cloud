@@ -13,8 +13,8 @@
   9.分布式锁 使用 Zookeeper 实现。 </br>
   10.分布式任务调度使用 xxl-job。 </br>
   11.分布式链路监控与追踪系统使用 Zipkin。 </br>
-  12.一些开发常用工具，比如 二维码生成和解析，时间相关转换，HttpUtils 参考 common 模块。
-  Mybatis 代码生成插件 参考db 模块。多数据源整合参考 feign-consumer 模块</br>
+  12.一些开发常用工具，比如 二维码生成和解析，HttpUtils 参考 common 模块。
+  Mybatis 代码生成插件 参考db 模块。多数据源整合,时间相关转换,返回值统一封装,全局异常处理,参考 feign-consumer 模块</br>
 
   父POM中配置了自己nexus私服，已注释，settings-nexus.xml 为自己私服对应配置文件，方便后期查找使用。</br> 
 
