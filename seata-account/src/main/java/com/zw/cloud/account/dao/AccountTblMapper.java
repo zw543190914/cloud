@@ -17,7 +17,7 @@ public interface AccountTblMapper {
     int insert(AccountTbl record);
 
     @Update("update account_tbl set money = money - ${money} where user_id = ${userId}")
-    int updateByUserId(String userId,Integer money);
+    int updateByUserId(@Param("userId") String userId,@Param("money") Integer money);
 
     int insertSelective(AccountTbl record);
 

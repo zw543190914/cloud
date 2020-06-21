@@ -6,10 +6,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @FeignClient("account")
-@RequestMapping("/account")
 public interface IAccountService {
 
-    @PutMapping("/{userId}/{money}")
+    @PutMapping("/account/{userId}/{money}")
     void update(@PathVariable("userId") String userId, @PathVariable("money") Integer money);
 
 }
