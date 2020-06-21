@@ -1,0 +1,2 @@
+dubboProviderContextFilter=com.zw.cloud.dubboprovider.filter.DubboProviderContextFilter
+dubboConsumerContextFilter=com.zw.cloud.dubboprovider.filter.DubboConsumerContextFilter
