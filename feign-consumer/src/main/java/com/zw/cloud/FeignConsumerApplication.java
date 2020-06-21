@@ -1,4 +1,4 @@
-package com.zw.cloud.feignconsumer;
+package com.zw.cloud;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableFeignClients
 @EnableDiscoveryClient
-@MapperScan(basePackages = "com.zw.cloud.db.dao")
+@MapperScan(basePackages = "com.zw.cloud.feignconsumer.test.dao,com.zw.cloud.feignconsumer.test2.dao")
 public class FeignConsumerApplication {
 
     public static void main(String[] args) {

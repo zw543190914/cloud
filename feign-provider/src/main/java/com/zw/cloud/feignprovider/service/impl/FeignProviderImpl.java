@@ -28,7 +28,7 @@ public class FeignProviderImpl implements IFeignProviderService {
         logger.info("[FeignProviderImpl][queryAllUser] server.port is {}",port);
         PageHelper.startPage(pageNo,pageSize);
         List<User> users = mapper.selectByExampleWithBLOBs(new UserExample());
-        throw new MyPermissionCheckException("wwww");
-        //return WebResult.success().withData(new PageInfo<>(users));
+        //throw new MyPermissionCheckException("wwww");
+        return WebResult.success().withData(new PageInfo<>(users));
     }
 }
