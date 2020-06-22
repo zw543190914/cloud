@@ -1,7 +1,5 @@
-/*
 package com.zw.cloud.feignprovider.zk;
 
-import com.alibaba.fastjson.JSON;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.leader.LeaderLatch;
 import org.apache.curator.framework.recipes.leader.LeaderLatchListener;
@@ -89,11 +87,9 @@ public class LeaderLatchService {
         });
     }
 
-    */
-/**
+    /**
      * 多台机器测试，当一台机器停止后，其他机器继续运行
-     *//*
-
+     */
     @Async
     @Scheduled(cron = "0/15 * * * * ? ")
     public void testZkLock(){
@@ -104,4 +100,3 @@ public class LeaderLatchService {
         }
     }
 }
-*/

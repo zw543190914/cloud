@@ -1,4 +1,3 @@
-/*
 package com.zw.cloud.feignprovider.controller;
 
 import com.zw.cloud.feignprovider.zk.ZkInterProcessMutexService;
@@ -20,4 +19,3 @@ public class ZkLockController {
         service.testZkLock();
     }
 }
-*/

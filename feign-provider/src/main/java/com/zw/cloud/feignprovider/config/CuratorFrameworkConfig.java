@@ -1,4 +1,3 @@
-/*
 package com.zw.cloud.feignprovider.config;
 
 import org.apache.curator.framework.CuratorFramework;
@@ -32,4 +31,3 @@ public class CuratorFrameworkConfig {
     }
 
 }
-*/
