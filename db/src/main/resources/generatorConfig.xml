@@ -43,6 +43,6 @@
         <!--<table tableName="user" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false">
             <generatedKey column="id" sqlStatement="MySql" identity="true" type="post" />
         </table>-->
-        <table tableName="user"></table>
+        <table tableName="account"></table>
     </context>
 </generatorConfiguration>

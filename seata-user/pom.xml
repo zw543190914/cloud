@@ -7,9 +7,9 @@
         <artifactId>cloud-parent</artifactId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>user</artifactId>
+    <artifactId>seata-user</artifactId>
     <version>1.0.0</version>
-    <name>user</name>
+    <name>seata-user</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>

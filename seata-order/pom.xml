@@ -7,9 +7,9 @@
         <artifactId>cloud-parent</artifactId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>order</artifactId>
+    <artifactId>seata-order</artifactId>
     <version>1.0.0</version>
-    <name>order</name>
+    <name>seata-order</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
