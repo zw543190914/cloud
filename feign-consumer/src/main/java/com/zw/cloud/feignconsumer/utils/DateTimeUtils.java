@@ -3,6 +3,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.*;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Calendar;
 import java.util.Date;
 
 @Service
@@ -56,5 +57,33 @@ public class DateTimeUtils {
     public Date getTodayEnd(LocalDate localDate){
         LocalDateTime todayEnd = LocalDateTime.of(localDate, LocalTime.MAX);
         return LocalDateTimeToUDate(todayEnd);
+    }
+
+    //获取本周的开始时间
+    public Date getBeginDayOfWeek() {
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+        if (dayOfWeek == 1) {
+            dayOfWeek += 7;
+        }
+        cal.add(Calendar.DATE, 2 - dayOfWeek);
+        cal.set(Calendar.HOUR_OF_DAY,0);
+        cal.set(Calendar.MINUTE,0);
+        cal.set(Calendar.SECOND,0);
+        return cal.getTime();
+    }
+
+    //获取本周的结束时间
+    public Date getEndDayOfWeek(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(getBeginDayOfWeek());
+        cal.add(Calendar.DAY_OF_WEEK, 6);
+        cal.set(Calendar.HOUR_OF_DAY,23);
+        cal.set(Calendar.MINUTE,59);
+        cal.set(Calendar.SECOND,59);
+        return cal.getTime();
+
     }
 }
