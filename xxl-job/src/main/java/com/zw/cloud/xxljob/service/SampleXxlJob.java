@@ -37,10 +37,10 @@ public class SampleXxlJob {
      */
     @XxlJob("demoJobHandler")
     public ReturnT<String> demoJobHandler(String param) throws Exception {
-        XxlJobLogger.log("XXL-JOB, Hello World.");
+        logger.info("XXL-JOB, Hello World.");
 
         for (int i = 0; i < 5; i++) {
-            XxlJobLogger.log("beat at:" + i);
+            logger.info("[SampleXxlJob][demoJobHandler] beat at:" + i);
             TimeUnit.SECONDS.sleep(2);
         }
         return ReturnT.SUCCESS;
@@ -64,14 +64,14 @@ public class SampleXxlJob {
             // command log
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                XxlJobLogger.log(line);
+                logger.error("[SampleXxlJob][commandJobHandler]line is {}",line);
             }
 
             // command exit
             process.waitFor();
             exitValue = process.exitValue();
         } catch (Exception e) {
-            XxlJobLogger.log(e);
+            logger.error("[SampleXxlJob][commandJobHandler]error is  {}", e);
         } finally {
             if (bufferedReader != null) {
                 bufferedReader.close();
@@ -98,7 +98,7 @@ public class SampleXxlJob {
 
         // param parse
         if (param==null || param.trim().length()==0) {
-            XxlJobLogger.log("param["+ param +"] invalid.");
+            logger.info("param["+ param +"] invalid.");
             return ReturnT.FAIL;
         }
         String[] httpParams = param.split("\n");
@@ -119,11 +119,11 @@ public class SampleXxlJob {
 
         // param valid
         if (url==null || url.trim().length()==0) {
-            XxlJobLogger.log("url["+ url +"] invalid.");
+            logger.info("url["+ url +"] invalid.");
             return ReturnT.FAIL;
         }
         if (method==null || !Arrays.asList("GET", "POST").contains(method)) {
-            XxlJobLogger.log("method["+ method +"] invalid.");
+            logger.info("method["+ method +"] invalid.");
             return ReturnT.FAIL;
         }
         boolean isPostMethod = method.equals("POST");
@@ -173,10 +173,10 @@ public class SampleXxlJob {
             }
             String responseMsg = result.toString();
 
-            XxlJobLogger.log(responseMsg);
+            logger.info(responseMsg);
             return ReturnT.SUCCESS;
         } catch (Exception e) {
-            XxlJobLogger.log(e);
+            logger.error("[SampleXxlJob][httpJobHandler]error is  {}", e);
             return ReturnT.FAIL;
         } finally {
             try {
@@ -187,7 +187,7 @@ public class SampleXxlJob {
                     connection.disconnect();
                 }
             } catch (Exception e2) {
-                XxlJobLogger.log(e2);
+                logger.error("[SampleXxlJob][httpJobHandler]e2 is  {}", e2);
             }
         }
 
@@ -198,7 +198,7 @@ public class SampleXxlJob {
      */
     @XxlJob(value = "demoJobHandler2", init = "init", destroy = "destroy")
     public ReturnT<String> demoJobHandler2(String param) throws Exception {
-        XxlJobLogger.log("XXL-JOB, Hello World.");
+        logger.info("XXL-JOB, Hello World.");
         return ReturnT.SUCCESS;
     }
     public void init(){
