@@ -2,6 +2,10 @@ package com.zw.cloud.activiti.service.impl;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
+import com.zw.cloud.activiti.dao.ActHiProcinstMapper;
+import com.zw.cloud.activiti.dao.ActReDeploymentMapper;
+import com.zw.cloud.activiti.entity.ActHiProcinst;
+import com.zw.cloud.activiti.entity.ActHiProcinstExample;
 import com.zw.cloud.activiti.service.api.IActivitiProcessService;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
@@ -29,29 +33,27 @@ import java.util.stream.Collectors;
 public class ActivitiProcessServiceImpl implements IActivitiProcessService {
     @Autowired
     private RuntimeService runtimeService;
+
     @Autowired
-    private RepositoryService repositoryService;
+    private ActHiProcinstMapper hiProcinstMapper;
+
     @Autowired
     private HistoryService historyService;
     @Autowired
     private TaskService taskService;
 
-
-    // 流程启动
+    /**
+     * 启动一个实例
+     */
     @Override
-    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
-    public String initNodeProcess(String workId,String deployName, String bussinessKey, Map<String, Object> paramMap)throws Exception {
-        Preconditions.checkNotNull(bussinessKey, "businessKey can not be null");
-        Preconditions.checkNotNull(deployName, "deployName can not be null");
-        Preconditions.checkNotNull(paramMap, "paramMap can not be null");
-
-        List<Deployment> deploymentList = repositoryService.createDeploymentQuery().deploymentName(deployName).list();
-        Set<String> deployIds = deploymentList.stream().map(Deployment::getId).collect(Collectors.toSet());
-        List<ProcessDefinition> processDefinitionList = repositoryService.createProcessDefinitionQuery().deploymentIds(deployIds).list();
-        ProcessDefinition processDefinition = processDefinitionList.stream().max(Comparator.comparingInt(ProcessDefinition::getVersion)).orElse(null);
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinition.getKey(), bussinessKey, paramMap);
-        return processInstance.getId();
-
+    public List<ActHiProcinst> startProcessInstance(String processDefinitionKey, String businessId, String permissionUserIds) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("businessId",businessId);
+        map.put("user",permissionUserIds);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessId, map);
+        ActHiProcinstExample example = new ActHiProcinstExample();
+        example.createCriteria().andProcInstIdEqualTo(processInstance.getProcessInstanceId());
+        return hiProcinstMapper.selectByExample(example);
     }
 
     //16.16.   任务处理 组任务 通过nodeCode做验证，防止同一任务 多人重复点击
@@ -76,7 +78,7 @@ public class ActivitiProcessServiceImpl implements IActivitiProcessService {
             String taskId = task.getId();
             //任务拾取
             taskService.claim(taskId, workId);
-            taskService.addComment(taskId,processInstanceId ,nodeCode );
+            //taskService.addComment(taskId,processInstanceId ,nodeCode );
             //处理任务
             taskService.complete(taskId, paramMap);
         }
@@ -103,7 +105,7 @@ public class ActivitiProcessServiceImpl implements IActivitiProcessService {
         //Set<String> taskIds = taskList.stream().map(TaskInfo::getId).collect(Collectors.toSet());
         for (Task task : tasks){
             String taskId = task.getId();
-            taskService.addComment(taskId,processInstanceId ,nodeCode );
+            //taskService.addComment(taskId,processInstanceId ,nodeCode );
             //处理任务
             taskService.complete(taskId, paramMap);
         }

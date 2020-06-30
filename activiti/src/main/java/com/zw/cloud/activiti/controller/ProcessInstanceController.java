@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
+/**
+ * https://blog.csdn.net/zhouchenjun001/article/details/103629559
+ * https://blog.csdn.net/hj7jay/article/details/51302829?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase
+ */
 @RestController
 @RequestMapping("/activiti/processInstance")
 public class ProcessInstanceController {
@@ -35,9 +38,10 @@ public class ProcessInstanceController {
         processInstanceService.handlerPersonalTask(processInstanceId, userId, result, permissionUserIds);
     }
 
-    @GetMapping("/taskQueryByUserId")
-    public WebResult taskQueryByUserId(@RequestParam String userId) {
-        return WebResult.success().withData(processInstanceService.taskQueryByUserId(userId));
+    @GetMapping("/taskQueryByProcInstId")
+    //http://localhost:9020/activiti/processInstance/queryHistoryTask?processInstanceId=924e0e4d-ba20-11ea-bed8-a0a4c5f4cb40
+    public WebResult taskQueryByProcInstId(@RequestParam String procInstId) {
+        return WebResult.success().withData(processInstanceService.taskQueryByProcInstId(procInstId));
     }
 
     @GetMapping("/completeTask")
@@ -46,6 +50,7 @@ public class ProcessInstanceController {
     }
 
     @GetMapping("/queryHistoryTask")
+    //http://localhost:9020/activiti/processInstance/queryHistoryTask?processInstanceId=924e0e4d-ba20-11ea-bed8-a0a4c5f4cb40
     public WebResult queryHistoryTask(@RequestParam String processInstanceId) {
         return WebResult.success().withData(processInstanceService.queryHistoryTask(processInstanceId));
     }

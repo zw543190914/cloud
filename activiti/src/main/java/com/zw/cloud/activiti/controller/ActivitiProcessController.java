@@ -9,6 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * https://blog.csdn.net/zhouchenjun001/article/details/103629559
+ * https://blog.csdn.net/hj7jay/article/details/51302829?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase
+ */
 @RestController
 @RequestMapping("/activiti/process")
 public class ActivitiProcessController {
@@ -24,11 +28,11 @@ public class ActivitiProcessController {
      * 根据流程定义 启动一个流程实例
      * 根据流程定义的一次具体执行过程，就是一个流程实例
      */
-    //http://localhost:9001/initNodeProcess
-    @PostMapping("/initNodeProcess")
-    public WebResult initNodeProcess(ParamVO paramVO)throws Exception{
-        log.info("[initNodeProcess]paramVO is {}", JSON.toJSONString(paramVO));
-        return WebResult.success().withData(activitiProcessService.initNodeProcess(paramVO.getWorkId(),paramVO.getDeployName(),paramVO.getBusinessKey() ,paramVO.getParamMap()));
+    @GetMapping("/startProcessInstance")
+    //http://localhost:9020/activiti/process/startProcessInstance?processDefinitionKey=event&businessId=001&permissionUserIds=001
+    public WebResult startProcessInstance(@RequestParam String processDefinitionKey,
+                                          @RequestParam String businessId,@RequestParam String permissionUserIds) {
+        return WebResult.success().withData(activitiProcessService.startProcessInstance(processDefinitionKey, businessId, permissionUserIds));
     }
 
     @PostMapping("/confirmNodeProcess")
@@ -72,26 +76,26 @@ public class ActivitiProcessController {
     }
 
     @GetMapping("/queryComment")
-    //http://localhost:9001/queryComment?username=&processInstanceId=2501
+    //http://localhost:9020/activiti/process/queryComment?username=&processInstanceId=2501
     public WebResult queryComment(String processInstanceId) throws Exception{
         return WebResult.success().withData(activitiProcessService.queryComment(processInstanceId));
     }
 
     @GetMapping("/queryHistoryTask")
-    //http://localhost:9001/queryHistoryTask?username=&processInstanceId=2501
+    //http://localhost:9020/activiti/process/queryHistoryTask?username=&processInstanceId=2501
     public WebResult queryHistoryTask(String username, String processInstanceId){
         // 查询 历史流程信息
         return WebResult.success().withData(activitiProcessService.queryHistoryTask(username, processInstanceId));
     }
 
     @GetMapping("/queryHistoricDetail")
-    //http://localhost:9001/queryHistoricDetail?processInstanceId=7505
+    //http://localhost:9020/activiti/process/queryHistoricDetail?processInstanceId=7505
     public WebResult queryHistoricDetail(String processInstanceId){
         return WebResult.success().withData(activitiProcessService.queryHistoricDetail(processInstanceId));
     }
 
     @GetMapping("/queryTaskUser")
-    //http://localhost:9001/queryTaskUser?processInstanceId=5005
+    //http://localhost:9020/activiti/process/queryTaskUser?processInstanceId=5005
     public WebResult queryTaskUser(String processInstanceId){
         return WebResult.success().withData(activitiProcessService.queryTaskUser(processInstanceId));
     }

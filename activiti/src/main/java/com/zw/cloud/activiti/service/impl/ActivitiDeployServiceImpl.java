@@ -1,6 +1,11 @@
 package com.zw.cloud.activiti.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.zw.cloud.activiti.dao.ActReDeploymentMapper;
+import com.zw.cloud.activiti.entity.ActReDeploymentExample;
 import com.zw.cloud.activiti.service.api.IActivitiDeployService;
+import com.zw.cloud.common.utils.WebResult;
 import org.activiti.engine.*;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentBuilder;
@@ -29,6 +34,10 @@ public class ActivitiDeployServiceImpl implements IActivitiDeployService {
 
     @Autowired
     private RepositoryService repositoryService;
+    @Autowired
+    private ProcessEngine processEngine;
+    @Autowired
+    private ActReDeploymentMapper actReDeploymentMapper;
 
 
     private Logger logger = LoggerFactory.getLogger(ActivitiDeployServiceImpl.class);
@@ -36,14 +45,16 @@ public class ActivitiDeployServiceImpl implements IActivitiDeployService {
 
     //流程定义和部署
     @Override
-    public String defineProcess(String filePath, String deployName) throws Exception {
-        // 获得一个部署构建器对象，用于加载流程定义文件（test01.bpmn test01.png）完成流程定义的部署
-        DeploymentBuilder builder = repositoryService.createDeployment();
-        //   加载流程定义文件
-        builder.addClasspathResource("process/"+filePath).name(deployName);
-        //    部署流程定义
-        Deployment deploy = builder.deploy();
-        return deploy.getName();
+    public WebResult deploy(String filePath, String deployName){
+
+        RepositoryService repositoryService = processEngine.getRepositoryService();
+        //创建一个部署对象
+        Deployment deployment = repositoryService
+                .createDeployment().name(deployName)
+                .key(deployName)
+                .addClasspathResource(filePath)
+                .deploy();
+        return WebResult.success().withData(deployment.getKey());
     }
 
     @Override
@@ -68,39 +79,24 @@ public class ActivitiDeployServiceImpl implements IActivitiDeployService {
         processEngine.getRepositoryService().deleteDeployment(deployId,true );
     }
 
-    //16.10.   流程定义查询
+
     @Override
-    public List<ProcessDefinition> queryDefined(String deployName, Integer pageNo, Integer pageSize) throws Exception {
-        if (StringUtils.isBlank(deployName)){
-            deployName = "";
+    public Object queryDefined(String key, Integer pageNo, Integer pageSize) throws Exception {
+        ActReDeploymentExample example = new ActReDeploymentExample();
+        example.setOrderByClause("ID_ desc");
+        if (StringUtils.isNoneBlank(key)){
+            example.createCriteria().andKeyEqualTo(key);
+            return actReDeploymentMapper.selectByExample(example);
         }
-        //根据流程部署名称 --->部署id----->流程定义
-        List<Deployment> deploymentList = repositoryService.createDeploymentQuery()
-                .deploymentNameLike(deployName + "%").list();
-        Set<String> deployIds = deploymentList.parallelStream().map(Deployment::getId).collect(Collectors.toSet());
-        if (CollectionUtils.isEmpty(deployIds)){
-            return null;
-        }
-        //分页
-        int firstResult = (pageNo - 1) * pageSize;
-        return repositoryService.createProcessDefinitionQuery()
-                .deploymentIds(deployIds).orderByProcessDefinitionVersion().desc().listPage(firstResult, pageSize);
-        // 重新封装实体类返回
-        /*List<ProcessDefinitionVO> processDefinitionVOList = new ArrayList<>();
-        processDefinitions.forEach(processDefinition -> {
-            ProcessDefinitionVO processDefinitionVO = new ProcessDefinitionVO();
-            BeanUtils.copyProperties(processDefinition,processDefinitionVO );
-            processDefinitionVOList.add(processDefinitionVO);
-        });
-        return processDefinitionVOList;*/
+        PageHelper.startPage(pageNo,pageSize);
+        return new PageInfo<>(actReDeploymentMapper.selectByExample(example));
     }
 
-    //16.11.   查询流程图—中文乱码
+    //  查询流程图—中文乱码
     @Override
     public void queryImage(String deployId, HttpServletResponse response) throws Exception {
-        /*Deployment deployment = repositoryService.createDeploymentQuery()
-                .deploymentId(deployId).singleResult();*/
-        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+
+       /* ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                 .deploymentId(deployId).singleResult();
         String imageName = processDefinition.getDiagramResourceName();
         try {
@@ -112,6 +108,6 @@ public class ActivitiDeployServiceImpl implements IActivitiDeployService {
             outputStream.close();
         } catch (IOException e) {
             logger.error("[queryImage] error is {}",e );
-        }
+        }*/
     }
 }

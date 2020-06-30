@@ -1,5 +1,6 @@
 package com.zw.cloud.activiti.service.api;
 
+import com.zw.cloud.common.utils.WebResult;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +16,7 @@ public interface IActivitiDeployService {
      * @return
      * @throws Exception
      */
-    String defineProcess(String filePath, String deployName)throws Exception;
+    WebResult deploy(String filePath, String deployName);
 
     /**
      *
@@ -34,13 +35,13 @@ public interface IActivitiDeployService {
 
     /**
      * 查询流程定义
-     * @param deployName
+     * @param key
      * @param pageNo
      * @param pageSize
      * @return
      * @throws Exception
      */
-    List<ProcessDefinition> queryDefined(String deployName, Integer pageNo, Integer pageSize)throws Exception;
+    Object queryDefined(String key, Integer pageNo, Integer pageSize)throws Exception;
 
     /**
      * 根据流程部署name查询流程图

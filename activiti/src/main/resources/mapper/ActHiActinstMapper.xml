@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zw.cloud.activiti.dao.ActHiActinstMapper">
+  <resultMap id="BaseResultMap" type="com.zw.cloud.activiti.entity.ActHiActinst">
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="PROC_DEF_ID_" jdbcType="VARCHAR" property="procDefId" />
+    <result column="PROC_INST_ID_" jdbcType="VARCHAR" property="procInstId" />
+    <result column="EXECUTION_ID_" jdbcType="VARCHAR" property="executionId" />
+    <result column="ACT_ID_" jdbcType="VARCHAR" property="actId" />
+    <result column="TASK_ID_" jdbcType="VARCHAR" property="taskId" />
+    <result column="CALL_PROC_INST_ID_" jdbcType="VARCHAR" property="callProcInstId" />
+    <result column="ACT_NAME_" jdbcType="VARCHAR" property="actName" />
+    <result column="ACT_TYPE_" jdbcType="VARCHAR" property="actType" />
+    <result column="ASSIGNEE_" jdbcType="VARCHAR" property="assignee" />
+    <result column="START_TIME_" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="END_TIME_" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="DURATION_" jdbcType="BIGINT" property="duration" />
+    <result column="DELETE_REASON_" jdbcType="VARCHAR" property="deleteReason" />
+    <result column="TENANT_ID_" jdbcType="VARCHAR" property="tenantId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID_, PROC_DEF_ID_, PROC_INST_ID_, EXECUTION_ID_, ACT_ID_, TASK_ID_, CALL_PROC_INST_ID_, 
+    ACT_NAME_, ACT_TYPE_, ASSIGNEE_, START_TIME_, END_TIME_, DURATION_, DELETE_REASON_, 
+    TENANT_ID_
+  </sql>
+  <select id="selectByExample" parameterType="com.zw.cloud.activiti.entity.ActHiActinstExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from act_hi_actinst
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from act_hi_actinst
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from act_hi_actinst
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zw.cloud.activiti.entity.ActHiActinstExample">
+    delete from act_hi_actinst
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zw.cloud.activiti.entity.ActHiActinst">
+    insert into act_hi_actinst (ID_, PROC_DEF_ID_, PROC_INST_ID_, 
+      EXECUTION_ID_, ACT_ID_, TASK_ID_, 
+      CALL_PROC_INST_ID_, ACT_NAME_, ACT_TYPE_, 
+      ASSIGNEE_, START_TIME_, END_TIME_, 
+      DURATION_, DELETE_REASON_, TENANT_ID_
+      )
+    values (#{id,jdbcType=VARCHAR}, #{procDefId,jdbcType=VARCHAR}, #{procInstId,jdbcType=VARCHAR}, 
+      #{executionId,jdbcType=VARCHAR}, #{actId,jdbcType=VARCHAR}, #{taskId,jdbcType=VARCHAR}, 
+      #{callProcInstId,jdbcType=VARCHAR}, #{actName,jdbcType=VARCHAR}, #{actType,jdbcType=VARCHAR}, 
+      #{assignee,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{duration,jdbcType=BIGINT}, #{deleteReason,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zw.cloud.activiti.entity.ActHiActinst">
+    insert into act_hi_actinst
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID_,
+      </if>
+      <if test="procDefId != null">
+        PROC_DEF_ID_,
+      </if>
+      <if test="procInstId != null">
+        PROC_INST_ID_,
+      </if>
+      <if test="executionId != null">
+        EXECUTION_ID_,
+      </if>
+      <if test="actId != null">
+        ACT_ID_,
+      </if>
+      <if test="taskId != null">
+        TASK_ID_,
+      </if>
+      <if test="callProcInstId != null">
+        CALL_PROC_INST_ID_,
+      </if>
+      <if test="actName != null">
+        ACT_NAME_,
+      </if>
+      <if test="actType != null">
+        ACT_TYPE_,
+      </if>
+      <if test="assignee != null">
+        ASSIGNEE_,
+      </if>
+      <if test="startTime != null">
+        START_TIME_,
+      </if>
+      <if test="endTime != null">
+        END_TIME_,
+      </if>
+      <if test="duration != null">
+        DURATION_,
+      </if>
+      <if test="deleteReason != null">
+        DELETE_REASON_,
+      </if>
+      <if test="tenantId != null">
+        TENANT_ID_,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="procDefId != null">
+        #{procDefId,jdbcType=VARCHAR},
+      </if>
+      <if test="procInstId != null">
+        #{procInstId,jdbcType=VARCHAR},
+      </if>
+      <if test="executionId != null">
+        #{executionId,jdbcType=VARCHAR},
+      </if>
+      <if test="actId != null">
+        #{actId,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null">
+        #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="callProcInstId != null">
+        #{callProcInstId,jdbcType=VARCHAR},
+      </if>
+      <if test="actName != null">
+        #{actName,jdbcType=VARCHAR},
+      </if>
+      <if test="actType != null">
+        #{actType,jdbcType=VARCHAR},
+      </if>
+      <if test="assignee != null">
+        #{assignee,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duration != null">
+        #{duration,jdbcType=BIGINT},
+      </if>
+      <if test="deleteReason != null">
+        #{deleteReason,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zw.cloud.activiti.entity.ActHiActinstExample" resultType="java.lang.Long">
+    select count(*) from act_hi_actinst
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update act_hi_actinst
+    <set>
+      <if test="record.id != null">
+        ID_ = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.procDefId != null">
+        PROC_DEF_ID_ = #{record.procDefId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.procInstId != null">
+        PROC_INST_ID_ = #{record.procInstId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.executionId != null">
+        EXECUTION_ID_ = #{record.executionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actId != null">
+        ACT_ID_ = #{record.actId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskId != null">
+        TASK_ID_ = #{record.taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.callProcInstId != null">
+        CALL_PROC_INST_ID_ = #{record.callProcInstId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actName != null">
+        ACT_NAME_ = #{record.actName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actType != null">
+        ACT_TYPE_ = #{record.actType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.assignee != null">
+        ASSIGNEE_ = #{record.assignee,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startTime != null">
+        START_TIME_ = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null">
+        END_TIME_ = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.duration != null">
+        DURATION_ = #{record.duration,jdbcType=BIGINT},
+      </if>
+      <if test="record.deleteReason != null">
+        DELETE_REASON_ = #{record.deleteReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null">
+        TENANT_ID_ = #{record.tenantId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update act_hi_actinst
+    set ID_ = #{record.id,jdbcType=VARCHAR},
+      PROC_DEF_ID_ = #{record.procDefId,jdbcType=VARCHAR},
+      PROC_INST_ID_ = #{record.procInstId,jdbcType=VARCHAR},
+      EXECUTION_ID_ = #{record.executionId,jdbcType=VARCHAR},
+      ACT_ID_ = #{record.actId,jdbcType=VARCHAR},
+      TASK_ID_ = #{record.taskId,jdbcType=VARCHAR},
+      CALL_PROC_INST_ID_ = #{record.callProcInstId,jdbcType=VARCHAR},
+      ACT_NAME_ = #{record.actName,jdbcType=VARCHAR},
+      ACT_TYPE_ = #{record.actType,jdbcType=VARCHAR},
+      ASSIGNEE_ = #{record.assignee,jdbcType=VARCHAR},
+      START_TIME_ = #{record.startTime,jdbcType=TIMESTAMP},
+      END_TIME_ = #{record.endTime,jdbcType=TIMESTAMP},
+      DURATION_ = #{record.duration,jdbcType=BIGINT},
+      DELETE_REASON_ = #{record.deleteReason,jdbcType=VARCHAR},
+      TENANT_ID_ = #{record.tenantId,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zw.cloud.activiti.entity.ActHiActinst">
+    update act_hi_actinst
+    <set>
+      <if test="procDefId != null">
+        PROC_DEF_ID_ = #{procDefId,jdbcType=VARCHAR},
+      </if>
+      <if test="procInstId != null">
+        PROC_INST_ID_ = #{procInstId,jdbcType=VARCHAR},
+      </if>
+      <if test="executionId != null">
+        EXECUTION_ID_ = #{executionId,jdbcType=VARCHAR},
+      </if>
+      <if test="actId != null">
+        ACT_ID_ = #{actId,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null">
+        TASK_ID_ = #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="callProcInstId != null">
+        CALL_PROC_INST_ID_ = #{callProcInstId,jdbcType=VARCHAR},
+      </if>
+      <if test="actName != null">
+        ACT_NAME_ = #{actName,jdbcType=VARCHAR},
+      </if>
+      <if test="actType != null">
+        ACT_TYPE_ = #{actType,jdbcType=VARCHAR},
+      </if>
+      <if test="assignee != null">
+        ASSIGNEE_ = #{assignee,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        START_TIME_ = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        END_TIME_ = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duration != null">
+        DURATION_ = #{duration,jdbcType=BIGINT},
+      </if>
+      <if test="deleteReason != null">
+        DELETE_REASON_ = #{deleteReason,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        TENANT_ID_ = #{tenantId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zw.cloud.activiti.entity.ActHiActinst">
+    update act_hi_actinst
+    set PROC_DEF_ID_ = #{procDefId,jdbcType=VARCHAR},
+      PROC_INST_ID_ = #{procInstId,jdbcType=VARCHAR},
+      EXECUTION_ID_ = #{executionId,jdbcType=VARCHAR},
+      ACT_ID_ = #{actId,jdbcType=VARCHAR},
+      TASK_ID_ = #{taskId,jdbcType=VARCHAR},
+      CALL_PROC_INST_ID_ = #{callProcInstId,jdbcType=VARCHAR},
+      ACT_NAME_ = #{actName,jdbcType=VARCHAR},
+      ACT_TYPE_ = #{actType,jdbcType=VARCHAR},
+      ASSIGNEE_ = #{assignee,jdbcType=VARCHAR},
+      START_TIME_ = #{startTime,jdbcType=TIMESTAMP},
+      END_TIME_ = #{endTime,jdbcType=TIMESTAMP},
+      DURATION_ = #{duration,jdbcType=BIGINT},
+      DELETE_REASON_ = #{deleteReason,jdbcType=VARCHAR},
+      TENANT_ID_ = #{tenantId,jdbcType=VARCHAR}
+    where ID_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <insert id="batchInsert" parameterType="java.util.List">
+    <!--
+      WARNING - @mbg.generated
+      这个节点为代码生成工具生成，请不要修改!
+      @author hewei
+    -->
+    insert into act_hi_actinst (ID_, PROC_DEF_ID_, PROC_INST_ID_, EXECUTION_ID_, ACT_ID_, TASK_ID_, CALL_PROC_INST_ID_, ACT_NAME_, ACT_TYPE_, ASSIGNEE_, START_TIME_, END_TIME_, DURATION_, DELETE_REASON_, TENANT_ID_)
+    values
+    <foreach collection="list" item="item" separator=",">
+       (#{item.id,jdbcType=VARCHAR}, #{item.procDefId,jdbcType=VARCHAR}, #{item.procInstId,jdbcType=VARCHAR}, #{item.executionId,jdbcType=VARCHAR}, #{item.actId,jdbcType=VARCHAR}, #{item.taskId,jdbcType=VARCHAR}, #{item.callProcInstId,jdbcType=VARCHAR}, #{item.actName,jdbcType=VARCHAR}, #{item.actType,jdbcType=VARCHAR}, #{item.assignee,jdbcType=VARCHAR}, #{item.startTime,jdbcType=TIMESTAMP}, #{item.endTime,jdbcType=TIMESTAMP}, #{item.duration,jdbcType=BIGINT}, #{item.deleteReason,jdbcType=VARCHAR}, #{item.tenantId,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+  <select id="selectOneByExample" parameterType="com.zw.cloud.activiti.entity.ActHiActinstExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - @mbg.generated
+      这个节点为代码生成工具生成，请不要修改!
+      @author hewei
+    -->
+    select
+    <include refid="Base_Column_List" />
+    from act_hi_actinst
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
+</mapper>

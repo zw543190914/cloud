@@ -1,23 +1,20 @@
 package com.zw.cloud.activiti.service.api;
 
-import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.task.Task;
+import com.zw.cloud.activiti.entity.*;
 
 import java.util.List;
 
 public interface IProcessInstanceService {
 
-    Deployment deploy();
+    ActReDeployment deploy();
 
-    ProcessInstance startProcessInstance(String processDefinitionKey,String businessId,String permissionUserIds);
+    List<ActHiProcinst> startProcessInstance(String processDefinitionKey, String businessId, String permissionUserIds);
 
     void handlerPersonalTask(String processInstanceId,String userId,String result,String nextStepPerson);
 
-    List<Task> taskQueryByUserId(String userId);
+    List<ActRuTask> taskQueryByProcInstId(String procInstId);
 
     void completeTask(String taskId,String result);
 
-    List<HistoricTaskInstance> queryHistoryTask(String processInstanceId);
+    List<ActHiActinst> queryHistoryTask(String processInstanceId);
 }

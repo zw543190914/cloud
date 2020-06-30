@@ -1,8 +1,10 @@
 package com.zw.cloud.activiti.service.api;
 
+import com.zw.cloud.activiti.entity.ActHiProcinst;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
@@ -12,15 +14,13 @@ public interface IActivitiProcessService {
 
     /**
      * 启动流程
-     * @param workId
-     * @param deployName
-     * @param bussinessKey
-     * @param paramMap （流程变量)下一步执行人，判断条件等
+     * @param processDefinitionKey
+     * @param businessId
+     * @param permissionUserIds
      * @return
      * @throws Exception
      */
-    String initNodeProcess(String workId,String deployName, String bussinessKey, Map<String,Object> paramMap)throws Exception;
-
+    List<ActHiProcinst> startProcessInstance(String processDefinitionKey, String businessId, String permissionUserIds);
 
     /**
      * 流程接入和审批 (组任务)

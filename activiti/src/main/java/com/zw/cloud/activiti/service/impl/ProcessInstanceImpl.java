@@ -1,13 +1,15 @@
 package com.zw.cloud.activiti.service.impl;
 
+import com.zw.cloud.activiti.dao.*;
+import com.zw.cloud.activiti.entity.*;
 import com.zw.cloud.activiti.service.api.IProcessInstanceService;
 import org.activiti.engine.*;
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.apache.commons.collections.CollectionUtils;
-import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,18 @@ public class ProcessInstanceImpl implements IProcessInstanceService {
     @Autowired
     private ProcessEngine processEngine;
 
+    @Autowired
+    private ActReDeploymentMapper actReDeploymentMapper;
+
+    @Autowired
+    private ActHiProcinstMapper hiProcinstMapper;
+
+    @Autowired
+    private ActRuTaskMapper ruTaskMapper;
+
+    @Autowired
+    private ActHiActinstMapper hiActinstMapper;
+
     private Logger logger = LoggerFactory.getLogger(ProcessInstanceImpl.class);
 
     /**
@@ -38,46 +52,44 @@ public class ProcessInstanceImpl implements IProcessInstanceService {
      * @return
      */
     @Override
-    public Deployment deploy(){
+    public ActReDeployment deploy(){
         RepositoryService repositoryService = processEngine.getRepositoryService();
         //创建一个部署对象
         Deployment deployment = repositoryService
                 .createDeployment().name("event")
-                //.key("event")
+                .key("event")
                 .addClasspathResource("processes/event.bpmn")
                 .deploy();
+        return actReDeploymentMapper.selectByPrimaryKey(deployment.getId());
 
-        //deployment.getKey()
-        //打印信息 3d86b719-ba20-11ea-a163-a0a4c5f4cb40
-        System.out.println("部署ID："+deployment.getId());
-        System.out.println("部署名称："+deployment.getName());
-        return deployment;
+        // 3d86b719-ba20-11ea-a163-a0a4c5f4cb40
+
     }
 
     /**
      * 启动一个实例
      */
     @Override
-    public ProcessInstance startProcessInstance(String processDefinitionKey,String businessId,String permissionUserIds) {
-        logger.info("[ProcessInstanceImpl][startProcessInstance] Number of process definitions is {}",repositoryService.createProcessDefinitionQuery().count());
-        logger.info("[ProcessInstanceImpl][startProcessInstance] Number of tasks is {}",taskService.createTaskQuery().count());
+    public List<ActHiProcinst> startProcessInstance(String processDefinitionKey,String businessId,String permissionUserIds) {
         Map<String,Object> map = new HashMap<>();
         map.put("businessId",businessId);
         map.put("user","001");
-        return runtimeService.startProcessInstanceByKey(processDefinitionKey,businessId, map);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessId, map);
+        ActHiProcinstExample example = new ActHiProcinstExample();
+        example.createCriteria().andProcInstIdEqualTo(processInstance.getProcessInstanceId());
+        return hiProcinstMapper.selectByExample(example);
     }
 
     /**
-     * 处理个人认为
+     * 处理个人任务
      */
     @Override
     public void handlerPersonalTask(String processInstanceId,String userId,String result,String permissionUserIds) {
         //根据流程定义的key,负责人assignee来实现当前用户的任务列表查询
         List<Task> taskList = taskService.createTaskQuery()
-                .processDefinitionKey("event")
+                .processInstanceId(processInstanceId)
                 .taskAssignee(userId)
                 .list();
-
         if(CollectionUtils.isNotEmpty(taskList)){
             for(Task task : taskList){
                 System.out.println("任务ID:"+task.getId());
@@ -107,11 +119,10 @@ public class ProcessInstanceImpl implements IProcessInstanceService {
      * 查询用户的任务列表
      */
     @Override
-    public List<Task> taskQueryByUserId(String userId) {
+    public List<ActRuTask> taskQueryByProcInstId(String procInstId) {
         //根据流程定义的key,负责人assignee来实现当前用户的任务列表查询
         List<Task> taskList = taskService.createTaskQuery()
-                .processDefinitionKey("event")
-                .taskAssignee(userId)
+                .processInstanceId(procInstId)
                 .list();
 
         if(CollectionUtils.isNotEmpty(taskList)){
@@ -137,7 +148,9 @@ public class ProcessInstanceImpl implements IProcessInstanceService {
 
             }
         }
-        return taskList;
+        ActRuTaskExample example = new ActRuTaskExample();
+        example.createCriteria().andProcInstIdEqualTo(procInstId);
+        return ruTaskMapper.selectByExample(example);
     }
 
     /**
@@ -156,21 +169,22 @@ public class ProcessInstanceImpl implements IProcessInstanceService {
      * 历史活动实例查询
      */
     @Override
-    public List<HistoricTaskInstance> queryHistoryTask(String processInstanceId) {
-        List<HistoricTaskInstance> historicTaskInstanceList = historyService.createHistoricTaskInstanceQuery() // 创建历史活动实例查询
+    public List<ActHiActinst> queryHistoryTask(String processInstanceId) {
+        List<HistoricActivityInstance> list = historyService.createHistoricActivityInstanceQuery() // 创建历史活动实例查询
                 .processInstanceId(processInstanceId) // 执行流程实例id
-                .orderByTaskCreateTime()
-                .asc()
                 .list();
-        for (HistoricTaskInstance hai : historicTaskInstanceList) {
+        for (HistoricActivityInstance hai : list) {
             System.out.println("活动ID:" + hai.getId());
             System.out.println("流程实例ID:" + hai.getProcessInstanceId());
-            System.out.println("活动名称：" + hai.getName());
+            System.out.println("活动名称：" + hai.getActivityName());
             System.out.println("办理人：" + hai.getAssignee());
             System.out.println("开始时间：" + hai.getStartTime());
             System.out.println("结束时间：" + hai.getEndTime());
         }
-        return historicTaskInstanceList;
+
+        ActHiActinstExample example = new ActHiActinstExample();
+        example.createCriteria().andProcInstIdEqualTo(processInstanceId);
+        return hiActinstMapper.selectByExample(example);
     }
 
 }

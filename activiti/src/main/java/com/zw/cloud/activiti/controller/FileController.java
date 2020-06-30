@@ -50,7 +50,9 @@ public class FileController {
                 dest.getParentFile().mkdirs();// 新建文件夹
             }
             file.transferTo(dest);// 文件写入
-            result.put("filePath",fileName );
+            result.put("filePath",path );
+            result.put("fileName",fileName );
+
             return WebResult.success().withData(result);
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,7 +61,7 @@ public class FileController {
     }
 
     @RequestMapping("/download")
-    public String downloadFile(HttpServletRequest request, HttpServletResponse response) {
+    public WebResult downloadFile(HttpServletRequest request, HttpServletResponse response) {
         String fileName = "ideaIU-2018.1.4.exe";// 设置文件名，根据业务需要替换成要下载的文件名
         if (fileName != null) {
             //设置文件路径
@@ -80,7 +82,7 @@ public class FileController {
                         os.write(buffer, 0, i);
                         i = bis.read(buffer);
                     }
-                    System.out.println("success");
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -101,6 +103,6 @@ public class FileController {
                 }
             }
         }
-        return null;
+        return WebResult.success();
     }
 }
