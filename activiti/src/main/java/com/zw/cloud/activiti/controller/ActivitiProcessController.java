@@ -1,6 +1,5 @@
 package com.zw.cloud.activiti.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.zw.cloud.activiti.entity.ParamVO;
 import com.zw.cloud.activiti.service.api.IActivitiProcessService;
 import com.zw.cloud.common.utils.WebResult;
@@ -36,7 +35,7 @@ public class ActivitiProcessController {
     }
 
     @PostMapping("/confirmNodeProcess")
-    public WebResult confirmNodeProcess(ParamVO paramVO) throws Exception{
+    public WebResult confirmNodeProcess(@RequestBody ParamVO paramVO) throws Exception{
         activitiProcessService.confirmNodeProcess(paramVO.getWorkId(), paramVO.getNodeCode(), paramVO.getProcessInstanceId(), paramVO.getParamMap());
         return WebResult.success();
     }
@@ -89,7 +88,7 @@ public class ActivitiProcessController {
     }
 
     @GetMapping("/queryHistoricDetail")
-    //http://localhost:9020/activiti/process/queryHistoricDetail?processInstanceId=7505
+    //http://localhost:9020/activiti/process/queryHistoricDetail?processInstanceId=3a17a1d0-bba0-11ea-bd16-a0a4c5f4cb40
     public WebResult queryHistoricDetail(String processInstanceId){
         return WebResult.success().withData(activitiProcessService.queryHistoricDetail(processInstanceId));
     }

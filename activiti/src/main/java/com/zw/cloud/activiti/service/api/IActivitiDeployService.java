@@ -11,12 +11,11 @@ public interface IActivitiDeployService {
 
     /**
      *流程部署和定义
-     * @param filePath  上传bpmn文件返回的filePath
      * @param deployName  流程名称
      * @return
      * @throws Exception
      */
-    WebResult deploy(String filePath, String deployName);
+    WebResult deploy(String deployName);
 
     /**
      *

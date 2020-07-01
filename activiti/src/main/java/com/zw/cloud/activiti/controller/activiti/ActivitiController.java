@@ -5,10 +5,15 @@ import com.github.pagehelper.PageInfo;
 import com.zw.cloud.activiti.dao.*;
 import com.zw.cloud.activiti.entity.*;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/activiti/modle")
@@ -34,6 +39,9 @@ public class ActivitiController {
 
     @Autowired
     private ActRuTaskMapper ruTaskMapper;
+
+    @Autowired
+    private ActGeBytearrayMapper geBytearrayMapper;
 
     @GetMapping("/queryDeployment")
     //http://localhost:9020/activiti/modle/queryDeployment?pageNo=1&pageSize=10&key=
@@ -124,5 +132,24 @@ public class ActivitiController {
         }
         PageHelper.startPage(pageNo,pageSize);
         return new PageInfo<>(ruTaskMapper.selectByExample(example));
+    }
+
+    @GetMapping("/queryActGeBytearrays")
+    //http://localhost:9020/activiti/modle/queryActGeBytearrays?pageNo=1&pageSize=10&procInstId=
+    public Object queryActGeBytearrays(Integer pageNo,Integer pageSize){
+        ActGeBytearrayExample example = new ActGeBytearrayExample();
+        example.setOrderByClause("ID_ desc");
+        PageHelper.startPage(pageNo,pageSize);
+        List<ActGeBytearray> actGeBytearrays = geBytearrayMapper.selectByExampleWithBLOBs(example);
+        return actGeBytearrays.stream().map(actGeBytearray -> {
+            ActGeBytearrayVO bytearrayVO = new ActGeBytearrayVO();
+            BeanUtils.copyProperties(actGeBytearray,bytearrayVO);
+            try {
+                bytearrayVO.setByteStr(new String(actGeBytearray.getBytes(),"utf-8"));
+            } catch (UnsupportedEncodingException e) {
+                System.out.println(e);
+            }
+            return bytearrayVO;
+        }).collect(Collectors.toList());
     }
 }

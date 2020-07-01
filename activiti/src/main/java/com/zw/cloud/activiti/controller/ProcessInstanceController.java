@@ -33,13 +33,14 @@ public class ProcessInstanceController {
     }
 
     @GetMapping("/handlerPersonalTask")
+    //http://localhost:9020/activiti/processInstance/handlerPersonalTask?processInstanceId=3a17a1d0-bba0-11ea-bd16-a0a4c5f4cb40&userId=001&permissionUserIds=001&result=true
     public void handlerPersonalTask(@RequestParam String processInstanceId,@RequestParam String userId,
                                      @RequestParam String result,@RequestParam String permissionUserIds) {
         processInstanceService.handlerPersonalTask(processInstanceId, userId, result, permissionUserIds);
     }
 
     @GetMapping("/taskQueryByProcInstId")
-    //http://localhost:9020/activiti/processInstance/queryHistoryTask?processInstanceId=924e0e4d-ba20-11ea-bed8-a0a4c5f4cb40
+    //http://localhost:9020/activiti/processInstance/queryHistoryTask?processInstanceId=3a17a1d0-bba0-11ea-bd16-a0a4c5f4cb40
     public WebResult taskQueryByProcInstId(@RequestParam String procInstId) {
         return WebResult.success().withData(processInstanceService.taskQueryByProcInstId(procInstId));
     }
@@ -50,7 +51,7 @@ public class ProcessInstanceController {
     }
 
     @GetMapping("/queryHistoryTask")
-    //http://localhost:9020/activiti/processInstance/queryHistoryTask?processInstanceId=924e0e4d-ba20-11ea-bed8-a0a4c5f4cb40
+    //http://localhost:9020/activiti/processInstance/queryHistoryTask?processInstanceId=3a17a1d0-bba0-11ea-bd16-a0a4c5f4cb40
     public WebResult queryHistoryTask(@RequestParam String processInstanceId) {
         return WebResult.success().withData(processInstanceService.queryHistoryTask(processInstanceId));
     }

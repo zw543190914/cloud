@@ -5,7 +5,6 @@ import com.zw.cloud.activiti.entity.*;
 import com.zw.cloud.activiti.service.api.IProcessInstanceService;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
-import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -90,6 +89,7 @@ public class ProcessInstanceImpl implements IProcessInstanceService {
                 .processInstanceId(processInstanceId)
                 .taskAssignee(userId)
                 .list();
+
         if(CollectionUtils.isNotEmpty(taskList)){
             for(Task task : taskList){
                 System.out.println("任务ID:"+task.getId());
@@ -110,7 +110,9 @@ public class ProcessInstanceImpl implements IProcessInstanceService {
                 for (Map.Entry<String, Object> m : task.getTaskLocalVariables().entrySet()) {
                     System.out.println("key:" + m.getKey() + " value:" + m.getValue());
                 }
-
+                map.put("user",permissionUserIds);
+                map.put("agree",result);
+                taskService.complete(task.getId(),map);
             }
         }
     }
