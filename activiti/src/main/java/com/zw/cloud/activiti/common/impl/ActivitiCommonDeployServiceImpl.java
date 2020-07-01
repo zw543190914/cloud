@@ -1,10 +1,10 @@
-package com.zw.cloud.activiti.service.impl;
+package com.zw.cloud.activiti.common.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zw.cloud.activiti.common.api.IActivitiCommonDeployService;
 import com.zw.cloud.activiti.dao.ActReDeploymentMapper;
 import com.zw.cloud.activiti.entity.ActReDeploymentExample;
-import com.zw.cloud.activiti.service.api.IActivitiDeployService;
 import com.zw.cloud.common.utils.WebResult;
 import org.activiti.engine.*;
 import org.activiti.engine.repository.Deployment;
@@ -24,7 +24,7 @@ import java.time.Instant;
 import java.util.zip.ZipInputStream;
 
 @Service
-public class ActivitiDeployServiceImpl implements IActivitiDeployService {
+public class ActivitiCommonDeployServiceImpl implements IActivitiCommonDeployService {
 
     @Autowired
     private RepositoryService repositoryService;
@@ -34,7 +34,7 @@ public class ActivitiDeployServiceImpl implements IActivitiDeployService {
     private ActReDeploymentMapper actReDeploymentMapper;
 
 
-    private Logger logger = LoggerFactory.getLogger(ActivitiDeployServiceImpl.class);
+    private Logger logger = LoggerFactory.getLogger(ActivitiCommonDeployServiceImpl.class);
 
 
     //流程定义和部署

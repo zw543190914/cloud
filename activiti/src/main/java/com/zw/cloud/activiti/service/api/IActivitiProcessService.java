@@ -1,14 +1,11 @@
 package com.zw.cloud.activiti.service.api;
 
 import com.zw.cloud.activiti.entity.ActHiProcinst;
-import org.activiti.engine.history.HistoricTaskInstance;
+import com.zw.cloud.common.utils.WebResult;
 import org.activiti.engine.task.Comment;
-import org.activiti.engine.task.Task;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public interface IActivitiProcessService {
 
@@ -20,7 +17,7 @@ public interface IActivitiProcessService {
      * @return
      * @throws Exception
      */
-    List<ActHiProcinst> startProcessInstance(String processDefinitionKey, String businessId, String permissionUserIds);
+    ActHiProcinst startProcessInstance(String processDefinitionKey, String businessId, String permissionUserIds);
 
     /**
      * 流程接入和审批 (组任务)
@@ -89,7 +86,7 @@ public interface IActivitiProcessService {
      * @return
      * @throws Exception
      */
-    boolean addTaskUser(String workId,String nodeCode, String processInstanceId, String taskUser,boolean isAdd) throws Exception;
+    WebResult addTaskUser(String workId,String nodeCode, String processInstanceId, String taskUser,boolean isAdd) throws Exception;
 
     /**
      * 查询个人任务或相关组任务
@@ -97,7 +94,7 @@ public interface IActivitiProcessService {
      * @return
      * @throws Exception
      */
-    List<Task> queryTaskByWorkId(String workId) throws Exception;
+    WebResult queryTaskByWorkId(String workId) throws Exception;
     /**
      *查询批注信息
      * @param processInstanceId
@@ -105,26 +102,14 @@ public interface IActivitiProcessService {
      */
     List<Comment> queryComment(String processInstanceId);
 
-    /**
-     * 查询 历史流程信息
-     * @param username
-     * @param processInstanceId
-     * @return
-     */
-    List<HistoricTaskInstance> queryHistoryTask(String username, String processInstanceId);
 
-    /**
-     * 流程详情
-     * @param processInstanceId
-     * @return
-     */
-    List<HistoricTaskInstance> queryHistoricDetail(String processInstanceId);
+    WebResult queryActinst( String processInstanceId);
 
     /**
      * 查询下一步执行人
      * @param processInstanceId
      * @return
      */
-    Map<String, Set<String>> queryTaskUser(String processInstanceId);
+    WebResult queryTaskUser(String processInstanceId);
 
 }

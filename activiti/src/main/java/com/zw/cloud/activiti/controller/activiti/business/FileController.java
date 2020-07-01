@@ -1,4 +1,4 @@
-package com.zw.cloud.activiti.controller;
+package com.zw.cloud.activiti.controller.activiti.business;
 
 import com.zw.cloud.common.utils.WebResult;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public class FileController {
     // 单文件上传
     @RequestMapping(value = "/upload")
     @ResponseBody
-    //http://localhost:9001/upload
+    //http://localhost:9001/activiti/file/upload
     public WebResult upload(MultipartFile file, HttpServletRequest request) {
 
         try {

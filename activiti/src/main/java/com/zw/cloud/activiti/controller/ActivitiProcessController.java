@@ -71,7 +71,7 @@ public class ActivitiProcessController {
 
     @GetMapping("/queryTaskByWorkId")
     public WebResult queryTaskByWorkId(String workId) throws Exception{
-        return WebResult.success().withData(activitiProcessService.queryTaskByWorkId(workId));
+        return activitiProcessService.queryTaskByWorkId(workId);
     }
 
     @GetMapping("/queryComment")
@@ -80,23 +80,16 @@ public class ActivitiProcessController {
         return WebResult.success().withData(activitiProcessService.queryComment(processInstanceId));
     }
 
-    @GetMapping("/queryHistoryTask")
-    //http://localhost:9020/activiti/process/queryHistoryTask?username=&processInstanceId=2501
-    public WebResult queryHistoryTask(String username, String processInstanceId){
-        // 查询 历史流程信息
-        return WebResult.success().withData(activitiProcessService.queryHistoryTask(username, processInstanceId));
-    }
-
-    @GetMapping("/queryHistoricDetail")
-    //http://localhost:9020/activiti/process/queryHistoricDetail?processInstanceId=3a17a1d0-bba0-11ea-bd16-a0a4c5f4cb40
-    public WebResult queryHistoricDetail(String processInstanceId){
-        return WebResult.success().withData(activitiProcessService.queryHistoricDetail(processInstanceId));
+    @GetMapping("/queryActinst")
+    //http://localhost:9020/activiti/process/queryActinst?processInstanceId=3a17a1d0-bba0-11ea-bd16-a0a4c5f4cb40
+    public WebResult queryActinst(String processInstanceId){
+        return WebResult.success().withData(activitiProcessService.queryActinst(processInstanceId));
     }
 
     @GetMapping("/queryTaskUser")
     //http://localhost:9020/activiti/process/queryTaskUser?processInstanceId=5005
     public WebResult queryTaskUser(String processInstanceId){
-        return WebResult.success().withData(activitiProcessService.queryTaskUser(processInstanceId));
+        return activitiProcessService.queryTaskUser(processInstanceId);
     }
 
 }

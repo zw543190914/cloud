@@ -1,13 +1,10 @@
-package com.zw.cloud.activiti.service.api;
+package com.zw.cloud.activiti.common.api;
 
 import com.zw.cloud.common.utils.WebResult;
-import org.activiti.engine.repository.ProcessDefinition;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
-public interface IActivitiDeployService {
+public interface IActivitiCommonDeployService {
 
     /**
      *流程部署和定义

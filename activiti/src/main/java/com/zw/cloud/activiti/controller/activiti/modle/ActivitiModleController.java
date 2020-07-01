@@ -1,4 +1,4 @@
-package com.zw.cloud.activiti.controller.activiti;
+package com.zw.cloud.activiti.controller.activiti.modle;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/activiti/modle")
-public class ActivitiController {
+public class ActivitiModleController {
 
     @Autowired
     private ActReDeploymentMapper actReDeploymentMapper;
