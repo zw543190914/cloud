@@ -78,7 +78,6 @@ public interface IActivitiProcessService {
 
     /**
      * 向任务中添加/删除人员
-     * @param workId
      * @param nodeCode
      * @param processInstanceId
      * @param taskUser  每次仅能添加或删除一人
@@ -86,8 +85,9 @@ public interface IActivitiProcessService {
      * @return
      * @throws Exception
      */
-    WebResult addTaskUser(String workId,String nodeCode, String processInstanceId, String taskUser,boolean isAdd) throws Exception;
+    WebResult addTaskUser(String nodeCode, String processInstanceId, String taskUser,boolean isAdd) throws Exception;
 
+    WebResult updateAssignee(String taskId, String userId);
     /**
      * 查询个人任务或相关组任务
      * @param workId
@@ -100,7 +100,7 @@ public interface IActivitiProcessService {
      * @param processInstanceId
      * @return
      */
-    List<Comment> queryComment(String processInstanceId);
+    WebResult queryComment(String processInstanceId);
 
 
     WebResult queryActinst( String processInstanceId);

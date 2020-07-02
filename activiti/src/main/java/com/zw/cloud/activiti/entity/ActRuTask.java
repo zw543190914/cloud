@@ -16,8 +16,6 @@ public class ActRuTask implements Serializable {
 
     private String name;
 
-    private String businessKey;
-
     private String parentTaskId;
 
     private String description;
@@ -45,8 +43,6 @@ public class ActRuTask implements Serializable {
     private String formKey;
 
     private Date claimTime;
-
-    private Integer appVersion;
 
     private static final long serialVersionUID = 1L;
 
@@ -96,14 +92,6 @@ public class ActRuTask implements Serializable {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
-    }
-
-    public String getBusinessKey() {
-        return businessKey;
-    }
-
-    public void setBusinessKey(String businessKey) {
-        this.businessKey = businessKey == null ? null : businessKey.trim();
     }
 
     public String getParentTaskId() {
@@ -216,13 +204,5 @@ public class ActRuTask implements Serializable {
 
     public void setClaimTime(Date claimTime) {
         this.claimTime = claimTime;
-    }
-
-    public Integer getAppVersion() {
-        return appVersion;
-    }
-
-    public void setAppVersion(Integer appVersion) {
-        this.appVersion = appVersion;
     }
 }

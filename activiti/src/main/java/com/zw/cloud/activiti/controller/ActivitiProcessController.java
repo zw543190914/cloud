@@ -1,12 +1,17 @@
 package com.zw.cloud.activiti.controller;
 
+import com.zw.cloud.activiti.common.api.IActivitiCommonDeployService;
+import com.zw.cloud.activiti.common.api.IActivitiCommonProcessService;
 import com.zw.cloud.activiti.entity.ParamVO;
+import com.zw.cloud.activiti.entity.VariableVO;
 import com.zw.cloud.activiti.service.api.IActivitiProcessService;
 import com.zw.cloud.common.utils.WebResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * https://blog.csdn.net/zhouchenjun001/article/details/103629559
@@ -18,8 +23,8 @@ public class ActivitiProcessController {
 
     @Autowired
     private IActivitiProcessService activitiProcessService;
-
-    private Logger log = LoggerFactory.getLogger(ActivitiProcessController.class);
+    @Autowired
+    private IActivitiCommonProcessService commonProcessService;
 
 
     /**
@@ -28,13 +33,14 @@ public class ActivitiProcessController {
      * 根据流程定义的一次具体执行过程，就是一个流程实例
      */
     @GetMapping("/startProcessInstance")
-    //http://localhost:9020/activiti/process/startProcessInstance?processDefinitionKey=event&businessId=001&permissionUserIds=001
+    //http://localhost:9020/activiti/process/startProcessInstance?processDefinitionKey=event2&businessId=001&permissionUserIds=a,b,c
     public WebResult startProcessInstance(@RequestParam String processDefinitionKey,
                                           @RequestParam String businessId,@RequestParam String permissionUserIds) {
         return WebResult.success().withData(activitiProcessService.startProcessInstance(processDefinitionKey, businessId, permissionUserIds));
     }
 
     @PostMapping("/confirmNodeProcess")
+    //http://localhost:9020/activiti/process/confirmNodeProcess
     public WebResult confirmNodeProcess(@RequestBody ParamVO paramVO) throws Exception{
         activitiProcessService.confirmNodeProcess(paramVO.getWorkId(), paramVO.getNodeCode(), paramVO.getProcessInstanceId(), paramVO.getParamMap());
         return WebResult.success();
@@ -64,30 +70,42 @@ public class ActivitiProcessController {
         return WebResult.success();
     }
     @GetMapping("/addTaskUser")
-    public WebResult addTaskUser(String workId,String nodeCode, String processInstanceId, String taskUser,boolean isAdd) throws Exception{
-        activitiProcessService.addTaskUser(workId, nodeCode, processInstanceId, taskUser, isAdd);
+    //http://localhost:9020/activiti/process/addTaskUser?nodeCode=handing&processInstanceId=54ca4514-bc7c-11ea-9b9e-a0a4c5f4cb40&taskUser=002&isAdd=true
+    public WebResult addTaskUser(String nodeCode, String processInstanceId, String taskUser,boolean isAdd) throws Exception{
+        activitiProcessService.addTaskUser(nodeCode, processInstanceId, taskUser, isAdd);
         return WebResult.success();
+    }
+    @GetMapping("/updateAssignee")
+    //http://localhost:9020/activiti/process/updateAssignee?taskId=bb36e5a4-bc89-11ea-ab10-a0a4c5f4cb40&userId=as
+    public WebResult updateAssignee(String taskId, String userId) {
+        return activitiProcessService.updateAssignee(taskId, userId);
+    }
+
+    @PostMapping("/updateVariables")
+    public WebResult updateVariables(@RequestBody VariableVO variables){
+        return commonProcessService.updateVariables(variables.getTaskId(), variables.getVariables());
     }
 
     @GetMapping("/queryTaskByWorkId")
+    //http://localhost:9020/activiti/process/queryTaskByWorkId?workId=d,e
     public WebResult queryTaskByWorkId(String workId) throws Exception{
         return activitiProcessService.queryTaskByWorkId(workId);
     }
 
     @GetMapping("/queryComment")
-    //http://localhost:9020/activiti/process/queryComment?username=&processInstanceId=2501
+    //http://localhost:9020/activiti/process/queryComment?processInstanceId=d21a3108-bc87-11ea-ab43-a0a4c5f4cb40
     public WebResult queryComment(String processInstanceId) throws Exception{
-        return WebResult.success().withData(activitiProcessService.queryComment(processInstanceId));
+        return activitiProcessService.queryComment(processInstanceId);
     }
 
     @GetMapping("/queryActinst")
-    //http://localhost:9020/activiti/process/queryActinst?processInstanceId=3a17a1d0-bba0-11ea-bd16-a0a4c5f4cb40
+    //http://localhost:9020/activiti/process/queryActinst?processInstanceId=8fba9cb3-bc92-11ea-8a1c-a0a4c5f4cb40
     public WebResult queryActinst(String processInstanceId){
         return WebResult.success().withData(activitiProcessService.queryActinst(processInstanceId));
     }
 
     @GetMapping("/queryTaskUser")
-    //http://localhost:9020/activiti/process/queryTaskUser?processInstanceId=5005
+    //http://localhost:9020/activiti/process/queryTaskUser?processInstanceId=d21a3108-bc87-11ea-ab43-a0a4c5f4cb40
     public WebResult queryTaskUser(String processInstanceId){
         return activitiProcessService.queryTaskUser(processInstanceId);
     }

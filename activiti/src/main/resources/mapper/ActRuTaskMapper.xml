@@ -8,7 +8,6 @@
     <result column="PROC_INST_ID_" jdbcType="VARCHAR" property="procInstId" />
     <result column="PROC_DEF_ID_" jdbcType="VARCHAR" property="procDefId" />
     <result column="NAME_" jdbcType="VARCHAR" property="name" />
-    <result column="BUSINESS_KEY_" jdbcType="VARCHAR" property="businessKey" />
     <result column="PARENT_TASK_ID_" jdbcType="VARCHAR" property="parentTaskId" />
     <result column="DESCRIPTION_" jdbcType="VARCHAR" property="description" />
     <result column="TASK_DEF_KEY_" jdbcType="VARCHAR" property="taskDefKey" />
@@ -23,7 +22,6 @@
     <result column="TENANT_ID_" jdbcType="VARCHAR" property="tenantId" />
     <result column="FORM_KEY_" jdbcType="VARCHAR" property="formKey" />
     <result column="CLAIM_TIME_" jdbcType="TIMESTAMP" property="claimTime" />
-    <result column="APP_VERSION_" jdbcType="INTEGER" property="appVersion" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -84,9 +82,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ID_, REV_, EXECUTION_ID_, PROC_INST_ID_, PROC_DEF_ID_, NAME_, BUSINESS_KEY_, PARENT_TASK_ID_, 
-    DESCRIPTION_, TASK_DEF_KEY_, OWNER_, ASSIGNEE_, DELEGATION_, PRIORITY_, CREATE_TIME_, 
-    DUE_DATE_, CATEGORY_, SUSPENSION_STATE_, TENANT_ID_, FORM_KEY_, CLAIM_TIME_, APP_VERSION_
+    ID_, REV_, EXECUTION_ID_, PROC_INST_ID_, PROC_DEF_ID_, NAME_, PARENT_TASK_ID_, DESCRIPTION_, 
+    TASK_DEF_KEY_, OWNER_, ASSIGNEE_, DELEGATION_, PRIORITY_, CREATE_TIME_, DUE_DATE_, 
+    CATEGORY_, SUSPENSION_STATE_, TENANT_ID_, FORM_KEY_, CLAIM_TIME_
   </sql>
   <select id="selectByExample" parameterType="com.zw.cloud.activiti.entity.ActRuTaskExample" resultMap="BaseResultMap">
     select
@@ -121,20 +119,18 @@
   <insert id="insert" parameterType="com.zw.cloud.activiti.entity.ActRuTask">
     insert into act_ru_task (ID_, REV_, EXECUTION_ID_, 
       PROC_INST_ID_, PROC_DEF_ID_, NAME_, 
-      BUSINESS_KEY_, PARENT_TASK_ID_, DESCRIPTION_, 
-      TASK_DEF_KEY_, OWNER_, ASSIGNEE_, 
-      DELEGATION_, PRIORITY_, CREATE_TIME_, 
-      DUE_DATE_, CATEGORY_, SUSPENSION_STATE_, 
-      TENANT_ID_, FORM_KEY_, CLAIM_TIME_, 
-      APP_VERSION_)
+      PARENT_TASK_ID_, DESCRIPTION_, TASK_DEF_KEY_, 
+      OWNER_, ASSIGNEE_, DELEGATION_, 
+      PRIORITY_, CREATE_TIME_, DUE_DATE_, 
+      CATEGORY_, SUSPENSION_STATE_, TENANT_ID_, 
+      FORM_KEY_, CLAIM_TIME_)
     values (#{id,jdbcType=VARCHAR}, #{rev,jdbcType=INTEGER}, #{executionId,jdbcType=VARCHAR}, 
       #{procInstId,jdbcType=VARCHAR}, #{procDefId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{businessKey,jdbcType=VARCHAR}, #{parentTaskId,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
-      #{taskDefKey,jdbcType=VARCHAR}, #{owner,jdbcType=VARCHAR}, #{assignee,jdbcType=VARCHAR}, 
-      #{delegation,jdbcType=VARCHAR}, #{priority,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{dueDate,jdbcType=TIMESTAMP}, #{category,jdbcType=VARCHAR}, #{suspensionState,jdbcType=INTEGER}, 
-      #{tenantId,jdbcType=VARCHAR}, #{formKey,jdbcType=VARCHAR}, #{claimTime,jdbcType=TIMESTAMP}, 
-      #{appVersion,jdbcType=INTEGER})
+      #{parentTaskId,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{taskDefKey,jdbcType=VARCHAR}, 
+      #{owner,jdbcType=VARCHAR}, #{assignee,jdbcType=VARCHAR}, #{delegation,jdbcType=VARCHAR}, 
+      #{priority,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{dueDate,jdbcType=TIMESTAMP}, 
+      #{category,jdbcType=VARCHAR}, #{suspensionState,jdbcType=INTEGER}, #{tenantId,jdbcType=VARCHAR}, 
+      #{formKey,jdbcType=VARCHAR}, #{claimTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zw.cloud.activiti.entity.ActRuTask">
     insert into act_ru_task
@@ -156,9 +152,6 @@
       </if>
       <if test="name != null">
         NAME_,
-      </if>
-      <if test="businessKey != null">
-        BUSINESS_KEY_,
       </if>
       <if test="parentTaskId != null">
         PARENT_TASK_ID_,
@@ -202,9 +195,6 @@
       <if test="claimTime != null">
         CLAIM_TIME_,
       </if>
-      <if test="appVersion != null">
-        APP_VERSION_,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -224,9 +214,6 @@
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="businessKey != null">
-        #{businessKey,jdbcType=VARCHAR},
       </if>
       <if test="parentTaskId != null">
         #{parentTaskId,jdbcType=VARCHAR},
@@ -270,9 +257,6 @@
       <if test="claimTime != null">
         #{claimTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="appVersion != null">
-        #{appVersion,jdbcType=INTEGER},
-      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.zw.cloud.activiti.entity.ActRuTaskExample" resultType="java.lang.Long">
@@ -301,9 +285,6 @@
       </if>
       <if test="record.name != null">
         NAME_ = #{record.name,jdbcType=VARCHAR},
-      </if>
-      <if test="record.businessKey != null">
-        BUSINESS_KEY_ = #{record.businessKey,jdbcType=VARCHAR},
       </if>
       <if test="record.parentTaskId != null">
         PARENT_TASK_ID_ = #{record.parentTaskId,jdbcType=VARCHAR},
@@ -347,9 +328,6 @@
       <if test="record.claimTime != null">
         CLAIM_TIME_ = #{record.claimTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.appVersion != null">
-        APP_VERSION_ = #{record.appVersion,jdbcType=INTEGER},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -363,7 +341,6 @@
       PROC_INST_ID_ = #{record.procInstId,jdbcType=VARCHAR},
       PROC_DEF_ID_ = #{record.procDefId,jdbcType=VARCHAR},
       NAME_ = #{record.name,jdbcType=VARCHAR},
-      BUSINESS_KEY_ = #{record.businessKey,jdbcType=VARCHAR},
       PARENT_TASK_ID_ = #{record.parentTaskId,jdbcType=VARCHAR},
       DESCRIPTION_ = #{record.description,jdbcType=VARCHAR},
       TASK_DEF_KEY_ = #{record.taskDefKey,jdbcType=VARCHAR},
@@ -377,8 +354,7 @@
       SUSPENSION_STATE_ = #{record.suspensionState,jdbcType=INTEGER},
       TENANT_ID_ = #{record.tenantId,jdbcType=VARCHAR},
       FORM_KEY_ = #{record.formKey,jdbcType=VARCHAR},
-      CLAIM_TIME_ = #{record.claimTime,jdbcType=TIMESTAMP},
-      APP_VERSION_ = #{record.appVersion,jdbcType=INTEGER}
+      CLAIM_TIME_ = #{record.claimTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -400,9 +376,6 @@
       </if>
       <if test="name != null">
         NAME_ = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="businessKey != null">
-        BUSINESS_KEY_ = #{businessKey,jdbcType=VARCHAR},
       </if>
       <if test="parentTaskId != null">
         PARENT_TASK_ID_ = #{parentTaskId,jdbcType=VARCHAR},
@@ -446,9 +419,6 @@
       <if test="claimTime != null">
         CLAIM_TIME_ = #{claimTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="appVersion != null">
-        APP_VERSION_ = #{appVersion,jdbcType=INTEGER},
-      </if>
     </set>
     where ID_ = #{id,jdbcType=VARCHAR}
   </update>
@@ -459,7 +429,6 @@
       PROC_INST_ID_ = #{procInstId,jdbcType=VARCHAR},
       PROC_DEF_ID_ = #{procDefId,jdbcType=VARCHAR},
       NAME_ = #{name,jdbcType=VARCHAR},
-      BUSINESS_KEY_ = #{businessKey,jdbcType=VARCHAR},
       PARENT_TASK_ID_ = #{parentTaskId,jdbcType=VARCHAR},
       DESCRIPTION_ = #{description,jdbcType=VARCHAR},
       TASK_DEF_KEY_ = #{taskDefKey,jdbcType=VARCHAR},
@@ -473,8 +442,7 @@
       SUSPENSION_STATE_ = #{suspensionState,jdbcType=INTEGER},
       TENANT_ID_ = #{tenantId,jdbcType=VARCHAR},
       FORM_KEY_ = #{formKey,jdbcType=VARCHAR},
-      CLAIM_TIME_ = #{claimTime,jdbcType=TIMESTAMP},
-      APP_VERSION_ = #{appVersion,jdbcType=INTEGER}
+      CLAIM_TIME_ = #{claimTime,jdbcType=TIMESTAMP}
     where ID_ = #{id,jdbcType=VARCHAR}
   </update>
   <insert id="batchInsert" parameterType="java.util.List">
@@ -483,10 +451,10 @@
       这个节点为代码生成工具生成，请不要修改!
       @author hewei
     -->
-    insert into act_ru_task (ID_, REV_, EXECUTION_ID_, PROC_INST_ID_, PROC_DEF_ID_, NAME_, BUSINESS_KEY_, PARENT_TASK_ID_, DESCRIPTION_, TASK_DEF_KEY_, OWNER_, ASSIGNEE_, DELEGATION_, PRIORITY_, CREATE_TIME_, DUE_DATE_, CATEGORY_, SUSPENSION_STATE_, TENANT_ID_, FORM_KEY_, CLAIM_TIME_, APP_VERSION_)
+    insert into act_ru_task (ID_, REV_, EXECUTION_ID_, PROC_INST_ID_, PROC_DEF_ID_, NAME_, PARENT_TASK_ID_, DESCRIPTION_, TASK_DEF_KEY_, OWNER_, ASSIGNEE_, DELEGATION_, PRIORITY_, CREATE_TIME_, DUE_DATE_, CATEGORY_, SUSPENSION_STATE_, TENANT_ID_, FORM_KEY_, CLAIM_TIME_)
     values
     <foreach collection="list" item="item" separator=",">
-       (#{item.id,jdbcType=VARCHAR}, #{item.rev,jdbcType=INTEGER}, #{item.executionId,jdbcType=VARCHAR}, #{item.procInstId,jdbcType=VARCHAR}, #{item.procDefId,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, #{item.businessKey,jdbcType=VARCHAR}, #{item.parentTaskId,jdbcType=VARCHAR}, #{item.description,jdbcType=VARCHAR}, #{item.taskDefKey,jdbcType=VARCHAR}, #{item.owner,jdbcType=VARCHAR}, #{item.assignee,jdbcType=VARCHAR}, #{item.delegation,jdbcType=VARCHAR}, #{item.priority,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.dueDate,jdbcType=TIMESTAMP}, #{item.category,jdbcType=VARCHAR}, #{item.suspensionState,jdbcType=INTEGER}, #{item.tenantId,jdbcType=VARCHAR}, #{item.formKey,jdbcType=VARCHAR}, #{item.claimTime,jdbcType=TIMESTAMP}, #{item.appVersion,jdbcType=INTEGER})
+       (#{item.id,jdbcType=VARCHAR}, #{item.rev,jdbcType=INTEGER}, #{item.executionId,jdbcType=VARCHAR}, #{item.procInstId,jdbcType=VARCHAR}, #{item.procDefId,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, #{item.parentTaskId,jdbcType=VARCHAR}, #{item.description,jdbcType=VARCHAR}, #{item.taskDefKey,jdbcType=VARCHAR}, #{item.owner,jdbcType=VARCHAR}, #{item.assignee,jdbcType=VARCHAR}, #{item.delegation,jdbcType=VARCHAR}, #{item.priority,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.dueDate,jdbcType=TIMESTAMP}, #{item.category,jdbcType=VARCHAR}, #{item.suspensionState,jdbcType=INTEGER}, #{item.tenantId,jdbcType=VARCHAR}, #{item.formKey,jdbcType=VARCHAR}, #{item.claimTime,jdbcType=TIMESTAMP})
     </foreach>
   </insert>
   <select id="selectOneByExample" parameterType="com.zw.cloud.activiti.entity.ActRuTaskExample" resultMap="BaseResultMap">

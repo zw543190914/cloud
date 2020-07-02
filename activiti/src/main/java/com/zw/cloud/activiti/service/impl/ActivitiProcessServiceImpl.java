@@ -6,10 +6,7 @@ import com.zw.cloud.activiti.common.api.IActivitiCommonProcessService;
 import com.zw.cloud.activiti.entity.ActHiProcinst;
 import com.zw.cloud.activiti.service.api.IActivitiProcessService;
 import com.zw.cloud.common.utils.WebResult;
-import org.activiti.engine.HistoryService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.history.HistoricActivityInstance;
-import org.activiti.engine.history.HistoricActivityInstanceQuery;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.apache.commons.collections4.CollectionUtils;
@@ -24,8 +21,6 @@ import java.util.stream.Collectors;
 @Service
 public class ActivitiProcessServiceImpl implements IActivitiProcessService {
 
-    @Autowired
-    private HistoryService historyService;
     @Autowired
     private TaskService taskService;
     @Autowired
@@ -50,10 +45,7 @@ public class ActivitiProcessServiceImpl implements IActivitiProcessService {
         Preconditions.checkNotNull(nodeCode,"nodeCode can not be null");
         Preconditions.checkNotNull(processInstanceId, "processInstanceId can not be null");
         //Preconditions.checkNotNull(paramMap, "paramMap can not be null");
-        List<Task> taskList = taskService.createTaskQuery().taskCandidateUser(workId).processInstanceId(processInstanceId).list();
-        if(CollectionUtils.isEmpty(taskList)){
-            throw new Exception("没有您的对应审批任务");
-        }
+        List<Task> taskList = taskService.createTaskQuery().processInstanceId(processInstanceId).list();
         List<Task> tasks = taskList.stream().filter(task -> nodeCode.equals(task.getName())).collect(Collectors.toList());
         if (CollectionUtils.isEmpty(tasks)){
             throw new Exception("任务进度不匹配");
@@ -61,11 +53,10 @@ public class ActivitiProcessServiceImpl implements IActivitiProcessService {
         //Set<String> taskIds = taskList.stream().map(TaskInfo::getId).collect(Collectors.toSet());
         for (Task task : tasks){
             String taskId = task.getId();
-            //任务拾取
-            taskService.claim(taskId, workId);
             //taskService.addComment(taskId,processInstanceId ,nodeCode );
             //处理任务
-            commonProcessService.doTaskWithoutPermissionCheck(taskId,paramMap);
+            commonProcessService.claimAnddoTask(workId,taskId,paramMap);
+
         }
         return true;
     }
@@ -130,7 +121,7 @@ public class ActivitiProcessServiceImpl implements IActivitiProcessService {
         Preconditions.checkNotNull(workId, "workId can not be null");
         Preconditions.checkNotNull(processInstanceId, "processInstanceId can not be null");
         //Preconditions.checkNotNull(paramMap, "paramMap can not be null");
-        List<Task> taskList = taskService.createTaskQuery().taskAssignee(workId).processInstanceId(processInstanceId).list();
+        List<Task> taskList = taskService.createTaskQuery().taskCandidateOrAssigned(workId).processInstanceId(processInstanceId).list();
         if(CollectionUtils.isEmpty(taskList)){
             throw new Exception("没有您的对应审批任务");
         }
@@ -189,8 +180,13 @@ public class ActivitiProcessServiceImpl implements IActivitiProcessService {
     }
 
     @Override
-    public WebResult addTaskUser(String workId, String nodeCode, String processInstanceId, String taskUser, boolean isAdd) throws Exception {
-        return commonProcessService.addTaskUser(workId, nodeCode, processInstanceId, taskUser, isAdd);
+    public WebResult addTaskUser(String nodeCode, String processInstanceId, String taskUser, boolean isAdd) throws Exception {
+        return commonProcessService.addTaskUser(nodeCode, processInstanceId, taskUser, isAdd);
+    }
+
+    @Override
+    public WebResult updateAssignee(String taskId, String userId) {
+        return commonProcessService.updateAssignee(taskId,userId);
     }
 
 
@@ -204,22 +200,9 @@ public class ActivitiProcessServiceImpl implements IActivitiProcessService {
 
     //16.14.   查询批注信息----可以根据流程实例或执行实例id查询
     @Override
-    public List<Comment> queryComment(String processInstanceId){
+    public WebResult queryComment(String processInstanceId){
         Preconditions.checkNotNull(processInstanceId,"processInstanceId can not be null");
-        List<Comment> commentList = new ArrayList<>();
-        /*Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        String processInstanceId = task.getProcessInstanceId();*/
-        HistoricActivityInstanceQuery historicActivityInstanceQuery = historyService.createHistoricActivityInstanceQuery();
-        //  所有历史活动节点---历史流程详情
-        List<HistoricActivityInstance> list = historicActivityInstanceQuery.processInstanceId(processInstanceId).list();
-        list.forEach(historicActivityInstance -> {
-            String historicTaskId = historicActivityInstance.getTaskId();
-            List<Comment> taskComments = taskService.getTaskComments(historicTaskId);
-            if (null != taskComments && taskComments.size() > 0){
-                commentList.addAll(taskComments);
-            }
-        });
-        return commentList.stream().sorted(Comparator.comparing(Comment::getTime)).collect(Collectors.toList());
+        return WebResult.success().withData(commonProcessService.queryHiComment(processInstanceId));
     }
 
 

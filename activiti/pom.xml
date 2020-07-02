@@ -54,6 +54,12 @@
             <artifactId>activiti-spring-boot-starter</artifactId>
             <version>7.1.0.M6</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.activiti/activiti-image-generator -->
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-image-generator</artifactId>
+            <version>7.1.0.M6</version>
+        </dependency>
 
         <dependency>
             <groupId>com.zw.cloud</groupId>

@@ -18,10 +18,6 @@ public class ActReDeployment implements Serializable {
 
     private String engineVersion;
 
-    private Integer version;
-
-    private String projectReleaseVersion;
-
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -78,21 +74,5 @@ public class ActReDeployment implements Serializable {
 
     public void setEngineVersion(String engineVersion) {
         this.engineVersion = engineVersion == null ? null : engineVersion.trim();
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public String getProjectReleaseVersion() {
-        return projectReleaseVersion;
-    }
-
-    public void setProjectReleaseVersion(String projectReleaseVersion) {
-        this.projectReleaseVersion = projectReleaseVersion == null ? null : projectReleaseVersion.trim();
     }
 }

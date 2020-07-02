@@ -9,8 +9,6 @@
     <result column="TENANT_ID_" jdbcType="VARCHAR" property="tenantId" />
     <result column="DEPLOY_TIME_" jdbcType="TIMESTAMP" property="deployTime" />
     <result column="ENGINE_VERSION_" jdbcType="VARCHAR" property="engineVersion" />
-    <result column="VERSION_" jdbcType="INTEGER" property="version" />
-    <result column="PROJECT_RELEASE_VERSION_" jdbcType="VARCHAR" property="projectReleaseVersion" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -71,8 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ID_, NAME_, CATEGORY_, KEY_, TENANT_ID_, DEPLOY_TIME_, ENGINE_VERSION_, VERSION_, 
-    PROJECT_RELEASE_VERSION_
+    ID_, NAME_, CATEGORY_, KEY_, TENANT_ID_, DEPLOY_TIME_, ENGINE_VERSION_
   </sql>
   <select id="selectByExample" parameterType="com.zw.cloud.activiti.entity.ActReDeploymentExample" resultMap="BaseResultMap">
     select
@@ -107,12 +104,10 @@
   <insert id="insert" parameterType="com.zw.cloud.activiti.entity.ActReDeployment">
     insert into act_re_deployment (ID_, NAME_, CATEGORY_, 
       KEY_, TENANT_ID_, DEPLOY_TIME_, 
-      ENGINE_VERSION_, VERSION_, PROJECT_RELEASE_VERSION_
-      )
+      ENGINE_VERSION_)
     values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{category,jdbcType=VARCHAR}, 
       #{key,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{deployTime,jdbcType=TIMESTAMP}, 
-      #{engineVersion,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, #{projectReleaseVersion,jdbcType=VARCHAR}
-      )
+      #{engineVersion,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zw.cloud.activiti.entity.ActReDeployment">
     insert into act_re_deployment
@@ -138,12 +133,6 @@
       <if test="engineVersion != null">
         ENGINE_VERSION_,
       </if>
-      <if test="version != null">
-        VERSION_,
-      </if>
-      <if test="projectReleaseVersion != null">
-        PROJECT_RELEASE_VERSION_,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -166,12 +155,6 @@
       </if>
       <if test="engineVersion != null">
         #{engineVersion,jdbcType=VARCHAR},
-      </if>
-      <if test="version != null">
-        #{version,jdbcType=INTEGER},
-      </if>
-      <if test="projectReleaseVersion != null">
-        #{projectReleaseVersion,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -205,12 +188,6 @@
       <if test="record.engineVersion != null">
         ENGINE_VERSION_ = #{record.engineVersion,jdbcType=VARCHAR},
       </if>
-      <if test="record.version != null">
-        VERSION_ = #{record.version,jdbcType=INTEGER},
-      </if>
-      <if test="record.projectReleaseVersion != null">
-        PROJECT_RELEASE_VERSION_ = #{record.projectReleaseVersion,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -224,9 +201,7 @@
       KEY_ = #{record.key,jdbcType=VARCHAR},
       TENANT_ID_ = #{record.tenantId,jdbcType=VARCHAR},
       DEPLOY_TIME_ = #{record.deployTime,jdbcType=TIMESTAMP},
-      ENGINE_VERSION_ = #{record.engineVersion,jdbcType=VARCHAR},
-      VERSION_ = #{record.version,jdbcType=INTEGER},
-      PROJECT_RELEASE_VERSION_ = #{record.projectReleaseVersion,jdbcType=VARCHAR}
+      ENGINE_VERSION_ = #{record.engineVersion,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -252,12 +227,6 @@
       <if test="engineVersion != null">
         ENGINE_VERSION_ = #{engineVersion,jdbcType=VARCHAR},
       </if>
-      <if test="version != null">
-        VERSION_ = #{version,jdbcType=INTEGER},
-      </if>
-      <if test="projectReleaseVersion != null">
-        PROJECT_RELEASE_VERSION_ = #{projectReleaseVersion,jdbcType=VARCHAR},
-      </if>
     </set>
     where ID_ = #{id,jdbcType=VARCHAR}
   </update>
@@ -268,9 +237,7 @@
       KEY_ = #{key,jdbcType=VARCHAR},
       TENANT_ID_ = #{tenantId,jdbcType=VARCHAR},
       DEPLOY_TIME_ = #{deployTime,jdbcType=TIMESTAMP},
-      ENGINE_VERSION_ = #{engineVersion,jdbcType=VARCHAR},
-      VERSION_ = #{version,jdbcType=INTEGER},
-      PROJECT_RELEASE_VERSION_ = #{projectReleaseVersion,jdbcType=VARCHAR}
+      ENGINE_VERSION_ = #{engineVersion,jdbcType=VARCHAR}
     where ID_ = #{id,jdbcType=VARCHAR}
   </update>
   <insert id="batchInsert" parameterType="java.util.List">
@@ -279,10 +246,10 @@
       这个节点为代码生成工具生成，请不要修改!
       @author hewei
     -->
-    insert into act_re_deployment (ID_, NAME_, CATEGORY_, KEY_, TENANT_ID_, DEPLOY_TIME_, ENGINE_VERSION_, VERSION_, PROJECT_RELEASE_VERSION_)
+    insert into act_re_deployment (ID_, NAME_, CATEGORY_, KEY_, TENANT_ID_, DEPLOY_TIME_, ENGINE_VERSION_)
     values
     <foreach collection="list" item="item" separator=",">
-       (#{item.id,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, #{item.category,jdbcType=VARCHAR}, #{item.key,jdbcType=VARCHAR}, #{item.tenantId,jdbcType=VARCHAR}, #{item.deployTime,jdbcType=TIMESTAMP}, #{item.engineVersion,jdbcType=VARCHAR}, #{item.version,jdbcType=INTEGER}, #{item.projectReleaseVersion,jdbcType=VARCHAR})
+       (#{item.id,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, #{item.category,jdbcType=VARCHAR}, #{item.key,jdbcType=VARCHAR}, #{item.tenantId,jdbcType=VARCHAR}, #{item.deployTime,jdbcType=TIMESTAMP}, #{item.engineVersion,jdbcType=VARCHAR})
     </foreach>
   </insert>
   <select id="selectOneByExample" parameterType="com.zw.cloud.activiti.entity.ActReDeploymentExample" resultMap="BaseResultMap">

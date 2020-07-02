@@ -20,11 +20,19 @@ public interface IActivitiCommonProcessService {
 
     WebResult doTaskWithoutPermissionCheck(String taskId, Map<String, Object> variables);
 
-    WebResult addTaskUser(String workId,String nodeCode, String processInstanceId, String taskUser,boolean isAdd);
+    WebResult claimAnddoTask(String workId,String taskId, Map<String, Object> variables);
+
+    WebResult addTaskUser(String nodeCode, String processInstanceId, String taskUser,boolean isAdd);
+
+    WebResult updateAssignee(String taskId, String userId);
+
+    WebResult updateVariables(String taskId,  Map<String, Object> variables);
 
     WebResult queryNextTaskByProcInstId(String procInstId);
 
     WebResult taskQueryByWorkId(String workId);
 
     WebResult queryHiActinst(String procInstId);
+
+    WebResult queryHiComment(String procInstId);
 }

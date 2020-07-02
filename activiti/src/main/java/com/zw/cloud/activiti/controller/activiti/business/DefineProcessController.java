@@ -20,7 +20,7 @@ public class DefineProcessController {
      * @param deployName  流程名称
      */
     @GetMapping("/deploy")
-    //http://localhost:9020/activiti/defineProcess/deploy?deployName=event
+    //http://localhost:9020/activiti/defineProcess/deploy?deployName=event2
     public WebResult deploy(String deployName){
         return WebResult.success().withData(commonDeployService.deploy( deployName));
     }
@@ -62,7 +62,7 @@ public class DefineProcessController {
      * @param response
      */
     @GetMapping("/queryImage")
-    //http://localhost:9020/activiti/defineProcess/queryImage?deployId=2325e9ed-bba0-11ea-bd16-a0a4c5f4cb40
+    //http://localhost:9020/activiti/defineProcess/queryImage?deployId=event:1:61656bd4-bc7a-11ea-b4f8-a0a4c5f4cb40
     public void queryImage(String deployId, HttpServletResponse response)throws Exception{
         commonDeployService.queryImage(deployId, response);
     }

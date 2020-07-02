@@ -8,6 +8,7 @@ import com.zw.cloud.activiti.entity.ActReDeploymentExample;
 import com.zw.cloud.common.utils.WebResult;
 import org.activiti.engine.*;
 import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.repository.DeploymentBuilder;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +17,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,15 +45,12 @@ public class ActivitiCommonDeployServiceImpl implements IActivitiCommonDeploySer
     //流程定义和部署
     @Override
     public WebResult deploy(String deployName){
-
-        RepositoryService repositoryService = processEngine.getRepositoryService();
-        //创建一个部署对象
-        Deployment deployment = repositoryService
-                .createDeployment().name(deployName)
+        Deployment deploy = processEngine.getRepositoryService().createDeployment()
                 .key(deployName)
-                .addClasspathResource("processes/" +deployName+ ".bpmn")
+                .name(deployName)
+                .addClasspathResource("processes/" + deployName + ".bpmn")
                 .deploy();
-        return WebResult.success().withData(deployment.getKey());
+        return WebResult.success().withData(deploy.getKey());
     }
 
     @Override
@@ -95,13 +97,13 @@ public class ActivitiCommonDeployServiceImpl implements IActivitiCommonDeploySer
         String imageName = processDefinition.getResourceName();
         try {
             InputStream inputstream = repositoryService.getResourceAsStream(deployId, imageName);
-            /*BufferedImage bufferedImage = ImageIO.read(in);
+            BufferedImage bufferedImage = ImageIO.read(inputstream);
             ServletOutputStream outputStream = response.getOutputStream();
             ImageIO.write(bufferedImage,"JPEG" ,outputStream );
-            in.close();
-            outputStream.close();*/
-            String fileName = "image" + Instant.now().getEpochSecond()+".png";
-            FileUtils.copyInputStreamToFile(inputstream, new File("src/main/resources/processes/"+fileName));
+            inputstream.close();
+            outputStream.close();
+            /*String fileName = "image" + Instant.now().getEpochSecond()+".png";
+            FileUtils.copyInputStreamToFile(inputstream, new File("src/main/resources/processes/"+fileName));*/
 
 
         } catch (IOException e) {
