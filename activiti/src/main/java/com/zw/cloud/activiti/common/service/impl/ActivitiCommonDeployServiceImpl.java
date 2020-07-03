@@ -92,7 +92,7 @@ public class ActivitiCommonDeployServiceImpl implements IActivitiCommonDeploySer
                 .deploymentId(deployId).singleResult();
         String imageName = processDefinition.getResourceName();
         try {
-            InputStream inputstream = repositoryService.getResourceAsStream(deployId, imageName);
+            InputStream inputstream = repositoryService.getResourceAsStream(deployId, processDefinition.getDiagramResourceName());
             BufferedImage bufferedImage = ImageIO.read(inputstream);
             ServletOutputStream outputStream = response.getOutputStream();
             ImageIO.write(bufferedImage,"JPEG" ,outputStream );

@@ -20,7 +20,7 @@ public class DefineProcessController {
      * @param deployName  流程名称
      */
     @GetMapping("/deploy")
-    //http://localhost:9020/activiti/defineProcess/deploy?deployName=test
+    //http://localhost:9020/activiti/defineProcess/deploy?deployName=event2
     public WebResult deploy(String deployName){
         return WebResult.success().withData(commonDeployService.deploy( deployName));
     }

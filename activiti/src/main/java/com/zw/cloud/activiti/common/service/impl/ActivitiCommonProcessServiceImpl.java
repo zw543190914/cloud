@@ -7,11 +7,12 @@ import com.zw.cloud.activiti.dao.ActHiCommentMapper;
 import com.zw.cloud.activiti.dao.ActRuTaskMapper;
 import com.zw.cloud.activiti.entity.*;
 import com.zw.cloud.common.utils.WebResult;
+import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -22,10 +23,13 @@ import java.util.Map;
 @Service
 public class ActivitiCommonProcessServiceImpl implements IActivitiCommonProcessService {
 
+
     @Autowired
     private RuntimeService runtimeService;
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private RepositoryService repositoryService;
     @Autowired
     private ActRuTaskMapper taskMapper;
     @Autowired
@@ -45,16 +49,18 @@ public class ActivitiCommonProcessServiceImpl implements IActivitiCommonProcessS
     @Override
     @Transactional
     public WebResult doTask(String workId,String taskId, Map<String, Object> variables){
-        List<Task> taskList = taskService.createTaskQuery().taskId(taskId).taskCandidateOrAssigned(workId).list();
-        if (CollectionUtils.isNotEmpty(taskList)){
-            taskList.forEach(task -> taskService.complete(taskId, variables,true));
+        Task task = taskService.createTaskQuery().taskId(taskId).taskCandidateOrAssigned(workId).singleResult();
+        if (null == task){
+            throw new RuntimeException("暂无相关任务");
         }
+        taskService.setVariables(taskId,variables);
+        taskService.complete(taskId);
         return WebResult.success();
     }
 
     @Override
     public WebResult doTaskWithoutPermissionCheck(String taskId, Map<String, Object> variables){
-        taskService.complete(taskId,variables,true);
+        taskService.complete(taskId,variables);
         return WebResult.success();
     }
 
@@ -67,7 +73,7 @@ public class ActivitiCommonProcessServiceImpl implements IActivitiCommonProcessS
 
     @Override
     public WebResult updateVariables(String taskId,  Map<String, Object> variables){
-        taskService.setVariablesLocal(taskId,variables);
+        taskService.setVariables(taskId,variables);
         return WebResult.success();
     }
 
@@ -107,6 +113,37 @@ public class ActivitiCommonProcessServiceImpl implements IActivitiCommonProcessS
         return WebResult.success();
     }
 
+    /**
+     * 激活或挂起 全部流程
+     * @param key
+     * @return
+     */
+    @Override
+    public WebResult suspendedOrActive(String key){
+        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().processDefinitionKey(key).singleResult();
+        // 是否暂停
+        boolean suspended = processDefinition.isSuspended();
+        if (suspended){
+            // 激活
+            repositoryService.activateProcessDefinitionById(processDefinition.getId(),true,null);
+        } else {
+            repositoryService.suspendProcessDefinitionById(processDefinition.getId(),true,null);
+        }
+        return WebResult.success();
+    }
+
+    /**
+     * 激活或挂起 全部流程
+     * @param processInstanceById
+     * @return
+     */
+    @Override
+    public WebResult suspendedOrActiveSingle(String processInstanceById){
+        runtimeService.activateProcessInstanceById(processInstanceById);
+        runtimeService.suspendProcessInstanceById(processInstanceById);
+        return WebResult.success();
+    }
+
     @Override
     public WebResult queryNextTaskByProcInstId(String procInstId){
         ActRuTaskExample taskExample = new ActRuTaskExample();
@@ -128,6 +165,7 @@ public class ActivitiCommonProcessServiceImpl implements IActivitiCommonProcessS
     public WebResult queryHiActinst(String procInstId){
         ActHiActinstExample example = new ActHiActinstExample();
         example.createCriteria().andProcInstIdEqualTo(procInstId);
+        example.setOrderByClause("START_TIME_ DESC");
         return WebResult.success().withData(hiActinstMapper.selectByExample(example));
 
     }

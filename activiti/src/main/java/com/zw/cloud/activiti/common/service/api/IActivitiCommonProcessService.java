@@ -28,6 +28,10 @@ public interface IActivitiCommonProcessService {
 
     WebResult updateVariables(String taskId,  Map<String, Object> variables);
 
+    WebResult suspendedOrActive(String key);
+
+    WebResult suspendedOrActiveSingle(String processInstanceById);
+
     WebResult queryNextTaskByProcInstId(String procInstId);
 
     WebResult taskQueryByWorkId(String workId);

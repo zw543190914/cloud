@@ -4,6 +4,7 @@ import com.zw.cloud.activiti.business.service.api.IActivitiProcessService;
 import com.zw.cloud.activiti.common.service.api.IActivitiCommonProcessService;
 import com.zw.cloud.activiti.entity.ParamVO;
 import com.zw.cloud.activiti.entity.VariableVO;
+import com.zw.cloud.activiti.utils.SecurityUtils;
 import com.zw.cloud.common.utils.WebResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * https://blog.csdn.net/hj7jay/article/details/51302829?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/activiti/process")
 public class ActivitiProcessController {
 
@@ -22,6 +24,8 @@ public class ActivitiProcessController {
     @Autowired
     private IActivitiCommonProcessService commonProcessService;
 
+    @Autowired
+    private SecurityUtils securityUtils;
 
     /**
      * 启动流程实例
@@ -29,7 +33,7 @@ public class ActivitiProcessController {
      * 根据流程定义的一次具体执行过程，就是一个流程实例
      */
     @GetMapping("/startProcessInstance")
-    //http://localhost:9020/activiti/process/startProcessInstance?processDefinitionKey=test&businessId=001&permissionUserIds=a,b,c
+    //http://localhost:9020/activiti/process/startProcessInstance?processDefinitionKey=event2&businessId=001&permissionUserIds=a,b,c
     public WebResult startProcessInstance(@RequestParam String processDefinitionKey,
                                           @RequestParam String businessId,@RequestParam String permissionUserIds) {
         return WebResult.success().withData(activitiProcessService.startProcessInstance(processDefinitionKey, businessId, permissionUserIds));
