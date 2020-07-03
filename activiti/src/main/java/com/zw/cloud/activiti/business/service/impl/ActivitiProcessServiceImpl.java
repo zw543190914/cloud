@@ -1,8 +1,8 @@
-package com.zw.cloud.activiti.service.impl;
+package com.zw.cloud.activiti.business.service.impl;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
-import com.zw.cloud.activiti.common.api.IActivitiCommonProcessService;
+import com.zw.cloud.activiti.common.service.api.IActivitiCommonProcessService;
 import com.zw.cloud.activiti.entity.ActHiProcinst;
 import com.zw.cloud.activiti.service.api.IActivitiProcessService;
 import com.zw.cloud.common.utils.WebResult;
@@ -50,13 +50,11 @@ public class ActivitiProcessServiceImpl implements IActivitiProcessService {
         if (CollectionUtils.isEmpty(tasks)){
             throw new Exception("任务进度不匹配");
         }
-        //Set<String> taskIds = taskList.stream().map(TaskInfo::getId).collect(Collectors.toSet());
         for (Task task : tasks){
             String taskId = task.getId();
             //taskService.addComment(taskId,processInstanceId ,nodeCode );
             //处理任务
-            commonProcessService.claimAnddoTask(workId,taskId,paramMap);
-
+            commonProcessService.doTask(workId,taskId,paramMap);
         }
         return true;
     }

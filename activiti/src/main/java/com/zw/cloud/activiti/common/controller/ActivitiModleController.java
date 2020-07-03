@@ -1,4 +1,4 @@
-package com.zw.cloud.activiti.controller.activiti.modle;
+package com.zw.cloud.activiti.common.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -47,7 +47,6 @@ public class ActivitiModleController {
     //http://localhost:9020/activiti/modle/queryDeployment?pageNo=1&pageSize=10&key=
     public Object queryDeployment(Integer pageNo,Integer pageSize,String key){
         ActReDeploymentExample example = new ActReDeploymentExample();
-        example.setOrderByClause("ID_ desc");
         if (StringUtils.isNoneBlank(key)){
             example.createCriteria().andKeyEqualTo(key);
             return actReDeploymentMapper.selectByExample(example);
@@ -60,7 +59,6 @@ public class ActivitiModleController {
     //http://localhost:9020/activiti/modle/queryProcdef?pageNo=1&pageSize=10&key=
     public Object queryProcdef(Integer pageNo,Integer pageSize,String key){
         ActReProcdefExample example = new ActReProcdefExample();
-        example.setOrderByClause("ID_ desc");
         if (StringUtils.isNoneBlank(key)){
             example.createCriteria().andKeyEqualTo(key);
             return actReProcdefMapper.selectByExample(example);
@@ -73,7 +71,6 @@ public class ActivitiModleController {
     //http://localhost:9020/activiti/modle/queryHiProcinst?pageNo=1&pageSize=10&procInstId=
     public Object queryHiProcinst(Integer pageNo,Integer pageSize,String procInstId){
         ActHiProcinstExample example = new ActHiProcinstExample();
-        example.setOrderByClause("ID_ desc");
         if (StringUtils.isNoneBlank(procInstId)){
             example.createCriteria().andProcInstIdEqualTo(procInstId);
             return hiProcinstMapper.selectByExample(example);
@@ -86,7 +83,6 @@ public class ActivitiModleController {
     //http://localhost:9020/activiti/modle/queryHiDetail?pageNo=1&pageSize=10&procInstId=
     public Object queryHiDetail(Integer pageNo,Integer pageSize,String procInstId){
         ActHiDetailExample example = new ActHiDetailExample();
-        example.setOrderByClause("ID_ desc");
         if (StringUtils.isNoneBlank(procInstId)){
             example.createCriteria().andProcInstIdEqualTo(procInstId);
             return hiDetailMapper.selectByExample(example);
@@ -99,7 +95,6 @@ public class ActivitiModleController {
     //http://localhost:9020/activiti/modle/queryHiTaskinst?pageNo=1&pageSize=10&procInstId=924e0e4d-ba20-11ea-bed8-a0a4c5f4cb40
     public Object queryHiTaskinst(Integer pageNo,Integer pageSize,String procInstId){
         ActHiTaskinstExample example = new ActHiTaskinstExample();
-        example.setOrderByClause("ID_ desc");
         if (StringUtils.isNoneBlank(procInstId)){
             example.createCriteria().andProcInstIdEqualTo(procInstId);
             return hiTaskinstMapper.selectByExample(example);
@@ -112,7 +107,6 @@ public class ActivitiModleController {
     //http://localhost:9020/activiti/modle/queryHiActinst?pageNo=1&pageSize=10&procInstId=
     public Object queryHiActinst(Integer pageNo,Integer pageSize,String procInstId){
         ActHiActinstExample example = new ActHiActinstExample();
-        example.setOrderByClause("ID_ desc");
         if (StringUtils.isNoneBlank(procInstId)){
             example.createCriteria().andProcInstIdEqualTo(procInstId);
             return hiActinstMapper.selectByExample(example);
@@ -125,7 +119,6 @@ public class ActivitiModleController {
     //http://localhost:9020/activiti/modle/queryRuTask?pageNo=1&pageSize=10&procInstId=
     public Object queryRuTask(Integer pageNo,Integer pageSize,String procInstId){
         ActRuTaskExample example = new ActRuTaskExample();
-        example.setOrderByClause("ID_ desc");
         if (StringUtils.isNoneBlank(procInstId)){
             example.createCriteria().andProcInstIdEqualTo(procInstId);
             return ruTaskMapper.selectByExample(example);
@@ -138,7 +131,6 @@ public class ActivitiModleController {
     //http://localhost:9020/activiti/modle/queryActGeBytearrays?pageNo=1&pageSize=10&procInstId=
     public Object queryActGeBytearrays(Integer pageNo,Integer pageSize){
         ActGeBytearrayExample example = new ActGeBytearrayExample();
-        example.setOrderByClause("ID_ desc");
         PageHelper.startPage(pageNo,pageSize);
         List<ActGeBytearray> actGeBytearrays = geBytearrayMapper.selectByExampleWithBLOBs(example);
         return actGeBytearrays.stream().map(actGeBytearray -> {

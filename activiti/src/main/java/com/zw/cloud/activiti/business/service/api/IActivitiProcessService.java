@@ -1,10 +1,8 @@
-package com.zw.cloud.activiti.service.api;
+package com.zw.cloud.activiti.business.service.api;
 
 import com.zw.cloud.activiti.entity.ActHiProcinst;
 import com.zw.cloud.common.utils.WebResult;
-import org.activiti.engine.task.Comment;
 
-import java.util.List;
 import java.util.Map;
 
 public interface IActivitiProcessService {
@@ -28,7 +26,7 @@ public interface IActivitiProcessService {
      * @return
      * @throws Exception
      */
-    boolean confirmNodeProcess(String workId,String nodeCode, String processInstanceId, Map<String, Object> paramMap) throws Exception;
+    boolean confirmNodeProcess(String workId, String nodeCode, String processInstanceId, Map<String, Object> paramMap) throws Exception;
 
     /**
      * 流程接入和审批 （组任务）针对 并行网关 使用（不需要指定下一步nodeNode）,
@@ -50,7 +48,7 @@ public interface IActivitiProcessService {
      * @return
      * @throws Exception
      */
-    boolean confirmNodeProcessAssignee(String workId,String nodeCode, String processInstanceId, Map<String, Object> paramMap) throws Exception;
+    boolean confirmNodeProcessAssignee(String workId, String nodeCode, String processInstanceId, Map<String, Object> paramMap) throws Exception;
 
     /**
      * 流程接入和审批 (个人任务) 针对并行网关 个人任务使用（不需要指定下一步nodeNode）
@@ -73,7 +71,7 @@ public interface IActivitiProcessService {
      * @return
      * @throws Exception
      */
-    boolean confirmNodeAdditionalSignature(String workId,String result, String processInstanceId, Map<String, Object> paramMap,String key) throws Exception;
+    boolean confirmNodeAdditionalSignature(String workId, String result, String processInstanceId, Map<String, Object> paramMap, String key) throws Exception;
 
 
     /**
@@ -85,7 +83,7 @@ public interface IActivitiProcessService {
      * @return
      * @throws Exception
      */
-    WebResult addTaskUser(String nodeCode, String processInstanceId, String taskUser,boolean isAdd) throws Exception;
+    WebResult addTaskUser(String nodeCode, String processInstanceId, String taskUser, boolean isAdd) throws Exception;
 
     WebResult updateAssignee(String taskId, String userId);
     /**
@@ -103,7 +101,7 @@ public interface IActivitiProcessService {
     WebResult queryComment(String processInstanceId);
 
 
-    WebResult queryActinst( String processInstanceId);
+    WebResult queryActinst(String processInstanceId);
 
     /**
      * 查询下一步执行人

@@ -1,6 +1,6 @@
-package com.zw.cloud.activiti.controller.activiti.business;
+package com.zw.cloud.activiti.business.controller;
 
-import com.zw.cloud.activiti.common.api.IActivitiCommonDeployService;
+import com.zw.cloud.activiti.common.service.api.IActivitiCommonDeployService;
 import com.zw.cloud.common.utils.WebResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class DefineProcessController {
      * @param deployName  流程名称
      */
     @GetMapping("/deploy")
-    //http://localhost:9020/activiti/defineProcess/deploy?deployName=event2
+    //http://localhost:9020/activiti/defineProcess/deploy?deployName=test
     public WebResult deploy(String deployName){
         return WebResult.success().withData(commonDeployService.deploy( deployName));
     }

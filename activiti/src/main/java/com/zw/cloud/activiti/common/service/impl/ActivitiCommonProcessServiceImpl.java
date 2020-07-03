@@ -1,7 +1,7 @@
-package com.zw.cloud.activiti.common.impl;
+package com.zw.cloud.activiti.common.service.impl;
 
 import com.google.common.base.Preconditions;
-import com.zw.cloud.activiti.common.api.IActivitiCommonProcessService;
+import com.zw.cloud.activiti.common.service.api.IActivitiCommonProcessService;
 import com.zw.cloud.activiti.dao.ActHiActinstMapper;
 import com.zw.cloud.activiti.dao.ActHiCommentMapper;
 import com.zw.cloud.activiti.dao.ActRuTaskMapper;
@@ -60,10 +60,8 @@ public class ActivitiCommonProcessServiceImpl implements IActivitiCommonProcessS
 
     @Override
     @Transactional
-    public WebResult claimAnddoTask(String workId,String taskId, Map<String, Object> variables){
-        taskService.claim(taskId,null);
+    public WebResult claimTask(String workId,String taskId){
         taskService.claim(taskId,workId);
-        taskService.complete(taskId,variables,true);
         return WebResult.success();
     }
 

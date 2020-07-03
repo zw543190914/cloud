@@ -1,4 +1,4 @@
-package com.zw.cloud.activiti.common.api;
+package com.zw.cloud.activiti.common.service.api;
 
 import com.zw.cloud.activiti.entity.ActHiProcinst;
 import com.zw.cloud.common.utils.WebResult;
@@ -20,7 +20,7 @@ public interface IActivitiCommonProcessService {
 
     WebResult doTaskWithoutPermissionCheck(String taskId, Map<String, Object> variables);
 
-    WebResult claimAnddoTask(String workId,String taskId, Map<String, Object> variables);
+    WebResult claimTask(String workId,String taskId);
 
     WebResult addTaskUser(String nodeCode, String processInstanceId, String taskUser,boolean isAdd);
 
