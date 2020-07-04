@@ -29,9 +29,9 @@ public class UserServiceImpl implements IUserService {
     private ResourceMapper resourceMapper;
 
     @Override
-    public User queryUserByUserName(User user){
+    public User queryUserByUserName(String username){
         UserExample example = new UserExample();
-        example.createCriteria().andUserNameEqualTo(user.getUserName()).andStatusEqualTo((byte)0);
+        example.createCriteria().andUserNameEqualTo(username).andStatusEqualTo((byte)0);
         return userMapper.selectOneByExample(example);
     }
 

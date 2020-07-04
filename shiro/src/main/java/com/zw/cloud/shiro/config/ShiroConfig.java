@@ -21,14 +21,15 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+@Configuration
 public class ShiroConfig {
-
 
     /**
      * 配置session监听
@@ -65,7 +66,7 @@ public class ShiroConfig {
         //设置session失效的扫描时间, 清理用户直接关闭浏览器造成的孤立会话 默认为 1个小时
         //设置该属性 就不需要设置 ExecutorServiceSessionValidationScheduler 底层也是默认自动调用ExecutorServiceSessionValidationScheduler
         //暂时设置为 5秒 用来测试
-        sessionManager.setSessionValidationInterval(5000);
+        sessionManager.setSessionValidationInterval(1000 * 60 );
 
         return sessionManager;
 
@@ -199,7 +200,7 @@ public class ShiroConfig {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
         factoryBean.setSecurityManager(securityManager);
         // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
-        factoryBean.setLoginUrl("/login");
+        factoryBean.setLoginUrl("/shiro/user/login");
         // 登录成功后要跳转的连接
         //factoryBean.setSuccessUrl("/welcome");
         factoryBean.setUnauthorizedUrl("/403");
@@ -217,17 +218,17 @@ public class ShiroConfig {
 
         // 配置不会被拦截的链接 顺序判断
         filterChainMap.put("/static/**", "anon");
-        filterChainMap.put("/login", "anon");
-        filterChainMap.put("/insertUser", "anon");
+        filterChainMap.put("/shiro/user/login", "anon");
+        filterChainMap.put("/shiro/user/insert", "anon");
         //配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了
-        filterChainMap.put("/logout", "logout");
+        filterChainMap.put("/shiro/user/logout", "logout");
         //<!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
         //<!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
         filterChainMap.put("/**", "authc");
         // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
         factoryBean.setLoginUrl("/login");
         // 登录成功后要跳转的链接
-        factoryBean.setSuccessUrl("/selectUser");
+        factoryBean.setSuccessUrl("/shiro/user/selectUser");
         //未授权界面;
         factoryBean.setUnauthorizedUrl("/403");
         factoryBean.setFilterChainDefinitionMap(filterChainMap);
@@ -271,4 +272,6 @@ public class ShiroConfig {
     public static LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();
     }
+
+
 }

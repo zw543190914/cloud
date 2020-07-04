@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface IUserService {
 
-    User queryUserByUserName(User user);
+    User queryUserByUserName(String username);
 
     User insert(User user);
 

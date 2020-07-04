@@ -1,6 +1,5 @@
 package com.zw.cloud.shiro.config;
 
-import com.alibaba.fastjson.JSON;
 import com.zw.cloud.shiro.entity.User;
 import com.zw.cloud.shiro.service.api.IUserService;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -34,17 +33,16 @@ public class MyRealm extends AuthorizingRealm {
         //UsernamePasswordToken用于存放提交的登录信息
         UsernamePasswordToken token = (UsernamePasswordToken)authenticationToken;
         logger.info("[doGetAuthenticationInfo]进入登录认证");
-        User user = new User();
-        user.setUserName(token.getUsername());
+        String username = token.getUsername();
         User currentUser = null;
         try {
-            currentUser = userService.queryUserByUserName(user);
+            currentUser = userService.queryUserByUserName(username);
         } catch (Exception e) {
             logger.error("[doGetAuthenticationInfo] error is {}",e );
         }
         if (currentUser != null){
             //盐值 盐值在前
-            ByteSource salt = ByteSource.Util.bytes(token.getUsername());
+            ByteSource salt = ByteSource.Util.bytes(username);
             // 若存在，将此用户存放到登录认证info中，无需自己做密码对比，Shiro会为我们进行密码对比校验
             // currentUser.getPassword() 加密后密码
             return new SimpleAuthenticationInfo(currentUser.getUserName(), currentUser.getPassword(),salt,getName());
@@ -59,14 +57,7 @@ public class MyRealm extends AuthorizingRealm {
         logger.info("[doGetAuthorizationInfo]进入权限匹配");
         String username =(String) super.getAvailablePrincipal(principalCollection);
         //根据用户名取数据库中权限
-        User currentUser = null;
-        try {
-            User user = new User();
-            user.setUserName(username);
-            currentUser = userService.queryUserByUserName(user);
-        } catch (Exception e) {
-            logger.error("[doGetAuthorizationInfo]error is {}",e );
-        }
+        User currentUser = userService.queryUserByUserName(username);
         if (currentUser != null){
             // 权限信息对象info，用来存放查出的用户的所有的角色及权限
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
@@ -94,7 +85,7 @@ public class MyRealm extends AuthorizingRealm {
 
 
     public static void main(String[] args) {
-        System.out.println(DigestUtils.md5Hex("121212"));
+        System.out.println(DigestUtils.md5Hex("zy123456"));
     }
 
 }
