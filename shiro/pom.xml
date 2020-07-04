@@ -52,15 +52,23 @@
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-ehcache -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-ehcache</artifactId>
+            <artifactId>shiro-core</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-ehcache -->
+      <!--  <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-ehcache</artifactId>
+        </dependency>-->
 
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.crazycake</groupId>
+            <artifactId>shiro-redis</artifactId>
         </dependency>
 
     </dependencies>

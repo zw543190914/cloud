@@ -6,6 +6,7 @@ import com.zw.cloud.shiro.entity.*;
 import com.zw.cloud.shiro.service.api.IUserService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,9 @@ public class UserServiceImpl implements IUserService {
     public User insert(User user){
         Preconditions.checkNotNull(user.getUserName());
         Preconditions.checkNotNull(user.getPassword());
-        user.setPassword(DigestUtils.md5Hex(user.getUserName() + user.getPassword()));
+        //String password = DigestUtils.md5Hex(user.getUserName() + user.getPassword());
+        String password = new Md5Hash(user.getPassword(), user.getUserName(), 3).toString();
+        user.setPassword(password);
         userMapper.insertSelective(user);
         return user;
     }

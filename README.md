@@ -10,13 +10,14 @@
   8.分布式链路追踪 Zipkin ,参考 feign 相关模块。 </br>
   9.分布式链路监控与追踪系统使用 Zipkin。参考 feign-provider </br>
   10.分布式任务调度使用 xxl-job。参考xxl-job 模块 </br>
-  11. activiti工作流引擎使用整合。参考 activiti 模块。  </br>
-  12.一些开发常用工具，比如 二维码生成和解析，HttpUtils ，JwtUtils 参考 common 模块。 </br>
-  13. Mybatis 代码生成插件 参考db 模块。 </br>
-  14. 多数据源整合,时间相关转换,返回值统一封装,全局异常处理,poi,参考 feign-consumer 模块</br>
-  15. 整合使用IK分词器(自定义分词)或者 HanLP 分词进行文本相似度分析。参考 common 模块。 </br>
-  16. 使用 Pinyin4jUtils 进行 中文转拼音的相关处理， 参考 common 模块。 </br>
-  17. 整合 shiro 进行权限控制，参考 shiro 模块 </br>
+  11. 分布式锁 zookeeper(ZkInterProcessMutex,LeaderLatch)，redis 缓存和redisUtils ，参考 feign-provider 模块。
+  12. activiti工作流引擎使用整合。参考 activiti 模块。  </br>
+  13.一些开发常用工具，比如 二维码生成和解析，HttpUtils ，JwtUtils 参考 common 模块。 </br>
+  14. Mybatis 代码生成插件 参考db 模块。 </br>
+  15. 多数据源整合,时间相关转换,返回值统一封装,全局异常处理,poi,参考 feign-consumer 模块</br>
+  16. 整合使用IK分词器(自定义分词)或者 HanLP 分词进行文本相似度分析。参考 common 模块。 </br>
+  17. 使用 Pinyin4jUtils 进行 中文转拼音的相关处理， 参考 common 模块。 </br>
+  18. 整合 shiro 进行权限控制，参考 shiro 模块 </br>
 
   父POM中配置了自己nexus私服，已注释，settings-nexus.xml 为自己私服对应配置文件，方便后期查找使用。</br> 
 

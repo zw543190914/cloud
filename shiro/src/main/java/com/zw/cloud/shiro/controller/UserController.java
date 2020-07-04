@@ -9,6 +9,8 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
@@ -19,6 +21,9 @@ public class UserController {
 
     @Autowired
     private IUserService userService;
+
+    private Logger logger = LoggerFactory.getLogger(UserController.class);
+
 
     @PostMapping("/insert")
     public User insert(@RequestBody User user){
@@ -46,7 +51,7 @@ public class UserController {
 
     @PostMapping("/login")
     //http://localhost:9030/shiro/user/login
-    public User login(@RequestBody User user) {
+    public String login(@RequestBody User user) {
         if (StringUtils.isBlank(user.getUserName())){
             throw new RuntimeException("用户名不能为空");
         }
@@ -55,8 +60,8 @@ public class UserController {
         try {
             subject.login(token);
             Session session = subject.getSession();
-            session.setAttribute("user", subject.getPrincipal());
-            return user;
+            logger.info("[login success] sessionId is {}",session.getId());
+            return "success";
         } catch (Exception e) {
             throw e;
         }

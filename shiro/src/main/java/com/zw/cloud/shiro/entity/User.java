@@ -1,8 +1,10 @@
 package com.zw.cloud.shiro.entity;
 
+import org.crazycake.shiro.AuthCachePrincipal;
+
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class User implements Serializable , AuthCachePrincipal {
     private Integer id;
 
     private String userName;
@@ -63,5 +65,10 @@ public class User implements Serializable {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    @Override
+    public String getAuthCacheKey() {
+        return null;
     }
 }
