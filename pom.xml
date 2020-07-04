@@ -26,6 +26,9 @@
         <module>db</module>
         <module>common</module>
         <module>xxl-job</module>
+        <module>activiti</module>
+        <module>shiro</module>
+
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -52,6 +55,18 @@
         <dubbo-serialization-kryo.version>2.7.7</dubbo-serialization-kryo.version>
         <curator.version>4.0.0</curator.version>
         <zookeeper.version>3.4.14</zookeeper.version>
+        <activiti.version>7.1.0.M6</activiti.version>
+        <jjwt.version>0.9.1</jjwt.version>
+        <pinyin4j.version>2.5.1</pinyin4j.version>
+        <jsoup.version>1.13.1</jsoup.version>
+        <hanlp.version>portable-1.7.5</hanlp.version>
+        <hutool-all.version>5.1.1</hutool-all.version>
+        <ikanalyzer.version>2012_u6</ikanalyzer.version>
+        <fastjson.version>1.2.71</fastjson.version>
+        <guava.version>29.0-jre</guava.version>
+        <httpclient.version>4.5.6</httpclient.version>
+        <shiro-spring.version>1.5.3</shiro-spring.version>
+        <commons-codec.version>1.14</commons-codec.version>
     </properties>
 
     <dependencyManagement>
@@ -171,6 +186,81 @@
                 <version>${logback.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.janeluo</groupId>
+                <artifactId>ikanalyzer</artifactId>
+                <version>${ikanalyzer.version}</version>
+
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool-all.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hankcs</groupId>
+                <artifactId>hanlp</artifactId>
+                <version>${hanlp.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>${jsoup.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.belerweb/pinyin4j -->
+            <dependency>
+                <groupId>com.belerweb</groupId>
+                <artifactId>pinyin4j</artifactId>
+                <version>${pinyin4j.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.activiti/activiti-spring-boot-starter -->
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-spring-boot-starter</artifactId>
+                <version>${activiti.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.activiti/activiti-image-generator -->
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-image-generator</artifactId>
+                <version>${activiti.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-spring -->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>${shiro-spring.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-ehcache -->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-ehcache</artifactId>
+                <version>${shiro-spring.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
+            </dependency>
+
+
         </dependencies>
     </dependencyManagement>
 
@@ -179,13 +269,13 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.71</version>
+            <version>${fastjson.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>29.0-jre</version>
+            <version>${guava.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
