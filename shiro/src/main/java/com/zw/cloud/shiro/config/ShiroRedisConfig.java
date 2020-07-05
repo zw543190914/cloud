@@ -5,6 +5,10 @@ import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
+import org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
+import org.apache.shiro.session.mgt.eis.SessionIdGenerator;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -14,7 +18,8 @@ import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
-import org.crazycake.shiro.RedisSessionDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,16 +40,18 @@ public class ShiroRedisConfig {
     @Value("${spring.redis.port}")
     private int redisPort;
 
+    private Logger logger = LoggerFactory.getLogger(ShiroRedisConfig.class);
+
     //安全管理器
     @Bean(name = "securityManager")
-    public DefaultWebSecurityManager defaultWebSecurityManager(MyRealm realm){
-        System.out.println("shiro~~~~~~~~启动");
+    public DefaultWebSecurityManager defaultWebSecurityManager(RedisRealm redisReam){
+        logger.info("[ShiroConfig][securityManager] shiro~~~~~~~~启动");
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setCacheManager(redisCacheManager());
         securityManager.setSessionManager(sessionManager());
         securityManager.setRememberMeManager(rememberMeManager());
         //设置realm
-        securityManager.setRealm(realm);
+        securityManager.setRealm(redisReam);
         return securityManager;
     }
 
@@ -80,22 +87,21 @@ public class ShiroRedisConfig {
         //设置session失效的扫描时间, 清理用户直接关闭浏览器造成的孤立会话 默认为 1个小时
         //设置该属性 就不需要设置 ExecutorServiceSessionValidationScheduler 底层也是默认自动调用ExecutorServiceSessionValidationScheduler
         //暂时设置为 5秒 用来测试
-        sessionManager.setSessionValidationInterval(1000 * 60 );
-
+        sessionManager.setSessionValidationInterval(1000 * 5 );
         return sessionManager;
-
     }
 
      //cacheManager 缓存 redis实现
     @Bean
     public RedisCacheManager redisCacheManager() {
+        logger.info("[ShiroConfig][redisCacheManager] ShiroConfiguration.redisCacheManager()");
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         redisCacheManager.setRedisManager(redisManager());
         //redis中针对不同用户缓存
         //redisCacheManager.setPrincipalIdFieldName("id");
         //redisCacheManager.setPrincipalIdFieldName("username");
-        //用户权限信息缓存时间
-        redisCacheManager.setExpire(1000 * 60 * 30);
+        //用户权限信息缓存时间 s
+        redisCacheManager.setExpire(60);
         return redisCacheManager;
     }
 
@@ -112,18 +118,28 @@ public class ShiroRedisConfig {
 
      //RedisSessionDAO shiro sessionDao层的实现 通过redis
     @Bean
-    public RedisSessionDAO sessionDAO() {
-        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
+    public SessionDAO sessionDAO() {
+
+        /*RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
         redisSessionDAO.setRedisManager(redisManager());
         //session在redis中的保存时间,最好大于session会话超时时间
-        redisSessionDAO.setExpire(1000 * 60 * 30);
-        return redisSessionDAO;
+        redisSessionDAO.setExpire(1000 * 60 * 30);*/
+
+        EnterpriseCacheSessionDAO enterpriseCacheSessionDAO = new EnterpriseCacheSessionDAO();
+        //使用RedisCacheManager
+        enterpriseCacheSessionDAO.setCacheManager(redisCacheManager());
+        //设置session缓存的名字 默认为 shiro-activeSessionCache
+        enterpriseCacheSessionDAO.setActiveSessionsCacheName("shiro-activeSessionCache");
+        //sessionId生成器
+        enterpriseCacheSessionDAO.setSessionIdGenerator(sessionIdGenerator());
+
+        return enterpriseCacheSessionDAO;
     }
 
     //注入ShiroRealm
-    @Bean(name = "myRealm")
-    public MyRealm myRealm(RedisCacheManager redisCacheManager ){
-        MyRealm realm = new MyRealm();
+    @Bean(name = "redisReam")
+    public RedisRealm redisReam(RedisCacheManager redisCacheManager ){
+        RedisRealm realm = new RedisRealm();
         realm.setCacheManager(redisCacheManager);
         realm.setCredentialsMatcher(hashedCredentialsMatcher());
         return realm;
@@ -191,7 +207,7 @@ public class ShiroRedisConfig {
         //factoryBean.setSuccessUrl("/welcome");
         factoryBean.setUnauthorizedUrl("/403");
         loadShiroFilterChain(factoryBean);
-        System.out.println("shiro拦截器工厂类注入成功");
+        logger.info("[ShiroConfig][shiroFilterFactoryBean] shiro拦截器工厂类注入成功");
         return factoryBean;
     }
 
@@ -261,4 +277,8 @@ public class ShiroRedisConfig {
         return kickoutSessionControlFilter;
     }
 
+    @Bean
+    public SessionIdGenerator sessionIdGenerator() {
+        return new JavaUuidSessionIdGenerator();
+    }
 }

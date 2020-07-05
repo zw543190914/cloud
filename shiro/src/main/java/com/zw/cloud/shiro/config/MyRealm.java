@@ -1,3 +1,4 @@
+/*
 package com.zw.cloud.shiro.config;
 
 import com.zw.cloud.shiro.entity.User;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.Set;
 
+// ehcache 作为缓存
 @Component
 public class MyRealm extends AuthorizingRealm {
 
@@ -88,52 +90,6 @@ public class MyRealm extends AuthorizingRealm {
         return null;
     }
 
-
-    /**
-     * 重写方法,清除当前用户的的 授权缓存
-     * @param principals
-     */
-    @Override
-    public void clearCachedAuthorizationInfo(PrincipalCollection principals) {
-        super.clearCachedAuthorizationInfo(principals);
-    }
-
-    /**
-     * 重写方法，清除当前用户的 认证缓存
-     * @param principals
-     */
-    @Override
-    public void clearCachedAuthenticationInfo(PrincipalCollection principals) {
-        super.clearCachedAuthenticationInfo(principals);
-    }
-
-    @Override
-    public void clearCache(PrincipalCollection principals) {
-        super.clearCache(principals);
-    }
-
-    /**
-     * 自定义方法：清除所有 授权缓存
-     */
-    public void clearAllCachedAuthorizationInfo() {
-        getAuthorizationCache().clear();
-    }
-
-    /**
-     * 自定义方法：清除所有 认证缓存
-     */
-    public void clearAllCachedAuthenticationInfo() {
-        getAuthenticationCache().clear();
-    }
-
-    /**
-     * 自定义方法：清除所有的  认证缓存  和 授权缓存
-     */
-    public void clearAllCache() {
-        clearAllCachedAuthenticationInfo();
-        clearAllCachedAuthorizationInfo();
-    }
-
     public static void main(String[] args) {
         String zy = new Md5Hash("123456", "zw", 3).toString();
         System.out.println(zy);
@@ -141,3 +97,4 @@ public class MyRealm extends AuthorizingRealm {
     }
 
 }
+*/

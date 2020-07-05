@@ -28,6 +28,7 @@
         <module>xxl-job</module>
         <module>activiti</module>
         <module>shiro</module>
+        <module>tools</module>
 
     </modules>
     <properties>
@@ -69,7 +70,10 @@
         <!--<shiro-spring.version>1.5.3</shiro-spring.version>-->
         <commons-codec.version>1.14</commons-codec.version>
         <shiro-redis.version>3.0.0</shiro-redis.version>
-
+        <poi.version>4.1.2</poi.version>
+        <commons-io.version>2.7</commons-io.version>
+        <qiniu-java-sdk.version>[7.2.0, 7.2.99]</qiniu-java-sdk.version>
+        <baidu-aip.version>4.8.0</baidu-aip.version>
     </properties>
 
     <dependencyManagement>
@@ -141,7 +145,6 @@
                 <artifactId>core</artifactId>
                 <version>${zing-core.version}</version>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/com.google.zxing/javase  解析二维码-->
             <dependency>
                 <groupId>com.google.zxing</groupId>
                 <artifactId>javase</artifactId>
@@ -275,7 +278,29 @@
                 <artifactId>commons-codec</artifactId>
                 <version>${commons-codec.version}</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <!--七牛云对象存储-->
+            <dependency>
+                <groupId>com.qiniu</groupId>
+                <artifactId>qiniu-java-sdk</artifactId>
+                <version>${qiniu-java-sdk.version}</version>
+            </dependency>
 
+            <dependency>
+                <groupId>com.baidu.aip</groupId>
+                <artifactId>java-sdk</artifactId>
+                <version>${baidu-aip.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -305,6 +330,12 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>${commons-collections4.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
         </dependency>
 
 

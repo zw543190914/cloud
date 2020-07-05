@@ -18,6 +18,8 @@ import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -31,6 +33,21 @@ import java.util.Map;
 
 @Configuration
 public class ShiroConfig {
+
+    private Logger logger = LoggerFactory.getLogger(ShiroConfig.class);
+
+    //安全管理器
+    @Bean(name = "securityManager")
+    public DefaultWebSecurityManager defaultWebSecurityManager(MyRealm realm){
+        logger.info("[ShiroConfig][securityManager] shiro~~~~~~~~启动");
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        securityManager.setCacheManager(ehCacheManager());
+        securityManager.setSessionManager(sessionManager());
+        securityManager.setRememberMeManager(rememberMeManager());
+        //设置realm
+        securityManager.setRealm(realm);
+        return securityManager;
+    }
 
      // 配置session监听
     @Bean("sessionListener")
@@ -56,7 +73,7 @@ public class ShiroConfig {
         sessionManager.setCacheManager(ehCacheManager());
 
         //全局会话超时时间（单位毫秒），默认30分钟
-        sessionManager.setGlobalSessionTimeout(1000 * 60 * 10);
+        sessionManager.setGlobalSessionTimeout(1000 * 60);
         //是否开启删除无效的session对象  默认为true
         sessionManager.setDeleteInvalidSessions(true);
         //是否开启定时调度器进行检测过期session 默认为true
@@ -65,10 +82,18 @@ public class ShiroConfig {
         //设置该属性 就不需要设置 ExecutorServiceSessionValidationScheduler 底层也是默认自动调用ExecutorServiceSessionValidationScheduler
         //暂时设置为 5秒 用来测试
         sessionManager.setSessionValidationInterval(1000 * 60 );
-
         return sessionManager;
-
     }
+
+    @Bean
+    public EhCacheManager ehCacheManager() {
+        logger.info("[ShiroConfig][ehCacheManager] ShiroConfiguration.getEhCacheManager()");
+        EhCacheManager ehCacheManager = new EhCacheManager();
+        //将ehcacheManager转换成shiro包装后的ehcacheManager对象
+        ehCacheManager.setCacheManagerConfigFile("classpath:ehcache.xml");
+        return ehCacheManager;
+    }
+
 
     //  SessionDAO的作用是为Session提供CRUD并进行持久化的一个shiro组件
     //  MemorySessionDAO 直接在内存中进行会话维护
@@ -86,21 +111,11 @@ public class ShiroConfig {
     }
 
     @Bean
-    public EhCacheManager ehCacheManager() {
-        System.out.println("ShiroConfiguration.getEhCacheManager()");
-        EhCacheManager ehCacheManager = new EhCacheManager();
-        //将ehcacheManager转换成shiro包装后的ehcacheManager对象
-        ehCacheManager.setCacheManagerConfigFile("classpath:ehcache.xml");
-
-        return ehCacheManager;
-    }
-
-    @Bean
     public SessionIdGenerator sessionIdGenerator() {
         return new JavaUuidSessionIdGenerator();
     }
 
-     //* 密码管理
+     // 密码管理
     @Bean
     public HashedCredentialsMatcher hashedCredentialsMatcher() {
         HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
@@ -111,8 +126,8 @@ public class ShiroConfig {
         return credentialsMatcher;
     }
 
-    // * 配置保存sessionId的cookie
-    // * 注意：这里的cookie 不是上面的记住我 cookie 记住我需要一个cookie session管理 也需要自己的cookie
+    // 配置保存sessionId的cookie
+    //  注意：这里的cookie 不是上面的记住我 cookie 记住我需要一个cookie session管理 也需要自己的cookie
     @Bean("sessionIdCookie")
     public SimpleCookie sessionIdCookie(){
         //这个参数是cookie的名称
@@ -159,19 +174,6 @@ public class ShiroConfig {
         return realm;
     }
 
-    //安全管理器
-    @Bean(name = "securityManager")
-    public DefaultWebSecurityManager defaultWebSecurityManager(MyRealm realm){
-        System.out.println("shiro~~~~~~~~启动");
-        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setCacheManager(ehCacheManager());
-        securityManager.setSessionManager(sessionManager());
-        securityManager.setRememberMeManager(rememberMeManager());
-        //设置realm
-        securityManager.setRealm(realm);
-        return securityManager;
-    }
-
 
     //shiro核心拦截器
     @Bean(name = "shiroFilter")
@@ -184,7 +186,7 @@ public class ShiroConfig {
         //factoryBean.setSuccessUrl("/welcome");
         factoryBean.setUnauthorizedUrl("/403");
         loadShiroFilterChain(factoryBean);
-        System.out.println("shiro拦截器工厂类注入成功");
+        logger.info("[ShiroConfig][shiroFilterFactoryBean] shiro拦截器工厂类注入成功");
         return factoryBean;
     }
 

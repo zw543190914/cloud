@@ -1,4 +1,4 @@
-package com.zw.cloud.common.utils;
+package com.zw.cloud.tools.utils;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
-public class ZXingCodeUtils {
+public class ZXingCodeWithImageUtils {
     private static final int QRCOLOR = 0xFF000000; // 默认是黑色
     private static final int BGWHITE = 0xFFFFFFFF; // 背景颜色
 
@@ -114,9 +114,9 @@ public class ZXingCodeUtils {
 
 
     //解析 二维码
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) {
         try {
-            MultiFormatReader reader=new MultiFormatReader();//需要详细了解MultiFormatReader的小伙伴可以点我一下官方去看文档
+            MultiFormatReader reader=new MultiFormatReader();
             File f=new File("D:\\QrCode\\05.png");
             BufferedImage image=ImageIO.read(f);
             BinaryBitmap bb=new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(image)));

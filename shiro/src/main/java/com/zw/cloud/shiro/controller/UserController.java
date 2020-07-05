@@ -51,12 +51,12 @@ public class UserController {
 
     @PostMapping("/login")
     //http://localhost:9030/shiro/user/login
-    public String login(@RequestBody User user) {
+    public String loginForRedis(@RequestBody User user) {
         if (StringUtils.isBlank(user.getUserName())){
             throw new RuntimeException("用户名不能为空");
         }
-        UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(), user.getPassword());
         Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(), user.getPassword());
         try {
             subject.login(token);
             Session session = subject.getSession();
