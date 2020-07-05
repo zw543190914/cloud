@@ -3,9 +3,11 @@ package com.zw.cloud.tools.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Preconditions;
+import com.qiniu.http.Response;
 import com.zw.cloud.db.dao.UserMapper;
 import com.zw.cloud.db.entity.User;
 import com.zw.cloud.db.entity.UserExample;
+import com.zw.cloud.tools.modle.vo.MyPutRet;
 import com.zw.cloud.tools.modle.vo.ParamVO;
 import com.zw.cloud.tools.utils.BaiduAiUtil;
 import org.slf4j.Logger;
@@ -24,18 +26,25 @@ public class UserServiceImpl {
     @Autowired
     private UserMapper userMapper;
     @Autowired
+    private FileServiceImpl fileService;
+    @Autowired
     private BaiduAiUtil baiduAiUtil;
 
     private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Transactional
     public void insert(User user, MultipartFile file)throws Exception{
+        // data url
         String encode = Base64.getEncoder().encodeToString(file.getBytes());
         String faceImage = "data:image/jpg;base64," + encode;
         logger.info("[UserServiceImpl][insert] faceImage is {}",faceImage);
-        user.setImage(faceImage);
-        userMapper.insertSelective(user);
         faceRegisterOrUpdate(String.valueOf(user.getId()),faceImage);
+        //user.setImage(faceImage);
+        // 上传至 七牛云
+        /*MyPutRet myPutRet = fileService.upload(user.getName(), file);
+        user.setImage(myPutRet.getKey());*/
+
+        userMapper.insertSelective(user);
     }
 
     @Transactional
@@ -44,7 +53,11 @@ public class UserServiceImpl {
         String encode = Base64.getEncoder().encodeToString(file.getBytes());
         String faceImage = "data:image/jpg;base64," + encode;
         logger.info("[UserServiceImpl][update] faceImage is {}",faceImage);
-        user.setImage(faceImage);
+        faceRegisterOrUpdate(String.valueOf(user.getId()),faceImage);
+        //user.setImage(faceImage);
+        // 上传至 七牛云
+        MyPutRet myPutRet = fileService.upload(user.getName(), file);
+        user.setImage(myPutRet.getKey());
         userMapper.updateByPrimaryKeySelective(user);
         faceRegisterOrUpdate(String.valueOf(user.getId()),faceImage);
     }

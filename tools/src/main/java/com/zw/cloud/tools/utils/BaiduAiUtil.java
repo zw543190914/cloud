@@ -1,13 +1,19 @@
 package com.zw.cloud.tools.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.baidu.aip.face.AipFace;
+import com.zw.cloud.tools.service.impl.UserServiceImpl;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class BaiduAiUtil {
@@ -25,19 +31,22 @@ public class BaiduAiUtil {
 
     private AipFace client;
 
-    private HashMap<String, String> options = new HashMap<String, String>();
+    private HashMap<String, String> options = new HashMap<>();
 
     public BaiduAiUtil() {
-        options.put("quality_control", "NORMAL");
-        options.put("liveness_control", "NORMAL");
+//        options.put("quality_control", "NORMAL");
+//        options.put("liveness_control", "LOW");
     }
+    private Logger logger = LoggerFactory.getLogger(BaiduAiUtil.class);
+
 
     @PostConstruct
     public void init() {
         client = new AipFace(APP_ID, API_KEY, SECRET_KEY);
+        logger.info("[BaiduAiUtil][init] client is {}", JSON.toJSONString(client));
         // 可选：设置网络连接参数
-        client.setConnectionTimeoutInMillis(5000);
-        client.setSocketTimeoutInMillis(60000);
+//        client.setConnectionTimeoutInMillis(5000);
+//        client.setSocketTimeoutInMillis(60000);
     }
 
     // 人脸注册 ：将用户照片存入人脸库中
