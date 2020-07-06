@@ -73,7 +73,8 @@
         <poi.version>4.1.2</poi.version>
         <commons-io.version>2.7</commons-io.version>
         <qiniu-java-sdk.version>[7.2.0, 7.2.99]</qiniu-java-sdk.version>
-        <baidu-aip.version>4.8.0</baidu-aip.version>
+        <baidu-aip.version>4.4.0</baidu-aip.version>
+        <aliyun-java-sdk-core.version>4.1.1</aliyun-java-sdk-core.version>
     </properties>
 
     <dependencyManagement>
@@ -296,10 +297,16 @@
                 <version>${qiniu-java-sdk.version}</version>
             </dependency>
 
-            <dependency>
+            <!--<dependency>
                 <groupId>com.baidu.aip</groupId>
                 <artifactId>java-sdk</artifactId>
                 <version>${baidu-aip.version}</version>
+            </dependency>-->
+
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-core</artifactId>
+                <version>${aliyun-java-sdk-core.version}</version>
             </dependency>
 
         </dependencies>

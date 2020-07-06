@@ -1,5 +1,5 @@
 package com.zw.cloud.tools.controller;
-
+/*
 import com.zw.cloud.common.utils.WebResult;
 import com.zw.cloud.tools.service.impl.FaceLoginServiceImpl;
 import com.zw.cloud.tools.utils.BaiduAiUtil;
@@ -17,31 +17,31 @@ public class FaceLoginController {
     @Autowired
     private BaiduAiUtil baiduAiUtil;
 
-    /**
+    *//**
      * 获取刷脸登录二维码
-     */
+     *//*
     @GetMapping(value = "/qrcode")
     //http://localhost:9040/tools/face/login/qrcode
     public WebResult qrcode() throws Exception {
         return WebResult.success().withData(faceLoginService.getQRCode());
     }
 
-    /**
+    *//**
      * 检查二维码：登录页面轮询调用此方法，根据唯一标识code判断用户登录情况
-     */
+     *//*
     @RequestMapping(value = "/qrcode/{code}")
     //http://localhost:9040/tools/face/login/qrcode/1
     public WebResult qrcodeCeck(@PathVariable(name = "code") Integer code) throws Exception {
         return WebResult.success().withData(faceLoginService.checkQRCode(code));
     }
 
-    /**
+    *//**
      * 当用户扫码进入落地页，通过落地页打开摄像头，并且定时成像。将成像图片，通过接 口提交给后端进行人脸检测。
      *
      * @param file
      * @return
      * @throws Exception
-     */
+     *//*
     @PostMapping(value = "/checkFace")
     //http://localhost:9040/tools/face/login/checkFace
     public WebResult checkFace(@RequestParam(name = "file") MultipartFile file) throws Exception {
@@ -53,14 +53,14 @@ public class FaceLoginController {
     }
 
 
-    /**
+    *//**
      * 检测成功后，即进行人脸登录，人脸登录后，改变特殊标记状态值，成功为“1”，失败为“0”。
      * 当登录成功时， 进行自动登录操作，将token和userId存入到redis中。
      * @param code
      * @param file
      * @return
      * @throws Exception
-     */
+     *//*
     @PostMapping(value = "/success/{code}")
     //http://localhost:9040/tools/face/login/success/
     public WebResult loginByFace(@PathVariable(name = "code") Integer code,
@@ -68,7 +68,7 @@ public class FaceLoginController {
         boolean result =  faceLoginService.loginByFace(code, file);
         return result ? WebResult.failed() : WebResult.success();
     }
-}
+}*/
 
     /**
      * 前端 二维码展现

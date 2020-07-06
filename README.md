@@ -16,11 +16,11 @@
   14.一些开发常用工具，比如 HttpUtils ，JwtUtils 参考 common 模块。 </br>
   15. 整合使用IK分词器(自定义分词)或者 HanLP 分词进行文本相似度分析。参考 common 模块。 </br>
   16. 使用 Pinyin4jUtils 进行 中文转拼音的相关处理， 参考 common 模块。 </br>
-  17. 整合 shiro 进行权限控制，缓存使用 ehcache或者 redis 。参考 shiro 模块 </br>
-  18. poi excel 导出(大数据了使用 SXSSF),数据读取(大数据量 使用事件模型进行读取), </br>
-    小图片data url, 七牛云对象存储， </br>
+  17. 整合 shiro 进行权限控制，缓存使用 ehcache(单机) 或者 redis(微服务) 。参考 shiro 模块 </br>
+  18. poi excel 导出(百万数据使用 SXSSF),数据读取(百万数据量 使用事件模型进行读取), </br>
+    小图片data url 数据库存储, 大文件 七牛云对象存储， </br>
     二维码生成和解析，</br>
-    使用 百度AI 进行人脸识别 登录。 </br>
+    使用 百度AI / 阿里云AI 进行人脸识别 登录。(百度AI 被注释) </br>
     时间相关转换,返回值统一封装,全局异常处理, Mybatis 代码生成插件 。参考 tools 模块 </br>
   父POM中配置了自己nexus私服，已注释，settings-nexus.xml 为自己私服对应配置文件，方便后期查找使用。</br> 
 

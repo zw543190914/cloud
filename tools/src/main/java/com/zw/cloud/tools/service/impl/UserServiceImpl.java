@@ -1,13 +1,12 @@
+/*
 package com.zw.cloud.tools.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Preconditions;
-import com.qiniu.http.Response;
 import com.zw.cloud.db.dao.UserMapper;
 import com.zw.cloud.db.entity.User;
 import com.zw.cloud.db.entity.UserExample;
-import com.zw.cloud.tools.modle.vo.MyPutRet;
 import com.zw.cloud.tools.modle.vo.ParamVO;
 import com.zw.cloud.tools.utils.BaiduAiUtil;
 import org.slf4j.Logger;
@@ -35,31 +34,32 @@ public class UserServiceImpl {
     @Transactional
     public void insert(User user, MultipartFile file)throws Exception{
         // data url
-        String encode = Base64.getEncoder().encodeToString(file.getBytes());
-        String faceImage = "data:image/jpg;base64," + encode;
-        logger.info("[UserServiceImpl][insert] faceImage is {}",faceImage);
-        faceRegisterOrUpdate(String.valueOf(user.getId()),faceImage);
-        //user.setImage(faceImage);
+        String faceImage = Base64.getEncoder().encodeToString(file.getBytes());
+        logger.info("[UserServiceImpl][insert] faceImage is {}","data:image/jpg;base64," + faceImage);
+        user.setImage(faceImage);
         // 上传至 七牛云
-        /*MyPutRet myPutRet = fileService.upload(user.getName(), file);
-        user.setImage(myPutRet.getKey());*/
+        */
+/*MyPutRet myPutRet = fileService.upload(user.getName(), file);
+        user.setImage(myPutRet.getKey());*//*
 
         userMapper.insertSelective(user);
+        faceRegisterOrUpdate(String.valueOf(user.getId()),faceImage);
+
     }
 
     @Transactional
     public void update(User user, MultipartFile file)throws Exception{
         Preconditions.checkNotNull(user.getId());
-        String encode = Base64.getEncoder().encodeToString(file.getBytes());
-        String faceImage = "data:image/jpg;base64," + encode;
-        logger.info("[UserServiceImpl][update] faceImage is {}",faceImage);
+        String faceImage = Base64.getEncoder().encodeToString(file.getBytes());
+        logger.info("[UserServiceImpl][update] faceImage is {}","data:image/jpg;base64," + faceImage);
         faceRegisterOrUpdate(String.valueOf(user.getId()),faceImage);
         //user.setImage(faceImage);
         // 上传至 七牛云
-        MyPutRet myPutRet = fileService.upload(user.getName(), file);
-        user.setImage(myPutRet.getKey());
+        */
+/*MyPutRet myPutRet = fileService.upload(user.getName(), file);
+        user.setImage(myPutRet.getKey());*//*
+
         userMapper.updateByPrimaryKeySelective(user);
-        faceRegisterOrUpdate(String.valueOf(user.getId()),faceImage);
     }
 
     public PageInfo<User> query(ParamVO paramVO) {
@@ -87,3 +87,4 @@ public class UserServiceImpl {
         }
     }
 }
+*/

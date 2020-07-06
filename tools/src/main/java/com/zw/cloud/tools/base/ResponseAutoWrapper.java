@@ -1,5 +1,6 @@
 package com.zw.cloud.tools.base;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zw.cloud.common.utils.WebResult;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -18,6 +19,7 @@ public class ResponseAutoWrapper extends AbstractMappingJacksonResponseBodyAdvic
                                            ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
         Object data = mappingJacksonValue.getValue();
         if (data instanceof String
+                || data instanceof JSONObject
                 || data instanceof WebResult
                 || data instanceof ResponseEntity){
             return;
