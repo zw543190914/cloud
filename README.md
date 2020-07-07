@@ -21,6 +21,6 @@
     小图片data url 数据库存储, 大文件 七牛云对象存储， </br>
     二维码生成和解析，</br>
     使用 百度AI / 阿里云AI 进行人脸识别 登录。(百度AI 被注释) </br>
-    时间相关转换,返回值统一封装,全局异常处理, Mybatis 代码生成插件 。参考 tools 模块 </br>
+    时间相关转换,返回值统一封装,全局异常处理, Mybatis 代码生成插件,StringTemplete 消息模板 。参考 tools 模块 </br>
   父POM中配置了自己nexus私服，已注释，settings-nexus.xml 为自己私服对应配置文件，方便后期查找使用。</br> 
 
