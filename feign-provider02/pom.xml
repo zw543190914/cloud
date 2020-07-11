@@ -9,7 +9,7 @@
     </parent>
     <artifactId>feign-provider02</artifactId>
     <version>1.0.0</version>
-    <name>feign-provider</name>
+    <name>feign-provider02</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
