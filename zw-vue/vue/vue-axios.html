@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!--解决闪烁-->
+    <style>
+        [v-clock]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app1"  v-clock>
+        <div>{{info.msg}}</div>
+        <div>{{info.user.name}}</div>
+        <div>{{info.user.age}}</div>
+        <div>{{info.idList}}</div>
+        <a v-bind:href = "info.url">click</a>
+    </div>
+
+    <div id="app2">
+        <p>currentTime:{{currentTime()}}</p>
+        <p>currentTime:{{currentTime1}}</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        var vm1 = new Vue({
+            el:"#app1",
+            data(){
+                return{
+                    info:{
+                        msg:null,
+                        user:{
+                            name:null,
+                            age:null
+                        },
+                        idList:[],
+                        url:null
+                    }
+                }
+            },
+            mounted(){
+                axios.get('data.json').then(response=>(this.info = response.data));
+            }
+        });
+
+        var vm2 = new Vue({
+            el:"#app2",
+            data:{
+                msg:"hello"
+            },
+            methods:{
+                currentTime:function () {
+                    return Date.now();
+                }
+            },
+            computed:{ // 缓存数据
+                currentTime1:function () {
+                    this.msg;
+                    return Date.now();
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "msg": "信息",
+  "user": {
+      "name": "zw",
+      "age": 16
+  },
+  "idList": [1,2,3],
+  "url": "https://www.baidu.com"
+}

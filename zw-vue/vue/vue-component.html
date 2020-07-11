@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>component</title>
+</head>
+<body>
+
+    <div id="app1">
+        <mytemplate v-for="item in items" v-bind:val="item"></mytemplate>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <script>
+        Vue.component("mytemplate",{
+            props:['val'],
+            template:'<li>{{val}}</li>'
+        });
+        var vm1 = new Vue({
+            el:"#app1",
+            data:{
+                items:["java","go","python"]
+            }
+        });
+
+    </script>
+
+</body>
+</html>

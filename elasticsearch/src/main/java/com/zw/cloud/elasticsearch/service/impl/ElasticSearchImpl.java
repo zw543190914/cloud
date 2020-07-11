@@ -82,6 +82,7 @@ public class ElasticSearchImpl {
             return Collections.emptyList();
         }
         for (SearchHit hit : searchResponse.getHits().getHits()){
+
             // 高亮字段
             Map<String, HighlightField> highlightFields = hit.getHighlightFields();
             HighlightField name = highlightFields.get("name");
@@ -94,6 +95,7 @@ public class ElasticSearchImpl {
                 }
                 // 替换原有 name
                 sourceAsMap.put("name",nameSb.toString());
+                sourceAsMap.put("score", hit.getScore());
             }
             result.add(sourceAsMap);
         }

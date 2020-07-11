@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-modle="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+    <div id="app1">
+        {{message}}
+    </div>
+
+    <div id="app2">
+        <h6 v-if = "type === 'A'">A</h6>
+        <h6 v-else-if = "type === 'B'">B</h6>
+        <h6 v-else>C</h6>
+    </div>
+
+    <div id="app3">
+        <span v-bind:title="msg">鼠标悬停提示信息</span>
+    </div>
+
+    <div id="app4">
+        <h6 v-for = "(item,index) in items">
+            {{item.msg}} == {{index}}
+        </h6>
+    </div>
+
+    <div id="app5">
+        <button v-on:click = "sayHi">click me</button>
+    </div>
+
+    <div id="app6">
+        <input type="text" v-model = "msg"> {{msg}}
+    </div>
+
+    <div id="app7">
+        性别
+        <input type="radio" name="sex" value="男" v-model = "yoursex"> 男
+        <input type="radio" name="sex" value="女" v-model = "yoursex"> 女
+        <p>选择了:{{yoursex}}</p>
+    </div>
+
+    <div id="app8">
+
+       <select v-model = "msg">
+           <option value="" disabled >==请选择==</option>
+           <option>A</option>
+           <option>B</option>
+           <option>C</option>
+       </select>
+
+        <p>选择了:{{msg}}</p>
+    </div>
+
+    <!--1 导入vue-->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <script>
+        var vm1 = new Vue({
+            el: "#app1",
+            data:{
+                message:"first-vue"
+            }
+        });
+
+        var vm2 = new Vue({
+            el: "#app2",
+            data:{
+                type:"A"
+            }
+        });
+
+        var vm3 = new Vue({
+            el: "#app3",
+            data:{
+                msg:"哈哈哈哈"
+            }
+        });
+
+        var vm4 = new Vue({
+            el: "#app4",
+            data:{
+                items:[
+                    {msg:"msg1"},
+                    {msg:"msg2"},
+                    {msg:"msg13"}
+                ]
+            }
+        });
+
+        var vm5 = new Vue({
+            el:"#app5",
+            data:{
+                msg:"click"
+            },
+            methods:{
+                sayHi:function (event) {
+                    alert(this.msg)
+                }
+            }
+        });
+
+        var vm6 = new Vue({
+            el:"#app6",
+            data:{
+                msg:"123"
+            }
+        });
+
+        var vm7 = new Vue({
+            el:"#app7",
+            data:{
+                yoursex:""
+            }
+        });
+        var vm8 = new Vue({
+            el:"#app8",
+            data:{
+                msg:""
+            }
+        });
+    </script>
+
+
+</body>
+</html>
