@@ -86,6 +86,7 @@
         <ST4.version>4.3.1</ST4.version>
         <xxl-sso-core.version>1.1.0</xxl-sso-core.version>
         <xxl-job-core.version>2.2.0</xxl-job-core.version>
+        <webcam-capture.version>0.3.12</webcam-capture.version>
     </properties>
 
     <dependencyManagement>
@@ -333,9 +334,16 @@
             <dependency>
                 <groupId>com.xuxueli</groupId>
                 <artifactId>xxl-job-core</artifactId>
-                <version>2.2.0</version>
+                <version>${xxl-job-core.version}</version>
             </dependency>
 
+            <!-- 摄像头 -->
+            <!-- https://mvnrepository.com/artifact/com.github.sarxos/webcam-capture -->
+            <dependency>
+                <groupId>com.github.sarxos</groupId>
+                <artifactId>webcam-capture</artifactId>
+                <version>${webcam-capture.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
