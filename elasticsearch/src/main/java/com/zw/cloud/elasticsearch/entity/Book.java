@@ -1,25 +1,28 @@
 package com.zw.cloud.elasticsearch.entity;
 
+import org.springframework.data.elasticsearch.annotations.Document;
+
 import java.io.Serializable;
 
-public class Content implements Serializable {
-    private Long id;
+@Document(indexName = "jd_goods",type = "_doc")
+public class Book implements Serializable {
+    private String id;
     private String name;
     private String img;
     private String price;
 
-    public Content() {
+    public Book() {
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Content(String name, String img, String price) {
+    public Book(String name, String img, String price) {
         this.name = name;
         this.img = img;
         this.price = price;
@@ -51,8 +54,9 @@ public class Content implements Serializable {
 
     @Override
     public String toString() {
-        return "Content{" +
-                "name='" + name + '\'' +
+        return "Book{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", img='" + img + '\'' +
                 ", price='" + price + '\'' +
                 '}';

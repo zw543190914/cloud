@@ -97,7 +97,7 @@
                                 <em> {{item.price}}</em>
                             </p>
                             <!--标题-->
-                            <p class="productTitle">
+                            <p class="productTitle" @click.prevent="queryDetail(item.id)">
                                 <a v-html = "item.name"> </a>
                             </p>
                             <!-- 店铺名 -->
@@ -113,6 +113,14 @@
                         </div>
                     </div>
                 </div>
+                <div>
+                    <el-pagination
+                            background
+                            @current-change="currentChange"
+                            layout="prev, pager, next"
+                            :total="1000">
+                    </el-pagination>
+                </div>
             </div>
         </div>
     </div>
@@ -126,6 +134,10 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
 <script th:src="@{/js/axios.min.js}"></script>
 <!--<script th:src="@{/js/vue.min.js}"></script>-->
+<!-- 引入样式 -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
 
 <script>
     let vue = new Vue({
@@ -144,6 +156,22 @@
                     this.results = response.data;
                 })
             },
+            currentChange(pageNo) {
+                var keyword = this.keyword;
+                console.log(keyword);
+
+                axios.get("/queryGoods/"+ keyword + `/${pageNo}/10`).then(response => {
+                    console.log(response);
+                    this.results = response.data;
+                })
+            },
+            queryDetail(id) {
+                console.log(id);
+                axios.get("/book/queryById/" + `${id}`).then(response => {
+                    console.log(response);
+                    this.results = response.data;
+                })
+            }
 
         }
     });
