@@ -13,7 +13,7 @@
   11. sso单点登录使用 xxl-sso(客户端)，xxl-sso-server 为服务端。参考xxl-sso,xxl-sso-server 模块 </br>
   12. 分布式锁 zookeeper(ZkInterProcessMutex,LeaderLatch)，redis 缓存和redisUtils ，参考 feign-provider 模块。
   13. activiti工作流引擎使用整合。参考 activiti 模块。  </br>
-  14. 多数据源整合, 参考 feign-consumer 模块</br>
+  14. 多数据源整合, 参考 feign-consumer 模块。 </br>
   15.一些开发常用工具，比如 HttpUtils ，JwtUtils 参考 common 模块。 </br>
   16. 整合使用IK分词器(自定义分词)或者 HanLP 分词进行文本相似度分析。参考 common 模块。 </br>
   17. 使用 Pinyin4jUtils 进行 中文转拼音的相关处理， 参考 common 模块。 </br>
