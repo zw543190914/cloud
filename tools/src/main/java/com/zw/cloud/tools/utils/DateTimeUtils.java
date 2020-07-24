@@ -3,8 +3,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.*;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class DateTimeUtils {
@@ -85,5 +87,62 @@ public class DateTimeUtils {
         cal.set(Calendar.SECOND,59);
         return cal.getTime();
 
+    }
+
+    /**
+     * 获取某段时间内的所有日期
+     */
+    public List<Date> findDates(Date dBegin, Date dEnd) {
+        List<Date> lDate = new ArrayList<>();
+        lDate.add(dBegin);
+        Calendar calBegin = Calendar.getInstance();
+        // 使用给定的 Date 设置此 Calendar 的时间
+        calBegin.setTime(dBegin);
+        Calendar calEnd = Calendar.getInstance();
+        // 使用给定的 Date 设置此 Calendar 的时间
+        calEnd.setTime(dEnd);
+        // 测试此日期是否在指定日期之后
+        while (dEnd.after(calBegin.getTime()))  {
+            // 根据日历的规则，为给定的日历字段添加或减去指定的时间量
+            calBegin.add(Calendar.DAY_OF_MONTH, 1);
+            lDate.add(calBegin.getTime());
+        }
+        return lDate.subList(0,lDate.size()-1);
+    }
+
+    /**
+     * @Param: [today, isFirst: true 表示开始时间，false表示结束时间]
+     */
+    public String getStartOrEndDayOfQuarter(LocalDate today, Boolean isFirst){
+        LocalDate resDate = LocalDate.now();
+        if (today == null) {
+            today = resDate;
+        }
+        Month month = today.getMonth();
+        Month firstMonthOfQuarter = month.firstMonthOfQuarter();
+        Month endMonthOfQuarter = Month.of(firstMonthOfQuarter.getValue() + 2);
+        if (isFirst) {
+            resDate = LocalDate.of(today.getYear(), firstMonthOfQuarter, 1);
+        } else {
+            resDate = LocalDate.of(today.getYear(), endMonthOfQuarter, endMonthOfQuarter.length(today.isLeapYear()));
+        }
+        return resDate.toString();
+    }
+
+    /**
+     * @Param: [today, isFirst: true 表示开始时间，false表示结束时间]
+     * @Exception:
+     */
+    public static String getStartOrEndDayOfYear(LocalDate today, Boolean isFirst){
+        LocalDate resDate = LocalDate.now();
+        if (today == null) {
+            today = resDate;
+        }
+        if (isFirst) {
+            resDate = LocalDate.of(today.getYear(), Month.JANUARY, 1);
+        } else {
+            resDate = LocalDate.of(today.getYear(), Month.DECEMBER, Month.DECEMBER.length(today.isLeapYear()));
+        }
+        return resDate.toString();
     }
 }
