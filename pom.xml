@@ -68,6 +68,7 @@
         <jjwt.version>0.9.1</jjwt.version>
         <pinyin4j.version>2.5.1</pinyin4j.version>
         <jsoup.version>1.13.1</jsoup.version>
+        <JsoupXpath.version>2.3.2</JsoupXpath.version>
         <hanlp.version>portable-1.7.5</hanlp.version>
         <hutool-all.version>5.1.1</hutool-all.version>
         <ikanalyzer.version>2012_u6</ikanalyzer.version>
@@ -80,6 +81,7 @@
         <shiro-redis.version>3.0.0</shiro-redis.version>
         <poi.version>4.1.2</poi.version>
         <commons-io.version>2.7</commons-io.version>
+        <commons-lang3.version>3.10</commons-lang3.version>
         <qiniu-java-sdk.version>[7.2.0, 7.2.99]</qiniu-java-sdk.version>
         <baidu-aip.version>4.4.0</baidu-aip.version>
         <aliyun-java-sdk-core.version>4.1.1</aliyun-java-sdk-core.version>
@@ -87,6 +89,7 @@
         <xxl-sso-core.version>1.1.0</xxl-sso-core.version>
         <xxl-job-core.version>2.2.0</xxl-job-core.version>
         <webcam-capture.version>0.3.12</webcam-capture.version>
+        <webmagic.version>0.7.3</webmagic.version>
     </properties>
 
     <dependencyManagement>
@@ -225,6 +228,12 @@
                 <artifactId>jsoup</artifactId>
                 <version>${jsoup.version}</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/cn.wanghaomiao/JsoupXpath -->
+            <dependency>
+                <groupId>cn.wanghaomiao</groupId>
+                <artifactId>JsoupXpath</artifactId>
+                <version>${JsoupXpath.version}</version>
+            </dependency>
 
             <!-- https://mvnrepository.com/artifact/com.belerweb/pinyin4j -->
             <dependency>
@@ -345,6 +354,19 @@
                 <version>${webcam-capture.version}</version>
             </dependency>
 
+            <!-- https://mvnrepository.com/artifact/us.codecraft/webmagic-core -->
+            <dependency>
+                <groupId>us.codecraft</groupId>
+                <artifactId>webmagic-core</artifactId>
+                <version>${webmagic.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/us.codecraft/webmagic-extension -->
+            <dependency>
+                <groupId>us.codecraft</groupId>
+                <artifactId>webmagic-extension</artifactId>
+                <version>${webmagic.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -380,6 +402,7 @@
             <artifactId>commons-io</artifactId>
             <version>${commons-io.version}</version>
         </dependency>
+
 
 
     </dependencies>
