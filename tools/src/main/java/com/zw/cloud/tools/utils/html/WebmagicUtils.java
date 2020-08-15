@@ -89,7 +89,7 @@ public class WebmagicUtils implements PageProcessor {
         return site;
     }
 
-    @Scheduled(initialDelay = 1000,fixedDelay = 60000)
+    //@Scheduled(initialDelay = 1000,fixedDelay = 60000)
     public void process(){
         Spider.create(new WebmagicUtils())
                 .addUrl(url)
