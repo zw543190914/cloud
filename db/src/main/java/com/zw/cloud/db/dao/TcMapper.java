@@ -4,6 +4,7 @@ import com.zw.cloud.db.entity.Tc;
 import com.zw.cloud.db.entity.TcExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 public interface TcMapper {
     long countByExample(TcExample example);
@@ -15,6 +16,21 @@ public interface TcMapper {
     int insert(Tc record);
 
     int insertSelective(Tc record);
+
+    @Select("SELECT first FROM `tc` where id > 19000")
+    List<Integer> queryFirst();
+    @Select("SELECT second FROM `tc` where id > 19000")
+    List<Integer> querySecond();
+    @Select("SELECT third FROM `tc` where id > 19000")
+    List<Integer> queryThird();
+    @Select("SELECT four FROM `tc` where id > 19000")
+    List<Integer> queryFour();
+    @Select("SELECT five FROM `tc` where id > 19000" )
+    List<Integer> queryFive();
+    @Select("SELECT blue_first FROM `tc` where id > 19000")
+    List<Integer> queryBlueFirst();
+    @Select("SELECT blue_second FROM `tc` where id > 19000")
+    List<Integer> queryBlueSecond();
 
     List<Tc> selectByExample(TcExample example);
 
