@@ -102,7 +102,9 @@ public class TcController {
             tcVO.setCount(v);
             tcVOList.add(tcVO);
         });
-        return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount).reversed()).collect(Collectors.toList()).subList(0,5);
+        //return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount).reversed()).collect(Collectors.toList()).subList(0,5);
+        return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount)).collect(Collectors.toList()).subList(0,5);
+
     }
 
     @GetMapping("/querySecond")
@@ -118,7 +120,9 @@ public class TcController {
             tcVO.setCount(v);
             tcVOList.add(tcVO);
         });
-        return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount).reversed()).collect(Collectors.toList()).subList(0,5);
+        //return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount).reversed()).collect(Collectors.toList()).subList(0,5);
+        return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount)).collect(Collectors.toList()).subList(0,5);
+
     }
     @GetMapping("/queryThird")
     @ResponseBody
@@ -133,7 +137,9 @@ public class TcController {
             tcVO.setCount(v);
             tcVOList.add(tcVO);
         });
-        return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount).reversed()).collect(Collectors.toList()).subList(0,5);
+        //return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount).reversed()).collect(Collectors.toList()).subList(0,5);
+        return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount)).collect(Collectors.toList()).subList(0,5);
+
     }
     @GetMapping("/queryFour")
     @ResponseBody
@@ -148,7 +154,8 @@ public class TcController {
             tcVO.setCount(v);
             tcVOList.add(tcVO);
         });
-        return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount).reversed()).collect(Collectors.toList()).subList(0,5);
+        //return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount).reversed()).collect(Collectors.toList()).subList(0,5);
+        return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount)).collect(Collectors.toList()).subList(0,5);
     }
     @GetMapping("/queryFive")
     @ResponseBody
@@ -163,7 +170,9 @@ public class TcController {
             tcVO.setCount(v);
             tcVOList.add(tcVO);
         });
-        return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount).reversed()).collect(Collectors.toList()).subList(0,5);
+        //return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount).reversed()).collect(Collectors.toList()).subList(0,5);
+        return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount)).collect(Collectors.toList()).subList(0,5);
+
     }
     @GetMapping("/queryBlueFirst")
     @ResponseBody
@@ -178,7 +187,9 @@ public class TcController {
             tcVO.setCount(v);
             tcVOList.add(tcVO);
         });
-        return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount).reversed()).collect(Collectors.toList()).subList(0,5);
+        //return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount).reversed()).collect(Collectors.toList()).subList(0,5);
+        return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount)).collect(Collectors.toList()).subList(0,5);
+
     }
     @GetMapping("/queryBlueSecond")
     @ResponseBody
@@ -193,7 +204,9 @@ public class TcController {
             tcVO.setCount(v);
             tcVOList.add(tcVO);
         });
-        return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount).reversed()).collect(Collectors.toList()).subList(0,5);
+        //return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount).reversed()).collect(Collectors.toList()).subList(0,5);
+        return tcVOList.stream().sorted(Comparator.comparing(TcVO::getCount)).collect(Collectors.toList()).subList(0,5);
+
     }
 
     class TcVO{

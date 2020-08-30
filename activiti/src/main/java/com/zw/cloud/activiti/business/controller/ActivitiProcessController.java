@@ -33,7 +33,7 @@ public class ActivitiProcessController {
      * 根据流程定义的一次具体执行过程，就是一个流程实例
      */
     @GetMapping("/startProcessInstance")
-    //http://localhost:9020/activiti/process/startProcessInstance?processDefinitionKey=event2&businessId=001&permissionUserIds=a,b,c
+    //http://localhost:9020/activiti/process/startProcessInstance?processDefinitionKey=event2&businessId=001&permissionUserIds=a
     public WebResult startProcessInstance(@RequestParam String processDefinitionKey,
                                           @RequestParam String businessId,@RequestParam String permissionUserIds) {
         return WebResult.success().withData(activitiProcessService.startProcessInstance(processDefinitionKey, businessId, permissionUserIds));
@@ -87,7 +87,7 @@ public class ActivitiProcessController {
     }
 
     @GetMapping("/queryTaskByWorkId")
-    //http://localhost:9020/activiti/process/queryTaskByWorkId?workId=d,e
+    //http://localhost:9020/activiti/process/queryTaskByWorkId?workId=a
     public WebResult queryTaskByWorkId(String workId) throws Exception{
         return activitiProcessService.queryTaskByWorkId(workId);
     }
@@ -99,13 +99,13 @@ public class ActivitiProcessController {
     }
 
     @GetMapping("/queryActinst")
-    //http://localhost:9020/activiti/process/queryActinst?processInstanceId=ee65c4f6-bc94-11ea-a85c-a0a4c5f4cb40
+    //http://localhost:9020/activiti/process/queryActinst?processInstanceId=4709c0f5-bd56-11ea-9651-a0a4c5f4cb40
     public WebResult queryActinst(String processInstanceId){
         return WebResult.success().withData(activitiProcessService.queryActinst(processInstanceId));
     }
 
     @GetMapping("/queryTaskUser")
-    //http://localhost:9020/activiti/process/queryTaskUser?processInstanceId=ee65c4f6-bc94-11ea-a85c-a0a4c5f4cb40
+    //http://localhost:9020/activiti/process/queryTaskUser?processInstanceId=a0a4c5f4cb40
     public WebResult queryTaskUser(String processInstanceId){
         return activitiProcessService.queryTaskUser(processInstanceId);
     }

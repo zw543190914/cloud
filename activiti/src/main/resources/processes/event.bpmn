@@ -12,7 +12,7 @@
              name=""
              targetNamespace="http://www.activiti.org/test"
              typeLanguage="http://www.w3.org/2001/XMLSchema">
-   <process xmlns="" id="event" isClosed="false" isExecutable="true" processType="None">
+   <process id="event" isClosed="false" isExecutable="true" processType="None">
       <startEvent id="_2" name="create"/>
       <userTask activiti:assignee="${user}" activiti:candidateUsers="#{user}"
                 activiti:exclusive="true"
@@ -64,7 +64,7 @@
       <sequenceFlow id="_20" sourceRef="_17" targetRef="_19"/>
       <sequenceFlow id="_21" sourceRef="_7" targetRef="_11"/>
    </process>
-   <bpmndi:BPMNDiagram xmlns=""
+   <bpmndi:BPMNDiagram 
                        documentation="background=#3C3F41;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0"
                        id="Diagram-_1"
                        name="New Diagram">

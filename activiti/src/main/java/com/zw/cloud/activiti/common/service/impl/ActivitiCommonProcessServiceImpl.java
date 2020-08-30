@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ActivitiCommonProcessServiceImpl implements IActivitiCommonProcessService {
@@ -60,7 +61,8 @@ public class ActivitiCommonProcessServiceImpl implements IActivitiCommonProcessS
 
     @Override
     public WebResult doTaskWithoutPermissionCheck(String taskId, Map<String, Object> variables){
-        taskService.complete(taskId,variables);
+        taskService.setVariables(taskId,variables);
+        taskService.complete(taskId);
         return WebResult.success();
     }
 
@@ -156,9 +158,16 @@ public class ActivitiCommonProcessServiceImpl implements IActivitiCommonProcessS
      */
     @Override
     public WebResult taskQueryByWorkId(String workId) {
-        ActRuTaskExample taskExample = new ActRuTaskExample();
-        taskExample.createCriteria().andAssigneeEqualTo(workId);
-        return WebResult.success().withData(taskMapper.selectByExample(taskExample));
+        List<Task> taskList = taskService.createTaskQuery().taskCandidateOrAssigned(workId).list();
+        List<ActRuTask> actRuTaskList = taskList.stream().map(task -> {
+            ActRuTask ruTask = new ActRuTask();
+            ruTask.setId(task.getId());
+            ruTask.setProcInstId(task.getProcessInstanceId());
+            ruTask.setProcDefId(task.getProcessDefinitionId());
+            ruTask.setAssignee(task.getAssignee());
+            return ruTask;
+        }).collect(Collectors.toList());
+        return WebResult.success().withData(actRuTaskList);
     }
 
     @Override
