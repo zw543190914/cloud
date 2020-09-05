@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Handling Form Submission</title>
+    <meta charset="utf-8"/>
+</head>
+<body>
+<h3 align="center">检查单</h3>
+<form action="#" th:action="@{/word}" th:object="${user}" method="post">
+    <table>
+        <div >
+        <tr >
+            <td>姓名：</td><td> <input type="text"  th:field="*{name}" /></td>
+            <td>病人类型：</td><td> 其他</td>
+            <td>床    号：</td><td><input type="text"   th:field="*{cNo}"  /></td>
+        </tr>
+        <tr>
+            <td>性别：</td><td><input type="text"  th:field="*{sex}"  /></td>
+            <td>门诊号：</td><td><input type="text"  th:field="*{mNo}" /></td>
+            <td>临床诊断：</td><td><input type="text"   th:field="*{lNo}" /></td>
+        </tr>
+        <tr>
+            <td>年龄：</td><td><input type="text" th:field="*{age}"  /></td>
+            <td>科    别：</td><td><input type="text" th:field="*{kNo}"  /></td>
+            <td>备    注：</td><td><input type="text" th:field="*{rek}"  /></td>
+        </tr>
+        </div>
+        <div>
+        <tr>
+            <td></td>
+            <td>代号</td>
+            <td>项目 </td>
+            <td>结果 </td>
+            <td>参考值 </td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>CREA</td>
+            <td>肌纤测定</td>
+            <td><input type="text" th:field="*{r1}" /></td>
+            <td>53～111 umol/L</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>K</td>
+            <td>钾测定</td>
+            <td><input type="text" th:field="*{r2}" /></td>
+            <td>3.50～5.30 umol/L</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>NA</td>
+            <td>钠测定</td>
+            <td><input type="text" th:field="*{r3}" /></td>
+            <td>137.0～147.0 umol/L</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>CL</td>
+            <td>氯测定</td>
+            <td><input type="text" th:field="*{r4}" /></td>
+            <td>99.0～110.0 umol/L</td>
+        </tr>
+        </div>
+        <div>
+        <tr>
+            <td>采样时间：</td><td><input type="text" th:field="*{cTime}" /></td>
+            <td>送检日期：</td><td><input type="text" th:field="*{sTime}" /></td>
+        </tr>
+        <tr>
+            <td>检验日期：</td><td><input type="text" th:field="*{jTime}" /></td>
+            <td>报告日期：</td><td><input type="text" th:field="*{bTime}" /></td>
+        </tr>
+        </div>
+        <tr>
+            <td></td>
+            <td>  <input style="background:red;" type="reset" value="清空" /></td>
+            <td></td>
+            <td> <input style="color:red;" type="submit" value="提交" /> </td>
+        </tr>
+
+    </table>
+
+</form>
+</body>
+</html>
