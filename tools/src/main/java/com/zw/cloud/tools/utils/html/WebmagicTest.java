@@ -65,13 +65,13 @@ public class WebmagicTest implements PageProcessor {
             List<Selectable> selectables = node.css("td").nodes();
             Integer id = Integer.valueOf(selectables.get(0).css("td", "text").toString());
             tc.setId(id);
-            tc.setFirst(Integer.valueOf(selectables.get(1).css("td","text").toString()));
-            tc.setSecond(Integer.valueOf(selectables.get(2).css("td","text").toString()));
-            tc.setThird(Integer.valueOf(selectables.get(3).css("td","text").toString()));
+            tc.setOne(Integer.valueOf(selectables.get(1).css("td","text").toString()));
+            tc.setTwo(Integer.valueOf(selectables.get(2).css("td","text").toString()));
+            tc.setThree(Integer.valueOf(selectables.get(3).css("td","text").toString()));
             tc.setFour(Integer.valueOf(selectables.get(4).css("td","text").toString()));
             tc.setFive(Integer.valueOf(selectables.get(5).css("td","text").toString()));
-            tc.setBlueFirst(Integer.valueOf(selectables.get(6).css("td","text").toString()));
-            tc.setBlueSecond(Integer.valueOf(selectables.get(7).css("td","text").toString()));
+            tc.setSix(Integer.valueOf(selectables.get(6).css("td","text").toString()));
+            tc.setSeven(Integer.valueOf(selectables.get(7).css("td","text").toString()));
             System.out.println(JSON.toJSONString(tc));
             tcList.add(tc);
         }

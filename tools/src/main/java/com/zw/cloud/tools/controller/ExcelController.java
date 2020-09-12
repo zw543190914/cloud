@@ -1,6 +1,9 @@
 package com.zw.cloud.tools.controller;
 
+import com.zw.cloud.db.dao.TcMapper;
 import com.zw.cloud.db.dao.UserMapper;
+import com.zw.cloud.db.entity.Tc;
+import com.zw.cloud.db.entity.TcExample;
 import com.zw.cloud.db.entity.User;
 import com.zw.cloud.db.entity.UserExample;
 import com.zw.cloud.tools.handler.poi.SheetHandler;
@@ -41,6 +44,8 @@ public class ExcelController {
 
     @Autowired
     private UserMapper mapper;
+    @Autowired
+    private TcMapper tcMapper;
 
     @PostMapping("/import")
     //http://localhost:9040/tools/poi/excel/import
@@ -91,6 +96,9 @@ public class ExcelController {
         if (CollectionUtils.isEmpty(userList)){
             throw new Exception("data is empty");
         }*/
+        TcExample tcExample = new TcExample();
+        tcExample.setOrderByClause("id desc");
+        List<Tc> tcList = tcMapper.selectByExample(tcExample);
         List<User> userList = new ArrayList<>(10000);
 
         Random random = new Random();
@@ -105,7 +113,7 @@ public class ExcelController {
             u.setDescription("描述:" + k);
             userList.add(u);
         }
-        List<String> nameList = Arrays.asList("id","姓名", "年龄", "简介", "出生日期");
+        List<String> nameList = Arrays.asList("id","1", "2", "3", "4","5","blue1","blue2");
         //创建HSSFWorkbook对象(excel的文档对象)
         SXSSFWorkbook wb = new SXSSFWorkbook(200);
         //建立新的sheet对象（excel的表单）
@@ -119,20 +127,24 @@ public class ExcelController {
             i ++;
         }
         int rowNum = 1;
-        for (User user : userList){
+        for (Tc tc : tcList){
             SXSSFRow row = sheet.createRow(rowNum);
             int cellNo = 0;
-            row.createCell(cellNo ++).setCellValue(user.getId());
-            row.createCell(cellNo ++).setCellValue(user.getName());
-            row.createCell(cellNo ++).setCellValue(user.getAge());
-            row.createCell(cellNo ++).setCellValue(user.getDescription());
+            row.createCell(cellNo ++).setCellValue(tc.getId());
+            row.createCell(cellNo ++).setCellValue(tc.getOne());
+            row.createCell(cellNo ++).setCellValue(tc.getTwo());
+            row.createCell(cellNo ++).setCellValue(tc.getThree());
+            row.createCell(cellNo ++).setCellValue(tc.getFour());
+            row.createCell(cellNo ++).setCellValue(tc.getFive());
+            row.createCell(cellNo ++).setCellValue(tc.getSix());
+            row.createCell(cellNo ++).setCellValue(tc.getSeven());
 
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            /*SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String  bir = null;
             if (null != user.getBir()){
                 bir = format.format(user.getBir());
             }
-            row.createCell(cellNo ++).setCellValue(bir);
+            row.createCell(cellNo ++).setCellValue(bir);*/
 
             /*if (StringUtils.isNotBlank(description)){
                 for(int j = 0; j < attachments.size() ; j ++ ){

@@ -164,183 +164,183 @@ public class TcExample {
             return (Criteria) this;
         }
 
-        public Criteria andFirstIsNull() {
-            addCriterion("first is null");
+        public Criteria andOneIsNull() {
+            addCriterion("one is null");
             return (Criteria) this;
         }
 
-        public Criteria andFirstIsNotNull() {
-            addCriterion("first is not null");
+        public Criteria andOneIsNotNull() {
+            addCriterion("one is not null");
             return (Criteria) this;
         }
 
-        public Criteria andFirstEqualTo(Integer value) {
-            addCriterion("first =", value, "first");
+        public Criteria andOneEqualTo(Integer value) {
+            addCriterion("one =", value, "one");
             return (Criteria) this;
         }
 
-        public Criteria andFirstNotEqualTo(Integer value) {
-            addCriterion("first <>", value, "first");
+        public Criteria andOneNotEqualTo(Integer value) {
+            addCriterion("one <>", value, "one");
             return (Criteria) this;
         }
 
-        public Criteria andFirstGreaterThan(Integer value) {
-            addCriterion("first >", value, "first");
+        public Criteria andOneGreaterThan(Integer value) {
+            addCriterion("one >", value, "one");
             return (Criteria) this;
         }
 
-        public Criteria andFirstGreaterThanOrEqualTo(Integer value) {
-            addCriterion("first >=", value, "first");
+        public Criteria andOneGreaterThanOrEqualTo(Integer value) {
+            addCriterion("one >=", value, "one");
             return (Criteria) this;
         }
 
-        public Criteria andFirstLessThan(Integer value) {
-            addCriterion("first <", value, "first");
+        public Criteria andOneLessThan(Integer value) {
+            addCriterion("one <", value, "one");
             return (Criteria) this;
         }
 
-        public Criteria andFirstLessThanOrEqualTo(Integer value) {
-            addCriterion("first <=", value, "first");
+        public Criteria andOneLessThanOrEqualTo(Integer value) {
+            addCriterion("one <=", value, "one");
             return (Criteria) this;
         }
 
-        public Criteria andFirstIn(List<Integer> values) {
-            addCriterion("first in", values, "first");
+        public Criteria andOneIn(List<Integer> values) {
+            addCriterion("one in", values, "one");
             return (Criteria) this;
         }
 
-        public Criteria andFirstNotIn(List<Integer> values) {
-            addCriterion("first not in", values, "first");
+        public Criteria andOneNotIn(List<Integer> values) {
+            addCriterion("one not in", values, "one");
             return (Criteria) this;
         }
 
-        public Criteria andFirstBetween(Integer value1, Integer value2) {
-            addCriterion("first between", value1, value2, "first");
+        public Criteria andOneBetween(Integer value1, Integer value2) {
+            addCriterion("one between", value1, value2, "one");
             return (Criteria) this;
         }
 
-        public Criteria andFirstNotBetween(Integer value1, Integer value2) {
-            addCriterion("first not between", value1, value2, "first");
+        public Criteria andOneNotBetween(Integer value1, Integer value2) {
+            addCriterion("one not between", value1, value2, "one");
             return (Criteria) this;
         }
 
-        public Criteria andSecondIsNull() {
-            addCriterion("second is null");
+        public Criteria andTwoIsNull() {
+            addCriterion("two is null");
             return (Criteria) this;
         }
 
-        public Criteria andSecondIsNotNull() {
-            addCriterion("second is not null");
+        public Criteria andTwoIsNotNull() {
+            addCriterion("two is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSecondEqualTo(Integer value) {
-            addCriterion("second =", value, "second");
+        public Criteria andTwoEqualTo(Integer value) {
+            addCriterion("two =", value, "two");
             return (Criteria) this;
         }
 
-        public Criteria andSecondNotEqualTo(Integer value) {
-            addCriterion("second <>", value, "second");
+        public Criteria andTwoNotEqualTo(Integer value) {
+            addCriterion("two <>", value, "two");
             return (Criteria) this;
         }
 
-        public Criteria andSecondGreaterThan(Integer value) {
-            addCriterion("second >", value, "second");
+        public Criteria andTwoGreaterThan(Integer value) {
+            addCriterion("two >", value, "two");
             return (Criteria) this;
         }
 
-        public Criteria andSecondGreaterThanOrEqualTo(Integer value) {
-            addCriterion("second >=", value, "second");
+        public Criteria andTwoGreaterThanOrEqualTo(Integer value) {
+            addCriterion("two >=", value, "two");
             return (Criteria) this;
         }
 
-        public Criteria andSecondLessThan(Integer value) {
-            addCriterion("second <", value, "second");
+        public Criteria andTwoLessThan(Integer value) {
+            addCriterion("two <", value, "two");
             return (Criteria) this;
         }
 
-        public Criteria andSecondLessThanOrEqualTo(Integer value) {
-            addCriterion("second <=", value, "second");
+        public Criteria andTwoLessThanOrEqualTo(Integer value) {
+            addCriterion("two <=", value, "two");
             return (Criteria) this;
         }
 
-        public Criteria andSecondIn(List<Integer> values) {
-            addCriterion("second in", values, "second");
+        public Criteria andTwoIn(List<Integer> values) {
+            addCriterion("two in", values, "two");
             return (Criteria) this;
         }
 
-        public Criteria andSecondNotIn(List<Integer> values) {
-            addCriterion("second not in", values, "second");
+        public Criteria andTwoNotIn(List<Integer> values) {
+            addCriterion("two not in", values, "two");
             return (Criteria) this;
         }
 
-        public Criteria andSecondBetween(Integer value1, Integer value2) {
-            addCriterion("second between", value1, value2, "second");
+        public Criteria andTwoBetween(Integer value1, Integer value2) {
+            addCriterion("two between", value1, value2, "two");
             return (Criteria) this;
         }
 
-        public Criteria andSecondNotBetween(Integer value1, Integer value2) {
-            addCriterion("second not between", value1, value2, "second");
+        public Criteria andTwoNotBetween(Integer value1, Integer value2) {
+            addCriterion("two not between", value1, value2, "two");
             return (Criteria) this;
         }
 
-        public Criteria andThirdIsNull() {
-            addCriterion("third is null");
+        public Criteria andThreeIsNull() {
+            addCriterion("three is null");
             return (Criteria) this;
         }
 
-        public Criteria andThirdIsNotNull() {
-            addCriterion("third is not null");
+        public Criteria andThreeIsNotNull() {
+            addCriterion("three is not null");
             return (Criteria) this;
         }
 
-        public Criteria andThirdEqualTo(Integer value) {
-            addCriterion("third =", value, "third");
+        public Criteria andThreeEqualTo(Integer value) {
+            addCriterion("three =", value, "three");
             return (Criteria) this;
         }
 
-        public Criteria andThirdNotEqualTo(Integer value) {
-            addCriterion("third <>", value, "third");
+        public Criteria andThreeNotEqualTo(Integer value) {
+            addCriterion("three <>", value, "three");
             return (Criteria) this;
         }
 
-        public Criteria andThirdGreaterThan(Integer value) {
-            addCriterion("third >", value, "third");
+        public Criteria andThreeGreaterThan(Integer value) {
+            addCriterion("three >", value, "three");
             return (Criteria) this;
         }
 
-        public Criteria andThirdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("third >=", value, "third");
+        public Criteria andThreeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("three >=", value, "three");
             return (Criteria) this;
         }
 
-        public Criteria andThirdLessThan(Integer value) {
-            addCriterion("third <", value, "third");
+        public Criteria andThreeLessThan(Integer value) {
+            addCriterion("three <", value, "three");
             return (Criteria) this;
         }
 
-        public Criteria andThirdLessThanOrEqualTo(Integer value) {
-            addCriterion("third <=", value, "third");
+        public Criteria andThreeLessThanOrEqualTo(Integer value) {
+            addCriterion("three <=", value, "three");
             return (Criteria) this;
         }
 
-        public Criteria andThirdIn(List<Integer> values) {
-            addCriterion("third in", values, "third");
+        public Criteria andThreeIn(List<Integer> values) {
+            addCriterion("three in", values, "three");
             return (Criteria) this;
         }
 
-        public Criteria andThirdNotIn(List<Integer> values) {
-            addCriterion("third not in", values, "third");
+        public Criteria andThreeNotIn(List<Integer> values) {
+            addCriterion("three not in", values, "three");
             return (Criteria) this;
         }
 
-        public Criteria andThirdBetween(Integer value1, Integer value2) {
-            addCriterion("third between", value1, value2, "third");
+        public Criteria andThreeBetween(Integer value1, Integer value2) {
+            addCriterion("three between", value1, value2, "three");
             return (Criteria) this;
         }
 
-        public Criteria andThirdNotBetween(Integer value1, Integer value2) {
-            addCriterion("third not between", value1, value2, "third");
+        public Criteria andThreeNotBetween(Integer value1, Integer value2) {
+            addCriterion("three not between", value1, value2, "three");
             return (Criteria) this;
         }
 
@@ -464,123 +464,123 @@ public class TcExample {
             return (Criteria) this;
         }
 
-        public Criteria andBlueFirstIsNull() {
-            addCriterion("blue_first is null");
+        public Criteria andSixIsNull() {
+            addCriterion("six is null");
             return (Criteria) this;
         }
 
-        public Criteria andBlueFirstIsNotNull() {
-            addCriterion("blue_first is not null");
+        public Criteria andSixIsNotNull() {
+            addCriterion("six is not null");
             return (Criteria) this;
         }
 
-        public Criteria andBlueFirstEqualTo(Integer value) {
-            addCriterion("blue_first =", value, "blueFirst");
+        public Criteria andSixEqualTo(Integer value) {
+            addCriterion("six =", value, "six");
             return (Criteria) this;
         }
 
-        public Criteria andBlueFirstNotEqualTo(Integer value) {
-            addCriterion("blue_first <>", value, "blueFirst");
+        public Criteria andSixNotEqualTo(Integer value) {
+            addCriterion("six <>", value, "six");
             return (Criteria) this;
         }
 
-        public Criteria andBlueFirstGreaterThan(Integer value) {
-            addCriterion("blue_first >", value, "blueFirst");
+        public Criteria andSixGreaterThan(Integer value) {
+            addCriterion("six >", value, "six");
             return (Criteria) this;
         }
 
-        public Criteria andBlueFirstGreaterThanOrEqualTo(Integer value) {
-            addCriterion("blue_first >=", value, "blueFirst");
+        public Criteria andSixGreaterThanOrEqualTo(Integer value) {
+            addCriterion("six >=", value, "six");
             return (Criteria) this;
         }
 
-        public Criteria andBlueFirstLessThan(Integer value) {
-            addCriterion("blue_first <", value, "blueFirst");
+        public Criteria andSixLessThan(Integer value) {
+            addCriterion("six <", value, "six");
             return (Criteria) this;
         }
 
-        public Criteria andBlueFirstLessThanOrEqualTo(Integer value) {
-            addCriterion("blue_first <=", value, "blueFirst");
+        public Criteria andSixLessThanOrEqualTo(Integer value) {
+            addCriterion("six <=", value, "six");
             return (Criteria) this;
         }
 
-        public Criteria andBlueFirstIn(List<Integer> values) {
-            addCriterion("blue_first in", values, "blueFirst");
+        public Criteria andSixIn(List<Integer> values) {
+            addCriterion("six in", values, "six");
             return (Criteria) this;
         }
 
-        public Criteria andBlueFirstNotIn(List<Integer> values) {
-            addCriterion("blue_first not in", values, "blueFirst");
+        public Criteria andSixNotIn(List<Integer> values) {
+            addCriterion("six not in", values, "six");
             return (Criteria) this;
         }
 
-        public Criteria andBlueFirstBetween(Integer value1, Integer value2) {
-            addCriterion("blue_first between", value1, value2, "blueFirst");
+        public Criteria andSixBetween(Integer value1, Integer value2) {
+            addCriterion("six between", value1, value2, "six");
             return (Criteria) this;
         }
 
-        public Criteria andBlueFirstNotBetween(Integer value1, Integer value2) {
-            addCriterion("blue_first not between", value1, value2, "blueFirst");
+        public Criteria andSixNotBetween(Integer value1, Integer value2) {
+            addCriterion("six not between", value1, value2, "six");
             return (Criteria) this;
         }
 
-        public Criteria andBlueSecondIsNull() {
-            addCriterion("blue_second is null");
+        public Criteria andSevenIsNull() {
+            addCriterion("seven is null");
             return (Criteria) this;
         }
 
-        public Criteria andBlueSecondIsNotNull() {
-            addCriterion("blue_second is not null");
+        public Criteria andSevenIsNotNull() {
+            addCriterion("seven is not null");
             return (Criteria) this;
         }
 
-        public Criteria andBlueSecondEqualTo(Integer value) {
-            addCriterion("blue_second =", value, "blueSecond");
+        public Criteria andSevenEqualTo(Integer value) {
+            addCriterion("seven =", value, "seven");
             return (Criteria) this;
         }
 
-        public Criteria andBlueSecondNotEqualTo(Integer value) {
-            addCriterion("blue_second <>", value, "blueSecond");
+        public Criteria andSevenNotEqualTo(Integer value) {
+            addCriterion("seven <>", value, "seven");
             return (Criteria) this;
         }
 
-        public Criteria andBlueSecondGreaterThan(Integer value) {
-            addCriterion("blue_second >", value, "blueSecond");
+        public Criteria andSevenGreaterThan(Integer value) {
+            addCriterion("seven >", value, "seven");
             return (Criteria) this;
         }
 
-        public Criteria andBlueSecondGreaterThanOrEqualTo(Integer value) {
-            addCriterion("blue_second >=", value, "blueSecond");
+        public Criteria andSevenGreaterThanOrEqualTo(Integer value) {
+            addCriterion("seven >=", value, "seven");
             return (Criteria) this;
         }
 
-        public Criteria andBlueSecondLessThan(Integer value) {
-            addCriterion("blue_second <", value, "blueSecond");
+        public Criteria andSevenLessThan(Integer value) {
+            addCriterion("seven <", value, "seven");
             return (Criteria) this;
         }
 
-        public Criteria andBlueSecondLessThanOrEqualTo(Integer value) {
-            addCriterion("blue_second <=", value, "blueSecond");
+        public Criteria andSevenLessThanOrEqualTo(Integer value) {
+            addCriterion("seven <=", value, "seven");
             return (Criteria) this;
         }
 
-        public Criteria andBlueSecondIn(List<Integer> values) {
-            addCriterion("blue_second in", values, "blueSecond");
+        public Criteria andSevenIn(List<Integer> values) {
+            addCriterion("seven in", values, "seven");
             return (Criteria) this;
         }
 
-        public Criteria andBlueSecondNotIn(List<Integer> values) {
-            addCriterion("blue_second not in", values, "blueSecond");
+        public Criteria andSevenNotIn(List<Integer> values) {
+            addCriterion("seven not in", values, "seven");
             return (Criteria) this;
         }
 
-        public Criteria andBlueSecondBetween(Integer value1, Integer value2) {
-            addCriterion("blue_second between", value1, value2, "blueSecond");
+        public Criteria andSevenBetween(Integer value1, Integer value2) {
+            addCriterion("seven between", value1, value2, "seven");
             return (Criteria) this;
         }
 
-        public Criteria andBlueSecondNotBetween(Integer value1, Integer value2) {
-            addCriterion("blue_second not between", value1, value2, "blueSecond");
+        public Criteria andSevenNotBetween(Integer value1, Integer value2) {
+            addCriterion("seven not between", value1, value2, "seven");
             return (Criteria) this;
         }
     }

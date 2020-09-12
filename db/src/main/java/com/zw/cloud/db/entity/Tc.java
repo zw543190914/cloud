@@ -5,19 +5,19 @@ import java.io.Serializable;
 public class Tc implements Serializable {
     private Integer id;
 
-    private Integer first;
+    private Integer one;
 
-    private Integer second;
+    private Integer two;
 
-    private Integer third;
+    private Integer three;
 
     private Integer four;
 
     private Integer five;
 
-    private Integer blueFirst;
+    private Integer six;
 
-    private Integer blueSecond;
+    private Integer seven;
 
     private static final long serialVersionUID = 1L;
 
@@ -29,28 +29,28 @@ public class Tc implements Serializable {
         this.id = id;
     }
 
-    public Integer getFirst() {
-        return first;
+    public Integer getOne() {
+        return one;
     }
 
-    public void setFirst(Integer first) {
-        this.first = first;
+    public void setOne(Integer one) {
+        this.one = one;
     }
 
-    public Integer getSecond() {
-        return second;
+    public Integer getTwo() {
+        return two;
     }
 
-    public void setSecond(Integer second) {
-        this.second = second;
+    public void setTwo(Integer two) {
+        this.two = two;
     }
 
-    public Integer getThird() {
-        return third;
+    public Integer getThree() {
+        return three;
     }
 
-    public void setThird(Integer third) {
-        this.third = third;
+    public void setThree(Integer three) {
+        this.three = three;
     }
 
     public Integer getFour() {
@@ -69,19 +69,19 @@ public class Tc implements Serializable {
         this.five = five;
     }
 
-    public Integer getBlueFirst() {
-        return blueFirst;
+    public Integer getSix() {
+        return six;
     }
 
-    public void setBlueFirst(Integer blueFirst) {
-        this.blueFirst = blueFirst;
+    public void setSix(Integer six) {
+        this.six = six;
     }
 
-    public Integer getBlueSecond() {
-        return blueSecond;
+    public Integer getSeven() {
+        return seven;
     }
 
-    public void setBlueSecond(Integer blueSecond) {
-        this.blueSecond = blueSecond;
+    public void setSeven(Integer seven) {
+        this.seven = seven;
     }
 }
