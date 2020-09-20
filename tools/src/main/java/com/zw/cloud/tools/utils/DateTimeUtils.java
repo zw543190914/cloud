@@ -1,6 +1,7 @@
 package com.zw.cloud.tools.utils;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
@@ -144,5 +145,24 @@ public class DateTimeUtils {
             resDate = LocalDate.of(today.getYear(), Month.DECEMBER, Month.DECEMBER.length(today.isLeapYear()));
         }
         return resDate.toString();
+    }
+
+    /**
+     * 获取某个时间段内所有月份
+     */
+    public static List<String> getMonthBetweenDates(Date start, Date end){
+        ArrayList<String> result = new ArrayList<>();
+        Calendar min = Calendar.getInstance();
+        Calendar max = Calendar.getInstance();
+        min.setTime(start);
+        min.set(min.get(Calendar.YEAR), min.get(Calendar.MONTH), 1);
+        max.setTime(end);
+        max.set(max.get(Calendar.YEAR), max.get(Calendar.MONTH), 2);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
+        while (min.before(max)) {
+            result.add(formatter.format(min.getTime()));
+            min.add(Calendar.MONTH, 1);
+        }
+        return result;
     }
 }
