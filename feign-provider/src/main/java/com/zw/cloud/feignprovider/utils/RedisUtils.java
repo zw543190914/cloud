@@ -543,6 +543,9 @@ public class RedisUtils  implements InitializingBean {
         }
     }
 
+    public Long increment(String key){
+        return redisTemplate.opsForValue().increment(key);
+    }
 
     /**
      * 获取 jedis ---记的关闭jedis

@@ -37,7 +37,15 @@ public class ActivitiProcessServiceImpl implements IActivitiProcessService {
         return commonProcessService.startProcessInstance(processDefinitionKey,map);
     }
 
-    //16.16.   任务处理 组任务 通过nodeCode做验证，防止同一任务 多人重复点击
+    /**
+     * 任务处理 --  组任务
+     * @param workId
+     * @param nodeCode 通过nodeCode做验证，防止同一任务 多人重复点击，后面流程如果操作人都被注入，流程会被推动多步
+     * @param processInstanceId
+     * @param paramMap （流程变量)下一步执行人，判断条件等
+     * @return
+     * @throws Exception
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public boolean confirmNodeProcess(String workId,String nodeCode, String processInstanceId, Map<String, Object> paramMap) throws Exception{
@@ -60,6 +68,16 @@ public class ActivitiProcessServiceImpl implements IActivitiProcessService {
     }
 
     //16.16.   任务处理 个人任务 通过nodeCode做验证，防止同一任务 多人重复点击
+
+    /**
+     * 任务处理 -- 个人任务
+     * @param workId
+     * @param nodeCode 通过nodeCode做验证，防止同一任务 多人重复点击,后面流程如果操作人都被注入，流程会被推动多步
+     * @param processInstanceId
+     * @param paramMap
+     * @return
+     * @throws Exception
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public boolean confirmNodeProcessAssignee(String workId,String nodeCode, String processInstanceId, Map<String, Object> paramMap) throws Exception{
@@ -86,7 +104,14 @@ public class ActivitiProcessServiceImpl implements IActivitiProcessService {
         return true;
     }
 
-    //16.16.   任务处理---并行网关组任务使用（不需要指定下一步nodeNode）--非并行网关，可能造成多次点击流程被推动多步
+    /**
+     * 任务处理---并行网关组任务使用  （不需要指定下一步nodeNode）--非并行网关，可能造成多次点击流程被推动多步
+     * @param workId
+     * @param processInstanceId
+     * @param paramMap
+     * @return
+     * @throws Exception
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public boolean confirmNodeProcess(String workId, String processInstanceId, Map<String, Object> paramMap) throws Exception{
@@ -112,7 +137,15 @@ public class ActivitiProcessServiceImpl implements IActivitiProcessService {
         return true;
     }
 
-    //16.16.   任务处理---并行网关 个人任务使用（不需要指定下一步nodeNode）
+
+    /**
+     * 任务处理---并行网关 个人任务使用（不需要指定下一步nodeNode）
+     * @param workId
+     * @param processInstanceId
+     * @param paramMap
+     * @return
+     * @throws Exception
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public boolean confirmNodeProcessAssignee(String workId, String processInstanceId, Map<String, Object> paramMap) throws Exception{
@@ -132,7 +165,17 @@ public class ActivitiProcessServiceImpl implements IActivitiProcessService {
         }
         return true;
     }
-    //16.16.   任务处理--加签操作
+
+    /**
+     *  任务处理--加签操作 所有人都同意才算通过
+     * @param workId
+     * @param result 审批人意见 （agree/disagree）
+     * @param processInstanceId
+     * @param paramMap
+     * @param key 流程变量中 任务处理人对应的key
+     * @return
+     * @throws Exception
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public boolean confirmNodeAdditionalSignature(String workId, String result,String processInstanceId, Map<String, Object> paramMap,String key) throws Exception{
@@ -188,15 +231,23 @@ public class ActivitiProcessServiceImpl implements IActivitiProcessService {
     }
 
 
-    //16.13.   查询任务
+    /**
+     *  查询任务
+     * @param workId
+     * @return
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
-    public WebResult queryTaskByWorkId(String workId) throws Exception{
+    public WebResult queryTaskByWorkId(String workId){
         Preconditions.checkNotNull(workId,"workId can not be null");
         return commonProcessService.taskQueryByWorkId(workId);
     }
 
-    //16.14.   查询批注信息----可以根据流程实例或执行实例id查询
+    /**
+     *   查询批注信息----可以根据流程实例或执行实例id查询
+     * @param processInstanceId
+     * @return
+     */
     @Override
     public WebResult queryComment(String processInstanceId){
         Preconditions.checkNotNull(processInstanceId,"processInstanceId can not be null");
@@ -211,7 +262,11 @@ public class ActivitiProcessServiceImpl implements IActivitiProcessService {
 
     }
 
-    //查询下一步执行人
+    /**
+     * 查询下一步执行人
+     * @param processInstanceId
+     * @return
+     */
     @Override
     public WebResult queryTaskUser(String processInstanceId){
         Preconditions.checkNotNull(processInstanceId,"processInstanceId can not be null");
