@@ -1,15 +1,16 @@
 package com.zw.cloud.tools.controller;
 
 import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.tools.modle.vo.MyPutRet;
 import com.zw.cloud.tools.service.impl.FileServiceImpl;
+import com.zw.cloud.tools.utils.CustomerExecutorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping("/tools/file")
@@ -17,6 +18,7 @@ public class FileController {
 
     @Autowired
     private FileServiceImpl fileService;
+
 
     private Logger logger = LoggerFactory.getLogger(FileController.class);
 
