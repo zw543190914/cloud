@@ -2,7 +2,6 @@ package com.zw.cloud.utils;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
@@ -23,11 +22,12 @@ public class CodeGenerator {
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
-        gc.setOutputDir(projectPath + "/src/main/java");
+        gc.setOutputDir(projectPath + "/db/src/main/java");
         gc.setAuthor("zw");
         gc.setOpen(false);
         gc.setIdType(IdType.AUTO);
         gc.setDateType(DateType.ONLY_DATE);
+        gc.setFileOverride(true);
         // gc.setSwagger2(true); 实体属性 Swagger2 注解
         mpg.setGlobalConfig(gc);
 
@@ -77,7 +77,7 @@ public class CodeGenerator {
         // 公共父类
         //strategy.setSuperControllerClass("你自己的父类控制器,没有就不用设置!");
         // 写于父类中的公共字段
-        strategy.setSuperEntityColumns("id");
+        //strategy.setSuperEntityColumns("id");
         strategy.setRestControllerStyle(true);
         strategy.setControllerMappingHyphenStyle(true);
         mpg.setStrategy(strategy);

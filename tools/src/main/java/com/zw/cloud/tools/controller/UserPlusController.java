@@ -52,7 +52,7 @@ public class UserPlusController {
     @GetMapping("/delete")
     //http://localhost:9040/user/plus/delete
     public void delete(){
-        userPlusMapper.deleteById(3L);
+        userPlusMapper.deleteById(2L);
     }
 
     @GetMapping("/queryAll")
