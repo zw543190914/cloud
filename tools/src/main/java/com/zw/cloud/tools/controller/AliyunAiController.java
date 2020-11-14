@@ -1,8 +1,6 @@
 package com.zw.cloud.tools.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.CommonResponse;
-import com.zw.cloud.db.entity.User;
 import com.zw.cloud.tools.utils.AliyunAiUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

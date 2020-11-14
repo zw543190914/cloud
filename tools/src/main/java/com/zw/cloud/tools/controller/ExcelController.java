@@ -1,13 +1,11 @@
 package com.zw.cloud.tools.controller;
 
-import com.zw.cloud.db.dao.TcMapper;
-import com.zw.cloud.db.dao.UserMapper;
-import com.zw.cloud.db.entity.Tc;
-import com.zw.cloud.db.entity.TcExample;
-import com.zw.cloud.db.entity.User;
-import com.zw.cloud.db.entity.UserExample;
+import com.zw.cloud.dao.TcMapper;
+import com.zw.cloud.dao.UserMapper;
+import com.zw.cloud.entity.Tc;
+import com.zw.cloud.entity.TcExample;
+import com.zw.cloud.entity.User;
 import com.zw.cloud.tools.handler.poi.SheetHandler;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.opc.OPCPackage;
@@ -35,7 +33,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController

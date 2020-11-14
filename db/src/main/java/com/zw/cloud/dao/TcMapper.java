@@ -1,8 +1,9 @@
-package com.zw.cloud.db.dao;
+package com.zw.cloud.dao;
 
-import com.zw.cloud.db.entity.Tc;
-import com.zw.cloud.db.entity.TcExample;
+import com.zw.cloud.entity.Tc;
+import com.zw.cloud.entity.TcExample;
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface TcMapper {

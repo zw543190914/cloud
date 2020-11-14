@@ -1,28 +1,18 @@
 package com.zw.cloud.tools.utils.html;
 
-import com.alibaba.fastjson.JSON;
-import com.zw.cloud.db.entity.User;
-import org.apache.commons.collections4.CollectionUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
+import com.zw.cloud.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.pipeline.FilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.scheduler.BloomFilterDuplicateRemover;
 import us.codecraft.webmagic.scheduler.QueueScheduler;
 import us.codecraft.webmagic.selector.Selectable;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.jsoup.nodes.Document.OutputSettings.Syntax.html;
 
 @Component
 public class WebmagicUtils implements PageProcessor {

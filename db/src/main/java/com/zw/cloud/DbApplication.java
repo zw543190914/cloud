@@ -1,6 +1,5 @@
-package com.zw.cloud.db;
+package com.zw.cloud;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

@@ -1,4 +1,4 @@
-package com.zw.cloud.db.entity;
+package com.zw.cloud.entity;
 
 import java.io.Serializable;
 import java.util.Date;

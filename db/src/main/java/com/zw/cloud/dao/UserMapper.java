@@ -1,8 +1,9 @@
-package com.zw.cloud.db.dao;
+package com.zw.cloud.dao;
 
-import com.zw.cloud.db.entity.User;
-import com.zw.cloud.db.entity.UserExample;
+import com.zw.cloud.entity.User;
+import com.zw.cloud.entity.UserExample;
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {

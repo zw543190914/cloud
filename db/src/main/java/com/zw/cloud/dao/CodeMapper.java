@@ -1,7 +1,7 @@
-package com.zw.cloud.db.dao;
+package com.zw.cloud.dao;
 
-import com.zw.cloud.db.entity.Code;
-import com.zw.cloud.db.entity.CodeExample;
+import com.zw.cloud.entity.Code;
+import com.zw.cloud.entity.CodeExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 

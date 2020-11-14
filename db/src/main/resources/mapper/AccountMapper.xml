@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zw.cloud.db.dao.AccountMapper">
-  <resultMap id="BaseResultMap" type="com.zw.cloud.db.entity.Account">
+<mapper namespace="com.zw.cloud.dao.AccountMapper">
+  <resultMap id="BaseResultMap" type="com.zw.cloud.entity.Account">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="money" jdbcType="INTEGER" property="money" />
@@ -67,7 +67,7 @@
   <sql id="Base_Column_List">
     id, user_id, money
   </sql>
-  <select id="selectByExample" parameterType="com.zw.cloud.db.entity.AccountExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.zw.cloud.entity.AccountExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -91,19 +91,19 @@
     delete from account
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.zw.cloud.db.entity.AccountExample">
+  <delete id="deleteByExample" parameterType="com.zw.cloud.entity.AccountExample">
     delete from account
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.zw.cloud.db.entity.Account">
+  <insert id="insert" parameterType="com.zw.cloud.entity.Account">
     insert into account (id, user_id, money
       )
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{money,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.zw.cloud.db.entity.Account">
+  <insert id="insertSelective" parameterType="com.zw.cloud.entity.Account">
     insert into account
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -128,7 +128,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.zw.cloud.db.entity.AccountExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.zw.cloud.entity.AccountExample" resultType="java.lang.Long">
     select count(*) from account
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -160,7 +160,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zw.cloud.db.entity.Account">
+  <update id="updateByPrimaryKeySelective" parameterType="com.zw.cloud.entity.Account">
     update account
     <set>
       <if test="userId != null">
@@ -172,7 +172,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zw.cloud.db.entity.Account">
+  <update id="updateByPrimaryKey" parameterType="com.zw.cloud.entity.Account">
     update account
     set user_id = #{userId,jdbcType=VARCHAR},
       money = #{money,jdbcType=INTEGER}
@@ -190,7 +190,7 @@
        (#{item.id,jdbcType=INTEGER}, #{item.userId,jdbcType=VARCHAR}, #{item.money,jdbcType=INTEGER})
     </foreach>
   </insert>
-  <select id="selectOneByExample" parameterType="com.zw.cloud.db.entity.AccountExample" resultMap="BaseResultMap">
+  <select id="selectOneByExample" parameterType="com.zw.cloud.entity.AccountExample" resultMap="BaseResultMap">
     <!--
       WARNING - @mbg.generated
       这个节点为代码生成工具生成，请不要修改!

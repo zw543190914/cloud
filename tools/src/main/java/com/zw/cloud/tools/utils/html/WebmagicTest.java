@@ -1,12 +1,10 @@
 package com.zw.cloud.tools.utils.html;
 
 import com.alibaba.fastjson.JSON;
-import com.zw.cloud.db.dao.TcMapper;
-import com.zw.cloud.db.entity.Tc;
-import com.zw.cloud.db.entity.TcExample;
-import com.zw.cloud.db.entity.User;
+import com.zw.cloud.dao.TcMapper;
+import com.zw.cloud.entity.Tc;
+import com.zw.cloud.entity.TcExample;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
@@ -16,7 +14,6 @@ import us.codecraft.webmagic.scheduler.BloomFilterDuplicateRemover;
 import us.codecraft.webmagic.scheduler.QueueScheduler;
 import us.codecraft.webmagic.selector.Selectable;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 

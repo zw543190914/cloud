@@ -1,10 +1,8 @@
 package com.zw.cloud.tools.utils.html;
 
-import com.zw.cloud.db.dao.TcMapper;
-import com.zw.cloud.db.dao.UserMapper;
-import com.zw.cloud.db.entity.Tc;
-import com.zw.cloud.db.entity.TcExample;
-import com.zw.cloud.db.entity.User;
+import com.zw.cloud.dao.TcMapper;
+import com.zw.cloud.dao.UserMapper;
+import com.zw.cloud.entity.Tc;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

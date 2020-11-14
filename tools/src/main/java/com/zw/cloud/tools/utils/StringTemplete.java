@@ -1,6 +1,6 @@
 package com.zw.cloud.tools.utils;
 
-import com.zw.cloud.db.entity.User;
+import com.zw.cloud.entity.User;
 import org.stringtemplate.v4.ST;
 
 import java.util.Random;

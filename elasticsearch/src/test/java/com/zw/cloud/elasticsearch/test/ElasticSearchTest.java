@@ -1,7 +1,7 @@
 package com.zw.cloud.elasticsearch.test;
 
 import com.alibaba.fastjson.JSON;
-import com.zw.cloud.db.entity.User;
+import com.zw.cloud.entity.User;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;

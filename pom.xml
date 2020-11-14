@@ -54,6 +54,7 @@
         <alibaba.spring-context-support.version>1.0.6</alibaba.spring-context-support.version>
         <mybatis-spring-boot-starter.version>2.1.1</mybatis-spring-boot-starter.version>
         <pagehelper-spring-boot-starter.version>1.2.13</pagehelper-spring-boot-starter.version>
+        <mybatis-plus.version>3.4.1</mybatis-plus.version>
         <logback.version>1.1.7</logback.version>
         <slf4j.version>1.7.21</slf4j.version>
         <zing-core.version>3.3.0</zing-core.version>
@@ -142,6 +143,16 @@
                 <version>${pagehelper-spring-boot-starter.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.zw.cloud</groupId>
                 <artifactId>common</artifactId>

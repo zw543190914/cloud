@@ -1,4 +1,4 @@
-package com.zw.cloud.db.entity;
+package com.zw.cloud.entity;
 
 import java.util.ArrayList;
 import java.util.List;
