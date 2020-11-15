@@ -23,7 +23,9 @@
     二维码生成和解析，</br>
     使用 百度AI / 阿里云AI 进行人脸识别 登录。(百度AI 被注释) </br>
     时间相关转换,返回值统一封装,全局异常处理, Mybatis 代码生成插件 </br>
-    Java简单爬虫 WebmagicUtils,StringTemplete 消息模板 。参考 tools 模块 </br>
+    Java简单爬虫 WebmagicUtils,StringTemplete 消息模板 。 </br>
+    并发相关内容 锁，JUC工具类 线程池</br>
+    参考 tools 模块 </br>
     
   20. elasticsearch 整合，工具类封装，数据来源为Jsoup获取网页数据。 参考 elasticsearch 模块。
   

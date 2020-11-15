@@ -45,8 +45,8 @@ public class CodeGenerator {
         //pc.setModuleName("模块名");
         pc.setParent("com.zw.cloud");
         pc.setController("controller");
-        pc.setService("service");
-        pc.setServiceImpl("impl");
+        pc.setService("service.api");
+        pc.setServiceImpl("service.impl");
         pc.setMapper("dao");
         pc.setEntity("entity");
         mpg.setPackageInfo(pc);
