@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableFeignClients
 @EnableDiscoveryClient
-@MapperScan(basePackages = "com.zw.cloud.db.dao")
+@MapperScan(basePackages = "com.zw.cloud.dao")
 @EnableScheduling
 public class FeignProviderApplication {
 

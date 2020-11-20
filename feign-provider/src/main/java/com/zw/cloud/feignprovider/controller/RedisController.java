@@ -31,6 +31,14 @@ public class RedisController {
         return JSON.toJSONString(result);
     }
 
+    @GetMapping("/flushDb")
+    //http://localhost:9000/provider/redis/flushDb
+    public void flushDb(){
+
+        redisUtils.flushDb();
+
+    }
+
     @GetMapping("/testList")
     //http://localhost:9000/provider/redis/testList
     public List<Object> testList(){

@@ -2,35 +2,26 @@ package com.zw.cloud.feignprovider.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ReflectionUtils;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-public class RedisUtils  implements InitializingBean {
+@Component
+public class RedisUtils {
 
     @Autowired
-    private JedisConnectionFactory jedisConnectionFactory;
-
-    private JedisPool jedisPool;
-
-    private RedisTemplate<String, Object> redisTemplate;
+    @Qualifier("redisTemplate")
+    private RedisTemplate<String,Object> redisTemplate;
 
     private Logger logger = LoggerFactory.getLogger(RedisUtils.class);
 
-    public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
     //=============================common============================
     /**
      * 指定缓存失效时间
@@ -543,29 +534,15 @@ public class RedisUtils  implements InitializingBean {
         }
     }
 
-    public Long increment(String key){
-        return redisTemplate.opsForValue().increment(key);
-    }
-
     /**
-     * 获取 jedis ---记的关闭jedis
-      */
-    public Jedis getJedis(){
-        if(jedisPool != null) {
-            return jedisPool.getResource();
-        } else {
-            afterPropertiesSet();
-            return jedisPool.getResource();
-        }
+     * 清空数据库
+     */
+    public void flushDb(){
+        RedisConnection connection = redisTemplate.getConnectionFactory().getConnection();
+        connection.flushDb();
+
     }
 
-
-    @Override
-    public void afterPropertiesSet() {
-        Field poolField = ReflectionUtils.findField(JedisConnectionFactory.class, "pool");
-        ReflectionUtils.makeAccessible(poolField);
-        jedisPool = (JedisPool) ReflectionUtils.getField(poolField, jedisConnectionFactory);
-    }
 
 
 }
