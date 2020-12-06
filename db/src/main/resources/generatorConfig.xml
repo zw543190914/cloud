@@ -22,6 +22,11 @@
                 connectionURL="jdbc:mysql://localhost:3306/user?serverTimezone=GMT%2B8"
                 userId="root"
                 password="password">
+            <!--MySQL 不支持 schema 或者 catalog 所以需要添加这个-->
+            <!--参考 : http://www.mybatis.org/generator/usage/mysql.html-->
+            <property name="nullCatalogMeansCurrent" value="true"/>
+            <!-- MySQL8默认启用 SSL ,不关闭会有警告-->
+            <property name="useSSL" value="false"/>
         </jdbcConnection>
         <!--<javaTypeResolver>
             <property name="forceBigDecimals" value="false"/>
