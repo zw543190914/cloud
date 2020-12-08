@@ -38,6 +38,7 @@
         <module>xxl-sso-server</module>
         <module>xxl-job-server</module>
         <module>elasticsearch</module>
+        <module>shop</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

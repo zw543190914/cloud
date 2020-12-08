@@ -1,4 +1,4 @@
-package com.zw.cloud.utils;
+package com.zw.cloud.shop.utils;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;

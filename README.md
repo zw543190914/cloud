@@ -27,7 +27,8 @@
     并发相关内容 锁，JUC工具类 线程池</br>
     参考 tools 模块 </br>
     
-  20. elasticsearch 整合，工具类封装，数据来源为Jsoup获取网页数据。 参考 elasticsearch 模块。
+  20. elasticsearch 整合，工具类封装，数据来源为Jsoup获取网页数据。 参考 elasticsearch 模块。 </br>
+  21. shop 商品模块，主要添加秒杀相关。
   
   父POM中配置了自己nexus私服，已注释，settings-nexus.xml 为自己私服对应配置文件，方便后期查找使用。</br> 
 
