@@ -61,7 +61,7 @@
         <zing-core.version>3.3.0</zing-core.version>
         <zing-javase.version>3.3.3</zing-javase.version>
         <commons-collections4.version>4.4</commons-collections4.version>
-        <druid.version>1.1.21</druid.version>
+        <druid.version>1.1.14</druid.version>
         <dubbo-serialization-kryo.version>2.7.7</dubbo-serialization-kryo.version>
         <curator.version>4.0.0</curator.version>
         <zookeeper.version>3.4.14</zookeeper.version>
@@ -131,13 +131,6 @@
                 <version>${mybatis-spring-boot-starter.version}</version>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/com.alibaba/druid -->
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>druid</artifactId>
-                <version>${druid.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
@@ -154,6 +147,13 @@
                 <artifactId>mybatis-plus-generator</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.zw.cloud</groupId>
                 <artifactId>common</artifactId>
