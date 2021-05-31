@@ -19,7 +19,7 @@ public class TestController {
 
 
     @GetMapping("/query")
-    //http://localhost:9040/tools/file/query?id=1
+    //http://localhost:9040/tools/test/query?id=1
     public String query(@RequestParam("id") String id)throws Exception{
         logger.info("[query]id is {}, thread name is {}", id,Thread.currentThread().getName());
         Future<String> future = CustomerExecutorService.pool.submit(() -> queryData(id));
@@ -27,6 +27,18 @@ public class TestController {
         String result = future.get();
         logger.info("[query]id is {}, thread name is {},result is {}", id,Thread.currentThread().getName(),result);
         return result;
+    }
+
+    @GetMapping("/test")
+    //http://localhost:9040/tools/test/test
+    public String test1() {
+      return "test";
+    }
+
+    @GetMapping("/test2")
+    //http://localhost:9040/tools/test/test2
+    public void test2() {
+
     }
 
     private String queryData(String id){
