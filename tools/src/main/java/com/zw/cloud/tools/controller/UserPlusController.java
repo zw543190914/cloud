@@ -5,10 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zw.cloud.dao.UserPlusMapper;
 import com.zw.cloud.entity.UserPlus;
+import com.zw.cloud.tools.base.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,10 +19,13 @@ public class UserPlusController {
 
     @Autowired
     private UserPlusMapper userPlusMapper;
+    @Autowired
+    private ThreadContext threadContext;
 
-    @GetMapping("/insert")
-    //http://localhost:9040/user/plus/insert
+    @PostMapping
+    //http://localhost:9040/user/plus
     public void insert(){
+        System.out.println(threadContext.getWorkIdThreadLocal().get());
         UserPlus userPlus = new UserPlus();
         userPlus.setAge(11);
         userPlus.setName("001");
@@ -33,8 +35,8 @@ public class UserPlusController {
         System.out.println(userPlus.getId());// 1327531913719611394
     }
 
-    @GetMapping("/update")
-    //http://localhost:9040/user/plus/update
+    @PutMapping
+    //http://localhost:9040/user/plus
     public void update(){
         UserPlus userPlus = userPlusMapper.selectById(2L);
         userPlus.setAge(2);
@@ -49,8 +51,8 @@ public class UserPlusController {
         System.out.println(JSONObject.toJSONString(userPlus2));
     }
 
-    @GetMapping("/delete")
-    //http://localhost:9040/user/plus/delete
+    @DeleteMapping
+    //http://localhost:9040/user/plus
     public void delete(){
         userPlusMapper.deleteById(2L);
     }
