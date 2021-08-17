@@ -56,7 +56,7 @@
         <mybatis-spring-boot-starter.version>2.1.1</mybatis-spring-boot-starter.version>
         <pagehelper-spring-boot-starter.version>1.2.13</pagehelper-spring-boot-starter.version>
         <mybatis-plus.version>3.4.1</mybatis-plus.version>
-        <logback.version>1.1.7</logback.version>
+        <logback.version>1.2.0</logback.version>
         <slf4j.version>1.7.21</slf4j.version>
         <zing-core.version>3.3.0</zing-core.version>
         <zing-javase.version>3.3.3</zing-javase.version>
@@ -74,8 +74,8 @@
         <hutool-all.version>5.1.1</hutool-all.version>
         <ikanalyzer.version>2012_u6</ikanalyzer.version>
         <fastjson.version>1.2.71</fastjson.version>
-        <guava.version>29.0-jre</guava.version>
-        <httpclient.version>4.5.6</httpclient.version>
+        <guava.version>30.0-jre</guava.version>
+        <httpclient.version>4.5.13</httpclient.version>
         <shiro-spring.version>1.5.3</shiro-spring.version>
         <!--<shiro-spring.version>1.5.3</shiro-spring.version>-->
         <commons-codec.version>1.14</commons-codec.version>
