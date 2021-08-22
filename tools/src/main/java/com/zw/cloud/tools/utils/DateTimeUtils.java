@@ -1,69 +1,118 @@
 package com.zw.cloud.tools.utils;
+import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
-@Service
 public class DateTimeUtils {
-    public LocalDateTime UDateToLocalDateTime(Date date) {
+    public static LocalDateTime dateToLocalDateTime(Date date) {
         Instant instant = date.toInstant();
         return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
     }
 
-    public LocalDate UDateToLocalDate(Date date) {
+    public static LocalDate dateToLocalDate(Date date) {
         Instant instant = date.toInstant();
         LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         return localDateTime.toLocalDate();
     }
 
-    public Date LocalDateTimeToUDate(LocalDateTime localDateTime) {
+    public static Date localDateTimeToUDate(LocalDateTime localDateTime) {
         Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
         return Date.from(instant);
     }
 
-    public Date LocalDateToUDate(LocalDate localDate) {
+    public static Date localDateToUDate(LocalDate localDate) {
         Instant instant = localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
         return Date.from(instant);
     }
 
-    public Date minusMonths(int num) {
+    public static Date minusMonths(int num) {
         LocalDate localDate =  LocalDate.now().minusMonths(num);
-        return LocalDateToUDate(localDate);
+        return localDateToUDate(localDate);
     }
 
-    public Date plusMonths(int num) {
+    public static Date plusMonths(int num) {
         LocalDate localDate =  LocalDate.now().plusMonths(num);
-        return LocalDateToUDate(localDate);
+        return localDateToUDate(localDate);
     }
 
-    public Date getFirstDayOfMonth(LocalDate start){
+    public static Date getFirstDayOfMonth(LocalDate start){
         LocalDate firstday = start.with(TemporalAdjusters.firstDayOfMonth());
-        return LocalDateToUDate(firstday);
+        Date date = localDateToUDate(firstday);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY,0);
+        cal.set(Calendar.MINUTE,0);
+        cal.set(Calendar.SECOND,0);
+        return cal.getTime();
     }
 
-    public Date getLastDayOfMonth(LocalDate localDate){
+    public static Date getLastDayOfMonth(LocalDate localDate){
         LocalDate lastTheMonthDay = localDate.with(TemporalAdjusters.lastDayOfMonth());
-        return LocalDateToUDate(lastTheMonthDay);
+        Date date = localDateToUDate(lastTheMonthDay);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY,23);
+        cal.set(Calendar.MINUTE,59);
+        cal.set(Calendar.SECOND,59);
+        return cal.getTime();
     }
 
-    public Date getTodayStart(LocalDate localDate){
+    public static Date getTodayStart(LocalDate localDate){
         LocalDateTime todayStart = LocalDateTime.of(localDate, LocalTime.MIN);
-        return LocalDateTimeToUDate(todayStart);
+        return localDateTimeToUDate(todayStart);
     }
 
-    public Date getTodayEnd(LocalDate localDate){
+    public static Date getTodayEnd(LocalDate localDate){
         LocalDateTime todayEnd = LocalDateTime.of(localDate, LocalTime.MAX);
-        return LocalDateTimeToUDate(todayEnd);
+        return localDateTimeToUDate(todayEnd);
+    }
+
+    public static Date getTodayStart(){
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY,0);
+        cal.set(Calendar.MINUTE,0);
+        cal.set(Calendar.SECOND,0);
+        return cal.getTime();
+    }
+
+    public static Date getTodayEnd(){
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY,23);
+        cal.set(Calendar.MINUTE,59);
+        cal.set(Calendar.SECOND,59);
+        return cal.getTime();
+    }
+
+    public static Date getBeforeDayStart(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DAY_OF_MONTH, -1);
+        cal.set(Calendar.HOUR_OF_DAY,0);
+        cal.set(Calendar.MINUTE,0);
+        cal.set(Calendar.SECOND,0);
+        return cal.getTime();
+    }
+
+    public static Date getAfterDayEnd(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DAY_OF_MONTH, +1);
+        cal.set(Calendar.HOUR_OF_DAY,23);
+        cal.set(Calendar.MINUTE,59);
+        cal.set(Calendar.SECOND,59);
+        return cal.getTime();
     }
 
     //获取本周的开始时间
-    public Date getBeginDayOfWeek() {
+    public static Date getBeginDayOfWeek() {
         Date date = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -79,7 +128,7 @@ public class DateTimeUtils {
     }
 
     //获取本周的结束时间
-    public Date getEndDayOfWeek(){
+    public static Date getEndDayOfWeek(){
         Calendar cal = Calendar.getInstance();
         cal.setTime(getBeginDayOfWeek());
         cal.add(Calendar.DAY_OF_WEEK, 6);
@@ -90,31 +139,28 @@ public class DateTimeUtils {
 
     }
 
-    /**
-     * 获取某段时间内的所有日期
-     */
-    public List<Date> findDates(Date dBegin, Date dEnd) {
-        List<Date> lDate = new ArrayList<>();
-        lDate.add(dBegin);
+
+    // 查询时间段每天开始时间
+    public static List<Date> findDatesBegin(Date start, Date end) {
+        List<Date> dateList = new ArrayList<>();
+        dateList.add(start);
         Calendar calBegin = Calendar.getInstance();
         // 使用给定的 Date 设置此 Calendar 的时间
-        calBegin.setTime(dBegin);
+        calBegin.setTime(start);
         Calendar calEnd = Calendar.getInstance();
         // 使用给定的 Date 设置此 Calendar 的时间
-        calEnd.setTime(dEnd);
+        calEnd.setTime(start);
         // 测试此日期是否在指定日期之后
-        while (dEnd.after(calBegin.getTime()))  {
+        while (end.after(calBegin.getTime()))  {
             // 根据日历的规则，为给定的日历字段添加或减去指定的时间量
             calBegin.add(Calendar.DAY_OF_MONTH, 1);
-            lDate.add(calBegin.getTime());
+            dateList.add(calBegin.getTime());
         }
-        return lDate.subList(0,lDate.size()-1);
+        return dateList;
     }
 
-    /**
-     * @Param: [today, isFirst: true 表示开始时间，false表示结束时间]
-     */
-    public String getStartOrEndDayOfQuarter(LocalDate today, Boolean isFirst){
+
+    public static Date getStartOrEndDayOfQuarter(LocalDate today, Boolean isFirst){
         LocalDate resDate = LocalDate.now();
         if (today == null) {
             today = resDate;
@@ -127,14 +173,11 @@ public class DateTimeUtils {
         } else {
             resDate = LocalDate.of(today.getYear(), endMonthOfQuarter, endMonthOfQuarter.length(today.isLeapYear()));
         }
-        return resDate.toString();
+        Instant instant = resDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
+        return Date.from(instant);
     }
 
-    /**
-     * @Param: [today, isFirst: true 表示开始时间，false表示结束时间]
-     * @Exception:
-     */
-    public static String getStartOrEndDayOfYear(LocalDate today, Boolean isFirst){
+    public static Date getStartOrEndDayOfYear(LocalDate today, Boolean isFirst){
         LocalDate resDate = LocalDate.now();
         if (today == null) {
             today = resDate;
@@ -144,25 +187,73 @@ public class DateTimeUtils {
         } else {
             resDate = LocalDate.of(today.getYear(), Month.DECEMBER, Month.DECEMBER.length(today.isLeapYear()));
         }
-        return resDate.toString();
+        Instant instant = resDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
+        return Date.from(instant);
+    }
+
+    /**获取两个时间节点之间的月份列表**/
+    public static List<String> getMonthBetween(Date start, Date endTime){
+        ArrayList<String> result = new ArrayList<>();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        String lastMonth = sdf.format(endTime);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(start);
+        while (calendar.getTime().before(endTime)) {
+            result.add(sdf.format(calendar.getTime()));
+            calendar.add(Calendar.MONTH, 1);
+        }
+        if (result.contains(lastMonth)){
+            return result;
+        }
+        result.add(lastMonth);
+        return result;
     }
 
     /**
-     * 获取某个时间段内所有月份
+     * 计算两个日期之间间隔的天数
+     * @param start 开始日期
+     * @param end 结束日期
+     * @return 返回天数
      */
-    public static List<String> getMonthBetweenDates(Date start, Date end){
-        ArrayList<String> result = new ArrayList<>();
-        Calendar min = Calendar.getInstance();
-        Calendar max = Calendar.getInstance();
-        min.setTime(start);
-        min.set(min.get(Calendar.YEAR), min.get(Calendar.MONTH), 1);
-        max.setTime(end);
-        max.set(max.get(Calendar.YEAR), max.get(Calendar.MONTH), 2);
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
-        while (min.before(max)) {
-            result.add(formatter.format(min.getTime()));
-            min.add(Calendar.MONTH, 1);
-        }
-        return result;
+    public static int getTheNumberOfDaysBetweenTwoDates(Date start, Date end) {
+        Preconditions.checkArgument(start != null && end != null, "start and end is not null");
+        LocalDate startDate = dateToLocalDate(start);
+        LocalDate endDate = dateToLocalDate(end);
+        return (int) (endDate.toEpochDay() - startDate.toEpochDay());
     }
+
+    /**
+     * 计算两个日期之间指定间隔[分钟]的日期
+     */
+    public static List<Date> getDayListBetweenTwoDates(Date start,Date end,int cycle) {
+        List<Date> dateList = new ArrayList<>();
+        Date date = start;
+        while (date.before(end) || date.equals(end)) {
+            // 开始时间不统计在内
+            if (!date.equals(start)) {
+                dateList.add(date);
+            }
+            date = new Date(date.getTime() + 1000 * 60 * cycle);
+        }
+        return dateList;
+    }
+
+    public static String parseTime(long time){
+        if (time < 3600000) {
+            //这里想要只保留分秒可以写成"mm:ss"
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+            //这里很重要，如果不设置时区的话，输出结果就会是几点钟，而不是毫秒值对应的时分秒数量了。
+            formatter.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
+            String hms = formatter.format(time);
+            System.out.println(hms);
+            return hms;
+        }
+        long house = time / 3600000;
+        long min = time % 3600000 / 60000;
+        long second = time % 3600000 % 60000 / 1000;
+        return String.format("%02d",house) + ":" + String.format("%02d",min) + ":" + String.format("%02d",second);
+    }
+
 }

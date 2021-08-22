@@ -1,16 +1,34 @@
 package com.zw.cloud.tools.concurrent.block.queue;
 
+import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
 
 public class BlockQueueTest {
 
+    public static ArrayBlockingQueue<Integer> blockingQueue = new ArrayBlockingQueue<>(100);
+
     public static void main(String[] args) throws Exception{
         //test1();
         //test2();
-        test3();
+        //test3();
         //test4();
+        new Thread(()-> {
+            try {
+                take();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        new Thread(()-> {
+            try {
+                put();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     // 抛出异常 add remove 查看队首元素 element
@@ -60,16 +78,20 @@ public class BlockQueueTest {
     }
 
     // 等待 一直阻塞 put take
-    public static void test4()throws Exception{
-        ArrayBlockingQueue<String> blockingQueue = new ArrayBlockingQueue<>(3);
-        blockingQueue.put("A");
-        blockingQueue.put("B");
-        blockingQueue.put("C");
-        //blockingQueue.put("D");
-        System.out.println("================");
-        System.out.println(blockingQueue.take());
-        System.out.println(blockingQueue.take());
-        System.out.println(blockingQueue.take());
-        //System.out.println(blockingQueue.take());
+    public static void put()throws Exception{
+        Random random = new Random();
+        while (true) {
+            int i = random.nextInt();
+            blockingQueue.put(i);
+            System.out.println("put " + i);
+            Thread.sleep(5000);
+        }
+    }
+
+    public static void take()throws Exception{
+        while (true) {
+            System.out.println("take " + blockingQueue.take());
+        }
     }
 }
+

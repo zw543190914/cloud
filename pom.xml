@@ -39,6 +39,8 @@
         <module>xxl-job-server</module>
         <module>elasticsearch</module>
         <module>shop</module>
+        <module>spring-security</module>
+        <module>spark</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
