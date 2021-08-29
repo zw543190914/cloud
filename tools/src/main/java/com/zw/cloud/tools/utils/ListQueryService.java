@@ -1,6 +1,8 @@
 package com.zw.cloud.tools.utils;
 
-import com.zw.cloud.entity.User;
+
+import com.zw.cloud.tools.entity.User;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;

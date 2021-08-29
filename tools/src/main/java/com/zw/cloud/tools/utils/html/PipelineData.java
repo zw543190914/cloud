@@ -1,8 +1,8 @@
 package com.zw.cloud.tools.utils.html;
 
-import com.zw.cloud.dao.TcMapper;
-import com.zw.cloud.dao.UserMapper;
-import com.zw.cloud.entity.Tc;
+
+import com.zw.cloud.tools.dao.UserDao;
+import com.zw.cloud.tools.entity.User;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,16 +15,13 @@ import java.util.List;
 @Component
 public class PipelineData implements Pipeline {
     @Autowired
-    private UserMapper userMapper;
-    @Autowired
-    private TcMapper tcMapper;
+    private UserDao userMapper;
 
     @Override
     public void process(ResultItems resultItems, Task task) {
-        List<Tc> tcList = resultItems.get("tcList");
-        if (CollectionUtils.isNotEmpty(tcList)){
+        List<User> userList = resultItems.get("userList");
+        if (CollectionUtils.isNotEmpty(userList)){
             // todo 录入数据库
-            tcMapper.batchInsert(tcList);
         }
     }
 }

@@ -1,9 +1,8 @@
 package com.zw.cloud.tools.utils.html;
 
 import com.alibaba.fastjson.JSON;
-import com.zw.cloud.dao.TcMapper;
-import com.zw.cloud.entity.Tc;
-import com.zw.cloud.entity.TcExample;
+import com.zw.cloud.tools.dao.TcDao;
+import com.zw.cloud.tools.entity.Tc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
@@ -21,7 +20,7 @@ import java.util.List;
 public class WebmagicTest implements PageProcessor {
 
     @Autowired
-    private TcMapper tcMapper;
+    private TcDao tcMapper;
 
     public String url = "https://www.lottery.gov.cn/historykj/history.jspx?_ltype=dlt";
 
@@ -82,7 +81,7 @@ public class WebmagicTest implements PageProcessor {
 
     //@PostConstruct
     public void process(){
-        tcMapper.deleteByExample(new TcExample());
+        //tcMapper.deleteByExample(new TcExample());
 
         Spider.create(new WebmagicTest())
                 .addUrl(url)

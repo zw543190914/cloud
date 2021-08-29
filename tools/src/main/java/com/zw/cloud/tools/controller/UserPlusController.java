@@ -1,11 +1,10 @@
 package com.zw.cloud.tools.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zw.cloud.dao.UserPlusMapper;
-import com.zw.cloud.entity.UserPlus;
+
 import com.zw.cloud.tools.base.ThreadContext;
+import com.zw.cloud.tools.dao.UserDao;
+import com.zw.cloud.tools.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +17,7 @@ import java.util.Map;
 public class UserPlusController {
 
     @Autowired
-    private UserPlusMapper userPlusMapper;
+    private UserDao userPlusMapper;
     @Autowired
     private ThreadContext threadContext;
 
@@ -26,8 +25,8 @@ public class UserPlusController {
     //http://localhost:9040/user/plus
     public void insert(){
         System.out.println(threadContext.getWorkIdThreadLocal().get());
-        UserPlus userPlus = new UserPlus();
-        userPlus.setAge(11);
+        User userPlus = new User();
+        userPlus.setAge((byte)11);
         userPlus.setName("001");
         int insert = userPlusMapper.insert(userPlus);
         System.out.println(insert);
@@ -38,16 +37,16 @@ public class UserPlusController {
     @PutMapping
     //http://localhost:9040/user/plus
     public void update(){
-        UserPlus userPlus = userPlusMapper.selectById(2L);
-        userPlus.setAge(2);
+        User userPlus = userPlusMapper.queryById(2L);
+        userPlus.setAge((byte)2);
         userPlus.setName("test01");
 
-        UserPlus userPlus2 = userPlusMapper.selectById(2L);
-        userPlusMapper.updateById(userPlus);
+        User userPlus2 = userPlusMapper.queryById(2L);
+        userPlusMapper.update(userPlus);
         System.out.println(JSONObject.toJSONString(userPlus));
-        userPlus2.setAge(3);
+        userPlus2.setAge((byte)3);
         // 更新失败
-        userPlusMapper.updateById(userPlus2);
+        userPlusMapper.update(userPlus2);
         System.out.println(JSONObject.toJSONString(userPlus2));
     }
 
@@ -59,34 +58,34 @@ public class UserPlusController {
 
     @GetMapping("/queryAll")
     //http://localhost:9040/user/plus/queryAll
-    public List<UserPlus> queryAll(){
-        return userPlusMapper.selectList(null);
+    public List<User> queryAll(){
+        return userPlusMapper.queryAll(null);
     }
 
     /**
      * 自定义查询
      * @return
      */
-    @GetMapping("/queryByMap")
+    /*@GetMapping("/queryByMap")
     //http://localhost:9040/user/plus/queryByMap
-    public List<UserPlus> queryByMap(){
+    public List<User> queryByMap(){
         Map<String,Object> map = new HashMap<>();
         map.put("name","test");
         return userPlusMapper.selectByMap(map);
-    }
+    }*/
 
     /**
      * 分页
      * @return
      */
-    @GetMapping("/query")
+   /* @GetMapping("/query")
     //http://localhost:9040/user/plus/query
     public Page<UserPlus> query(){
-        Page<UserPlus> page = new Page<>(2,2);
+        Page<User> page = new Page<>(2,2);
         return userPlusMapper.selectPage(page, null);
-    }
+    }*/
 
-    @GetMapping("/queryByWrapper")
+   /* @GetMapping("/queryByWrapper")
     //http://localhost:9040/user/plus/query
     public Page<UserPlus> queryByWrapper(){
         Page<UserPlus> page = new Page<>(2,2);
@@ -96,5 +95,5 @@ public class UserPlusController {
                 .ge("name","test01")
                 .inSql("id","select id from user_plus where id < 3");
         return userPlusMapper.selectPage(page, null);
-    }
+    }*/
 }

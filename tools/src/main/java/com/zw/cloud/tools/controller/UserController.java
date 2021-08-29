@@ -1,38 +1,35 @@
-/*
 package com.zw.cloud.tools.controller;
 
-
-import com.github.pagehelper.PageInfo;
-import com.zw.cloud.db.entity.User;
-import com.zw.cloud.tools.modle.vo.ParamVO;
-import com.zw.cloud.tools.service.impl.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.zw.cloud.tools.entity.User;
+import com.zw.cloud.tools.service.UserService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
+
+/**
+ * (User)表控制层
+ *
+ * @author makejava
+ * @since 2021-08-29 21:02:43
+ */
 @RestController
-@RequestMapping("/tools/user")
+@RequestMapping("user")
 public class UserController {
+    /**
+     * 服务对象
+     */
+    @Resource
+    private UserService userService;
 
-    @Autowired
-    private UserServiceImpl userService;
-
-    @PostMapping
-    //http://localhost:9040/tools/user
-    public void insert(User user, MultipartFile file)throws Exception{
-        userService.insert(user,file);
+    /**
+     * 通过主键查询单条数据
+     *
+     * @param id 主键
+     * @return 单条数据
+     */
+    @GetMapping("selectOne")
+    public User selectOne(Long id) {
+        return this.userService.queryById(id);
     }
 
-    @PutMapping
-    //http://localhost:9040/tools/user
-    public void update(User user, MultipartFile file)throws Exception{
-        userService.update(user,file);
-    }
-
-    @PostMapping("/query")
-    //http://localhost:9040/tools/user/query
-    public PageInfo<User> query(@RequestBody ParamVO paramVO)throws Exception{
-        return userService.query(paramVO);
-    }
 }
-*/

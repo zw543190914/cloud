@@ -1,10 +1,10 @@
 package com.zw.cloud.tools.controller;
 
-import com.zw.cloud.dao.TcMapper;
-import com.zw.cloud.dao.UserMapper;
-import com.zw.cloud.entity.Tc;
-import com.zw.cloud.entity.TcExample;
-import com.zw.cloud.entity.User;
+
+import com.zw.cloud.tools.dao.TcDao;
+import com.zw.cloud.tools.dao.UserDao;
+import com.zw.cloud.tools.entity.Tc;
+import com.zw.cloud.tools.entity.User;
 import com.zw.cloud.tools.handler.poi.SheetHandler;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -40,9 +40,9 @@ import java.util.*;
 public class ExcelController {
 
     @Autowired
-    private UserMapper mapper;
+    private UserDao mapper;
     @Autowired
-    private TcMapper tcMapper;
+    private TcDao tcMapper;
 
     @PostMapping("/import")
     //http://localhost:9040/tools/poi/excel/import
@@ -78,7 +78,7 @@ public class ExcelController {
                 }
             }
         }
-        mapper.batchInsert(userList);
+        //mapper.(userList);
     }
 
     /**
@@ -89,13 +89,7 @@ public class ExcelController {
     @GetMapping(value = "/export")
     //http://localhost:9040/tools/poi/excel/export
     public void export( HttpServletResponse response)throws Exception{
-        /*List<User> userList = mapper.selectByExampleWithBLOBs(new UserExample());
-        if (CollectionUtils.isEmpty(userList)){
-            throw new Exception("data is empty");
-        }*/
-        TcExample tcExample = new TcExample();
-        tcExample.setOrderByClause("id desc");
-        List<Tc> tcList = tcMapper.selectByExample(tcExample);
+
         List<User> userList = new ArrayList<>(10000);
 
         Random random = new Random();
@@ -124,17 +118,10 @@ public class ExcelController {
             i ++;
         }
         int rowNum = 1;
-        for (Tc tc : tcList){
+        for (User tc : userList){
             SXSSFRow row = sheet.createRow(rowNum);
             int cellNo = 0;
             row.createCell(cellNo ++).setCellValue(tc.getId());
-            row.createCell(cellNo ++).setCellValue(tc.getOne());
-            row.createCell(cellNo ++).setCellValue(tc.getTwo());
-            row.createCell(cellNo ++).setCellValue(tc.getThree());
-            row.createCell(cellNo ++).setCellValue(tc.getFour());
-            row.createCell(cellNo ++).setCellValue(tc.getFive());
-            row.createCell(cellNo ++).setCellValue(tc.getSix());
-            row.createCell(cellNo ++).setCellValue(tc.getSeven());
 
             /*SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String  bir = null;

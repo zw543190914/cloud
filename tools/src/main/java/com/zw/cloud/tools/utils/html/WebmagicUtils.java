@@ -1,6 +1,6 @@
 package com.zw.cloud.tools.utils.html;
 
-import com.zw.cloud.entity.User;
+import com.zw.cloud.tools.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
