@@ -6,6 +6,7 @@ import com.zw.cloud.tools.dao.UserDao;
 import com.zw.cloud.tools.entity.Tc;
 import com.zw.cloud.tools.entity.User;
 import com.zw.cloud.tools.handler.poi.SheetHandler;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.opc.OPCPackage;
@@ -20,6 +21,7 @@ import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,12 +39,13 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/tools/poi/excel")
+//@RequiredArgsConstructor(onConstructor_ = {@Lazy, @Autowired})
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ExcelController {
 
-    @Autowired
-    private UserDao mapper;
-    @Autowired
-    private TcDao tcMapper;
+    private final UserDao mapper;
+
+    private final TcDao tcMapper;
 
     @PostMapping("/import")
     //http://localhost:9040/tools/poi/excel/import

@@ -1,13 +1,14 @@
+/*
 package com.zw.cloud.tools.base;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@TestPropertySource(locations = "classpath:application.properties")
 public class BaseTest {
 
     @BeforeEach
@@ -19,3 +20,4 @@ public class BaseTest {
         System.out.println("------------测试结束------------");
     }
 }
+*/

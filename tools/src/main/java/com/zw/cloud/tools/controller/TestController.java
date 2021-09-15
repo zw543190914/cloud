@@ -1,9 +1,12 @@
 package com.zw.cloud.tools.controller;
 
 
+import com.zw.cloud.tools.service.impl.ScheduleService;
 import com.zw.cloud.tools.utils.CustomerExecutorService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,7 +16,10 @@ import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping("/tools/test")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TestController {
+
+    private final ScheduleService scheduleService;
 
     private Logger logger = LoggerFactory.getLogger(TestController.class);
 
@@ -37,8 +43,8 @@ public class TestController {
 
     @GetMapping("/test2")
     //http://localhost:9040/tools/test/test2
-    public void test2() {
-
+    public void test2() throws Exception{
+        scheduleService.test();
     }
 
     private String queryData(String id){
