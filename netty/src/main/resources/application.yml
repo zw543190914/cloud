@@ -1,0 +1,15 @@
+
+spring:
+  application:
+    # 应用名称
+    name: netty
+
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_null
+
+server:
+  port: 18092
+
+
