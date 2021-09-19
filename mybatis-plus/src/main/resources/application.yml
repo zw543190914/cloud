@@ -1,0 +1,53 @@
+
+spring:
+  application:
+    # 应用名称
+    name: mybatis-plus-demo
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_null
+  sql:
+    init:
+      enabled: false
+      #创建表的MySql语句位置
+      schema-locations: classpath:schema.sql
+      #插入数据的MySql语句的位置
+      data-locations: classpath:data.sql
+
+  #数据库配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      initial-size: 1
+      min-idle: 3
+      max-active: 50
+      max-wait: 10000
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      validation-query: "select 1"
+      filters: stat,slf4j
+      filter:
+        stat:
+          slow-sql-millis: 2000
+          log-slow-sql: true
+    #指定数据库的种类，改为内存
+    url: jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull
+    #用户名密码不需要改，都是临时值
+    username: root
+    password: password
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  type-handlers-package: com.zw.cloud.mybatis.plus.db.typehandlers.ext
+  configuration:
+    map-underscore-to-camel-case: true
+    #打印sql日志
+  #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    banner: false
+    db-config:
+      table-underline: true
+      id-type: assign_id
+
