@@ -42,6 +42,7 @@
         <module>spring-security</module>
         <module>mybatis-plus</module>
         <module>websocket</module>
+        <module>netty</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -58,7 +59,6 @@
         <alibaba.spring-context-support.version>1.0.6</alibaba.spring-context-support.version>
         <mybatis-spring-boot-starter.version>2.1.1</mybatis-spring-boot-starter.version>
         <pagehelper-spring-boot-starter.version>1.2.13</pagehelper-spring-boot-starter.version>
-        <mybatis-plus.version>3.4.1</mybatis-plus.version>
         <logback.version>1.2.0</logback.version>
         <slf4j.version>1.7.21</slf4j.version>
         <zing-core.version>3.3.0</zing-core.version>
@@ -100,7 +100,8 @@
         <easy-captcha.version>1.6.2</easy-captcha.version>
         <pig4cloud.version>1.0.1</pig4cloud.version>
         <mybatis.plus.version>3.4.2</mybatis.plus.version>
-
+        <mybatis-plus-generator.version>3.4.1</mybatis-plus-generator.version>
+        <netty-all.version>4.1.20.Final</netty-all.version>
     </properties>
 
     <dependencyManagement>
@@ -145,17 +146,6 @@
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper-spring-boot-starter.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatis-plus.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-generator</artifactId>
-                <version>${mybatis-plus.version}</version>
             </dependency>
 
             <dependency>
@@ -432,9 +422,20 @@
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatis-plus-generator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-extension</artifactId>
                 <version>${mybatis.plus.version}</version>
                 <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty-all.version}</version>
             </dependency>
 
         </dependencies>

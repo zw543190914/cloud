@@ -1,4 +1,4 @@
-package com.zw.cloud.websocket.Server.endpoint;
+package com.zw.cloud.websocket.server.endpoint;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

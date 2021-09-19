@@ -1,9 +1,11 @@
-package com.zw.cloud.websocket.Server.endpoint;
+package com.zw.cloud.websocket.server.endpoint;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zw.cloud.websocket.entity.OneToOneMessage;
+import com.zw.cloud.websocket.service.OtherService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -42,6 +44,17 @@ public class OneToOneWebSocket {
     private static Map<String, String> clientIdName = new ConcurrentHashMap<>();
 
     /**
+     * 解决SpringBoot中webScocket不能注入bean的问题
+     */
+    private static ApplicationContext applicationContext;
+
+    private OtherService otherService;
+
+    public static void setApplicationContext(ApplicationContext applicationContext){
+        OneToOneWebSocket.applicationContext = applicationContext;
+    }
+
+    /**
      * 连接建立成功调用的方法
      */
     @OnOpen
@@ -49,6 +62,8 @@ public class OneToOneWebSocket {
         if (clients.containsKey(name)) {
             throw new RuntimeException("用户已存在");
         }
+        // 通过application获取bean
+        otherService = applicationContext.getBean(OtherService.class);
         onlineCount.incrementAndGet(); // 在线数加1
         clients.put(name, session);
         clientIdName.put(session.getId(), name);
@@ -78,6 +93,7 @@ public class OneToOneWebSocket {
     @OnMessage
     public void onMessage(String message, Session session) {
         log.info("服务端收到客户端[{}]的消息[{}]", session.getId(), message);
+        otherService.test();
         try {
             OneToOneMessage myMessage = JSON.parseObject(message, OneToOneMessage.class);
             if (myMessage != null) {
@@ -169,4 +185,25 @@ public class OneToOneWebSocket {
         }
     }
 
+    /**
+     * kafka发送消息监听事件，有消息分发
+     */
+   /* public void kafkaReceiveMsg(String message) {
+        JSONObject jsonObject = JSONObject.parseObject(message);
+
+        String receiver_id = jsonObject.getString("receiver_id"); //接受者ID
+
+        if (drWebSocketSet.get(receiver_id) != null) {
+            drWebSocketSet.get(receiver_id).getBasicRemote.sendText(message); //进行消息发送
+        }
+    }*/
+
+    /**
+     * kafka监听关闭websocket连接
+     */
+   /* public void kafkaCloseWebsocket(String closeMessage) {
+        JSONObject jsonObject = JSONObject.parseObject(closeMessage);
+        String userId = jsonObject.getString("userId");
+        drWebSocketSet.remove(userId);
+    }*/
 }
