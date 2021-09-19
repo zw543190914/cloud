@@ -40,8 +40,8 @@
         <module>elasticsearch</module>
         <module>shop</module>
         <module>spring-security</module>
-        <module>spark</module>
         <module>mybatis-plus</module>
+        <module>websocket</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
