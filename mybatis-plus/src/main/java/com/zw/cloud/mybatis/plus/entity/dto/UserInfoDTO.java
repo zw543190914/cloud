@@ -31,4 +31,8 @@ public class UserInfoDTO implements Serializable {
     @Digits(integer = 4, fraction = 1)
     private BigDecimal value;
 
+    private String orgCode;
+
+    private String clientId;
+
 }

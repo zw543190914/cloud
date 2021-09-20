@@ -29,7 +29,7 @@
     
   20. elasticsearch 整合，工具类封装，数据来源为Jsoup获取网页数据。 参考 elasticsearch 模块。 </br>
   21. shop 商品模块，主要添加秒杀相关。
-  22. mybatis-plus整合， 参考 mybatis-plus 模块。</br>
+  22. mybatis-plus整合，mybatis-plus generate 代码生成，参考 mybatis-plus 模块。</br>
   23. websocket 、 netty-server、 netty-client, 参考对应模块。</br>
   24. 常用插件：https://blog.csdn.net/weixin_41846320/article/details/82697818
   

@@ -17,7 +17,7 @@ public class BookController {
     @PostMapping
     //http://localhost:9050/book
     public void save(@RequestBody Book book){
-        bookRespository.index(book);
+        bookRespository.save(book);
     }
 
     @GetMapping("/{name}")

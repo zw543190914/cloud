@@ -49,5 +49,5 @@ mybatis-plus:
     banner: false
     db-config:
       table-underline: true
-      id-type: assign_id
+      id-type: auto
 

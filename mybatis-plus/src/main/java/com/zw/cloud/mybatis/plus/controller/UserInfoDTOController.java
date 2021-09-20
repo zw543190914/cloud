@@ -20,7 +20,7 @@ public class UserInfoDTOController {
     private IUserInfoDTOService userInfoService;
 
     @GetMapping
-    //http://localhost:8080/test?name=test1
+    //http://localhost:8080/test?name=test4
     public void saveOrUpdate(String name) {
         UserInfoDTO userInfoDTO = UserInfoDTO.builder().name(name).build();
         UserInfoDTO userInfoDTO1 = userInfoService.saveOrUpdate(userInfoDTO);

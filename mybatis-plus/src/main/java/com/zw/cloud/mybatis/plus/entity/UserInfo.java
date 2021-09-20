@@ -36,5 +36,11 @@ public class UserInfo implements Serializable {
     @TableLogic
     private int deleted;
 
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private String orgCode;
+
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private String clientId;
+
 }
 

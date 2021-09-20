@@ -103,6 +103,7 @@
         <pig4cloud.version>1.0.1</pig4cloud.version>
         <mybatis.plus.version>3.4.2</mybatis.plus.version>
         <mybatis-plus-generator.version>3.4.1</mybatis-plus-generator.version>
+        <velocity-engine-core.version>2.2</velocity-engine-core.version>
         <netty-all.version>4.1.63.Final</netty-all.version>
     </properties>
 
@@ -435,11 +436,17 @@
                 <artifactId>mybatis-plus-generator</artifactId>
                 <version>${mybatis-plus-generator.version}</version>
             </dependency>
-            <dependency>
+           <!-- 影响mybatis-plus generate-->
+           <!-- <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-extension</artifactId>
                 <version>${mybatis.plus.version}</version>
                 <scope>provided</scope>
+            </dependency>-->
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity-engine-core</artifactId>
+                <version>${velocity-engine-core.version}</version>
             </dependency>
 
             <dependency>
