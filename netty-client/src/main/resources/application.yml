@@ -1,0 +1,43 @@
+
+spring:
+  application:
+    # 应用名称
+    name: netty-client
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    lettuce:
+      pool:
+        max-active: 20
+        max-wait: 5000
+        max-idle: 5
+    timeout: 5000
+#  redis 测试数据 WEBSOCKET:NODE:LIST  127.0.0.1#18888  360
+
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_null
+
+server:
+  port: 18093
+
+# websocket配置
+websocket:
+  config:
+    ws-protocol: ws
+    ws-path: /ws
+    #webSocket backLog
+    backLog: 1024
+    #webSocket 传输最大数据量(不常改)
+    data-max-length: 65536000
+    identity: websocket_client
+    identity-token: 24d65adf-b2ea-11eb-8b80-52543945f0dd
+    task:
+      heart-listen-cron: "0 */2 * * * ?"
+      connnet-failure-count-num: 3
+      reconnection-client-cron: "0 */1 * * * ?"
+      service-listen-out-time: 10
+
+

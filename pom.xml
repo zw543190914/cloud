@@ -43,6 +43,7 @@
         <module>mybatis-plus</module>
         <module>websocket</module>
         <module>netty</module>
+        <module>netty-client</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -82,6 +83,7 @@
         <shiro-spring.version>1.5.3</shiro-spring.version>
         <!--<shiro-spring.version>1.5.3</shiro-spring.version>-->
         <commons-codec.version>1.14</commons-codec.version>
+        <commons-pool2.version>2.11.1</commons-pool2.version>
         <shiro-redis.version>3.0.0</shiro-redis.version>
         <poi.version>4.1.2</poi.version>
         <easyexcel.version>2.2.8</easyexcel.version>
@@ -101,7 +103,7 @@
         <pig4cloud.version>1.0.1</pig4cloud.version>
         <mybatis.plus.version>3.4.2</mybatis.plus.version>
         <mybatis-plus-generator.version>3.4.1</mybatis-plus-generator.version>
-        <netty-all.version>4.1.20.Final</netty-all.version>
+        <netty-all.version>4.1.63.Final</netty-all.version>
     </properties>
 
     <dependencyManagement>
@@ -309,6 +311,14 @@
                 <artifactId>commons-codec</artifactId>
                 <version>${commons-codec.version}</version>
             </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-pool2 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>${commons-pool2.version}</version>
+            </dependency>
+
             <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
             <dependency>
                 <groupId>org.apache.poi</groupId>

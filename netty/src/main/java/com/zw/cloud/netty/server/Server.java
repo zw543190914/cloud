@@ -11,9 +11,7 @@ import io.netty.handler.logging.LoggingHandler;
 
 public class Server {
 
-    private final int PORT = 18888;
-
-    public Server(){
+    public Server(int port){
         // 配置服务端的NIO线程组
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -21,14 +19,15 @@ public class Server {
         try {
             b.group(bossGroup, workerGroup)  // 绑定线程池
                     .channel(NioServerSocketChannel.class) // 指定使用的channel
-                    .option(ChannelOption.SO_BACKLOG, 1024)
                     .handler(new LoggingHandler(LogLevel.INFO))
+                    .option(ChannelOption.SO_KEEPALIVE,true)
+                    .option(ChannelOption.SO_BACKLOG,1024*1024*10)
                     .childHandler(new NettyServerInitializer());
 
             // 	绑定端口，同步等待成功
-            ChannelFuture cf = b.bind(PORT).sync();
+            ChannelFuture cf = b.bind(port).sync();
 
-            System.out.println(" Server startup.. port: " + PORT);
+            System.out.println(" Server startup.. port: " + port);
             cf.channel().closeFuture().sync();
         } catch (Exception e) {
             e.printStackTrace();

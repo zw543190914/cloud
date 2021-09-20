@@ -12,10 +12,11 @@
             socket = new WebSocket("ws://127.0.0.1:18888/ws");
             socket.onmessage = function(event){
                 var ta = document.getElementById('responseText');
-                var uidValue = document.getElementById('uid');
-                var msg = event.data;
-                var uid = msg.toString().split(":")[0];
-                var msgData = msg.toString().split(":")[1]
+                // var uidValue = document.getElementById('uid');
+                // var msg = event.data;
+                // var uid = msg.toString().split(":")[0];
+                // var msgData = msg.toString().split(":")[1]
+                var msgData = event.data;
                 ta.value += msgData+"\r\n";
                 uidValue.value = uid;
             };

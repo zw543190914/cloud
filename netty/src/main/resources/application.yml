@@ -12,4 +12,8 @@ spring:
 server:
   port: 18092
 
+netty:
+  server:
+    port: 18888
+
 

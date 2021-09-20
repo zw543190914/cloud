@@ -1,4 +1,4 @@
-package com.zw.cloud.feignprovider.utils;
+package com.zw.cloud.netty.client.util;
 
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
@@ -174,22 +174,6 @@ public class RedisUtils {
         return redisTemplate.opsForHash().entries(key);
     }
 
-    /**
-     * HashSet
-     * @param key 键
-     * @param map 对应多个键值
-     * @return true 成功 false 失败
-     */
-    public boolean hmset(String key, Map<String,Object> map){
-        try {
-            redisTemplate.opsForHash().putAll(key, map);
-            return true;
-        } catch (Exception e) {
-            logger.error("[RedisUtils][hmset]key is {},error is {}",key,e);
-            return false;
-        }
-    }
-
     public <T> Map<String, T> getMapValues(String cacheKey, Class<T> clsType) {
         Map<Object, Object> data = redisTemplate.opsForHash().entries(cacheKey);
         Map<String, T> result = new HashMap();
@@ -209,6 +193,23 @@ public class RedisUtils {
             return JSON.parseObject(data.toString(), clsType);
         }
         return null;
+    }
+
+
+    /**
+     * HashSet
+     * @param key 键
+     * @param map 对应多个键值
+     * @return true 成功 false 失败
+     */
+    public boolean hmset(String key, Map<String,Object> map){
+        try {
+            redisTemplate.opsForHash().putAll(key, map);
+            return true;
+        } catch (Exception e) {
+            logger.error("[RedisUtils][hmset]key is {},error is {}",key,e);
+            return false;
+        }
     }
 
     /**

@@ -1,27 +1,38 @@
 package com.zw.cloud.netty.server;
 
 import com.alibaba.fastjson.JSON;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import com.zw.cloud.netty.entity.dto.NettyMsgDTO;
+import com.zw.cloud.netty.enums.EnumNettyMsgTag;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.*;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
-import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.util.CharsetUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import static io.netty.buffer.Unpooled.copiedBuffer;
+import static io.netty.handler.codec.http.HttpHeaderNames.CONNECTION;
+import static io.netty.handler.codec.http.HttpHeaderValues.KEEP_ALIVE;
 
+@Slf4j
 public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     // 用于记录和管理所有客户端的channle
     public static ChannelGroup clients = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
-   /* private static ConcurrentHashMap<String, Channel> manage = new ConcurrentHashMap<String, Channel>();
+    private static ConcurrentHashMap<String, Channel> manage = new ConcurrentHashMap<String, Channel>();
 
-    public static  void put(String senderId,Channel channel){
+   /* public static  void put(String senderId,Channel channel){
         manage.put(senderId,channel);
     }
     public static Channel get(String senderId){
@@ -32,7 +43,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         //添加到channelGroup通道组
         clients.add(ctx.channel());
-        System.out.println("与客户端建立连接，通道开启！现有连接数："+ clients.size());
+        System.out.println("与客户端 " + ctx.channel().id() + "建立连接，通道开启！现有连接数："+ clients.size());
     }
 
     @Override
@@ -45,6 +56,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         //首次连接是FullHttpRequest
         if (msg instanceof FullHttpRequest) {
+
             FullHttpRequest request = (FullHttpRequest) msg;
             String uri = request.uri();
 
@@ -56,16 +68,28 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 System.out.println(newUri);
                 request.setUri(newUri);
             }
+            String data = "http request over";
+            ByteBuf buf = copiedBuffer(data, CharsetUtil.UTF_8);
+            FullHttpResponse response = responseOK(HttpResponseStatus.OK, buf);
+            boolean keepAlive = HttpUtil.isKeepAlive(request);
+            if (!keepAlive) {
+                ctx.write(response).addListener(ChannelFutureListener.CLOSE);
+            } else {
+                response.headers().set(CONNECTION, KEEP_ALIVE);
+                ctx.write(response);
+            }
 
         }else if(msg instanceof TextWebSocketFrame){
             //正常的TEXT消息类型
             TextWebSocketFrame frame=(TextWebSocketFrame)msg;
             System.out.println("客户端收到服务器数据：" +frame.text());
             sendAllMessage(frame.text());
+        }else if(msg instanceof BinaryWebSocketFrame){
+            System.out.println("收到二进制消息："+((BinaryWebSocketFrame)msg).content().readableBytes());
+            BinaryWebSocketFrame binaryWebSocketFrame=new BinaryWebSocketFrame(Unpooled.buffer().writeBytes("xxx".getBytes()));
+            ctx.channel().writeAndFlush(binaryWebSocketFrame);
         }
-        super.channelRead(ctx, msg);
     }
-
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
@@ -75,8 +99,22 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     public static void sendAllMessage(String message){
-        //收到信息后，群发给所有channel
-        clients.writeAndFlush( new TextWebSocketFrame(message));
+        if (StringUtils.isBlank(message)){
+            System.out.println("message is null");
+            return;
+        }
+        try {
+            NettyMsgDTO nettyMsgDTO = JSON.parseObject(message, NettyMsgDTO.class);
+            if (EnumNettyMsgTag.HEART.getKey().equals(nettyMsgDTO.getTag())) {
+                log.info("收到 HEART 消息 , nettyMsgDTO = {}", JSON.toJSONString(nettyMsgDTO));
+            } else {
+                clients.writeAndFlush( new TextWebSocketFrame(message));
+            }
+        } catch (Exception e) {
+            log.error("msg转换DTO异常, msg={}", message);
+            //收到信息后，群发给所有channel
+            clients.writeAndFlush( new TextWebSocketFrame(message));
+        }
     }
 
 
@@ -99,4 +137,14 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             return map;
         }
     }
+
+    private FullHttpResponse responseOK(HttpResponseStatus status, ByteBuf content) {
+        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, status, content);
+        if (content != null) {
+            response.headers().set("Content-Type", "text/plain;charset=UTF-8");
+            response.headers().set("Content_Length", response.content().readableBytes());
+        }
+        return response;
+    }
+
 }
