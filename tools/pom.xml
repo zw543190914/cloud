@@ -173,16 +173,23 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+
+       <!-- ====mock静态方法 start=====-->
        <!-- <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
+            <scope>test</scope>
+        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-inline -->
+       <!-- <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <version>3.11.2</version>
             <scope>test</scope>
         </dependency>-->
         <dependency>
@@ -197,7 +204,6 @@
             <version>2.23.4</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
@@ -209,7 +215,6 @@
             <version>5.4.2</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-module-junit4</artifactId>
@@ -222,6 +227,8 @@
             <version>2.0.2</version>
             <scope>test</scope>
         </dependency>
+        <!-- ====mock静态方法 end =====-->
+
 
     </dependencies>
 

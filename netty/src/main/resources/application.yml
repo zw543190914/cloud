@@ -3,6 +3,16 @@ spring:
   application:
     # 应用名称
     name: netty
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    lettuce:
+      pool:
+        max-active: 20
+        max-wait: 5000
+        max-idle: 5
+    timeout: 5000
 
   jackson:
     time-zone: GMT+8
