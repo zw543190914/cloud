@@ -74,7 +74,7 @@ public class WebSocketClient {
     /**
      * 客户端初始化
      */
-    public void start() {
+    private void start() {
         String url = "";
         try {
             Bootstrap bootstrap = new Bootstrap();
@@ -108,16 +108,11 @@ public class WebSocketClient {
                 }
             });
 
-           /* url = String
+            url = String
                     .format("%s://%s%s?identity=%s&orgCode=%s&token=%s", webSocketConfigDTO.getWsProtocol(), addr,
                             webSocketConfigDTO.getWsPath(),
                             webSocketConfigDTO.getIdentity(), webSocketConfigDTO.getIdentity(),
-                            webSocketConfigDTO.getIdentityToken());*/
-            url = String
-                    .format("%s://%s%s",
-                            webSocketConfigDTO.getWsProtocol(),
-                            addr,
-                            webSocketConfigDTO.getWsPath());
+                            webSocketConfigDTO.getIdentityToken());
             URI websocketURI = new URI(url);
             // //根据升级协议，获取http请求头sec-websocket-version获取客户端支持版本
              //根据版本创建不同版本握手对象

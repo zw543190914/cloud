@@ -23,9 +23,6 @@ public class NettyServerInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new ChunkedWriteHandler());
         //http聚合器
         pipeline.addLast(new HttpObjectAggregator(1024*1024*1024));
-        //websocket支持,设置路由
-        pipeline.addLast(new WebSocketServerProtocolHandler("/ws",null,true,65535));
-
 
         // ====================== 增加心跳支持 start    ======================
         // 针对客户端，如果在30秒没有向服务端发送读写心跳(ALL)，则主动断开
@@ -37,5 +34,8 @@ public class NettyServerInitializer extends ChannelInitializer<SocketChannel> {
 
         //添加自定义的助手类
         pipeline.addLast(new ServerHandler());
+        //websocket支持,设置路由
+        pipeline.addLast(new WebSocketServerProtocolHandler("/ws",null,true,65535));
+
     }
 }

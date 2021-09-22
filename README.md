@@ -24,7 +24,8 @@
     使用 百度AI / 阿里云AI 进行人脸识别 登录。(百度AI 被注释) </br>
     时间相关转换,返回值统一封装,全局异常处理, Mybatis 代码生成插件 </br>
     Java简单爬虫 WebmagicUtils,StringTemplete 消息模板 。 </br>
-    并发相关内容 锁，JUC工具类 线程池</br>
+    并发相关内容 锁，JUC工具类 线程池。</br>
+    SPRINGBOOT单元测试 & MOCK静态方法。</br>
     参考 tools 模块 </br>
     
   20. elasticsearch 整合，工具类封装，数据来源为Jsoup获取网页数据。 参考 elasticsearch 模块。 </br>
@@ -34,5 +35,3 @@
   24. 常用插件：https://blog.csdn.net/weixin_41846320/article/details/82697818
   
   父POM中配置了自己nexus私服，已注释，settings-nexus.xml 为自己私服对应配置文件，方便后期查找使用。</br> 
-
-duiying

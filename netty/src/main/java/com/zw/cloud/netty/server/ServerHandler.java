@@ -66,9 +66,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             if(uri.contains("?")){
                 String newUri=uri.substring(0,uri.indexOf("?"));
                 System.out.println(newUri);
+                //重新设置请求地址 /ws
                 request.setUri(newUri);
             }
-            String data = "http request over";
+            /*String data = "http request over";
             ByteBuf buf = copiedBuffer(data, CharsetUtil.UTF_8);
             FullHttpResponse response = responseOK(HttpResponseStatus.OK, buf);
             boolean keepAlive = HttpUtil.isKeepAlive(request);
@@ -77,7 +78,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             } else {
                 response.headers().set(CONNECTION, KEEP_ALIVE);
                 ctx.write(response);
-            }
+            }*/
+            //接着建立请求
+            super.channelRead(ctx, msg);
 
         }else if(msg instanceof TextWebSocketFrame){
             //正常的TEXT消息类型

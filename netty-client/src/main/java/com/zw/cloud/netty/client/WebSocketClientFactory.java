@@ -73,11 +73,11 @@ public class WebSocketClientFactory implements ApplicationRunner, DisposableBean
             try {
                 addr = addr.replaceAll("#", ":");
                 String finalAddr = addr;
-                /*executorService.execute(() -> {
+                executorService.execute(() -> {
+                    //添加客户端列表
+                    websocketClientList.add(new WebSocketClient(finalAddr, webSocketConfigDTO));
+                });
 
-                });*/
-                //添加客户端列表
-                websocketClientList.add(new WebSocketClient(finalAddr, webSocketConfigDTO));
             } catch (Exception e) {
                 log.error("初始化客户端异常, addr={}", addr, e);
             }
