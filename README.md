@@ -11,7 +11,7 @@
   9. 分布式链路监控与追踪系统使用 Zipkin。参考 feign-provider </br>
   10. 分布式任务调度使用 xxl-job(客户端)，xxl-job-server 为服务端。参考xxl-job，xxl-job-server 模块 </br>
   11. sso单点登录使用 xxl-sso(客户端)，xxl-sso-server 为服务端。参考xxl-sso,xxl-sso-server 模块 </br>
-  12. 分布式锁 zookeeper(ZkInterProcessMutex,LeaderLatch)，redis 缓存和redisUtils(netty-client) ，参考 feign-provider 模块。
+  12. 分布式锁 zookeeper(ZkInterProcessMutex,LeaderLatch)。参考 feign-provider 模块。
   13. activiti工作流引擎使用整合。参考 activiti 模块。  </br>
   14. 多数据源整合, 参考 feign-consumer 模块。 </br>
   15.一些开发常用工具，比如 HttpUtils ，JwtUtils 参考 common 模块。 </br>
@@ -31,7 +31,8 @@
   20. elasticsearch 整合，工具类封装，数据来源为Jsoup获取网页数据。 参考 elasticsearch 模块。 </br>
   21. shop 商品模块，主要添加秒杀相关。
   22. mybatis-plus整合，mybatis-plus generate 代码生成，参考 mybatis-plus 模块。</br>
-  23. websocket 、 netty-server、 netty-client, 参考对应模块。</br>
-  24. 常用插件：https://blog.csdn.net/weixin_41846320/article/details/82697818
+  23. websocket 、 netty(netty-server)、 netty-client, 参考对应模块。</br>
+  24. redis 分布式锁，幂等控制，参考 netty(netty-server) 模块。</br>
+  25. 常用插件：https://blog.csdn.net/weixin_41846320/article/details/82697818
   
   父POM中配置了自己nexus私服，已注释，settings-nexus.xml 为自己私服对应配置文件，方便后期查找使用。</br> 

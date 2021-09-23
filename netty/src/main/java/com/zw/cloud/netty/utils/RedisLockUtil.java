@@ -6,17 +6,15 @@ import org.springframework.data.redis.connection.ReturnType;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.types.Expiration;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
 /**
  * Redis分布式锁
  */
+@Component
 public class RedisLockUtil {
-
-	public RedisLockUtil(RedisTemplate<String, Object> redisTemplate) {
-		this.redisTemplate = redisTemplate;
-	}
 
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
