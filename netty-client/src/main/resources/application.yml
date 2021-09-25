@@ -35,8 +35,9 @@ websocket:
     identity: websocket_client
     identity-token: 24d65adf-b2ea-11eb-8b80-52543945f0dd
     task:
+      # 心跳
       heart-listen-cron: "0 */2 * * * ?"
-      connnet-failure-count-num: 3
+      connnet-failure-count-num: 2
       reconnection-client-cron: "0 */1 * * * ?"
       service-listen-out-time: 10
 

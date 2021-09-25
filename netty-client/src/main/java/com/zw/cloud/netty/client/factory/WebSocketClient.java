@@ -1,4 +1,4 @@
-package com.zw.cloud.netty.client;
+package com.zw.cloud.netty.client.factory;
 
 import com.alibaba.fastjson.JSON;
 import com.zw.cloud.netty.client.dto.NettyMsgDTO;
@@ -11,7 +11,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.HttpClientCodec;
-import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketClientHandshaker;
@@ -56,14 +55,13 @@ public class WebSocketClient {
      * 关闭客户端
      */
     public void close() {
-        log.info("webSocketClient正在关闭");
+        log.info("[WebSocketClient][close]channelId={},正在关闭",this.channel.id().asLongText());
         try {
-            log.info("关闭时，channelId={}", this.channel.id().asLongText());
             if (this.channel != null) {
                 this.channel.close();
             }
         } catch (Exception e) {
-            log.error("关闭websocket client 异常", e);
+            log.error("[WebSocketClient][close]channelId={},关闭异常",this.channel.id().asLongText());
         } finally {
             if (this.bossGroup != null) {
                 this.bossGroup.shutdownGracefully();
@@ -126,9 +124,9 @@ public class WebSocketClient {
             //阻塞等待是否握手成功
             handler.handshakeFuture().sync();
 
-            log.info("webSocketClient启动成功,addr-{}", addr);
+            log.info("[WebSocketClient][start]webSocketClient启动成功,addr-{}", addr);
         } catch (Exception e) {
-            log.info("websocket client 初始化失败, url={}, ", url, e);
+            log.error("[WebSocketClient][start] 初始化失败, url={}, ", url, e);
             bossGroup.shutdownGracefully();
         }
     }
@@ -151,10 +149,9 @@ public class WebSocketClient {
             nettyMsgDTO.setTag(tag);
             nettyMsgDTO.setOnlySenderReceive(false);
             nettyMsgDTO.setTargetChannelId(targetChannelId);
-//            log.info("发送内容 nettyMsgDTO = {}", JsonUtil.toJsonString(nettyMsgDTO));
             TextWebSocketFrame frame = new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO));
             if (channel == null) {
-                log.info("channel is null, return");
+                log.info("[WebSocketClient][sendMsg]channel is null, return");
                 return;
             }
             channel.writeAndFlush(frame).addListener((ChannelFutureListener) channelFuture1 -> {
@@ -164,14 +161,16 @@ public class WebSocketClient {
                         connnetFailureCountNum = 0;
                     } else {
                         connnetFailureCountNum++;
-                        log.warn("发送消息失败={}  ", channelFuture1.cause().getMessage());
+                        log.warn("[WebSocketClient][sendMsg] 发送消息失败={},connnetFailureCountNum is {} ", channelFuture1.cause().getMessage(),connnetFailureCountNum);
                     }
                 } catch (Exception e) {
-                    log.error("发送消息异常", e);
+                    log.error("[WebSocketClient][sendMsg] 发送消息异常", e);
+                    throw e;
                 }
             });
         } catch (Exception e) {
-            log.error("webClient monitor客户端发送消息失败， msg={}", JSON.toJSONString(nettyMsgDTO), e);
+            log.error("[WebSocketClient][sendMsg]webClient monitor客户端发送消息失败， msg={}", JSON.toJSONString(nettyMsgDTO), e);
+            throw e;
         }
     }
 }

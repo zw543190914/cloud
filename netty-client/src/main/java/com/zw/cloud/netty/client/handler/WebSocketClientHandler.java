@@ -1,20 +1,22 @@
 package com.zw.cloud.netty.client.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.zw.cloud.netty.client.WebSocketClient;
+import com.zw.cloud.netty.client.enums.EnumNettyMsgTag;
+import com.zw.cloud.netty.client.factory.WebSocketClient;
 import com.zw.cloud.netty.client.dto.NettyMsgDTO;
 import com.zw.cloud.netty.client.util.NettyHeartUtil;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import io.netty.handler.codec.http.websocketx.WebSocketClientHandshaker;
-import io.netty.handler.codec.http.websocketx.WebSocketFrame;
-import io.netty.handler.codec.http.websocketx.WebSocketHandshakeException;
+import io.netty.handler.codec.http.websocketx.*;
 import io.netty.util.CharsetUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Getter
@@ -52,7 +54,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
                 String errorMsg = String.format("WebSocket Client failed to connect,status:%s,reason:%s", res.status(),
                         res.content().toString(
                                 CharsetUtil.UTF_8));
-                log.error("errorMsg={}", errorMsg, e);
+                log.error("[WebSocketClientHandler][channelRead0] errorMsg={}", errorMsg, e);
                 this.handshakeFuture.setFailure(new Exception(errorMsg));
             }
         } else if (msg instanceof FullHttpResponse) {
@@ -61,45 +63,41 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
             throw new IllegalStateException(
                     "Unexpected FullHttpResponse (getStatus=" + response.status() + ", content=" + response.content()
                             .toString(CharsetUtil.UTF_8) + ')');
-        } else {
-            try {
-                WebSocketFrame frame = (WebSocketFrame) msg;
-                if (frame instanceof TextWebSocketFrame) {
-                    String msgJson = ((TextWebSocketFrame) frame).text();
-                    NettyMsgDTO nettyMsgDTO = null;
-                    if (StringUtils.isNotEmpty(msgJson)) {
-                        try {
-                            nettyMsgDTO = JSON.parseObject(msgJson, NettyMsgDTO.class);
-                            log.info("msg转换DTO, msg={}", msgJson);
-                        } catch (Exception e) {
-                            log.error("msg转换DTO异常, msg={}", msgJson);
-                            nettyMsgDTO = new NettyMsgDTO();
-                            nettyMsgDTO.setData(msgJson);
-                            nettyMsgDTO.setTag("add_channel");
-                            nettyMsgDTO.setIdentity("system");
-                            nettyMsgDTO.setTargetChannelId("system");
-                        }
-                    }
-                    if (nettyMsgDTO == null) {
-                        return;
-                    }
-                    String targetGroupId = nettyMsgDTO.getTargetGroupId();
-                    String identity = nettyMsgDTO.getIdentity();
-                    String tag = nettyMsgDTO.getTag();
-                    //获取当前存活的所有客户端节点列表
-                    //Element localChannelElement = monitorClientCache.get(EnumEcacheKey.LOCAL_CHANNEL_SET.getKey());
-                    if (StringUtils.isEmpty(targetGroupId) || StringUtils.isEmpty(identity)
-                            || StringUtils.isEmpty(tag) || nettyMsgDTO.getData() == null) {
-                        return;
-                    }
+        } else if (msg instanceof TextWebSocketFrame) {
 
-                    //处理客户端上线、下线等存活问题，维护存活的客户端节点列表
-                    NettyHeartUtil
-                            .dealClientActive(nettyMsgDTO, webSocketClient);
+            WebSocketFrame frame = (WebSocketFrame) msg;
+            String msgJson = ((TextWebSocketFrame) frame).text();
+            NettyMsgDTO nettyMsgDTO = null;
+            if (StringUtils.isNotEmpty(msgJson)) {
+                try {
+                    nettyMsgDTO = JSON.parseObject(msgJson, NettyMsgDTO.class);
+                    log.info("[WebSocketClientHandler][channelRead0] msg转换DTO, msg={}", msgJson);
+                } catch (Exception e) {
+                    log.error("[WebSocketClientHandler][channelRead0] msg转换DTO异常, msg={}", msgJson);
+                    nettyMsgDTO = new NettyMsgDTO();
+                    nettyMsgDTO.setData(msgJson);
+                    nettyMsgDTO.setTag("add_channel");
+                    nettyMsgDTO.setIdentity("system");
+                    nettyMsgDTO.setTargetChannelId("system");
                 }
-            } catch (Exception e) {
-                log.error("====websocketClientHandler 异常=====", e);
             }
+            // 处理消息
+            if (nettyMsgDTO == null) {
+                return;
+            }
+            if (EnumNettyMsgTag.allKeys().contains(nettyMsgDTO.getTag())) {
+                //处理客户端上线、下线等存活问题，维护存活的客户端节点列表
+                NettyHeartUtil.dealClientActive(nettyMsgDTO, webSocketClient);
+            }
+           /* String targetGroupId = nettyMsgDTO.getTargetGroupId();
+            String identity = nettyMsgDTO.getIdentity();
+            String tag = nettyMsgDTO.getTag();*/
+
+        } else if (msg instanceof BinaryWebSocketFrame) {
+            ByteBuf content = ((BinaryWebSocketFrame) msg).content();
+            byte[] byteArray = new byte[content.capacity()];
+            content.readBytes(byteArray);
+            log.info("[WebSocketClientHandler][channelRead0]BinaryWebSocketFrame msg={}", new String(byteArray, StandardCharsets.UTF_8));
 
         }
     }

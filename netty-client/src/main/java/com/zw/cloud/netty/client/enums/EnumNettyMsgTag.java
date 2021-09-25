@@ -1,5 +1,8 @@
 package com.zw.cloud.netty.client.enums;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * netty消息tag类型
  */
@@ -23,5 +26,13 @@ public enum EnumNettyMsgTag {
 
     public String getDesc() {
         return desc;
+    }
+
+    public static Set<String> allKeys(){
+        Set<String> keys = new HashSet<>();
+        for (EnumNettyMsgTag value : EnumNettyMsgTag.values()) {
+            keys.add(value.key);
+        }
+        return keys;
     }
 }

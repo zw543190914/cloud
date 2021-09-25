@@ -1,13 +1,17 @@
 package com.zw.cloud.netty.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
 
+@Slf4j
 public class IpAddressUtils {
 
     public static void main(String[] args) {
+
         System.out.println("本机IP:" + getIpAddress());
     }
 
@@ -30,7 +34,8 @@ public class IpAddressUtils {
                 }
             }
         } catch (Exception e) {
-            System.err.println("IP地址获取失败" + e.toString());
+            log.error("[IpAddressUtils][getIpAddress] IP地址获取失败, error is ",e);
+            throw new RuntimeException("IP地址获取失败:" + e.getMessage());
         }
         return "";
     }

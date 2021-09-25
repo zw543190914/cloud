@@ -1,4 +1,4 @@
-package com.zw.cloud.netty.client;
+package com.zw.cloud.netty.client.factory;
 
 import com.alibaba.fastjson.JSON;
 import com.zw.cloud.netty.client.dto.WebSocketConfigDTO;
@@ -33,7 +33,7 @@ public class WebSocketClientFactory implements ApplicationRunner, DisposableBean
 
     @Override
     public void destroy() throws Exception {
-        log.info("webSocketClient正在关闭");
+        log.info("[WebSocketClientFactory][destroy]webSocketClient正在关闭");
         try {
             if (websocketClientList.size() > 0) {
                 for (WebSocketClient websocketClient : websocketClientList) {
@@ -43,15 +43,10 @@ public class WebSocketClientFactory implements ApplicationRunner, DisposableBean
                 }
             }
         } catch (Exception e) {
-            log.error("关闭wecsocket factory 异常", e);
+            log.error("[WebSocketClientFactory][destroy]关闭wecsocket factory 异常:",e);
         }
     }
 
-//    @Override
-//    public void afterPropertiesSet() throws Exception {
-//
-//
-//    }
 
     /**
      * 获取客户端列表
@@ -66,20 +61,21 @@ public class WebSocketClientFactory implements ApplicationRunner, DisposableBean
     public void run(ApplicationArguments args) throws Exception {
         // 获取服务器和服务器列表 redis 测试数据 WEBSOCKET:NODE:LIST  127.0.0.1#18888  360
         Map<String, Long> serviceMap = redisUtils.getMapValues("WEBSOCKET:NODE:LIST", Long.class);
-
-        log.info("webSocketConfigDTO  -->  {}", JSON.toJSONString(webSocketConfigDTO));
+        log.info("[WebSocketClientFactory][run]webSocketConfigDTO is {}",JSON.toJSONString(webSocketConfigDTO));
 
         for (String addr : serviceMap.keySet()) {
+            log.info("[WebSocketClientFactory][run]addr is {}",addr);
             try {
                 addr = addr.replaceAll("#", ":");
                 String finalAddr = addr;
                 executorService.execute(() -> {
+                    WebSocketClient webSocketClient = new WebSocketClient(finalAddr, webSocketConfigDTO);
                     //添加客户端列表
-                    websocketClientList.add(new WebSocketClient(finalAddr, webSocketConfigDTO));
+                    websocketClientList.add(webSocketClient);
                 });
 
             } catch (Exception e) {
-                log.error("初始化客户端异常, addr={}", addr, e);
+                log.error("[WebSocketClientFactory][run]初始化客户端异常, addr={} : {}",addr,e);
             }
         }
     }
