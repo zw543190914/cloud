@@ -39,12 +39,12 @@ spring:
     password: password
 
 mybatis-plus:
-  mapper-locations: classpath*:mapper/**/*.xml
+  #mapper-locations: classpath*:mapper/**/*.xml
   type-handlers-package: com.zw.cloud.mybatis.plus.db.typehandlers.ext
   configuration:
     map-underscore-to-camel-case: true
     #打印sql日志
-  #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     banner: false
     db-config:

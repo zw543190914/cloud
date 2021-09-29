@@ -50,7 +50,7 @@ public class GeneratorCode {
         pc.setServiceImpl("service.impl");
         pc.setMapper("mapper");
         pc.setEntity("entity");
-        pc.setXml("mapper.xml");
+        pc.setXml("mapper");
         mpg.setPackageInfo(pc);
 
         // 策略配置

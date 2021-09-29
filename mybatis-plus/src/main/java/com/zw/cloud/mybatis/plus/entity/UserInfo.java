@@ -21,6 +21,8 @@ public class UserInfo implements Serializable {
 
     private LocalDateTime bir;
 
+    private Integer age;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 

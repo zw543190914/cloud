@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.common.collect.Lists;
 import com.zw.cloud.mybatis.plus.entity.UserInfo;
+import com.zw.cloud.mybatis.plus.mapper.UserInfoMapper;
 import com.zw.cloud.mybatis.plus.service.api.IUserTestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,8 @@ import java.util.Objects;
 public class UserTestController {
     @Autowired
     private IUserTestService userService;
+    @Autowired
+    private UserInfoMapper userInfoMapper;
 
     @GetMapping
     //http://localhost:8080/user-test?name=test2
@@ -25,6 +29,22 @@ public class UserTestController {
         user.setName(name);
         userService.saveOrUpdate(user);
         System.out.println(JSON.toJSONString(user));
+    }
+
+
+    @GetMapping("/batchUpdate")
+    //http://localhost:8080/user-test/batchUpdate
+    public void batchUpdate() {
+        UserInfo user = new UserInfo();
+        user.setId(1439904092171239426L);
+        user.setName("a1");
+        user.setAge(11);
+
+        UserInfo user2 = new UserInfo();
+        user2.setId(1439904092171239427L);
+        user2.setName("a2");
+        user2.setAge(22);
+        userInfoMapper.batchUpdate(Lists.newArrayList(user,user2));
     }
 
     @GetMapping("/query")
