@@ -20,9 +20,9 @@
                 </foreach>
             </trim>
         </trim>
-        where
-        <foreach collection="list" separator="or" item="i" index="index">
-            id = #{i.id}
+        where id in
+        <foreach collection="list" separator="," item="i" open="(" close=")">
+            #{i.id}
         </foreach>
     </update>
 

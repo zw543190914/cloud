@@ -19,8 +19,6 @@ import java.util.Objects;
 public class UserTestController {
     @Autowired
     private IUserTestService userService;
-    @Autowired
-    private UserInfoMapper userInfoMapper;
 
     @GetMapping
     //http://localhost:8080/user-test?name=test2
@@ -37,14 +35,16 @@ public class UserTestController {
     public void batchUpdate() {
         UserInfo user = new UserInfo();
         user.setId(1439904092171239426L);
-        user.setName("a1");
+        user.setName("aa");
         user.setAge(11);
 
         UserInfo user2 = new UserInfo();
         user2.setId(1439904092171239427L);
-        user2.setName("a2");
+        user2.setName("bb");
         user2.setAge(22);
-        userInfoMapper.batchUpdate(Lists.newArrayList(user,user2));
+        userService.batchUpdateUserListByMapper(Lists.newArrayList(user,user2));
+
+        //userService.batchUpdateUserList(Lists.newArrayList(user,user2));
     }
 
     @GetMapping("/query")
