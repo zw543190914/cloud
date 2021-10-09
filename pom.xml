@@ -72,7 +72,7 @@
         <activiti.version>7.1.0.M6</activiti.version>
         <jjwt.version>0.9.1</jjwt.version>
         <pinyin4j.version>2.5.1</pinyin4j.version>
-        <jsoup.version>1.13.1</jsoup.version>
+        <jsoup.version>1.14.2</jsoup.version>
         <JsoupXpath.version>2.3.2</JsoupXpath.version>
         <hanlp.version>portable-1.7.5</hanlp.version>
         <hutool-all.version>5.1.1</hutool-all.version>
@@ -80,7 +80,7 @@
         <fastjson.version>1.2.78</fastjson.version>
         <guava.version>30.0-jre</guava.version>
         <httpclient.version>4.5.13</httpclient.version>
-        <shiro-spring.version>1.5.3</shiro-spring.version>
+        <shiro-spring.version>1.8.0</shiro-spring.version>
         <!--<shiro-spring.version>1.5.3</shiro-spring.version>-->
         <commons-codec.version>1.14</commons-codec.version>
         <commons-pool2.version>2.11.1</commons-pool2.version>

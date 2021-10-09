@@ -3,7 +3,12 @@ package com.zw.cloud.tools.entity;
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.format.DateTimeFormat;
+import org.hibernate.validator.constraints.Range;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.io.Serializable;
 
@@ -20,9 +25,12 @@ public class User implements Serializable {
     private Long id;
 
     @ExcelProperty(value = "姓名")
+    @NotBlank(message = "name is blank")
     private String name;
 
     @ExcelProperty(value = "年龄")
+    @NotNull(message = "age is null")
+    @Range(max = 100,min = 10,message = "age is error")
     private Byte age;
 
     @ExcelProperty(value = "描述")
@@ -36,6 +44,11 @@ public class User implements Serializable {
     private String image;
     @ExcelIgnore
     private Date gmtCreate;
+
+    @ExcelIgnore
+    @Valid //嵌套验证
+    @NotNull
+    private Tc tc;
 
 
     public Long getId() {
@@ -94,4 +107,11 @@ public class User implements Serializable {
         this.gmtCreate = gmtCreate;
     }
 
+    public Tc getTc() {
+        return tc;
+    }
+
+    public void setTc(Tc tc) {
+        this.tc = tc;
+    }
 }

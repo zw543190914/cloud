@@ -2,10 +2,16 @@ package com.zw.cloud.tools.base;
 
 import com.zw.cloud.common.utils.MyPermissionCheckException;
 import com.zw.cloud.common.utils.WebResult;
+import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -21,6 +27,11 @@ public class GlobalExceptionHandler {
             return WebResult.failed()
                     .withErrorCode(WebResult.ErrorCode.METHOD_NOT_ALLOWED)
                     .withErrorMsg("没有操作权限");
+        } else if (exception instanceof BindException) {
+            BindException bindException = (BindException) exception;
+            String msg = bindException.getFieldErrors().stream().map((i) -> String.format("%s(%s):%s", i.getField(), i.getRejectedValue(), i.getDefaultMessage())).collect(Collectors.joining(";"));
+            return WebResult.failed().withErrorCode(WebResult.ErrorCode.PARAMETER_ILLEGAL)
+                    .withErrorMsg(msg);
         }
 
         return WebResult.failed()

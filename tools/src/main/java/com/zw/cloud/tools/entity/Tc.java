@@ -1,5 +1,6 @@
 package com.zw.cloud.tools.entity;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -12,7 +13,8 @@ public class Tc implements Serializable {
     private static final long serialVersionUID = 738831055406144746L;
     
     private Integer id;
-    
+
+    @NotNull(message = "one is null")
     private Integer one;
     
     private Integer two;
