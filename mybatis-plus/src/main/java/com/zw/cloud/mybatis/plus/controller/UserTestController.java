@@ -48,20 +48,22 @@ public class UserTestController {
     }
 
     @GetMapping("/query")
-    //http://localhost:8080/user-test/query
-    public Page<UserInfo> pageQuery() {
+    //http://localhost:8080/user-test/query?name=
+    public Page<UserInfo> pageQuery(String name) {
         UserInfo user = new UserInfo();
+        user.setName(name);
        /* QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id","name")
                 .eq(Objects.nonNull(user.getId()),"id",user.getId())
                 .eq(Objects.nonNull(user.getName()),"name",user.getName())
                 .orderByDesc("id");*/
                 //.last("limit 1");
-        LambdaQueryWrapper<UserInfo> queryWrapper = Wrappers.lambdaQuery();
+       /* LambdaQueryWrapper<UserInfo> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.eq(Objects.nonNull(user.getId()), UserInfo::getId, user.getId())
                 .eq(Objects.nonNull(user.getName()), UserInfo::getName, user.getName())
-                .orderByDesc(UserInfo::getId);
+                .orderByDesc(UserInfo::getId);*/
+        LambdaQueryWrapper<UserInfo> lambdaQuery = Wrappers.lambdaQuery(user);
         Page<UserInfo> page = new Page<>(1,10);
-        return userService.page(page, queryWrapper);
+        return userService.page(page, lambdaQuery);
     }
 }
