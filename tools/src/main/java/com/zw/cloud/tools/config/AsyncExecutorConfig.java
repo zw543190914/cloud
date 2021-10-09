@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableAsync
 @Configuration
 public class AsyncExecutorConfig implements AsyncConfigurer {
-    @Bean("taskExecutor")
+    @Bean("asyncTaskExecutor")
     public ThreadPoolTaskExecutor asyncServiceExecutor() {
         //返回可用处理器的虚拟机的最大数量不小于1
         int cpu = Runtime.getRuntime().availableProcessors();

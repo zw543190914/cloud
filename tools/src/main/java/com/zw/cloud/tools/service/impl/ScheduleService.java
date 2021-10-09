@@ -26,10 +26,4 @@ public class ScheduleService {
         System.out.println(futureTask.get());
     }
 
-   /* @Scheduled(fixedRate = 1000)
-    public void test2(){
-        log.info("test2 thread is " + Thread.currentThread().getName());
-    }*/
-
-
 }

@@ -7,5 +7,5 @@ import java.util.concurrent.TimeUnit;
 
 public class CustomerExecutorService {
 
-    public static ExecutorService pool = new ThreadPoolExecutor(4, 6, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(10240));
+    public static ExecutorService pool = new ThreadPoolExecutor(4, 6, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(10240),new ThreadPoolExecutor.CallerRunsPolicy());
 }
