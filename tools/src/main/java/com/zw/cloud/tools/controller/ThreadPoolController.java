@@ -53,11 +53,11 @@ public class ThreadPoolController {
         scheduleService.test();
     }
 
-    @Scheduled(fixedRate = 1000)
+   /* @Scheduled(fixedRate = 1000)
     public void testScheduled(){
         logger.info("Scheduled thread is " + Thread.currentThread().getName());
     }
-
+*/
 
 
     private String queryData(String id){

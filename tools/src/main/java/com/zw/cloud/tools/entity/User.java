@@ -4,6 +4,8 @@ import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.format.DateTimeFormat;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.io.Serializable;
 
@@ -20,9 +22,11 @@ public class User implements Serializable {
     private Long id;
 
     @ExcelProperty(value = "姓名")
+    @NotBlank(message = "name is blank")
     private String name;
 
     @ExcelProperty(value = "年龄")
+    @NotNull(message = "age is null")
     private Byte age;
 
     @ExcelProperty(value = "描述")
