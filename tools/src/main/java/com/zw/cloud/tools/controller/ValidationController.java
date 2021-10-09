@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.zw.cloud.tools.entity.User;
 import com.zw.cloud.tools.service.impl.ValidationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
