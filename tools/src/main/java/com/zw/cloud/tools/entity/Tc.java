@@ -1,34 +1,25 @@
 package com.zw.cloud.tools.entity;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-/**
- * (Tc)实体类
- *
- * @author makejava
- * @since 2021-08-29 21:10:14
- */
 public class Tc implements Serializable {
-    private static final long serialVersionUID = 738831055406144746L;
-    
     private Integer id;
 
-    @NotNull(message = "one is null")
     private Integer one;
-    
+
     private Integer two;
-    
+
     private Integer three;
-    
+
     private Integer four;
-    
+
     private Integer five;
-    
+
     private Integer six;
-    
+
     private Integer seven;
 
+    private static final long serialVersionUID = 1L;
 
     public Integer getId() {
         return id;
@@ -93,5 +84,4 @@ public class Tc implements Serializable {
     public void setSeven(Integer seven) {
         this.seven = seven;
     }
-
 }
