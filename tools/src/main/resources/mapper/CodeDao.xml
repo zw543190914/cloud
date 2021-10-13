@@ -13,7 +13,7 @@
     <select id="queryById" resultMap="BaseResultMap">
         select
           id, status, gmt_create
-        from user.code
+        from code
         where id = #{id}
     </select>
 
@@ -21,7 +21,7 @@
     <select id="queryAllByLimit" resultMap="BaseResultMap">
         select
           id, status, gmt_create
-        from user.code
+        from code
         limit #{offset}, #{limit}
     </select>
 
@@ -29,7 +29,7 @@
     <select id="queryAll" resultMap="BaseResultMap">
         select
           id, status, gmt_create
-        from user.code
+        from code
         <where>
             <if test="id != null">
                 and id = #{id}
@@ -45,13 +45,13 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into user.code(status, gmt_create)
+        insert into code(status, gmt_create)
         values (#{status}, #{gmtCreate})
     </insert>
 
     <!--通过主键修改数据-->
     <update id="update">
-        update user.code
+        update code
         <set>
             <if test="status != null">
                 status = #{status},
@@ -65,7 +65,7 @@
 
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete from user.code where id = #{id}
+        delete from code where id = #{id}
     </delete>
 
 </mapper>

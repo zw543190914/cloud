@@ -48,7 +48,7 @@ public class TcController {
     @GetMapping("/add")
     //http://localhost:9040/tc/add
     public void add(){
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 1; i++) {
             String url = "https://webapi.sporttery.cn/gateway/lottery/getHistoryPageListV1.qry?gameNo=85&provinceId=0&pageSize=30&isVerify=1&pageNo="+ i;
             String result = HttpClientUtils.doGet(url, null, null);
             TcResultVO tcResultVO = JSON.parseObject(result, TcResultVO.class);
@@ -60,7 +60,7 @@ public class TcController {
             if (CollectionUtils.isEmpty(list)) {
                 return;
             }
-            List<Tc> tcList = list.stream().map(valueData -> {
+            list.forEach(valueData -> {
                 String lotteryDrawResult = valueData.getLotteryDrawResult();
                 String[] values = lotteryDrawResult.split(" ");
                 Tc tc = new Tc();
@@ -72,9 +72,9 @@ public class TcController {
                 tc.setFive(Integer.valueOf(values[4]));
                 tc.setSix(Integer.valueOf(values[5]));
                 tc.setSeven(Integer.valueOf(values[6]));
-                return tc;
-            }).collect(Collectors.toList());
-            tcMapper.batchInsert(tcList);
+                tc.setUpdateTime(new Date());
+                tcMapper.insertSelective(tc);
+            });
         }
 
     }

@@ -18,7 +18,7 @@
     <select id="queryById" resultMap="BaseResultMap">
         select
           id, one, two, three, four, five, six, seven
-        from user.tc
+        from tc
         where id = #{id}
     </select>
 
@@ -26,7 +26,7 @@
     <select id="queryAllByLimit" resultMap="BaseResultMap">
         select
           id, one, two, three, four, five, six, seven
-        from user.tc
+        from tc
         limit #{offset}, #{limit}
     </select>
 
@@ -34,7 +34,7 @@
     <select id="queryAll" resultMap="BaseResultMap">
         select
           id, one, two, three, four, five, six, seven
-        from user.tc
+        from tc
         <where>
             <if test="id != null">
                 and id = #{id}
@@ -65,13 +65,13 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into user.tc(one, two, three, four, five, six, seven)
+        insert into tc(one, two, three, four, five, six, seven)
         values (#{one}, #{two}, #{three}, #{four}, #{five}, #{six}, #{seven})
     </insert>
 
     <!--通过主键修改数据-->
     <update id="update">
-        update user.tc
+        update tc
         <set>
             <if test="one != null">
                 one = #{one},
@@ -100,7 +100,7 @@
 
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete from user.tc where id = #{id}
+        delete from tc where id = #{id}
     </delete>
 
 </mapper>
