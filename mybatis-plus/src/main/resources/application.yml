@@ -1,7 +1,5 @@
-
 spring:
   application:
-    # 应用名称
     name: mybatis-plus-demo
   jackson:
     time-zone: GMT+8
@@ -15,7 +13,7 @@ spring:
       #插入数据的MySql语句的位置
       data-locations: classpath:data.sql
 
-  #数据库配置
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
@@ -32,9 +30,7 @@ spring:
         stat:
           slow-sql-millis: 2000
           log-slow-sql: true
-    #指定数据库的种类，改为内存
     url: jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull
-    #用户名密码不需要改，都是临时值
     username: root
     password: password
 
@@ -43,11 +39,13 @@ mybatis-plus:
   type-handlers-package: com.zw.cloud.mybatis.plus.db.typehandlers.ext
   configuration:
     map-underscore-to-camel-case: true
-    #打印sql日志
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     banner: false
     db-config:
       table-underline: true
       id-type: auto
+      #logic-delete-field: deleted
+      #logic-delete-value: 1
+      #logic-not-delete-value: 0
 

@@ -1,5 +1,7 @@
 package com.zw.cloud.common.utils;
 
+import cn.hutool.core.util.IdUtil;
+
 public class SnowflakeIdWorker {
 
     // ==============================Fields===========================================
@@ -123,6 +125,7 @@ public class SnowflakeIdWorker {
 
     /** 测试 */
     public static void main(String[] args) {
+
         SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
         /**防止黑客猜到ID顺序可以休眠 */
         for (int i = 0; i < 1000; i++) {
@@ -130,6 +133,9 @@ public class SnowflakeIdWorker {
             /**Thread.sleep(1);*/
             System.out.println(Long.toBinaryString(id));
             System.out.println(id);
+            // cn.hutool.core.util
+            System.out.println(IdUtil.getSnowflake(0,0).nextId());
         }
+
     }
 }
