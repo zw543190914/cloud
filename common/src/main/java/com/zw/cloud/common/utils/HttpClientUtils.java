@@ -30,9 +30,12 @@ public class HttpClientUtils {
     private static CloseableHttpClient client = null;//
     static {
         PoolingHttpClientConnectionManager clientConnectionManager = new PoolingHttpClientConnectionManager();
-        clientConnectionManager.setValidateAfterInactivity(2000);//检测有效连接的间隔
-        clientConnectionManager.setMaxTotal(50);//设定连接池最大数量
-        clientConnectionManager.setDefaultMaxPerRoute(50);//设定默认单个路由的最大连接数（由于本处只使用一个路由地址所以设定为连接池大小）
+        //检测有效连接的间隔
+        clientConnectionManager.setValidateAfterInactivity(2000);
+        //设定连接池最大数量
+        clientConnectionManager.setMaxTotal(200);
+        //设定默认单个路由的最大连接数（由于本处只使用一个路由地址所以设定为连接池大小）
+        clientConnectionManager.setDefaultMaxPerRoute(50);
         client = HttpClients.createMinimal(clientConnectionManager);
     }
     public static String doGet(String path, Map<String, String> param, Map<String, String> headers) {

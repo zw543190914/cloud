@@ -137,6 +137,9 @@
       <if test="seven != null">
         seven,
       </if>
+      <if test="updateTime != null">
+        seven,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -162,6 +165,9 @@
       </if>
       <if test="seven != null">
         #{seven,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime},
       </if>
     </trim>
   </insert>
