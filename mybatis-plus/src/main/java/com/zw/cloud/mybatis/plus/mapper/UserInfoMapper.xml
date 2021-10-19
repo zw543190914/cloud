@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zw.cloud.mybatis.plus.mapper.UserInfoMapper">
+    <resultMap id="BaseResultMap" type="com.zw.cloud.mybatis.plus.entity.UserInfo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="age" jdbcType="TINYINT" property="age" />
+        <result column="bir" jdbcType="TIMESTAMP" property="bir" />
+        <result column="other" property="other" />
+    </resultMap>
 
     <update id="batchUpdate" parameterType="java.util.List">
         UPDATE user_info
@@ -26,4 +33,21 @@
         </foreach>
     </update>
 
+    <select id="queryJsonData" resultMap="BaseResultMap">
+        select * from user_info
+        <where>
+            <if test="name != null">
+                JSON_CONTAINS(other,JSON_OBJECT('name', #{name}))
+            </if>
+        </where>
+    </select>
+
+    <select id="queryJsonDataLike" resultMap="BaseResultMap">
+        select * from user_info
+        <where>
+            <if test="name != null">
+                json_extract(other,"$[*].name") like CONCAT('%',#{name},'%')
+            </if>
+        </where>
+    </select>
 </mapper>

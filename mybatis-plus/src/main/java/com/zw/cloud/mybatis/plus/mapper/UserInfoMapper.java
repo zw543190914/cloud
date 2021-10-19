@@ -10,5 +10,7 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
 
     void batchUpdate(@Param("list") List<UserInfo> userList);
 
-    boolean saveBatchCustom(List<UserInfo> list);
+    List<UserInfo> queryJsonData(@Param("name") String name);
+
+    List<UserInfo> queryJsonDataLike(@Param("name") String name);
 }

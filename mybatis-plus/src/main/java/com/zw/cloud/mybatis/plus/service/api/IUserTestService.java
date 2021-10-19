@@ -12,4 +12,8 @@ public interface IUserTestService extends IService<UserInfo> {
     void batchUpdateUserList(List<UserInfo> userInfoList);
 
     void batchSaveOrUpdate(List<UserInfo> userInfoList);
+
+    List<UserInfo> queryJsonData(String name);
+
+    List<UserInfo> queryJsonDataLike(String name);
 }
