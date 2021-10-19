@@ -101,7 +101,7 @@
         <swagger-annotations.version>1.6.2</swagger-annotations.version>
         <easy-captcha.version>1.6.2</easy-captcha.version>
         <pig4cloud.version>1.0.1</pig4cloud.version>
-        <mybatis.plus.version>3.4.2</mybatis.plus.version>
+        <mybatis.plus.version>3.4.3</mybatis.plus.version>
         <mybatis-plus-generator.version>3.4.1</mybatis-plus-generator.version>
         <velocity-engine-core.version>2.2</velocity-engine-core.version>
         <netty-all.version>4.1.63.Final</netty-all.version>

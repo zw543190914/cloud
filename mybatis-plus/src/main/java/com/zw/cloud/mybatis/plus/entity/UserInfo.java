@@ -23,13 +23,9 @@ public class UserInfo implements Serializable {
 
     private Integer age;
 
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
-    @TableField(exist = false)
     private String description;
 
     @TableField(typeHandler = JsonTypeHandler.class)
@@ -40,9 +36,6 @@ public class UserInfo implements Serializable {
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private String orgCode;
-
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private String clientId;
 
 }
 

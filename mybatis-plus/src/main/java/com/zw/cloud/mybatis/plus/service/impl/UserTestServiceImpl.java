@@ -24,4 +24,9 @@ public class UserTestServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     public void batchUpdateUserList(List<UserInfo> userInfoList) {
         updateBatchById(userInfoList);
     }
+
+    @Override
+    public void batchSaveOrUpdate(List<UserInfo> userInfoList) {
+        saveOrUpdateBatch(userInfoList);
+    }
 }

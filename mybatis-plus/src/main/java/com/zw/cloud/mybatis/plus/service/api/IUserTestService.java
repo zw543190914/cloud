@@ -10,4 +10,6 @@ public interface IUserTestService extends IService<UserInfo> {
     void batchUpdateUserListByMapper(List<UserInfo> userInfoList);
 
     void batchUpdateUserList(List<UserInfo> userInfoList);
+
+    void batchSaveOrUpdate(List<UserInfo> userInfoList);
 }
