@@ -6,7 +6,7 @@
         <result column="name" jdbcType="VARCHAR" property="name" />
         <result column="age" jdbcType="TINYINT" property="age" />
         <result column="bir" jdbcType="TIMESTAMP" property="bir" />
-        <result column="other" property="other" />
+        <result column="other" property="other" typeHandler="com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler"/>
     </resultMap>
 
     <update id="batchUpdate" parameterType="java.util.List">
@@ -36,8 +36,8 @@
     <select id="queryJsonData" resultMap="BaseResultMap">
         select * from user_info
         <where>
-            <if test="name != null">
-                JSON_CONTAINS(other,JSON_OBJECT('name', #{name}))
+            <if test="userInfo.name != null">
+                JSON_CONTAINS(other,JSON_OBJECT('name', #{userInfo.name}))
             </if>
         </where>
     </select>
@@ -45,8 +45,8 @@
     <select id="queryJsonDataLike" resultMap="BaseResultMap">
         select * from user_info
         <where>
-            <if test="name != null">
-                json_extract(other,"$[*].name") like CONCAT('%',#{name},'%')
+            <if test="userInfo.name != null">
+                json_extract(other,"$[*].name") like CONCAT('%',#{userInfo.name},'%')
             </if>
         </where>
     </select>

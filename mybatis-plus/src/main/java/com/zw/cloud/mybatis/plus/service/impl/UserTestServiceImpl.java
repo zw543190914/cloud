@@ -33,11 +33,15 @@ public class UserTestServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Override
     public List<UserInfo> queryJsonData(String name){
-        return userInfoMapper.queryJsonData(name);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setName(name);
+        return userInfoMapper.queryJsonData(userInfo);
     }
 
     @Override
     public List<UserInfo> queryJsonDataLike(String name){
-        return userInfoMapper.queryJsonDataLike(name);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setName(name);
+        return userInfoMapper.queryJsonDataLike(userInfo);
     }
 }
