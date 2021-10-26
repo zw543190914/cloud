@@ -16,4 +16,6 @@ public interface IUserTestService extends IService<UserInfo> {
     List<UserInfo> queryJsonData(String name);
 
     List<UserInfo> queryJsonDataLike(String name);
+
+    List<UserInfo> queryAllDataTest();
 }

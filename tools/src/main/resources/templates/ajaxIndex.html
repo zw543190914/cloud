@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript"  src="/js/jquery.min.js" ></script>
+    <script>
+        $(function () {
+            $('.nameBtn').click(function () {
+                var name = $('#name').val();
+                console.log(name);
+                if (name == "") {
+                    window.alert("请输入搜索内容！")
+                } else {
+                    $.ajax({
+                        type: "get",
+                        url: '/user/selectOne?id=' + name,
+                        //data: data,
+                        cache: "false",
+                        contentType : 'application/json',
+                        dataType: "json",
+                        async: false,
+                        success: function (data) {
+                            console.log(data);
+                            if (data.success) {
+                                // 删除成功后刷新页面
+                                window.location.reload();
+                            }
+                        },
+                        error: function () {
+                            alert('请求数据错误，请稍后再试');
+                        }
+                    });
+                }
+            });
+            $(document).keydown(function (event) {
+                if (event.keyCode === 13) { //keyCode=13是回车键
+                    $('.nameBtn').triggerHandler('click');
+                }
+            });
+        });
+
+    </script>
+</head>
+<body>
+
+<form action="" >
+    <input id="name" type="text" autocomplete="off" placeholder="请输入姓名">
+    <button type="button" class="nameBtn">搜索</button>
+</form>
+
+</body>
+</html>

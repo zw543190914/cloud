@@ -84,4 +84,10 @@ public class UserTestController {
     public List<UserInfo> queryJsonDataLike(String name) {
         return userService.queryJsonDataLike(name);
     }
+
+    @GetMapping("/queryAllDataTest")
+    //http://localhost:8080/user-test/queryAllDataTest
+    public List<UserInfo> queryAllDataTest() {
+        return userService.queryAllDataTest();
+    }
 }
