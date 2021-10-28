@@ -107,6 +107,20 @@ public class RedisUtils {
 
     }
 
+    public Boolean setnx(String key, String value, int expireSeconds) {
+        Boolean result = false;
+        try {
+            if (expireSeconds > 0) {
+                result = redisTemplate.opsForValue().setIfAbsent(key, value, expireSeconds, TimeUnit.SECONDS);
+            } else {
+                result = redisTemplate.opsForValue().setIfAbsent(key, value);
+            }
+        } catch (Exception e) {
+            logger.error("[RedisUtils][setnx] key is {},error is ", key,e);
+        }
+        return result;
+    }
+
     public boolean set(String key,Object value,long time, TimeUnit unit){
         try {
             if(time>0){

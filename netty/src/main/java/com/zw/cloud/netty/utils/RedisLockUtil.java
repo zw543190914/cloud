@@ -1,5 +1,7 @@
 package com.zw.cloud.netty.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.RedisStringCommands;
 import org.springframework.data.redis.connection.ReturnType;
@@ -18,6 +20,9 @@ public class RedisLockUtil {
 
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
+
+	private Logger logger = LoggerFactory.getLogger(RedisLockUtil.class);
+
 
 	private static final byte[] SCRIPT_RELEASE_LOCK = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end".getBytes();
 
@@ -39,6 +44,20 @@ public class RedisLockUtil {
 	 */
 	public synchronized void releaseLock(String key, String requestId) {
 		redisTemplate.execute((RedisCallback<Boolean>) redisConnection -> redisConnection.eval(SCRIPT_RELEASE_LOCK, ReturnType.BOOLEAN, 1, key.getBytes(), requestId.getBytes()));
+	}
+
+	public Boolean setnx(String key, String value, int expireSeconds) {
+		Boolean result = false;
+		try {
+			if (expireSeconds > 0) {
+				result = redisTemplate.opsForValue().setIfAbsent(key, value, expireSeconds, TimeUnit.SECONDS);
+			} else {
+				result = redisTemplate.opsForValue().setIfAbsent(key, value);
+			}
+		} catch (Exception e) {
+			logger.error("[RedisUtils][setnx] key is {},error is ", key,e);
+		}
+		return result;
 	}
 
 }

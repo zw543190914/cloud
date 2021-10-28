@@ -16,7 +16,7 @@ import static com.zw.cloud.rabbitmq.config.MQConfig.*;
 public class ConsumerService {
 
     @RabbitListener(queues = QUEUE)
-    public void directReceive(Message message, Channel channel) throws IOException {
+    public void directReceive(Message message) throws IOException {
         System.out.println("directReceive user is " + new String(message.getBody()));
     }
 
@@ -30,12 +30,13 @@ public class ConsumerService {
     public void topicReceive(Message message, Channel channel) throws IOException {
         try {
             System.out.println("topicReceive1 user is " + new String(message.getBody()));
+            //throw new RuntimeException("exception...");
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
-        } catch (IOException e) {
+        } catch (Exception e) {
             //费者处理出了问题，需要告诉队列信息消费失败
-            channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, false);
+            channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, true);
             System.out.println("topicReceive1 receiver fail");
-            e.printStackTrace();
+            throw e;
         }
     }
 
@@ -46,7 +47,7 @@ public class ConsumerService {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
         } catch (IOException e) {
             //费者处理出了问题，需要告诉队列信息消费失败
-            channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, false);
+            channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, true);
             System.out.println("topicReceive2 receiver fail");
             e.printStackTrace();
         }
@@ -59,7 +60,7 @@ public class ConsumerService {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
         } catch (IOException e) {
             //费者处理出了问题，需要告诉队列信息消费失败
-            channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, false);
+            channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, true);
             System.out.println("fanoutReceive1 receiver fail");
             e.printStackTrace();
         }
@@ -72,7 +73,7 @@ public class ConsumerService {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
         } catch (IOException e) {
             //费者处理出了问题，需要告诉队列信息消费失败
-            channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, false);
+            channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, true);
             System.out.println("fanoutReceive2 receiver fail");
             e.printStackTrace();
         }
@@ -85,7 +86,7 @@ public class ConsumerService {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
         } catch (Exception e) {
             //费者处理出了问题，需要告诉队列信息消费失败
-            channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, false);
+            channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, true);
             e.printStackTrace();
         }
     }
