@@ -31,20 +31,35 @@ public class RocketController {
     //发送消息
     @GetMapping("/sendMsg")
     //http://localhost:10000/rocket/sendMsg?msg=aaa&topic=topicA
-    public void sendMessage(@RequestParam String msg,@RequestParam String topic) {
+    public void sendMsg(@RequestParam String msg,@RequestParam String topic) {
         //SendResult hashkey = rocketMQTemplate.syncSendOrderly(topic, msg + " : " + atomicInteger.getAndAdd(1), "hashkey");
         topic = topic +":"+"tag1";
-        Message<byte[]> message = MessageBuilder.withPayload(msg.getBytes(StandardCharsets.UTF_8)).build();
-        rocketMQTemplate.asyncSend(topic, message, new SendCallback() {
-            @Override
-            public void onSuccess(SendResult sendResult) {
-                log.info("------------asyncSend: " + sendResult);
-            }
-            @Override
-            public void onException(Throwable throwable) {
-                log.info("------------asyncSend: " + throwable.getMessage());
-            }
-        });
+        for (int i = 0; i < 100; i++) {
+            msg = String.valueOf(atomicInteger.getAndAdd(1));
+            Message<byte[]> message = MessageBuilder.withPayload(msg.getBytes(StandardCharsets.UTF_8)).build();
+            rocketMQTemplate.asyncSend(topic, message, new SendCallback() {
+                @Override
+                public void onSuccess(SendResult sendResult) {
+                    //log.info("send success " + sendResult);
+                }
+                @Override
+                public void onException(Throwable throwable) {
+                    //log.info("send error is " + throwable.getMessage());
+                }
+            });
+        }
+
+    }
+
+    @GetMapping("/syncSendOrderly")
+    //http://localhost:10000/rocket/syncSendOrderly?msg=aaa&topic=topicA:tag1
+    public void syncSendOrderly(@RequestParam String msg,@RequestParam String topic) {
+        for (int i = 0; i < 100; i++) {
+            msg = String.valueOf(atomicInteger.getAndAdd(1));
+            Message<byte[]> message = MessageBuilder.withPayload(msg.getBytes(StandardCharsets.UTF_8)).build();
+            SendResult result = rocketMQTemplate.syncSendOrderly(topic, message, "hashKey");
+            //log.info("send success {}" ,JSONUtil.toJsonStr(result));
+        }
     }
 
     //发送事务消息
