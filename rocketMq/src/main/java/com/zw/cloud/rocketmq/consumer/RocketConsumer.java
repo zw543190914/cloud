@@ -2,6 +2,7 @@ package com.zw.cloud.rocketmq.consumer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
@@ -19,12 +20,18 @@ import java.util.List;
 @RocketMQMessageListener(topic = "topicA", consumerGroup = "group1",
         // 设置为顺序消费
         consumeMode = ConsumeMode.ORDERLY )
-public class RocketConsumer implements RocketMQListener<String> {
+public class RocketConsumer implements RocketMQListener<MessageExt> {
 
     @Override
-    public void onMessage(String msg) {
-        log.info("[RabbitConsumer][RabbitConsumer] msg is {}", msg);
-        if (msg.contains("3")) {
+    public void onMessage(MessageExt messageExt) {
+        String messageBody = new String(messageExt.getBody(), StandardCharsets.UTF_8);
+        String tag = messageExt.getTags();
+        log.info("[RabbitConsumer][RabbitConsumer] tag is {},receive messageBody is {}",tag, messageBody);
+        if (StringUtils.isEmpty(messageBody)) {
+            log.warn("[RabbitConsumer][RabbitConsumer] msg is null");
+            return;
+        }
+        if (messageBody.contains("3")) {
             throw new RuntimeException("ex...");
         }
     }
