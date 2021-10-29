@@ -9,6 +9,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 
 import static com.zw.cloud.rabbitmq.config.MQConfig.*;
 
@@ -18,6 +19,7 @@ public class ConsumerService {
     @RabbitListener(queues = QUEUE)
     public void directReceive(Message message) throws IOException {
         System.out.println("directReceive user is " + new String(message.getBody()));
+        throw new RemoteException("ww");
     }
 
     @RabbitListener(bindings = @QueueBinding(
