@@ -51,6 +51,10 @@ public class RocketController {
 
     }
 
+    /**
+     * 顺序消息
+     * consumeMode = ConsumeMode.ORDERLY
+     */
     @GetMapping("/syncSendOrderly")
     //http://localhost:10000/rocket/syncSendOrderly?msg=aaa&topic=topicA:tag1
     public void syncSendOrderly(@RequestParam String msg,@RequestParam String topic) {
