@@ -51,21 +51,6 @@ public class RocketController {
 
     }
 
-    /**
-     * 顺序消息
-     * consumeMode = ConsumeMode.ORDERLY
-     */
-    @GetMapping("/syncSendOrderly")
-    //http://localhost:10000/rocket/syncSendOrderly?msg=aaa&topic=topicA:tag1
-    public void syncSendOrderly(@RequestParam String msg,@RequestParam String topic) {
-        for (int i = 0; i < 100; i++) {
-            msg = String.valueOf(atomicInteger.getAndAdd(1));
-            Message<byte[]> message = MessageBuilder.withPayload(msg.getBytes(StandardCharsets.UTF_8)).build();
-            SendResult result = rocketMQTemplate.syncSendOrderly(topic, message, "hashKey");
-            //log.info("send success {}" ,JSONUtil.toJsonStr(result));
-        }
-    }
-
     //发送事务消息
     @GetMapping("/sendMessageIntransaction")
     //http://localhost:10000/rocket/sendMessageIntransaction?msg=&topic=
