@@ -8,6 +8,19 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 public class DateTimeUtils {
+
+    public static void main(String[] args) {
+        //获取秒数
+        Long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
+        System.out.println(second);
+        //获取毫秒数
+        Long milliSecond = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
+        System.out.println(milliSecond);
+        Instant instant = Instant.ofEpochSecond(second);
+        System.out.println(instant);
+        System.out.println(instant.atZone(ZoneId.systemDefault()));
+    }
+
     public static LocalDateTime dateToLocalDateTime(Date date) {
         Instant instant = date.toInstant();
         return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());

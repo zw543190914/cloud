@@ -33,6 +33,7 @@
   22. mybatis-plus整合，mybatis-plus generate 代码生成，参考 mybatis-plus 模块。</br>
   23. websocket 、 netty(netty-server)、 netty-client, 参考对应模块。</br>
   24. redis 分布式锁，幂等控制，参考 netty(netty-server) 模块。</br>
-  25. 常用插件：https://blog.csdn.net/weixin_41846320/article/details/82697818
+  25. rocketMq整合&rabbitMq整合& influxDB使用</br>
+  26. 常用插件：https://blog.csdn.net/weixin_41846320/article/details/82697818
   
   父POM中配置了自己nexus私服，已注释，settings-nexus.xml 为自己私服对应配置文件，方便后期查找使用。</br> 
