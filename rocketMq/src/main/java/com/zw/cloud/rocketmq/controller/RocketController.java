@@ -71,12 +71,12 @@ public class RocketController {
     //http://localhost:10000/rocket/sendMessageIntransaction?msg=&topic=
     public void sendMessageIntransaction(@RequestParam String msg,@RequestParam String topic) {
         Message<String> message = MessageBuilder.withPayload(msg + " : " + atomicInteger.getAndAdd(1))
-                .setHeader(RocketMQHeaders.TRANSACTION_ID, UUID.randomUUID().toString())
+                /*.setHeader(RocketMQHeaders.TRANSACTION_ID, UUID.randomUUID().toString())
                 .setHeader(RocketMQHeaders.TAGS, "tag1")
-                .setHeader("userId", "zw")
+                .setHeader("userId", "zw")*/
                 .build();
-        String destination = topic;
-        TransactionSendResult sendResult = rocketMQTemplate.sendMessageInTransaction(destination, message, destination);
+
+        TransactionSendResult sendResult = rocketMQTemplate.sendMessageInTransaction(topic, message,null);
         log.info("[rabbitProduct][sendMessageIntransaction] result is {}", sendResult.toString());
     }
 }
