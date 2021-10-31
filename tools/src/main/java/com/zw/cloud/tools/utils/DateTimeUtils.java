@@ -19,6 +19,9 @@ public class DateTimeUtils {
         Instant instant = Instant.ofEpochSecond(second);
         System.out.println(instant);
         System.out.println(instant.atZone(ZoneId.systemDefault()));
+        System.out.println(ZoneId.systemDefault());
+        System.out.println(Instant.parse("2021-10-30 12:12:12"));
+
     }
 
     public static LocalDateTime dateToLocalDateTime(Date date) {

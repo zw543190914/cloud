@@ -11,5 +11,6 @@ spring:
     user: dyeing_running_record_dev
     password: qlZFheKbuVBUvIaq9euohm3j9oy56bJo
     database: dyeing_running_record
+    retentionPolicy: au
 server:
   port: 10010

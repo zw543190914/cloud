@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.time.Instant;
 import java.util.*;
 
+import lombok.extern.slf4j.Slf4j;
+import org.influxdb.BatchOptions;
 import org.influxdb.InfluxDB;
 import org.influxdb.annotation.Column;
 import org.influxdb.annotation.Measurement;
@@ -15,21 +17,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-/**
- * influxdb操作工具类
- * @author 程就人生
- * @date 2020年7月27日
- * @Description
- *
- */
-@Component
-public class InfluxdbUtils {
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
-    @Autowired
-    private InfluxDB influxDB;
+
+@Component
+@Slf4j
+public class InfluxdbUtils {
 
     @Value("${spring.influx.database}")
     private String database;
+
+
+    @Autowired
+    private InfluxDB influxDBClient;
+
+    @PreDestroy
+    public void beforeClose() {
+        try {
+            influxDBClient.close();
+            log.info("influx client closed");
+        } catch (Exception e) {
+            log.warn("influx client close error: {}", e.getMessage());
+        }
+    }
 
     /**
      * 新增单条记录,利用java的反射机制进行新增操作
@@ -52,7 +63,7 @@ public class InfluxdbUtils {
                     //tag属性只能存储String类型
                     builder.tag(column.name(), field.get(obj).toString());
                 }else{
-                    //设置field
+                    //TODO设置field ==注意类型
                     if(field.get(obj) != null){
                         builder.addField(column.name(), field.get(obj).toString());
                     }
@@ -61,7 +72,7 @@ public class InfluxdbUtils {
                 e.printStackTrace();
             }
         }
-        influxDB.write(builder.build());
+        influxDBClient.write(builder.build());
     }
 
     /**
@@ -86,7 +97,7 @@ public class InfluxdbUtils {
                         //tag属性只能存储String类型
                         builder.tag(column.name(), field.get(record).toString());
                     }else{
-                        //设置field
+                        //TODO设置field ==注意类型
                         if(field.get(record) != null){
                             builder.addField(column.name(), field.get(record).toString());
                         }
@@ -97,7 +108,7 @@ public class InfluxdbUtils {
             }
             lines.add(builder.build().lineProtocol());
         });
-        influxDB.write(lines);
+        influxDBClient.write(lines);
     }
 
     /**
@@ -124,7 +135,7 @@ public class InfluxdbUtils {
                         //tag属性只能存储String类型
                         builder.tag(column.name(), field.get(record).toString());
                     }else{
-                        //设置field
+                        //TODO设置field ==注意类型
                         if(field.get(record) != null){
                             builder.addField(column.name(), field.get(record).toString());
                         }
@@ -135,7 +146,7 @@ public class InfluxdbUtils {
             }
             batchPoints.point(builder.build());
         });
-        influxDB.write(batchPoints);
+        influxDBClient.write(batchPoints);
     }
 
     /**
@@ -145,7 +156,7 @@ public class InfluxdbUtils {
      */
     public List<Object> fetchRecords(String query){
         List<Object> results = new ArrayList<Object>();
-        QueryResult queryResult = influxDB.query(new Query(query, database));
+        QueryResult queryResult = influxDBClient.query(new Query(query, database));
         queryResult.getResults().forEach(result->{
             result.getSeries().forEach(serial->{
                 List<String> columns = serial.getColumns();
@@ -212,7 +223,7 @@ public class InfluxdbUtils {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public <T> List<T> fetchResults(String query, Class<?> clasz){
         List results = new ArrayList<>();
-        QueryResult queryResult = influxDB.query(new Query(query, database));
+        QueryResult queryResult = influxDBClient.query(new Query(query, database));
         queryResult.getResults().forEach(result->{
             result.getSeries().forEach(serial->{
                 List<String> columns = serial.getColumns();
