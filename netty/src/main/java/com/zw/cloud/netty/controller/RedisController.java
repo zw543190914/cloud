@@ -1,6 +1,9 @@
 package com.zw.cloud.netty.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.zw.cloud.netty.utils.RedisLockUtil;
+import com.zw.cloud.netty.utils.RedisUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -9,12 +12,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 @RequestMapping("/redis")
 public class RedisController {
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private RedisUtils redisUtils;
+
+    //AtomicInteger atomicInteger = new AtomicInteger(1);
+    int i = 1;
 
     @GetMapping
     //http://localhost:18092/redis
@@ -32,5 +41,32 @@ public class RedisController {
         });
 
         return zw;
+    }
+
+    @GetMapping("/tryLock")
+    //http://localhost:18092/redis/tryLock
+    public void tryLock(){
+        for (int j = 0; j < 100; j++) {
+            test();
+        }
+    }
+
+    private void test() {
+        Boolean setnx = redisUtils.setnx("test_lock", "uuid", 3);
+        if (!setnx) {
+            while (true) {
+                if (redisUtils.setnx("test_lock", "uuid", 3)) {
+                    break;
+                }
+            }
+        }
+        try {
+            System.out.println(i++);
+            Thread.sleep(500);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            redisUtils.del("test_lock");
+        }
     }
 }
