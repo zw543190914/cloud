@@ -13,10 +13,10 @@ public class DingTalkUtils {
     private static String br = " \n\n ";
 
     public static void main(String[] args) throws Exception {
-        sendDingTalkMsg("haha");
+        sendDingTalkMsg(DingTalkUtils.class,"sendDingTalkMsg",new RuntimeException("running exception..."));
     }
 
-    public static void sendDingTalkMsg(String msg) throws Exception{
+    public static void sendDingTalkMsg(Class clazz,String methodName,Exception e) throws Exception{
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/robot/send?access_token=505e45d4253e2a98976d15de6b98a56c8635ddcab9d8b42de029ebb462c72db6");
         OapiRobotSendRequest request = new OapiRobotSendRequest();
         /*request.setMsgtype("text");
@@ -41,11 +41,12 @@ public class DingTalkUtils {
         request.setMsgtype("markdown");
         OapiRobotSendRequest.Markdown markdown = new OapiRobotSendRequest.Markdown();
         markdown.setTitle("请注意");
-        /*markdown.setText("#### 程序运行出错\n" +
-                "> class is ..."+ br +
+        markdown.setText("#### 程序运行出错\n" +
+                "> className is "+ clazz + br +
+                "> methodName is "+ methodName + br +
+                "> error is "+ e + br +
                 "> ![screenshot](https://gw.alicdn.com/tfs/TB1ut3xxbsrBKNjSZFpXXcXhFXa-846-786.png)\n"  +
-                "> [天气](http://www.thinkpage.cn/) \n");*/
-        markdown.setText(msg);
+                "> [天气](http://www.thinkpage.cn/) \n");
         request.setMarkdown(markdown);
         OapiRobotSendResponse response = client.execute(request);
         log.info("[DingTalkUtils][sendDingTalkMsg] response is {}", JSONUtil.toJsonStr(response));

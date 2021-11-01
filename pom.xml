@@ -473,7 +473,11 @@
                 <artifactId>mqtt-client</artifactId>
                 <version>${mqtt-client.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.zw.cloud</groupId>
+                <artifactId>ding-talk</artifactId>
+                <version>1.0.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

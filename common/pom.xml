@@ -73,7 +73,6 @@
         <dependency>
             <groupId>com.zw.cloud</groupId>
             <artifactId>ding-talk</artifactId>
-            <version>1.0.0</version>
         </dependency>
     </dependencies>
 
