@@ -9,25 +9,25 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@RocketMQTransactionListener
+@RocketMQTransactionListener()
 public class MyRocketMQTransactionListener implements RocketMQLocalTransactionListener {
     @Override
     public RocketMQLocalTransactionState executeLocalTransaction(Message message, Object o) {
         try {
             log.info("[MyRocketMQTransactionListener][executeLocalTransaction]【本地业务执行完毕】 msg:{}, Object:{}", message, o);
             System.out.println("业务。。。");
-            return RocketMQLocalTransactionState.COMMIT;
         } catch (Exception e) {
             log.error("[MyRocketMQTransactionListener][executeLocalTransaction]【执行本地业务异常】 exception message:{}", e.getMessage());
             return RocketMQLocalTransactionState.ROLLBACK;
         }
+        return RocketMQLocalTransactionState.UNKNOWN;
     }
     @Override
     public RocketMQLocalTransactionState checkLocalTransaction(Message message) {
         try {
             log.info("[MyRocketMQTransactionListener][checkLocalTransaction]【执行检查任务】");
-            System.out.println("业务。。。");
-            return RocketMQLocalTransactionState.UNKNOWN;
+            int i = 1 / 0;
+            return RocketMQLocalTransactionState.COMMIT;
         } catch (Exception e) {
             return RocketMQLocalTransactionState.ROLLBACK;
         }

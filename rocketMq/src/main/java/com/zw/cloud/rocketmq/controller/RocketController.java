@@ -53,10 +53,10 @@ public class RocketController {
 
     //发送事务消息
     @GetMapping("/sendMessageIntransaction")
-    //http://localhost:10000/rocket/sendMessageIntransaction?msg=&topic=
+    //http://localhost:10000/rocket/sendMessageIntransaction?msg=qq&topic=topicA
     public void sendMessageIntransaction(@RequestParam String msg,@RequestParam String topic) {
         Message<String> message = MessageBuilder.withPayload(msg + " : " + atomicInteger.getAndAdd(1))
-                /*.setHeader(RocketMQHeaders.TRANSACTION_ID, UUID.randomUUID().toString())
+               /* .setHeader(RocketMQHeaders.TRANSACTION_ID, UUID.randomUUID().toString())
                 .setHeader(RocketMQHeaders.TAGS, "tag1")
                 .setHeader("userId", "zw")*/
                 .build();
