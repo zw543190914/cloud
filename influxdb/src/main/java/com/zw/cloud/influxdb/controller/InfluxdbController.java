@@ -1,6 +1,7 @@
 package com.zw.cloud.influxdb.controller;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,13 +76,17 @@ public class InfluxdbController {
      * 获取数据
      */
     @GetMapping("/datas1")
-    //http://localhost:10010/influxdb/datas1?page=1
-    public List<Object> datas1(@RequestParam Integer page){
+    //http://localhost:10010/influxdb/datas1?page=1&device=dev_test_device_stenter_03
+    public List<Object> datas1(@RequestParam Integer page,@RequestParam String device){
         int pageSize = 10;
         // InfluxDB支持分页查询,因此可以设置分页查询条件
         String pageQuery = " LIMIT " + pageSize + " OFFSET " + (page - 1) * pageSize;
 
-        String queryCondition = "";  //查询条件暂且为空
+        LocalDateTime now = LocalDateTime.now();
+        Instant endTime = buildTimeParam(now);
+        Instant startTime = buildTimeParam(now.minusMinutes(5));
+        String queryCondition = " where device = '" + device + "' and time >= '" + startTime + "' and time <= '" + endTime + "' ";  //查询条件
+
         // 此处查询所有内容,如果
         String queryCmd = "SELECT * FROM device_report_data"
                 // 查询指定设备下的日志信息
@@ -93,7 +98,7 @@ public class InfluxdbController {
                 + " ORDER BY time DESC"
                 // 添加分页查询条件
                 + pageQuery;
-
+        System.out.println(queryCmd);
         return influxdbUtils.fetchRecords(queryCmd);
     }
 
@@ -101,13 +106,15 @@ public class InfluxdbController {
      * 获取数据
      */
     @GetMapping("/datas2")
-    //http://localhost:10010/influxdb/datas2?page=1
-    public List<DeviceVO> datas2(@RequestParam Integer page){
+    //http://localhost:10010/influxdb/datas2?page=1&device=dev_test_device_stenter_03
+    public List<DeviceVO> datas2(@RequestParam Integer page,@RequestParam String device){
         int pageSize = 10;
         // InfluxDB支持分页查询,因此可以设置分页查询条件
         String pageQuery = " LIMIT " + pageSize + " OFFSET " + (page - 1) * pageSize;
-
-        String queryCondition = "";  //查询条件暂且为空
+        LocalDateTime now = LocalDateTime.now();
+        Instant endTime = buildTimeParam(now);
+        Instant startTime = buildTimeParam(now.minusMinutes(5));
+        String queryCondition = " where device = '" + device + "' and time >= '" + startTime + "' and time <= '" + endTime + "' ";  //查询条件
         // 此处查询所有内容,如果
         String queryCmd = "SELECT * FROM device_report_data"
                 // 查询指定设备下的日志信息
@@ -121,6 +128,11 @@ public class InfluxdbController {
                 + pageQuery;
         return influxdbUtils.fetchResults(queryCmd, DeviceVO.class);
         //List<Sensor> sensorList = influxdbUtils.fetchResults("*", "sensor", Sensor.class);
+    }
+
+    private Instant buildTimeParam(LocalDateTime time) {
+        ZoneId zoneId = ZoneId.systemDefault();
+        return time.atZone(zoneId).toInstant();
     }
 
     private Point buildingPoint(Float second,Float stop){

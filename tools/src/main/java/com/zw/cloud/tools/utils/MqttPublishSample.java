@@ -35,13 +35,16 @@ public class MqttPublishSample {
         // 建立连接
         sampleClient.connect(connOpts);
         //long second = 1635659894;
+        int stop = 0;
         Long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
         for (int i = 0; i < 120; i++) {
             int j = i + 88;
-            int stop = 0;
-
-
             second = second + i;
+            if (i%2 == 1) {
+                stop = 0;
+            } else {
+                stop = 3;
+            }
             String content = buildContent(j,stop,second);
             try {
 
@@ -63,7 +66,7 @@ public class MqttPublishSample {
             }
             System.out.println("finish " + i);
             //System.out.println(content);
-            Thread.sleep(1000);
+            Thread.sleep(500);
         }
         // 断开连接
         sampleClient.disconnect();
