@@ -1,11 +1,13 @@
 package com.zw.cloud.influxdb.util;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
+import com.zw.cloud.common.utils.bean.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.influxdb.BatchOptions;
 import org.influxdb.InfluxDB;
@@ -242,8 +244,8 @@ public class InfluxdbUtils {
                                 if (Objects.nonNull(value.get(i))) {
                                     field.set(obj,Instant.parse(String.valueOf(value.get(i))));
                                 }
-                            }else{
-                                field.set(obj, value.get(i));
+                            }else if (type == BigDecimal.class){
+                                field.set(obj, new BigDecimal(String.valueOf(value.get(i))));
                             }
                         }
                     } catch (Exception e) {

@@ -2,7 +2,6 @@ package com.zw.cloud.influxdb.entity;
 
 import lombok.Data;
 import org.influxdb.annotation.Column;
-import org.influxdb.annotation.Measurement;
 import org.influxdb.annotation.TimeColumn;
 
 import java.math.BigDecimal;
