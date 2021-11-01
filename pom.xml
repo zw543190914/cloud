@@ -111,6 +111,7 @@
         <velocity-engine-core.version>2.2</velocity-engine-core.version>
         <netty-all.version>4.1.63.Final</netty-all.version>
         <mqtt-client.version>0.4.0</mqtt-client.version>
+        <dingtalk.version>1.0.1</dingtalk.version>
     </properties>
 
     <dependencyManagement>
@@ -473,10 +474,16 @@
                 <artifactId>mqtt-client</artifactId>
                 <version>${mqtt-client.version}</version>
             </dependency>
-            <dependency>
+           <!-- <dependency>
                 <groupId>com.zw.cloud</groupId>
                 <artifactId>ding-talk</artifactId>
                 <version>1.0.0</version>
+            </dependency>-->
+            <!-- https://mvnrepository.com/artifact/com.aliyun/alibaba-dingtalk-service-sdk -->
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>alibaba-dingtalk-service-sdk</artifactId>
+                <version>${dingtalk.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
