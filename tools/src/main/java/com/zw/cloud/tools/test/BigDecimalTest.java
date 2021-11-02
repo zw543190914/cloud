@@ -13,9 +13,9 @@ public class BigDecimalTest {
         BigDecimal smallDecimal = new BigDecimal("0.8");
         System.out.println(smallDecimal.compareTo(bigDecimal));
         System.out.println(bigDecimal.multiply(new BigDecimal("50")).divide(new BigDecimal(100)));
-        Integer temp1 = buildTemp(new BigDecimal("189"), 1);
+        Integer temp1 = buildTemp(new BigDecimal("89"), 1);
         System.out.println(temp1);
-        System.out.println(buildTemp2(new BigDecimal("189"), 1));
+        System.out.println(buildTemp2(new BigDecimal("89"), 1));
     }
 
     private static  Integer buildTemp(BigDecimal num, int size) {

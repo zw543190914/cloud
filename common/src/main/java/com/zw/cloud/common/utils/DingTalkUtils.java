@@ -13,11 +13,11 @@ public class DingTalkUtils {
     private static String br = " \n\n ";
 
     public static void main(String[] args) throws Exception {
-        sendDingTalkMsg(DingTalkUtils.class,"sendDingTalkMsg",new RuntimeException("running exception..."));
+        sendDingTalkMsg("505e45d4253e2a98976d15de6b98a56c8635ddcab9d8b42de029ebb462c72db6",DingTalkUtils.class,"sendDingTalkMsg",new RuntimeException("running exception..."));
     }
 
-    public static void sendDingTalkMsg(Class clazz,String methodName,Exception e) throws Exception{
-        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/robot/send?access_token=505e45d4253e2a98976d15de6b98a56c8635ddcab9d8b42de029ebb462c72db6");
+    public static void sendDingTalkMsg(String token,Class clazz,String methodName,Exception e) throws Exception{
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/robot/send?access_token=" + token);
         OapiRobotSendRequest request = new OapiRobotSendRequest();
         /*request.setMsgtype("text");
         OapiRobotSendRequest.Text text = new OapiRobotSendRequest.Text();
