@@ -22,12 +22,49 @@ import java.util.*;
 public class UserTestController {
     @Autowired
     private IUserTestService userService;
+    @Autowired
+    private UserInfoMapper mapper;
+
+    @GetMapping("/testBatchInsertOneByOne")
+    //http://localhost:8080/user-test/testBatchInsertOneByOne
+    public void testBatchInsertOneByOne() {
+        userService.testBatchInsertOneByOne();
+    }
+
+    @GetMapping("/testBatchInsertByMapper")
+    //http://localhost:8080/user-test/testBatchInsertByMapper
+    public void testBatchInsertByMapper() {
+        userService.testBatchInsertByMapper();
+    }
+
+    @GetMapping("/testBatchInsertByMybatisPlus")
+    //http://localhost:8080/user-test/testBatchInsertByMybatisPlus
+    public void testBatchInsertByMybatisPlus() {
+        userService.testBatchInsertByMybatisPlus();
+    }
+
+    @GetMapping("/insertWithJson")
+    //http://localhost:8080/user-test/insertWithJson
+    public void insertWithJson() {
+        UserInfo user = new UserInfo();
+        user.setName("test121");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("2222","name11");
+        jsonObject.put("date",new Date());
+        user.setOther(Lists.newArrayList(jsonObject));
+        mapper.insertByMapper(user);
+        System.out.println(JSON.toJSONString(user));
+    }
 
     @GetMapping
     //http://localhost:8080/user-test?name=test2
     public void saveOrUpdate(String name) {
         UserInfo user = new UserInfo();
         user.setName(name);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("2222","name11");
+        jsonObject.put("date",new Date());
+        user.setOther(Lists.newArrayList(jsonObject));
         userService.saveOrUpdate(user);
         System.out.println(JSON.toJSONString(user));
     }

@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface UserInfoMapper extends BaseMapper<UserInfo> {
 
+    void insertByMapper(UserInfo userInfo);
+
     void batchInsertByMapper(@Param("list") List<UserInfo> userList);
 
     void batchUpdate(@Param("list") List<UserInfo> userList);
