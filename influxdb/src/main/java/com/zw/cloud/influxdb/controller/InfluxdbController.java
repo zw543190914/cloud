@@ -82,9 +82,14 @@ public class InfluxdbController {
         // InfluxDB支持分页查询,因此可以设置分页查询条件
         String pageQuery = " LIMIT " + pageSize + " OFFSET " + (page - 1) * pageSize;
 
-        LocalDateTime now = LocalDateTime.now();
+        /*LocalDateTime now = LocalDateTime.now();
         Instant endTime = buildTimeParam(now);
-        Instant startTime = buildTimeParam(now.minusMinutes(5));
+        Instant startTime = buildTimeParam(now.minusMinutes(5));*/
+        LocalDateTime startTimeLocal = LocalDateTime.parse("2021-11-02T20:04:50");
+        LocalDateTime endTimeLocal = startTimeLocal.plusMinutes(10);
+        Instant startTime = buildTimeParam(startTimeLocal);
+        Instant endTime = buildTimeParam(endTimeLocal);
+
         String queryCondition = " where time >= '" + startTime + "' and time <= '" + endTime + "' and device = '" + device + "' and dataType = 'report' ";  //查询条件
 
         // 此处查询所有内容,如果

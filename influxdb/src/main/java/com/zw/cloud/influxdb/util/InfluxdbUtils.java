@@ -159,6 +159,9 @@ public class InfluxdbUtils {
         List<Object> results = new ArrayList<Object>();
         QueryResult queryResult = influxDBClient.query(new Query(query, database));
         queryResult.getResults().forEach(result->{
+            if (Objects.isNull(result) || Objects.isNull(result.getSeries())){
+                return;
+            }
             result.getSeries().forEach(serial->{
                 List<String> columns = serial.getColumns();
                 int fieldSize = columns.size();
@@ -226,6 +229,9 @@ public class InfluxdbUtils {
         List results = new ArrayList<>();
         QueryResult queryResult = influxDBClient.query(new Query(query, database));
         queryResult.getResults().forEach(result->{
+            if (Objects.isNull(result) || Objects.isNull(result.getSeries())){
+                return;
+            }
             result.getSeries().forEach(serial->{
                 List<String> columns = serial.getColumns();
                 int fieldSize = columns.size();

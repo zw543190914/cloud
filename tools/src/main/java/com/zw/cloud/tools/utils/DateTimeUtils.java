@@ -20,8 +20,10 @@ public class DateTimeUtils {
         System.out.println(instant);
         System.out.println(instant.atZone(ZoneId.systemDefault()));
         System.out.println(ZoneId.systemDefault());
-        System.out.println(Instant.parse("2021-10-30 12:12:12"));
-
+        System.out.println(Instant.parse("2021-11-03T20:37:30.00Z"));
+        String date = "2017-03-08T12:30:54";
+        LocalDateTime localdatetime = LocalDateTime.parse(date);
+        System.out.println(localdatetime);
     }
 
     public static LocalDateTime dateToLocalDateTime(Date date) {
