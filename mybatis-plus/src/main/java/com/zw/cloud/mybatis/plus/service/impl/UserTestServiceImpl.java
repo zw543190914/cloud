@@ -30,65 +30,31 @@ public class UserTestServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void testBatchInsertOneByOne() {
+    public void testBatchInsertOneByOne(List<UserInfo> userInfoList) {
         long start = System.currentTimeMillis();
         SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);
         UserInfoMapper mapper = sqlSession.getMapper(UserInfoMapper.class);
-        for (int i = 0; i < 20000; i++) {
-            UserInfo user2 = new UserInfo();
-            //user2.setId(1438688954489552898L);
-            user2.setName("test");
-            user2.setAge(22);
-            /*JSONObject jsonObject = new JSONObject();
-            jsonObject.put("2222","name11");
-            jsonObject.put("date",new Date());
-            user2.setOther(Lists.newArrayList(jsonObject));*/
-            mapper.insertByMapper(user2);
-        }
+        userInfoList.forEach(mapper::insertByMapper);
         sqlSession.commit();
-        // 1362 2793
+        // 1362 2793 2862
         log.info("[testBatchInsertOneByOne] use time {}", System.currentTimeMillis() - start);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void testBatchInsertByMapper() {
+    public void testBatchInsertByMapper(List<UserInfo> userInfoList) {
         long start = System.currentTimeMillis();
-        List<UserInfo> userInfoList = new ArrayList<>(50000);
-        for (int i = 0; i < 20000; i++) {
-            UserInfo user2 = new UserInfo();
-            //user2.setId(1438688954489552898L);
-            user2.setName("test");
-            user2.setAge(22);
-            /*JSONObject jsonObject = new JSONObject();
-            jsonObject.put("2222","name11");
-            jsonObject.put("date",new Date());
-            user2.setOther(Lists.newArrayList(jsonObject));*/
-            userInfoList.add(user2);
-        }
         userInfoMapper.batchInsertByMapper(userInfoList);
-        // 556 1129
+        // 556 1129 1115
         log.info("[testBatchInsertByMapper] use time {}", System.currentTimeMillis() - start);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void testBatchInsertByMybatisPlus() {
+    public void testBatchInsertByMybatisPlus(List<UserInfo> userInfoList) {
         long start = System.currentTimeMillis();
-        List<UserInfo> userInfoList = new ArrayList<>(50000);
-        for (int i = 0; i < 20000; i++) {
-            UserInfo user2 = new UserInfo();
-            //user2.setId(1438688954489552898L);
-            user2.setName("test");
-            user2.setAge(22);
-            /*JSONObject jsonObject = new JSONObject();
-            jsonObject.put("2222","name11");
-            jsonObject.put("date",new Date());
-            user2.setOther(Lists.newArrayList(jsonObject));*/
-            userInfoList.add(user2);
-        }
-        saveBatch(userInfoList,10000);
-        // 1895 3369
+        saveBatch(userInfoList,20000);
+        // 1895 3369 3252
         log.info("[testBatchInsertByMybatisPlus] use time {}", System.currentTimeMillis() - start);
     }
 

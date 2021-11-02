@@ -28,19 +28,19 @@ public class UserTestController {
     @GetMapping("/testBatchInsertOneByOne")
     //http://localhost:8080/user-test/testBatchInsertOneByOne
     public void testBatchInsertOneByOne() {
-        userService.testBatchInsertOneByOne();
+        userService.testBatchInsertOneByOne(buildUserList());
     }
 
     @GetMapping("/testBatchInsertByMapper")
     //http://localhost:8080/user-test/testBatchInsertByMapper
     public void testBatchInsertByMapper() {
-        userService.testBatchInsertByMapper();
+        userService.testBatchInsertByMapper(buildUserList());
     }
 
     @GetMapping("/testBatchInsertByMybatisPlus")
     //http://localhost:8080/user-test/testBatchInsertByMybatisPlus
     public void testBatchInsertByMybatisPlus() {
-        userService.testBatchInsertByMybatisPlus();
+        userService.testBatchInsertByMybatisPlus(buildUserList());
     }
 
     @GetMapping("/insertWithJson")
@@ -138,5 +138,21 @@ public class UserTestController {
         //userService.batchUpdateUserListByMapper(Lists.newArrayList(user,user2));
         //userService.batchUpdateUserList(Lists.newArrayList(user,user2));
         return Lists.newArrayList(user,user2);
+    }
+
+    private List<UserInfo> buildUserList(){
+        List<UserInfo> userInfoList = new ArrayList<>(30000);
+        for (int i = 0; i < 20000; i++) {
+            UserInfo user2 = new UserInfo();
+            //user2.setId(1438688954489552898L);
+            user2.setName("test");
+            user2.setAge(22);
+            /*JSONObject jsonObject = new JSONObject();
+            jsonObject.put("2222","name11");
+            jsonObject.put("date",new Date());
+            user2.setOther(Lists.newArrayList(jsonObject));*/
+            userInfoList.add(user2);
+        }
+        return userInfoList;
     }
 }
