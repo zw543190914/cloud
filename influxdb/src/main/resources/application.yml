@@ -7,10 +7,10 @@ spring:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
   influx:
-    url: http://192.168.21.12:8086
-    user: dyeing_running_record_dev
-    password: qlZFheKbuVBUvIaq9euohm3j9oy56bJo
-    database: dyeing_running_record
+    url:
+    user:
+    password:
+    database:
     retentionPolicy: au
 server:
   port: 10010

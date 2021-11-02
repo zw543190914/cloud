@@ -85,7 +85,7 @@ public class InfluxdbController {
         LocalDateTime now = LocalDateTime.now();
         Instant endTime = buildTimeParam(now);
         Instant startTime = buildTimeParam(now.minusMinutes(5));
-        String queryCondition = " where time >= '" + startTime + "' and time <= '" + endTime + "' and device = '" + device + "' ";  //查询条件
+        String queryCondition = " where time >= '" + startTime + "' and time <= '" + endTime + "' and device = '" + device + "' and dataType = 'report' ";  //查询条件
 
         // 此处查询所有内容,如果
         String queryCmd = "SELECT * FROM device_report_data"
@@ -114,7 +114,7 @@ public class InfluxdbController {
         LocalDateTime now = LocalDateTime.now();
         Instant endTime = buildTimeParam(now);
         Instant startTime = buildTimeParam(now.minusMinutes(5));
-        String queryCondition = " where time >= '" + startTime + "' and time <= '" + endTime + "' and device = '" + device + "' ";  //查询条件
+        String queryCondition = " where time >= '" + startTime + "' and time <= '" + endTime + "' and device = '" + device + "' and dataType = 'report' ";  //查询条件
         // 此处查询所有内容,如果
         String queryCmd = "SELECT * FROM device_report_data"
                 // 查询指定设备下的日志信息
