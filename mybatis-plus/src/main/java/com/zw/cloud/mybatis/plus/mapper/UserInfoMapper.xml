@@ -9,6 +9,19 @@
         <result column="other" property="other" typeHandler="com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler"/>
     </resultMap>
 
+    <insert id="batchInsertByMapper" parameterType="java.util.List">
+        <!--
+          WARNING - @mbg.generated
+          这个节点为代码生成工具生成，请不要修改!
+          @author hewei
+        -->
+        insert into user (id, name, age, bir, other)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id,jdbcType=BIGINT}, #{item.name,jdbcType=VARCHAR}, #{item.age,jdbcType=TINYINT}, #{item.bir,jdbcType=TIMESTAMP}, #{item.other})
+        </foreach>
+    </insert>
+
     <update id="batchUpdate" parameterType="java.util.List">
         UPDATE user_info
         <trim prefix="set" suffixOverrides=",">

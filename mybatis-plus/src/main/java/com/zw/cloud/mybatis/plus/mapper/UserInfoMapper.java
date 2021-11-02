@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface UserInfoMapper extends BaseMapper<UserInfo> {
 
+    void batchInsertByMapper(@Param("list") List<UserInfo> userList);
+
     void batchUpdate(@Param("list") List<UserInfo> userList);
 
     List<UserInfo> queryJsonData(@Param("userInfo") UserInfo userInfo);

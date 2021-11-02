@@ -32,25 +32,19 @@ public class UserTestController {
         System.out.println(JSON.toJSONString(user));
     }
 
+    @GetMapping("/batchInsertByMapper")
+    //http://localhost:8080/user-test/batchInsertByMapper
+    public void batchInsertByMapper() {
+
+        userService.batchSaveOrUpdate(buildData());
+
+    }
+
 
     @GetMapping("/batchUpdate")
     //http://localhost:8080/user-test/batchUpdate
     public void batchUpdate() {
-        UserInfo user = new UserInfo();
-        //user.setId(1438686379807698945L);
-        user.setName("hh");
-        user.setAge(11);
-        UserInfo user2 = new UserInfo();
-        //user2.setId(1438688954489552898L);
-        user2.setName("r挺剂TF-630ff");
-        user2.setAge(22);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("name","name11");
-        jsonObject.put("date",LocalDateTime.now());
-        user2.setOther(Lists.newArrayList(jsonObject));
-        //userService.batchUpdateUserListByMapper(Lists.newArrayList(user,user2));
-        //userService.batchUpdateUserList(Lists.newArrayList(user,user2));
-        userService.batchSaveOrUpdate(Lists.newArrayList(user,user2));
+        userService.batchSaveOrUpdate(buildData());
     }
 
     @GetMapping("/query")
@@ -89,5 +83,23 @@ public class UserTestController {
     //http://localhost:8080/user-test/queryAllDataTest
     public List<UserInfo> queryAllDataTest() {
         return userService.queryAllDataTest();
+    }
+
+    private List<UserInfo> buildData() {
+        UserInfo user = new UserInfo();
+        //user.setId(1438686379807698945L);
+        user.setName("zzzz");
+        user.setAge(11);
+        UserInfo user2 = new UserInfo();
+        //user2.setId(1438688954489552898L);
+        user2.setName("r挺剂TF-630ff");
+        user2.setAge(22);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("2222","name11");
+        jsonObject.put("date",new Date());
+        user2.setOther(Lists.newArrayList(jsonObject));
+        //userService.batchUpdateUserListByMapper(Lists.newArrayList(user,user2));
+        //userService.batchUpdateUserList(Lists.newArrayList(user,user2));
+        return Lists.newArrayList(user,user2);
     }
 }

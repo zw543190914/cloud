@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface IUserTestService extends IService<UserInfo> {
 
+    void batchInsertByMapper(List<UserInfo> userInfoList);
+
     void batchUpdateUserListByMapper(List<UserInfo> userInfoList);
 
     void batchUpdateUserList(List<UserInfo> userInfoList);

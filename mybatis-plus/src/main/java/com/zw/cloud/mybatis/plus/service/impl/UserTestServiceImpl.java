@@ -17,6 +17,11 @@ public class UserTestServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     private UserInfoMapper userInfoMapper;
 
     @Override
+    public void batchInsertByMapper(List<UserInfo> userInfoList) {
+        userInfoMapper.batchInsertByMapper(userInfoList);
+    }
+
+    @Override
     public void batchUpdateUserListByMapper(List<UserInfo> userInfoList) {
         userInfoMapper.batchUpdate(userInfoList);
     }
