@@ -20,7 +20,7 @@
         insert into user_info (id, name, age, bir, other)
         values
         <foreach collection="list" item="item" separator=",">
-            (#{item.id,jdbcType=BIGINT}, #{item.name,jdbcType=VARCHAR}, #{item.age,jdbcType=TINYINT}, #{item.bir,jdbcType=TIMESTAMP}, #{item.other})
+            (#{item.id,jdbcType=BIGINT}, #{item.name,jdbcType=VARCHAR}, #{item.age,jdbcType=TINYINT}, #{item.bir,jdbcType=TIMESTAMP}, #{item.other,typeHandler=com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler})
         </foreach>
     </insert>
 

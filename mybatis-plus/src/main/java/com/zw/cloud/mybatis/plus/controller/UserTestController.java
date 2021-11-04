@@ -142,15 +142,15 @@ public class UserTestController {
 
     private List<UserInfo> buildUserList(){
         List<UserInfo> userInfoList = new ArrayList<>(30000);
-        for (int i = 0; i < 20000; i++) {
+        for (int i = 0; i < 2000; i++) {
             UserInfo user2 = new UserInfo();
             //user2.setId(1438688954489552898L);
             user2.setName("test");
             user2.setAge(22);
-            /*JSONObject jsonObject = new JSONObject();
+            JSONObject jsonObject = new JSONObject();
             jsonObject.put("2222","name11");
             jsonObject.put("date",new Date());
-            user2.setOther(Lists.newArrayList(jsonObject));*/
+            user2.setOther(Lists.newArrayList(jsonObject));
             userInfoList.add(user2);
         }
         return userInfoList;
