@@ -10,6 +10,7 @@
     <result column="five" jdbcType="INTEGER" property="five" />
     <result column="six" jdbcType="INTEGER" property="six" />
     <result column="seven" jdbcType="INTEGER" property="seven" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, one, two, three, four, five, six, seven
+    id, one, two, three, four, five, six, seven, update_time
   </sql>
   <select id="selectByExample" parameterType="com.zw.cloud.tools.entity.TcExample" resultMap="BaseResultMap">
     select
@@ -105,10 +106,12 @@
   <insert id="insert" parameterType="com.zw.cloud.tools.entity.Tc">
     insert into tc (id, one, two, 
       three, four, five, 
-      six, seven)
+      six, seven, update_time
+      )
     values (#{id,jdbcType=INTEGER}, #{one,jdbcType=INTEGER}, #{two,jdbcType=INTEGER}, 
       #{three,jdbcType=INTEGER}, #{four,jdbcType=INTEGER}, #{five,jdbcType=INTEGER}, 
-      #{six,jdbcType=INTEGER}, #{seven,jdbcType=INTEGER})
+      #{six,jdbcType=INTEGER}, #{seven,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.zw.cloud.tools.entity.Tc">
     insert into tc
@@ -138,7 +141,7 @@
         seven,
       </if>
       <if test="updateTime != null">
-        seven,
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -167,7 +170,7 @@
         #{seven,jdbcType=INTEGER},
       </if>
       <if test="updateTime != null">
-        #{updateTime},
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -204,6 +207,9 @@
       <if test="record.seven != null">
         seven = #{record.seven,jdbcType=INTEGER},
       </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -218,7 +224,8 @@
       four = #{record.four,jdbcType=INTEGER},
       five = #{record.five,jdbcType=INTEGER},
       six = #{record.six,jdbcType=INTEGER},
-      seven = #{record.seven,jdbcType=INTEGER}
+      seven = #{record.seven,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -247,6 +254,9 @@
       <if test="seven != null">
         seven = #{seven,jdbcType=INTEGER},
       </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -258,7 +268,8 @@
       four = #{four,jdbcType=INTEGER},
       five = #{five,jdbcType=INTEGER},
       six = #{six,jdbcType=INTEGER},
-      seven = #{seven,jdbcType=INTEGER}
+      seven = #{seven,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <insert id="batchInsert" parameterType="java.util.List">
@@ -267,10 +278,10 @@
       这个节点为代码生成工具生成，请不要修改!
       @author hewei
     -->
-    insert into tc (id, one, two, three, four, five, six, seven)
+    insert into tc (id, one, two, three, four, five, six, seven, update_time)
     values
     <foreach collection="list" item="item" separator=",">
-       (#{item.id,jdbcType=INTEGER}, #{item.one,jdbcType=INTEGER}, #{item.two,jdbcType=INTEGER}, #{item.three,jdbcType=INTEGER}, #{item.four,jdbcType=INTEGER}, #{item.five,jdbcType=INTEGER}, #{item.six,jdbcType=INTEGER}, #{item.seven,jdbcType=INTEGER})
+       (#{item.id,jdbcType=INTEGER}, #{item.one,jdbcType=INTEGER}, #{item.two,jdbcType=INTEGER}, #{item.three,jdbcType=INTEGER}, #{item.four,jdbcType=INTEGER}, #{item.five,jdbcType=INTEGER}, #{item.six,jdbcType=INTEGER}, #{item.seven,jdbcType=INTEGER}, #{item.updateTime,jdbcType=TIMESTAMP})
     </foreach>
   </insert>
   <select id="selectOneByExample" parameterType="com.zw.cloud.tools.entity.TcExample" resultMap="BaseResultMap">

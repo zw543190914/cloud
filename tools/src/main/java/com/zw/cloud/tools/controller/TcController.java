@@ -79,6 +79,8 @@ public class TcController {
 
     }
 
+
+
     @GetMapping("/query")
     //http://localhost:9040/tc/query
     public void query() throws Exception{

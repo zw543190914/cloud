@@ -2,9 +2,8 @@ package com.zw.cloud.tools.dao;
 
 import com.zw.cloud.tools.entity.Tc;
 import com.zw.cloud.tools.entity.TcExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface TcMapper {
     long countByExample(TcExample example);
