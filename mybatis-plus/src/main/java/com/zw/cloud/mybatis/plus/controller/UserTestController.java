@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import com.zw.cloud.mybatis.plus.entity.UserInfo;
 import com.zw.cloud.mybatis.plus.mapper.UserInfoMapper;
 import com.zw.cloud.mybatis.plus.service.api.IUserTestService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/user-test")
+@Slf4j
 public class UserTestController {
     @Autowired
     private IUserTestService userService;
@@ -40,7 +42,11 @@ public class UserTestController {
     @GetMapping("/testBatchInsertByMybatisPlus")
     //http://localhost:8080/user-test/testBatchInsertByMybatisPlus
     public void testBatchInsertByMybatisPlus() {
-        userService.testBatchInsertByMybatisPlus(buildUserList());
+        long start = System.currentTimeMillis();
+        userService.saveBatch(buildUserList(),2000);
+        // 1895 3369 3252
+        log.info("[testBatchInsertByMybatisPlus] use time {}", System.currentTimeMillis() - start);
+
     }
 
     @GetMapping("/insertWithJson")

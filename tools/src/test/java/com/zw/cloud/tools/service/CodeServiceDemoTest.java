@@ -50,8 +50,9 @@ class CodeServiceDemoTest {
 
     @Test
     public void plusMonths() {
-        MockedStatic<DateTimeUtils> dateTimeUtilsMockedStatic = mockStatic(DateTimeUtils.class);
-        dateTimeUtilsMockedStatic.when(()-> DateTimeUtils.plusMonths(anyInt())).thenReturn(new Date());
-        System.out.println(DateTimeUtils.plusMonths(1));
+        try (MockedStatic<DateTimeUtils> dateTimeUtilsMockedStatic = mockStatic(DateTimeUtils.class)) {
+            dateTimeUtilsMockedStatic.when(()-> DateTimeUtils.plusMonths(anyInt())).thenReturn(new Date());
+            System.out.println(DateTimeUtils.plusMonths(1));
+        }
     }
 }
