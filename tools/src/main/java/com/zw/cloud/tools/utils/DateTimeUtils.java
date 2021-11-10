@@ -24,6 +24,9 @@ public class DateTimeUtils {
         String date = "2017-03-08T12:30:54";
         LocalDateTime localdatetime = LocalDateTime.parse(date);
         System.out.println(localdatetime);
+
+        LocalDateTime dateTime = LocalDateTime.of(localdatetime.getYear(), localdatetime.getMonth(), localdatetime.getDayOfMonth(), Integer.parseInt("09"), Integer.parseInt("59"), 0);
+        System.out.println(dateTime);
     }
 
     public static LocalDateTime dateToLocalDateTime(Date date) {
