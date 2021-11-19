@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -97,5 +98,32 @@ public class UserTestServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     public List<UserInfo> queryAllDataTest(){
         return userInfoMapper.queryAllDataTest();
+    }
+
+    @Override
+    public Map<String, Object> queryUserData() {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT sum(if(pt_quantity is null,0,pt_quantity)) ptQuantityTotal").append(",");
+        List<UserInfo> userInfoList = new ArrayList<>();
+        for (UserInfo userInfo : userInfoList) {
+            sql.append("SUM(if(JSON_CONTAINS(assistant,JSON_OBJECT('parentName','" + userInfo.getName() + "')) = 1,pt_quantity,0)) AS '" + userInfo.getName() + "' ,");
+        }
+        sql = new StringBuilder(sql.substring(0, sql.length() - 1));
+
+        sql.append(" FROM base_product_record where org_code = '").append("orgCode")
+                .append("' and workshop_id = ").append("1")
+                .append(" and calc_day = '").append("2021-11-10").append("'");
+        //.append("' GROUP BY device_id,device_name");
+        /*SELECT device_id,device_name,
+        SUM(if(pt_quantity is null,0,pt_quantity)) ptQuantityTotal,
+                SUM(if(JSON_CONTAINS(assistant,JSON_OBJECT('parentName','防水类')) = 1,pt_quantity,0)) AS 'waterproof' ,
+                SUM(if(JSON_CONTAINS(assistant,JSON_OBJECT('parentName','软剂类')) = 1,pt_quantity,0)) AS 'softener' ,
+                SUM(if(JSON_CONTAINS(assistant,JSON_OBJECT('parentName','其它')) = 1,pt_quantity,0)) AS 'other' ,
+                SUM(if(JSON_CONTAINS(assistant,JSON_OBJECT('parentName','助剂大')) = 1,pt_quantity,0)) AS '276'
+        FROM base_product_record
+        where org_code = 'devController' and workshop_id = 1
+        and calc_day = '2021-11-10'
+        GROUP BY device_id,device_name*/
+        return userInfoMapper.queryUserData(sql.toString());
     }
 }

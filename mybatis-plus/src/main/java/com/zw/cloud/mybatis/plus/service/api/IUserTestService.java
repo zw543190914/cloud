@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.zw.cloud.mybatis.plus.entity.UserInfo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IUserTestService extends IService<UserInfo> {
 
@@ -26,4 +27,6 @@ public interface IUserTestService extends IService<UserInfo> {
     List<UserInfo> queryJsonDataLike(String name);
 
     List<UserInfo> queryAllDataTest();
+
+    Map<String, Object> queryUserData();
 }

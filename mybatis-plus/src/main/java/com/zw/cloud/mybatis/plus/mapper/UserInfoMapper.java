@@ -3,9 +3,11 @@ package com.zw.cloud.mybatis.plus.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zw.cloud.mybatis.plus.entity.UserInfo;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserInfoMapper extends BaseMapper<UserInfo> {
 
@@ -21,4 +23,8 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
 
     @Select("select * from user_info")
     List<UserInfo> queryAllDataTest();
+
+    @Select({"${sql}"})
+    @ResultType(Map.class)
+    Map<String, Object> queryUserData(@Param("sql") String sql);
 }
