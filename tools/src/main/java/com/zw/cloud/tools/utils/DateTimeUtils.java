@@ -9,12 +9,13 @@ import java.util.*;
 
 public class DateTimeUtils {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         //获取秒数
-        Long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
+        LocalDateTime now = LocalDateTime.now();
+        Long second = now.toEpochSecond(ZoneOffset.of("+8"));
         System.out.println(second);
         //获取毫秒数
-        Long milliSecond = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
+        Long milliSecond = now.toInstant(ZoneOffset.of("+8")).toEpochMilli();
         System.out.println(milliSecond);
         Instant instant = Instant.ofEpochSecond(second);
         System.out.println(instant);
@@ -27,6 +28,11 @@ public class DateTimeUtils {
 
         LocalDateTime dateTime = LocalDateTime.of(localdatetime.getYear(), localdatetime.getMonth(), localdatetime.getDayOfMonth(), Integer.parseInt("09"), Integer.parseInt("59"), 0);
         System.out.println(dateTime);
+        LocalDateTime localDateTime = now.minusHours(7);
+        Duration between = Duration.between(localDateTime, now);
+        System.out.println(between.getSeconds());
+
+        System.out.println(getNumOfMonth("2021-02"));
     }
 
     public static LocalDateTime dateToLocalDateTime(Date date) {
@@ -275,6 +281,15 @@ public class DateTimeUtils {
         long min = time % 3600000 / 60000;
         long second = time % 3600000 % 60000 / 1000;
         return String.format("%02d",house) + ":" + String.format("%02d",min) + ":" + String.format("%02d",second);
+    }
+    /**
+     * 根据年月（字符串）获取当前月的天数
+     */
+    public static int getNumOfMonth(String date) throws Exception{
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM");
+        calendar.setTime(simpleDate.parse(date));
+        return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 
 }
