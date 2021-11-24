@@ -3,6 +3,8 @@ package com.zw.cloud.tools.entity;
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.format.DateTimeFormat;
+import com.zw.cloud.tools.bindcheckgroup.InsertCheckGroup;
+import com.zw.cloud.tools.bindcheckgroup.UpdateCheckGroup;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.validation.annotation.Validated;
 
@@ -25,12 +27,12 @@ public class User implements Serializable {
     private Long id;
 
     @ExcelProperty(value = "姓名")
-    @NotBlank(message = "name is blank")
+    @NotBlank(message = "name is blank",groups = {InsertCheckGroup.class, UpdateCheckGroup.class})
     private String name;
 
     @ExcelProperty(value = "年龄")
     @NotNull(message = "age is null")
-    @Range(max = 100,min = 10,message = "age is error")
+    @Range(max = 100,min = 10,message = "age is error",groups = InsertCheckGroup.class)
     private Byte age;
 
     @ExcelProperty(value = "描述")
