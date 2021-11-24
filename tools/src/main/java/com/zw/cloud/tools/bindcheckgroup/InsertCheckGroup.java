@@ -1,4 +1,4 @@
 package com.zw.cloud.tools.bindcheckgroup;
 
-public class InsertCheckGroup {
+public interface InsertCheckGroup {
 }
