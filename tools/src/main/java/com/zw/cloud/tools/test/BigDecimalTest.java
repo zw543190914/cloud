@@ -3,6 +3,7 @@ package com.zw.cloud.tools.test;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 
 public class BigDecimalTest {
@@ -16,6 +17,14 @@ public class BigDecimalTest {
         Integer temp1 = buildTemp(new BigDecimal("89"), 1);
         System.out.println(temp1);
         System.out.println(buildTemp2(new BigDecimal("89"), 1));
+
+        BigDecimal a1 = new BigDecimal("33");
+        BigDecimal a2 = new BigDecimal("44");
+        BigDecimal a3 = new BigDecimal("33");
+        BigDecimal total = a1.add(a2).add(a3);
+        System.out.println(a1.divide(total,3, RoundingMode.HALF_DOWN));
+        System.out.println(a2.divide(total,3, RoundingMode.HALF_DOWN));
+        System.out.println(a3.divide(total,3, RoundingMode.HALF_DOWN));
     }
 
     private static  Integer buildTemp(BigDecimal num, int size) {
