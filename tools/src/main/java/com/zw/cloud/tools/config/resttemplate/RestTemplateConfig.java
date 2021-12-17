@@ -1,9 +1,8 @@
 package com.zw.cloud.tools.config.resttemplate;
 
-import com.zw.cloud.tools.resttemplate.interceptor.CustomMappingJackson2HttpMessageConverter;
-import com.zw.cloud.tools.resttemplate.interceptor.CustomResponseErrorHandler;
-import com.zw.cloud.tools.resttemplate.interceptor.HeadClientHttpRequestInterceptor;
-import com.zw.cloud.tools.resttemplate.interceptor.TrackLogClientHttpRequestInterceptor;
+import com.zw.cloud.tools.config.resttemplate.interceptor.CustomMappingJackson2HttpMessageConverter;
+import com.zw.cloud.tools.config.resttemplate.interceptor.CustomResponseErrorHandler;
+import com.zw.cloud.tools.config.resttemplate.interceptor.HeadClientHttpRequestInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;

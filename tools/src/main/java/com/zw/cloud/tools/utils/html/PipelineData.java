@@ -1,7 +1,8 @@
 package com.zw.cloud.tools.utils.html;
 
 
-import com.zw.cloud.tools.dao.UserDao;
+
+import com.zw.cloud.tools.dao.UserMapper;
 import com.zw.cloud.tools.entity.User;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import java.util.List;
 @Component
 public class PipelineData implements Pipeline {
     @Autowired
-    private UserDao userMapper;
+    private UserMapper userMapper;
 
     @Override
     public void process(ResultItems resultItems, Task task) {

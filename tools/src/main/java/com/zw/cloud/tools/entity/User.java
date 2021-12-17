@@ -1,57 +1,24 @@
 package com.zw.cloud.tools.entity;
 
-import com.alibaba.excel.annotation.ExcelIgnore;
-import com.alibaba.excel.annotation.ExcelProperty;
-import com.alibaba.excel.annotation.format.DateTimeFormat;
-import com.zw.cloud.tools.bindcheckgroup.InsertCheckGroup;
-import com.zw.cloud.tools.bindcheckgroup.UpdateCheckGroup;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.validation.annotation.Validated;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
 import java.io.Serializable;
+import java.util.Date;
 
-/**
- * (User)实体类
- *
- * @author makejava
- * @since 2021-08-29 21:02:42
- */
 public class User implements Serializable {
-    private static final long serialVersionUID = 665809211608969869L;
-
-    @ExcelProperty(value = "id")
     private Long id;
 
-    @ExcelProperty(value = "姓名")
-    @NotBlank(message = "name is blank",groups = {InsertCheckGroup.class, UpdateCheckGroup.class})
     private String name;
 
-    @ExcelProperty(value = "年龄")
-    @NotNull(message = "age is null")
-    @Range(max = 100,min = 10,message = "age is error",groups = InsertCheckGroup.class)
     private Byte age;
 
-    @ExcelProperty(value = "描述")
-    private String description;
-
-    @ExcelProperty(value = "生日")
-    @DateTimeFormat("yyyy年MM月dd日HH时mm分ss秒")
     private Date bir;
 
-    @ExcelIgnore
-    private String image;
-    @ExcelIgnore
-    private Date gmtCreate;
+    private Date createTime;
 
-    @ExcelIgnore
-    @Valid //嵌套验证
-    @NotNull
-    private Tc tc;
+    private Date updateTime;
 
+    private Integer deleted;
+
+    private static final long serialVersionUID = 1L;
 
     public Long getId() {
         return id;
@@ -66,7 +33,7 @@ public class User implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name == null ? null : name.trim();
     }
 
     public Byte getAge() {
@@ -77,14 +44,6 @@ public class User implements Serializable {
         this.age = age;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Date getBir() {
         return bir;
     }
@@ -93,27 +52,27 @@ public class User implements Serializable {
         this.bir = bir;
     }
 
-    public String getImage() {
-        return image;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getGmtCreate() {
-        return gmtCreate;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
-    public Tc getTc() {
-        return tc;
+    public Integer getDeleted() {
+        return deleted;
     }
 
-    public void setTc(Tc tc) {
-        this.tc = tc;
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
     }
 }

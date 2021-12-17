@@ -1,7 +1,7 @@
 package com.zw.cloud.tools.service.impl;
 
+import com.zw.cloud.tools.dao.UserMapper;
 import com.zw.cloud.tools.entity.User;
-import com.zw.cloud.tools.dao.UserDao;
 import com.zw.cloud.tools.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ import java.util.List;
 @Service("userService")
 public class UserServiceImpl implements UserService {
     @Resource
-    private UserDao userDao;
+    private UserMapper userDao;
 
     /**
      * 通过ID查询单条数据
@@ -27,19 +27,12 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User queryById(Long id) {
-        return this.userDao.queryById(id);
+        return this.userDao.selectByPrimaryKey(id);
     }
 
-    /**
-     * 查询多条数据
-     *
-     * @param offset 查询起始位置
-     * @param limit 查询条数
-     * @return 对象列表
-     */
     @Override
-    public List<User> queryAllByLimit(int offset, int limit) {
-        return this.userDao.queryAllByLimit(offset, limit);
+    public List<User> queryAll() {
+        return this.userDao.selectByExample(null);
     }
 
     /**
@@ -50,7 +43,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User insert(User user) {
-        this.userDao.insert(user);
+        this.userDao.insertSelective(user);
         return user;
     }
 
@@ -62,7 +55,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User update(User user) {
-        this.userDao.update(user);
+        this.userDao.updateByPrimaryKeySelective(user);
         return this.queryById(user.getId());
     }
 
@@ -74,6 +67,6 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean deleteById(Long id) {
-        return this.userDao.deleteById(id) > 0;
+        return this.userDao.deleteByPrimaryKey(id) > 0;
     }
 }

@@ -1,4 +1,4 @@
-package com.zw.cloud.tools.resttemplate.interceptor;
+package com.zw.cloud.tools.config.resttemplate.interceptor;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;

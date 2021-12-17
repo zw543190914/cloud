@@ -66,7 +66,7 @@ public class WebmagicUtils implements PageProcessor {
             String name = node.css("div.p-name em","text").toString();
             user.setName(name);
             String description = node.css("div.p-shop span a","text").toString();
-            user.setDescription(description);
+            //user.setDescription(description);
             String price = node.css("div.p-price i","text").toString();
             System.out.println(price);
             userList.add(user);
