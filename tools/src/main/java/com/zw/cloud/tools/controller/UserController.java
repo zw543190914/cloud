@@ -1,7 +1,6 @@
 package com.zw.cloud.tools.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.zw.cloud.tools.base.ThreadContext;
 import com.zw.cloud.tools.entity.User;
 import com.zw.cloud.tools.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +24,10 @@ public class UserController {
     @Resource
     private UserService userService;
 
-    @Autowired
-    private ThreadContext threadContext;
 
     @PostMapping
     //http://localhost:9040/user
     public void insert(){
-        System.out.println(threadContext.getWorkIdThreadLocal().get());
         User userPlus = new User();
         userPlus.setAge((byte)11);
         userPlus.setName("001");

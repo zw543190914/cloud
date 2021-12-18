@@ -3,7 +3,7 @@ package com.zw.cloud.tools.mtop;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Preconditions;
 import com.zw.cloud.common.utils.WebResult;
-import com.zw.cloud.tools.base.ThreadContext;
+import com.zw.cloud.tools.threadlocal.InheritableThreadLocalUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -31,8 +31,7 @@ public class MtopService {
 
     @Autowired
     private WebApplicationContext webApplicationConnect;
-    @Autowired
-    private ThreadContext threadContext;
+
 
     private static Map<String, HandlerMethod> methodCache = new HashMap<>(255);
     private static Map<String, Object> serviceCache = new HashMap<>(255);
@@ -88,8 +87,6 @@ public class MtopService {
         Preconditions.checkArgument(methodParameters.length == args.size(), "参数数量不正确，请核对参数");
 
         //写入用户信息
-        threadContext.getWorkIdThreadLocal().set(workId);
-        threadContext.getWorkNameThreadLocal().set(workName);
 
         Object value;
         Map<String, Object> resultMap = new HashMap<>();
