@@ -4,7 +4,7 @@ import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.exception.ExcelDataConvertException;
 import com.alibaba.fastjson.JSON;
-import com.zw.cloud.tools.dao.UserDao;
+import com.zw.cloud.tools.dao.UserMapper;
 import com.zw.cloud.tools.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import java.util.LinkedList;
@@ -16,7 +16,7 @@ import java.util.List;
 @Slf4j
 public class ExcelListener extends AnalysisEventListener<User> {
 
-    private final UserDao userDao;
+    private final UserMapper userDao;
 
     /**
      * 每隔5条存储数据库，实际使用中可以3000条，然后清理list ，方便内存回收
@@ -25,7 +25,7 @@ public class ExcelListener extends AnalysisEventListener<User> {
     //存储待导入的数据列表
     private final List<User> userList = new LinkedList<>();
 
-    public ExcelListener(UserDao userDao) {
+    public ExcelListener(UserMapper userDao) {
         this.userDao = userDao;
     }
 

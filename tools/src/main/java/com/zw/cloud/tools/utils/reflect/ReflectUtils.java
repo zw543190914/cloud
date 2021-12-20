@@ -21,7 +21,7 @@ public class ReflectUtils {
         User user = new User();
         user.setId(1L);
         user.setName("test");
-        user.setGmtCreate(new Date());
+        user.setCreateTime(new Date());
         System.out.println(ReflectUtil.getFieldValue(user,"gmtCreate"));
         System.out.println(ReflectUtil.getFieldValue(user,"name"));
 

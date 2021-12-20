@@ -2,8 +2,7 @@ package com.zw.cloud.tools.controller;
 
 
 import com.zw.cloud.tools.dao.TcDao;
-import com.zw.cloud.tools.dao.UserDao;
-import com.zw.cloud.tools.entity.Tc;
+import com.zw.cloud.tools.dao.UserMapper;
 import com.zw.cloud.tools.entity.User;
 import com.zw.cloud.tools.handler.poi.SheetHandler;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +41,7 @@ import java.util.*;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ExcelController {
 
-    private final UserDao mapper;
+    private final UserMapper mapper;
 
     private final TcDao tcMapper;
 
@@ -104,7 +102,7 @@ public class ExcelController {
             u.setName("zw" + k);
             u.setAge((byte)(random.nextInt(100)));
             u.setBir(date);
-            u.setDescription("描述:" + k);
+            //u.setDescription("描述:" + k);
             userList.add(u);
         }
         List<String> nameList = Arrays.asList("id","1", "2", "3", "4","5","blue1","blue2");

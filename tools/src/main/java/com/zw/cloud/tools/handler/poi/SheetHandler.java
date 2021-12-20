@@ -50,9 +50,9 @@ public class SheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
                 case "C":
                     user.setAge(Byte.valueOf(formattedValue));
                     break;
-                case "D":
+               /* case "D":
                     user.setDescription(formattedValue);
-                    break;
+                    break;*/
                 case "E":
                     try {
                         Date date = format.parse(formattedValue);

@@ -5,7 +5,7 @@ import com.alibaba.excel.EasyExcelFactory;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.read.metadata.ReadSheet;
 import com.alibaba.fastjson.JSON;
-import com.zw.cloud.tools.dao.UserDao;
+import com.zw.cloud.tools.dao.UserMapper;
 import com.zw.cloud.tools.entity.User;
 import com.zw.cloud.tools.excel.listener.ExcelListener;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.*;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class EasyExcelController {
 
-    private final UserDao userDao;
+    private final UserMapper userDao;
 
     @PostMapping
     public void upload(MultipartFile file) throws Exception {
@@ -94,7 +94,7 @@ public class EasyExcelController {
             User data = new User();
             data.setId(Long.valueOf(i));
             data.setName("张三"+ i);
-            data.setDescription("字符串" + i);
+            //data.setDescription("字符串" + i);
             data.setBir(new Date());
             data.setAge((byte)56);
             list.add(data);
