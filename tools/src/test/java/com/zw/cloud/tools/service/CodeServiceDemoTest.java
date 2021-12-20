@@ -6,6 +6,7 @@ import com.zw.cloud.tools.dao.CodeDao;
 import com.zw.cloud.tools.entity.Code;
 import com.zw.cloud.tools.service.impl.CodeServiceImpl;
 import com.zw.cloud.tools.utils.DateTimeUtils;
+import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -28,7 +29,11 @@ class CodeServiceDemoTest {
 
     @BeforeEach
     public void before() {
+
         MockitoAnnotations.openMocks(this);
+        // 解决mybatisplus orderby LambdaQueryWrapper
+        //TableInfoHelper.initTableInfo(new MapperBuilderAssistant(new MybatisConfiguration(), ""), ProductRecord.class);
+
     }
 
 

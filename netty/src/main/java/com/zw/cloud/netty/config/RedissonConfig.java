@@ -23,7 +23,7 @@ public class RedissonConfig {
     public RedissonClient getRedisson(){
 
         Config config = new Config();
-        config.useSingleServer().setAddress("redis://" + host + ":" + port).setConnectionPoolSize(100).setDatabase(0);
+        config.useSingleServer().setAddress("redis://" + host + ":" + port).setConnectionPoolSize(100).setDatabase(6);
         config.setLockWatchdogTimeout(4000);
         //添加主从配置
 //        config.useMasterSlaveServers().setMasterAddress("").setPassword("").addSlaveAddress(new String[]{"",""});
