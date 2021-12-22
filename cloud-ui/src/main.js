@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
+import VueRouter from 'vue-router'
+import router from './router'
+
 
 // 按需引入
 import {  Aside,Button,
@@ -17,6 +20,8 @@ import {  Aside,Button,
   from 'element-ui';
 
 Vue.config.productionTip = false
+Vue.use(VueRouter)
+
 Vue.use(Aside);
 Vue.use(Button);
 Vue.use(Container);
@@ -45,4 +50,5 @@ Vue.use(TableColumn);
 
 new Vue({
   render: h => h(App),
+  router:router
 }).$mount('#app')
