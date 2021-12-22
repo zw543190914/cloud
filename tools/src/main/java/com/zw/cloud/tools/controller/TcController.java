@@ -48,7 +48,7 @@ public class TcController {
     @GetMapping("/add")
     //http://localhost:9040/tc/add
     public void add(){
-        for (int i = 1; i <= 1; i++) {
+        for (int i = 1; i <= 10; i++) {
             String url = "https://webapi.sporttery.cn/gateway/lottery/getHistoryPageListV1.qry?gameNo=85&provinceId=0&pageSize=30&isVerify=1&pageNo="+ i;
             String result = HttpClientUtils.doGet(url, null, null);
             TcResultVO tcResultVO = JSON.parseObject(result, TcResultVO.class);
