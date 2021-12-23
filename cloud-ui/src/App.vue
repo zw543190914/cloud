@@ -6,13 +6,12 @@
           <el-submenu index="1">
             <template slot="title"><i class="el-icon-menu"></i>导航一</template>
             <el-menu-item-group>
-              <template slot="title">分组一</template>
-              <el-menu-item index="1-1">选项1</el-menu-item>
+              <el-menu-item index="1-1" active-class="active" @click="toMainPage">
+                主页
+              </el-menu-item>
               <el-menu-item index="1-2">选项2</el-menu-item>
             </el-menu-item-group>
-            <el-menu-item-group title="分组2">
               <el-menu-item index="1-3">选项3</el-menu-item>
-            </el-menu-item-group>
             <el-submenu index="1-4">
               <template slot="title">选项4</template>
               <el-menu-item index="1-4-1">选项4-1</el-menu-item>
@@ -65,7 +64,7 @@
         </el-header>
 
         <el-main>
-
+          <router-view></router-view>
         </el-main>
       </el-container>
     </el-container>
@@ -73,13 +72,18 @@
 </template>
 
 <script>
-  import Main from "./pages/Main";
   export default {
     name: 'App',
-    components: {
-      Main,
-    },
+    methods:{
+      toMainPage(){
+        this.$router.push({
+          name:'tcMain',
+          query:{
 
+          }
+        })
+      }
+    }
   }
 </script>
 

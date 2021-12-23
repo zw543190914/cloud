@@ -30,14 +30,17 @@ module.exports = {
       */
 
       // 代理服务器 方式2
-      /*devServer: {
+      devServer: {
         proxy: {
           '/vue': {
             target: 'http://localhost:9040',
             pathRewrite:{'^/vue':''},
             ws: true,
-            changeOrigin: true // 
+            changeOrigin: true
           },
+         /*  '/foo': {
+            target: '<other_url>'
+          } */
         }
-      }*/
+      }
   }
