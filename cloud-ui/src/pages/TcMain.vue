@@ -84,7 +84,67 @@
                         :visible.sync="dialogVisible"
                         width="50%"
                         :before-close="handleClose">
-                      <span>这是一段信息</span>
+                      <el-table
+                          :data="data.detail"
+                          border
+                          style="width: 100%">
+                        <el-table-column
+                            fixed
+                            prop="id"
+                            label="日期"
+                            width="150">
+                        </el-table-column>
+                        <el-table-column
+                            prop="one"
+                            label="第一位"
+                            width="120">
+                        </el-table-column>
+                        <el-table-column
+                            prop="two"
+                            label="第二位"
+                            width="120">
+                        </el-table-column>
+                        <el-table-column
+                            prop="three"
+                            label="第三位"
+                            width="120">
+                        </el-table-column>
+                        <el-table-column
+                            prop="four"
+                            label="第四位"
+                            width="120">
+                        </el-table-column>
+                        <el-table-column
+                            prop="five"
+                            label="第五位"
+                            width="120">
+                        </el-table-column>
+                        <el-table-column
+                            prop="six"
+                            label="蓝一"
+                            width="120">
+                          <template slot-scope="scope">
+                            <span style="color:blue"> {{scope.row.six}} </span>
+                          </template>
+                        </el-table-column>
+                        <el-table-column
+                            prop="seven"
+                            label="蓝二"
+                            width="120">
+                          <template slot-scope="scope">
+                            <span style="color:blue"> {{scope.row.seven}} </span>
+                          </template>
+                        </el-table-column>
+                        <el-table-column
+                            fixed="right"
+                            label="操作"
+                            width="100">
+                          <template slot-scope="scope">
+                            <el-button @click="queryTcDetail(scope.row)" type="text" size="small">查看</el-button>
+                            <el-button type="text" size="small">编辑</el-button>
+                          </template>
+                        </el-table-column>
+                      </el-table>
                       <span slot="footer" class="dialog-footer">
                         <el-button @click="dialogVisible = false">取 消</el-button>
                         <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -110,6 +170,7 @@
               data:{
                 list:[],
               },
+              detail:{},
               queryDTO:{
                 pageNo:1,
                 pageSize:20,
@@ -145,9 +206,10 @@
 
           }).then(
               response=>{
-                const result = response.data.data;
+                this.detail = response.data.data;
                 console.log(result)
                 this.dialogVisible = true
+
               },
               error => {
                 alert(error.message)
