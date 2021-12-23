@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
 import com.zw.cloud.common.utils.HttpClientUtils;
+import com.zw.cloud.common.utils.WebResult;
 import com.zw.cloud.tools.dao.TcMapper;
 import com.zw.cloud.tools.entity.Tc;
 import com.zw.cloud.tools.entity.TcExample;
+import com.zw.cloud.tools.entity.dto.QueryDTO;
 import com.zw.cloud.tools.modle.vo.TcResultVO;
 import com.zw.cloud.tools.service.TcService;
 import org.apache.commons.collections4.CollectionUtils;
@@ -40,9 +42,16 @@ public class TcController {
      * @param id 主键
      * @return 单条数据
      */
-    @GetMapping("selectOne")
-    public Tc selectOne(Integer id) {
+    @GetMapping("queryById")
+    public Tc queryById(@RequestParam Integer id) {
         return this.tcService.queryById(id);
+    }
+
+    @PostMapping("pageQuery")
+    //http://localhost:9040/tc/pageQuery
+    public WebResult pageQuery(@RequestBody QueryDTO queryDTO) {
+        //int offset = (queryDTO.getPageNo() - 1) * queryDTO.getPageSize();
+        return WebResult.success().withData(this.tcService.pageQuery(queryDTO));
     }
 
     @GetMapping("/add")

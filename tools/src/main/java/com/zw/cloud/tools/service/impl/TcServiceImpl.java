@@ -1,7 +1,10 @@
 package com.zw.cloud.tools.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zw.cloud.tools.entity.Tc;
 import com.zw.cloud.tools.dao.TcDao;
+import com.zw.cloud.tools.entity.dto.QueryDTO;
 import com.zw.cloud.tools.service.TcService;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +43,13 @@ public class TcServiceImpl implements TcService {
     @Override
     public List<Tc> queryAllByLimit(int offset, int limit) {
         return this.tcDao.queryAllByLimit(offset, limit);
+    }
+
+    @Override
+    public PageInfo<Tc> pageQuery(QueryDTO queryDTO) {
+        PageHelper.startPage(queryDTO.getPageNo(),queryDTO.getPageSize());
+
+        return new PageInfo<>(this.tcDao.queryAll(null));
     }
 
     /**

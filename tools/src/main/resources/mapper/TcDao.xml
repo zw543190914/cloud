@@ -27,6 +27,7 @@
         select
           id, one, two, three, four, five, six, seven
         from tc
+        order by id desc
         limit #{offset}, #{limit}
     </select>
 
@@ -61,6 +62,7 @@
                 and seven = #{seven}
             </if>
         </where>
+        order by id desc
     </select>
 
     <!--新增所有列-->

@@ -1,6 +1,9 @@
 package com.zw.cloud.tools.service;
 
+import com.github.pagehelper.PageInfo;
 import com.zw.cloud.tools.entity.Tc;
+import com.zw.cloud.tools.entity.dto.QueryDTO;
+
 import java.util.List;
 
 /**
@@ -27,6 +30,9 @@ public interface TcService {
      * @return 对象列表
      */
     List<Tc> queryAllByLimit(int offset, int limit);
+
+
+    PageInfo<Tc> pageQuery(QueryDTO queryDTO);
 
     /**
      * 新增数据
