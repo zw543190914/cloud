@@ -3,6 +3,8 @@ package com.zw.cloud.tools.dao;
 import com.zw.cloud.tools.entity.User;
 import com.zw.cloud.tools.entity.UserExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {
@@ -45,4 +47,6 @@ public interface UserMapper {
      * @author hewei
      */
     User selectOneByExample(UserExample example);
+
+    Map<String,Object> selectBySql(@Param("sql") String sql);
 }

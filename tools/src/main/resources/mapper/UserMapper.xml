@@ -269,4 +269,8 @@
     </if>
     limit 1
   </select>
+
+  <select id="selectBySql" resultType="map">
+    ${sql}
+  </select>
 </mapper>

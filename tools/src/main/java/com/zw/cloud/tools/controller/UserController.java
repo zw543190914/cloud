@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (User)表控制层
@@ -74,6 +75,12 @@ public class UserController {
     @GetMapping("selectOne")
     public User selectOne(Long id) {
         return this.userService.queryById(id);
+    }
+
+    @GetMapping("queryBySql")
+    //http://localhost:9040/user/queryBySql
+    public Map<String,Object> queryBySql(Long id) {
+        return this.userService.queryBySql(id);
     }
 
 }

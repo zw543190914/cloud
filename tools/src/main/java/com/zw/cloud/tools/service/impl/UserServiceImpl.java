@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (User)表服务实现类
@@ -69,4 +70,12 @@ public class UserServiceImpl implements UserService {
     public boolean deleteById(Long id) {
         return this.userDao.deleteByPrimaryKey(id) > 0;
     }
+
+    @Override
+    public Map<String,Object> queryBySql(Long id) {
+        //
+        String sql = "select name as '姓名' from user where id = " + id;
+        return this.userDao.selectBySql(sql);
+    }
+
 }

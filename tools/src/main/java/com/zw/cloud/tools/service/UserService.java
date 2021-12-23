@@ -2,6 +2,7 @@ package com.zw.cloud.tools.service;
 
 import com.zw.cloud.tools.entity.User;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (User)表服务接口
@@ -43,5 +44,7 @@ public interface UserService {
      * @return 是否成功
      */
     boolean deleteById(Long id);
+
+    Map<String,Object> queryBySql(Long id);
 
 }
