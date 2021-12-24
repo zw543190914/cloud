@@ -2,8 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
 import router from './router'
-import axios from 'axios'
-
+import dayjs from "./utils/dayjs.min"
 
 // 按需引入
 import {  Aside,Button,
@@ -52,8 +51,10 @@ Vue.use(TableColumn);
 Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$message = Message
 
-axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';//配置请求头信息。
-
+// 全局过滤器
+Vue.filter('dateFormatFilter',function(dateTime,format='YYYY-MM-DD HH:mm:ss'){
+  return dayjs(dateTime).format(format);
+})
 
 new Vue({
   render: h => h(App),

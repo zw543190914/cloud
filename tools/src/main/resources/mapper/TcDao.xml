@@ -12,12 +12,13 @@
         <result property="five" column="five" jdbcType="INTEGER"/>
         <result property="six" column="six" jdbcType="INTEGER"/>
         <result property="seven" column="seven" jdbcType="INTEGER"/>
+        <result property="updateTime" column="update_time"/>
     </resultMap>
 
     <!--查询单个-->
     <select id="queryById" resultMap="BaseResultMap">
         select
-          id, one, two, three, four, five, six, seven
+          id, one, two, three, four, five, six, seven, update_time
         from tc
         where id = #{id}
     </select>
@@ -25,7 +26,7 @@
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="BaseResultMap">
         select
-          id, one, two, three, four, five, six, seven
+          id, one, two, three, four, five, six, seven, update_time
         from tc
         order by id desc
         limit #{offset}, #{limit}
@@ -34,7 +35,7 @@
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="BaseResultMap">
         select
-          id, one, two, three, four, five, six, seven
+          id, one, two, three, four, five, six, seven, update_time
         from tc
         <where>
             <if test="id != null">

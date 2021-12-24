@@ -1,6 +1,6 @@
 import VueRouter from 'vue-router'
 
-import TcMain from '../pages/TcMain'
+import TcMain from '../pages/tc/TcMain'
 
 // 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
 const originalPush = VueRouter.prototype.push
