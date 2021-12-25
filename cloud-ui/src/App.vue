@@ -6,12 +6,12 @@
           <el-submenu index="1">
             <template slot="title"><i class="el-icon-menu" ></i>cloud</template>
             <el-menu-item-group>
-              <el-menu-item index="1-1">
+              <el-menu-item index="1-1"  active-class="active" @click="toMainPage">
                 主页
               </el-menu-item>
-              <el-menu-item index="1-2" active-class="active" @click="toMainPage">TC</el-menu-item>
+              <el-menu-item index="1-2" active-class="active" @click="toTcMainPage">TC</el-menu-item>
             </el-menu-item-group>
-              <el-menu-item index="1-3">选项3</el-menu-item>
+              <el-menu-item index="1-3"  active-class="active" @click="toEcharts">echarts</el-menu-item>
             <el-submenu index="1-4">
               <template slot="title">选项4</template>
               <el-menu-item index="1-4-1">选项4-1</el-menu-item>
@@ -75,14 +75,30 @@
   export default {
     name: 'App',
     methods:{
-      toMainPage(){
-        this.$router.push({
-          name:'tcMain',
-          query:{
+          toTcMainPage(){
+            this.$router.push({
+              name:'tcMain',
+              query:{
 
-          }
-        })
-      }
+              }
+            })
+          },
+        toMainPage(){
+            this.$router.push({
+                name:'main',
+                query:{
+
+                }
+            })
+        },
+        toEcharts(){
+          this.$router.push({
+            name:'echarts',
+            query:{
+
+            }
+          })
+        }
     }
   }
 </script>
