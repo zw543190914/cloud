@@ -136,43 +136,43 @@
                         {
                             name: '第一位',
                             type: 'line',
-                            stack: 'Total',
+                            //stack: 'Total', 值相加
                             data: one
                         },
                         {
                             name: '第二位',
                             type: 'line',
-                            stack: 'Total',
+                            //stack: 'Total',
                             data: two
                         },
                         {
                             name: '第三位',
                             type: 'line',
-                            stack: 'Total',
+                            //stack: 'Total',
                             data: three
                         },
                         {
                             name: '第四位',
                             type: 'line',
-                            stack: 'Total',
+                            // stack: 'Total',
                             data: four
                         },
                         {
                             name: '第五位',
                             type: 'line',
-                            stack: 'Total',
+                            // stack: 'Total',
                             data: five
                         },
                         {
                             name: '蓝一',
                             type: 'line',
-                            stack: 'Total',
+                            // stack: 'Total',
                             data: six
                         },
                         {
                             name: '蓝二',
                             type: 'line',
-                            stack: 'Total',
+                            //  stack: 'Total',
                             data: seven
                         }
                     ]
