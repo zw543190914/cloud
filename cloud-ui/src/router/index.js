@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import TcMain from '../pages/tc/TcMain'
 import Main from '../pages/Main'
 import Echarts from '../pages/echarts/Echarts'
+import EchartsTc from '../pages/echarts/EchartsTc'
 
 // 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
 const originalPush = VueRouter.prototype.push
@@ -15,24 +16,48 @@ const router =  new VueRouter({
     routes:[
         {
             name:'main',
-            path:'/main',
+            path:'/',
             component:Main,
-            meta:{title:'首页'}
-        },
-        {
-            name:'tcMain',
-            path:'/tcMain',
-            component:TcMain,
-            meta:{title:'TC首页'}
+            children:[
+                {
+                    name:'home',
+                    path:'/',
+                    meta:{title:'首页'},
+                    component:()=>import('../pages/home/Home')
+                }
+            ]
         },
         {
             name:'echarts',
             path:'/echarts',
-            component:Echarts,
-            meta:{title:'Echarts'}
+            component:Main,
+            children:[
+                {
+                    path:'/echarts/01',
+                    name:'echarts01',
+                    meta:{title:'折线图'},
+                    component:()=>import('../pages/echarts/Echarts')
+                },
+                {
+                    path:'/echarts/02',
+                    name:'echarts02',
+                    meta:{title:'柱状图'},
+                    component:()=>import('../pages/tc/TcMain')
+                },
+                {
+                    path:'/echarts/tc',
+                    name:'echartsTc',
+                    meta:{title:'统计图'},
+                    component:()=>import('../pages/echarts/EchartsTc')
+                }
+            ]
         },
 
     ],
+})
+
+router.afterEach((to,from)=>{
+    document.title = to.meta.title
 })
 
 export default router
