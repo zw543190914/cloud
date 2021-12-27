@@ -67,8 +67,8 @@
                               label="操作"
                               width="100">
                           <template slot-scope="scope">
-                              <el-button @click="queryTcDetail(scope.row,false)" type="text" size="small">查看</el-button>
-                              <el-button @click="queryTcDetail(scope.row,true)" type="text" size="small">编辑</el-button>
+                              <el-button @click="queryTcDetail(scope.row)" type="text" size="small">查看</el-button>
+                              <el-button @click="editTcDetail(scope.row)" type="text" size="small">编辑</el-button>
                           </template>
                       </el-table-column>
                     </el-table>
@@ -86,35 +86,6 @@
                       </el-pagination>
                     </div>
 
-                    <!-- 详情页对话框-->
-                    <el-dialog
-                        title="详情"
-                        :visible.sync="dialogVisible"
-                        width="70%"
-                        :before-close="handleClose">
-                      <el-table
-                          :data="detail"
-                          border
-                          style="width: 100%">
-                        <el-table-column
-                            v-for="column in columnList"
-                            :key="column.prop"
-                            :prop="column.prop"
-                            :label="column.label"
-                            >
-
-                          <template slot-scope="scope">
-                            <el-button v-if="column.prop === 'action'" type="text" size="small">保存</el-button>
-                            <span v-else type="text" size="small">{{ scope.row[column.prop] }}</span>
-                          </template>
-                        </el-table-column>
-
-                      </el-table>
-                      <span slot="footer" class="dialog-footer">
-                        <el-button @click="dialogVisible = false;clear(detail)">取 消</el-button>
-                        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-                      </span>
-                    </el-dialog>
                 </el-main>
             </el-container>
         </el-container>
@@ -123,7 +94,7 @@
 
 <script>
 
-    import {tc_pageQuery,tc_queryDetail} from '@/api/tc/tc'
+    import {tc_pageQuery} from '@/api/tc/tc'
 
     export default {
         name:'TcMain',
@@ -135,23 +106,10 @@
               data:{
                 list:[],
               },
-              detail:[],
               queryDTO:{
                 pageNo:1,
                 pageSize:10,
               },
-              dialogVisible: false,
-              columnList: [
-                {fixed: true, prop: "id", label: "id"},
-                {fixed: false, prop: "one", label: "第一位"},
-                {fixed: false, prop: "two", label: "第二位"},
-                {fixed: false, prop: "three", label: "第三位"},
-                {fixed: false, prop: "four", label: "第四位"},
-                {fixed: false, prop: "five", label: "第五位"},
-                {fixed: false, prop: "six", label: "蓝一"},
-                {fixed: false, prop: "seven", label: "蓝二"},
-                {fixed: false, prop: "updateTime", label: "更新时间"},
-              ]
             }
         },
       mounted() {
@@ -171,13 +129,22 @@
       },
 
       methods: {
-        queryTcDetail(data,edit){
-          this.detail[0] = data
-          if (edit) {
-            this.columnList.push({fixed: true, prop: "action", label: "操作"})
-          }
-          console.log(this.detail)
-          this.dialogVisible = true
+        queryTcDetail(data){
+          this.$router.push({
+            name:'tc-detail',
+            query:{
+              id:data.id
+            }
+          })
+          //this.$bus.$emit('showTcDetail',data.id)
+        },
+        editTcDetail(data){
+          this.$router.push({
+            name:'tc-edit',
+            query:{
+              tc:data
+            }
+          })
         },
         handleSizeChange(size) {
           this.queryDTO.pageSize = size
@@ -197,19 +164,6 @@
               }
           )
         },
-
-        handleClose(done) {
-          this.$confirm('确认关闭？')
-              .then(_ => {
-                done();
-              })
-              .catch(_ => {});
-        },
-
-        clear(detail){
-          console.log(detail)
-        }
-
       }
     }
 </script>

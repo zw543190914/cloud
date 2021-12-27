@@ -15,7 +15,6 @@ const router =  new VueRouter({
     // mode:'hash',
     routes:[
         {
-            name:'main',
             path:'/',
             component:Main,
             children:[
@@ -25,6 +24,38 @@ const router =  new VueRouter({
                     meta:{title:'首页'},
                     component:()=>import('../pages/home/Home')
                 }
+            ]
+        },
+        {
+            path:'/tc',
+            name:'tc',
+            meta:{title:'TC'},
+            component:Main,
+            children:[
+                {
+                    path:'/tc/main',
+                    name:'tc-main',
+                    meta:{title:'TC'},
+                    component:()=>import('../pages/tc/TcMain')
+                },
+                {
+                    path:'/tc/detail',
+                    name:'tc-detail',
+                    meta:{title:'TC详情'},
+                    component:()=>import('../pages/tc/TcDetail'),
+                },
+                {
+                    path:'/tc/edit',
+                    name:'tc-edit',
+                    meta:{title:'新增/编辑'},
+                    component:()=>import('../pages/tc/TcEdit'),
+                },
+                {
+                    path:'/tc/echarts',
+                    name:'echarts-tc',
+                    meta:{title:'TC统计图'},
+                    component:()=>import('../pages/echarts/EchartsTc')
+                },
             ]
         },
         {
@@ -41,12 +72,6 @@ const router =  new VueRouter({
                 {
                     path:'/echarts/02',
                     name:'echarts02',
-                    meta:{title:'柱状图'},
-                    component:()=>import('../pages/tc/TcMain')
-                },
-                {
-                    path:'/echarts/tc',
-                    name:'echartsTc',
                     meta:{title:'统计图'},
                     component:()=>import('../pages/echarts/EchartsTc')
                 }

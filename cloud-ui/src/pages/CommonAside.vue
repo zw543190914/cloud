@@ -64,6 +64,24 @@
                         icon:'user',
                         url:'UserManage/UserManage'
                     },
+                  {
+                    label:'TC',
+                    icon:'setting',
+                    children:[
+                      {
+                        path:'/tc/tc-main',
+                        name:'tc-main',
+                        label:'TC',
+                        icon:'setting',
+                      },
+                      {
+                        path:'/tc/echarts',
+                        name:'echarts-tc',
+                        label:'TC统计',
+                        icon:'setting',
+                      },
+                    ]
+                  },
                     {
                         label:'图表',
                         icon:'location',
@@ -78,12 +96,6 @@
                                 path:'/echarts/02',
                                 name:'echarts02',
                                 label:'柱状图',
-                                icon:'setting',
-                            },
-                            {
-                                path:'/echarts/tc',
-                                name:'echartsTc',
-                                label:'统计图',
                                 icon:'setting',
                             },
                         ]
