@@ -31,6 +31,7 @@ module.exports = {
 
       // 代理服务器 方式2
       devServer: {
+        port:8087,
         proxy: {
           '/vue': {
             target: 'http://localhost:9040',
