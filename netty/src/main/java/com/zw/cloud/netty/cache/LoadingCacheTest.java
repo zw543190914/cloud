@@ -37,7 +37,6 @@ public class LoadingCacheTest {
 
     private Integer queryFromDB(Integer key){
         System.out.println("db");
-        RedisUtils.
         return key;
     }
 }
