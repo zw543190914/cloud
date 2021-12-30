@@ -63,7 +63,7 @@ public class FileController {
             //String suffixName = fileName.substring(fileName.lastIndexOf("."));
 
             // 设置文件存储路径
-            String filePath = "C:\\download";
+            String filePath = "C:\\download\\";
             String path = filePath + fileName;
 
             File dest = new File(path);

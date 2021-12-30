@@ -7,7 +7,8 @@ import store from './store'
 import dayjs from "./utils/dayjs.min"
 
 // 按需引入
-import {  Aside, Header,
+import {
+  Aside, Header,
   Container,
   Card,
   Col,
@@ -18,12 +19,12 @@ import {  Aside, Header,
   DatePicker,
   Dialog,
   Dropdown, DropdownMenu, DropdownItem,
-  Descriptions,DescriptionsItem,
+  Descriptions, DescriptionsItem,
   Form, FormItem,
   Input, InputNumber,
 
   MessageBox, Message,
-  Menu,Submenu,MenuItem,MenuItemGroup,
+  Menu, Submenu, MenuItem, MenuItemGroup,
   Main,
   Pagination,
   Radio,
@@ -35,7 +36,7 @@ import {  Aside, Header,
   Option,
   OptionGroup,
   Table, TableColumn,
-  Tag,  TimePicker,
+  Tag, TimePicker, Upload,
 }
   from 'element-ui';
 
@@ -84,6 +85,7 @@ Vue.use(Table);
 Vue.use(TableColumn);
 Vue.use(Tag);
 Vue.use(TimePicker)
+Vue.use(Upload)
 
 Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$message = Message
