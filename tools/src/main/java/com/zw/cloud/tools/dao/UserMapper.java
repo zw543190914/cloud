@@ -49,4 +49,7 @@ public interface UserMapper {
     User selectOneByExample(UserExample example);
 
     Map<String,Object> selectBySql(@Param("sql") String sql);
+
+
+    int insertOrUpdate(@Param("user") User user);
 }

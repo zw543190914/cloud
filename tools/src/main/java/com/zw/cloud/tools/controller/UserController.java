@@ -26,6 +26,20 @@ public class UserController {
     private UserService userService;
 
 
+    /**
+     * 不存在插入，存在更新
+     * @param name
+     */
+    @GetMapping("/insertOrUpdate")
+    //http://localhost:9040/user/insertOrUpdate?name=zw&age=18&desc=11
+    public void insertOrUpdate(String name,int age,String desc){
+        User userPlus = new User();
+        userPlus.setAge((byte)age);
+        userPlus.setName(name);
+        userPlus.setDescription(desc);
+        userService.insertOrUpdate(userPlus);
+    }
+
     @PostMapping
     //http://localhost:9040/user
     public void insert(){

@@ -16,17 +16,17 @@ public class MqttPublishSample {
     public static void main(String[] args) throws Exception{
 
         // dev
-        String host = "tcp://axdkagn.iot.gz.baidubce.com";
+        /*String host = "tcp://axdkagn.iot.gz.baidubce.com";
         String userName = "thingidp@axdkagn|dev_test_device_stenter_03|0|MD5";
         String password = "a1b48d70a8d106b861f58c1c32bdb04a";
         String topic = "d/dev_test_device_stenter_03/report";
-        String clientId = "subscribe_test_device";
+        String clientId = "subscribe_test_device";*/
         // qa
-        /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+        String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|qa_test_device_stenter_02|0|MD5";
         String password = "3509803995f1748b7d4c5f1ad9dfb615";
         String topic = "d/qa_test_device_stenter_02/report";
-        String clientId = "subscribe_test_device";*/
+        String clientId = "subscribe_test_device";
 
         int qos = 1;
         // 内存存储
@@ -42,11 +42,11 @@ public class MqttPublishSample {
         connOpts.setPassword(password.toCharArray());
         // 建立连接
         sampleClient.connect(connOpts);
-        //long second = 1635659894;
+        long second = 1640779872;
         int stop;
         int j ;
-        Long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
-        for (int i = 0; i < 20; i++) {
+        //Long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
+        for (int i = 0; i < 1; i++) {
 
             second = second + i;
             if (i%2 == 1) {

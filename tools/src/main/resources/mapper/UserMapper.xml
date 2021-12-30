@@ -270,6 +270,11 @@
     limit 1
   </select>
 
+  <insert id="insertOrUpdate">
+    INSERT INTO `test`.`user`( `name`, age,`description`) VALUES (#{user.name},#{age},#{description})
+      ON DUPLICATE KEY UPDATE description= VALUES(description);
+  </insert>
+
   <select id="selectBySql" resultType="map">
     ${sql}
   </select>

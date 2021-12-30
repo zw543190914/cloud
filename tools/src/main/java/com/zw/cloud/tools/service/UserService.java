@@ -12,6 +12,9 @@ import java.util.Map;
  */
 public interface UserService {
 
+    void insertOrUpdate(User user);
+
+
     /**
      * 通过ID查询单条数据
      *
