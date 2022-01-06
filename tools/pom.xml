@@ -103,10 +103,10 @@
             <artifactId>javase</artifactId>
         </dependency>
         <!--百度人脸识别-->
-        <!--<dependency>
+        <dependency>
             <groupId>com.baidu.aip</groupId>
             <artifactId>java-sdk</artifactId>
-        </dependency>-->
+        </dependency>
         <!--阿里云人脸识别-->
         <dependency>
             <groupId>com.aliyun</groupId>

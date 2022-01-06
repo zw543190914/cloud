@@ -1,4 +1,3 @@
-/*
 package com.zw.cloud.tools.controller;
 
 import com.zw.cloud.tools.utils.BaiduAiUtil;
@@ -76,4 +75,3 @@ public class BaiduAiController {
         return baiduAiUtil.checkPersonByIdCard(faceImage, idCardNumber, name);
     }
 }
-*/

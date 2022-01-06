@@ -1,4 +1,3 @@
-/*
 package com.zw.cloud.tools.utils;
 
 import com.alibaba.fastjson.JSON;
@@ -15,11 +14,10 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-*/
 /**
  * 百度人脸识别
  * http://ai.baidu.com/ai-doc/FACE/8k37c1rqz#%E4%BA%BA%E8%84%B8%E6%90%9C%E7%B4%A2-mn-%E8%AF%86%E5%88%AB
- *//*
+ */
 
 @Component
 public class BaiduAiUtil {
@@ -152,4 +150,3 @@ public class BaiduAiUtil {
     }
 }
  
-*/

@@ -79,7 +79,7 @@ public class AliyunAiUtils {
             logger.info("[AliyunAiUtils][recognizeFace] commonResponse is {}", JSON.toJSONString(recognizeFace));
             return recognizeFace;
         } catch (ClientException e) {
-            logger.error("[AliyunAiUtils][recognizeFace] error is {}", e);
+            logger.error("[AliyunAiUtils][recognizeFace] error is ", e);
             throw e;
         }
     }
@@ -97,7 +97,7 @@ public class AliyunAiUtils {
             logger.info("[AliyunAiUtils][checkFace] doPostJson is {}", doPostJson);
             return doPostJson;
         } catch (Exception e) {
-            logger.error("[AliyunAiUtils][checkFace] error is {}", e);
+            logger.error("[AliyunAiUtils][checkFace] error is ", e);
             throw e;
         }
 
@@ -114,7 +114,7 @@ public class AliyunAiUtils {
         try {
             return client.getCommonResponse(request);
         } catch (ClientException e) {
-            logger.error("[AliyunAiUtils][listFace] error is {}", e);
+            logger.error("[AliyunAiUtils][listFace] error is ", e);
             throw e;
         }
     }
@@ -140,7 +140,7 @@ public class AliyunAiUtils {
             return commonResponse;
 
         } catch (ClientException e) {
-            logger.error("[AliyunAiUtils][oparationFace] error is {}", e);
+            logger.error("[AliyunAiUtils][oparationFace] error is ", e);
             throw new RuntimeException("调用人脸识别服务出错");
         }
     }
