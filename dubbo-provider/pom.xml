@@ -10,6 +10,7 @@
     <artifactId>dubbo-provider</artifactId>
     <version>1.0.0</version>
     <name>dubbo-provider</name>
+    <packaging>jar</packaging>
     <description>Demo project for Spring Boot</description>
 
     <properties>
