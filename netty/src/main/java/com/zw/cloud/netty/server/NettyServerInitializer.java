@@ -21,10 +21,10 @@ public class NettyServerInitializer extends ChannelInitializer<SocketChannel> {
         //以下三个是Http的支持
         //http解码器
         pipeline.addLast(new HttpServerCodec());
-        //支持写大数据流 以块的方式来写的处理器
-        pipeline.addLast(new ChunkedWriteHandler());
         //http聚合器
         pipeline.addLast(new HttpObjectAggregator(1024*1024));
+        //支持写大数据流 以块的方式来写的处理器
+        pipeline.addLast(new ChunkedWriteHandler());
         // webSocket 数据压缩扩展，当添加这个的时候WebSocketServerProtocolHandler的第三个参数需要设置成true
         pipeline.addLast(new WebSocketServerCompressionHandler());
         // ====================== 增加心跳支持 start    ======================
