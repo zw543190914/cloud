@@ -1,7 +1,21 @@
 <template>
-    <div :id="uuid" :style="style">
+    <div>
+        <div>
+            <el-input style="width:200px"
+                    placeholder="请输入查看条数"
+                    v-model.number="queryDTO.pageSize"
+                    clearable>
+            </el-input>
+            <el-row>
+                <el-button round type="primary" @click="getTcData">搜索</el-button>
+            </el-row>
+        </div>
 
+        <div :id="uuid" :style="style">
+
+        </div>
     </div>
+
 </template>
 
 <script>
@@ -62,7 +76,7 @@
             },
             width:{
                 type: String,
-                default: '800px',
+                default: '100%',
             }
         },
 
@@ -82,14 +96,14 @@
                         }
                         this.data = response.data.data;
                         let result = this.data.list
-                        let xAxisData = result.map((item,index) => item.id)
-                        let one = result.map((item,index) => item.one)
-                        let two = result.map((item,index) => item.two)
-                        let three = result.map((item,index) => item.three)
-                        let four = result.map((item,index) => item.four)
-                        let five = result.map((item,index) => item.five)
-                        let six = result.map((item,index) => item.six)
-                        let seven = result.map((item,index) => item.seven)
+                        let xAxisData = result.map((item,index) => item.id).reverse();
+                        let one = result.map((item,index) => item.one).reverse();
+                        let two = result.map((item,index) => item.two).reverse();
+                        let three = result.map((item,index) => item.three).reverse();
+                        let four = result.map((item,index) => item.four).reverse();
+                        let five = result.map((item,index) => item.five).reverse();
+                        let six = result.map((item,index) => item.six).reverse();
+                        let seven = result.map((item,index) => item.seven).reverse();
 
                         this.getCharts(xAxisData,one,two,three,four,five,six,seven)
                     },
@@ -103,7 +117,7 @@
                 console.log(xAxisData)
                 let options = {
                     title: {
-                        text: 'Stacked Line'
+                        text: 'TC Line'
                     },
                     // 触发类型  'item'图形触发：散点图，饼图等无类目轴的图表中使用；
                     // 'axis'坐标轴触发；'none'：什么都不触发。
