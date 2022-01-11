@@ -51,10 +51,7 @@ public class Server {
                     log.error("[Netty Server] Server startup fail");
                 }
             });
-
-            Map<String,Object> serverMap = new HashMap<>();
-            serverMap.put(IpAddressUtils.getIpAddress() + "#" + port,360L);
-            redisUtils.hmset("WEBSOCKET:NODE:LIST", serverMap);
+            redisUtils.sSet("netty-ws-server", IpAddressUtils.getIpAddress() + "#" + port);
             //等待服务监听端口关闭
             future.channel().closeFuture().sync();
         } catch (Exception e) {
@@ -62,7 +59,7 @@ public class Server {
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
-            redisUtils.hdel("WEBSOCKET:NODE:LIST", IpAddressUtils.getIpAddress() + "#" + port);
+            redisUtils.del("netty-ws-server");
             log.warn("[Netty Server] Server shutdown.. ");
         }
     }

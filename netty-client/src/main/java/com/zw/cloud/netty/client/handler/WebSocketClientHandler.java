@@ -77,8 +77,8 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
                     nettyMsgDTO = new NettyMsgDTO();
                     nettyMsgDTO.setData(msgJson);
                     nettyMsgDTO.setTag("add_channel");
-                    nettyMsgDTO.setIdentity("system");
-                    nettyMsgDTO.setTargetChannelId("system");
+                    nettyMsgDTO.setNickName("system");
+
                 }
             }
             // 处理消息

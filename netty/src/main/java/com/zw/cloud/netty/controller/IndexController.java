@@ -1,5 +1,7 @@
 package com.zw.cloud.netty.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.zw.cloud.netty.entity.dto.NettyMsgDTO;
 import com.zw.cloud.netty.server.ServerHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,8 +25,9 @@ public class IndexController {
     @GetMapping("/sendMsg")
     //http://localhost:18092/sendMsg?msg=test
     public void sendMsg(String msg){
-
-        ServerHandler.sendAllMessage(msg);
+        NettyMsgDTO<String> nettyMsgDTO = new NettyMsgDTO<>();
+        nettyMsgDTO.setData(msg);
+        ServerHandler.sendAllMessage(JSON.toJSONString(nettyMsgDTO));
     }
 
 }

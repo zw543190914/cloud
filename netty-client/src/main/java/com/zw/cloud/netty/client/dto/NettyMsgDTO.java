@@ -22,7 +22,7 @@ public class NettyMsgDTO<T> implements Serializable {
     /**
      * 消息发送者身份标识
      */
-    private String identity;
+    private String nickName;
 
     /**
      * 发往的目标组id
@@ -30,9 +30,9 @@ public class NettyMsgDTO<T> implements Serializable {
     private String targetGroupId;
 
     /**
-     * 发往的目标channelId，（当与目标组id共存时，以channelId为优先级）
+     * 发往的目标 targetUserId
      */
-    private String targetChannelId;
+    private String targetUserId;
 
     /**
      * 该消息的回复是否只有发送者自身接收

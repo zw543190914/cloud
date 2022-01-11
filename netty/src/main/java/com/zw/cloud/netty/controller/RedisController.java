@@ -1,6 +1,7 @@
 package com.zw.cloud.netty.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.zw.cloud.netty.utils.IpAddressUtils;
 import com.zw.cloud.netty.utils.RedisLockUtil;
 import com.zw.cloud.netty.utils.RedisUtils;
 import org.checkerframework.checker.units.qual.A;
@@ -49,6 +50,12 @@ public class RedisController {
         for (int j = 0; j < 100; j++) {
             test();
         }
+    }
+
+    @GetMapping("/sSet")
+    //http://localhost:18092/redis/sSet
+    public void sSet() {
+        redisUtils.sSet("netty-ws-server", IpAddressUtils.getIpAddress() + "#" + 111);
     }
 
     private void test() {

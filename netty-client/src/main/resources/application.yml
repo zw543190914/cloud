@@ -13,7 +13,6 @@ spring:
         max-wait: 5000
         max-idle: 5
     timeout: 5000
-#  redis 测试数据 WEBSOCKET:NODE:LIST  127.0.0.1#18888  360
 
   jackson:
     time-zone: GMT+8
@@ -32,8 +31,7 @@ websocket:
     backLog: 1024
     #webSocket 传输最大数据量(不常改)
     data-max-length: 65536000
-    identity: websocket_client
-    identity-token: 24d65adf-b2ea-11eb-8b80-52543945f0dd
+    nick-name: 001
     task:
       # 心跳
       heart-listen-cron: "0 */2 * * * ?"

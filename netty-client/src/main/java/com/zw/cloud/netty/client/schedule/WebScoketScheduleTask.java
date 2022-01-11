@@ -7,6 +7,7 @@ import com.zw.cloud.netty.client.dto.WebSocketConfigDTO;
 import com.zw.cloud.netty.client.enums.EnumNettyMsgTag;
 import com.zw.cloud.netty.client.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -35,7 +36,7 @@ public class WebScoketScheduleTask {
 
         //获取发送服务列表
         List<WebSocketClient> socketClients = WebSocketClientFactory.getWebsocketClientList();
-        if (socketClients == null || socketClients.size() <= 0) {
+        if (CollectionUtils.isEmpty(socketClients)) {
             log.warn("[WebScoketScheduleTask][refreshWebsocketClientHeart] 客户端完成服务连接设备为 null 注意检查service服务器列表");
         } else {
             for (WebSocketClient webSocketClient : WebSocketClientFactory.getWebsocketClientList()) {
@@ -46,8 +47,8 @@ public class WebScoketScheduleTask {
                         try {
                             webSocketClient
                                     .sendMsg(webSocketClient.getChannelId(),
-                                            webSocketConfigDTO.getIdentity(),
-                                            EnumNettyMsgTag.HEART.getKey(), webSocketClient.getChannelId(),
+                                            webSocketConfigDTO.getNickName(),
+                                            EnumNettyMsgTag.HEART.getKey(), null,
                                             webSocketConfigDTO);
                         } catch (Exception e) {
                             log.warn("[WebScoketScheduleTask][refreshWebsocketClientHeart] 客户端心跳异常，", e);

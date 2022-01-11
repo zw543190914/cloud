@@ -26,12 +26,7 @@ public class WebSocketConfigDTO implements Serializable {
     /**
      * 身份标识
      */
-    private String identity;
-
-    /**
-     * 身份token
-     */
-    private String identityToken;
+    private String nickName;
 
     /**
      * webSocket backLog

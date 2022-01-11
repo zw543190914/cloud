@@ -97,8 +97,8 @@ public class WebSocketClient {
                      * 作用是将一个Http的消息组装成一个完成的HttpRequest或者HttpResponse，那么具体的是什么
                      * 取决于是请求还是响应, 该Handler必须放在HttpServerCodec后的后面
                      */
-                    pipeline.addLast(new ChannelHandler[]{new HttpClientCodec(),
-                            new HttpObjectAggregator(webSocketConfigDTO.getDataMaxLength())});
+                    pipeline.addLast(new HttpClientCodec(),
+                            new HttpObjectAggregator(webSocketConfigDTO.getDataMaxLength()));
                     WebSocketClientHandler webSocketClientHandler = new WebSocketClientHandler();
                     webSocketClientHandler.setWebSocketClient(WebSocketClient.this);
                     pipeline.addLast("hookedHandler", webSocketClientHandler);
@@ -107,10 +107,9 @@ public class WebSocketClient {
             });
 
             url = String
-                    .format("%s://%s%s?identity=%s&orgCode=%s&token=%s", webSocketConfigDTO.getWsProtocol(), addr,
+                    .format("%s://%s%s?nickName=%s", webSocketConfigDTO.getWsProtocol(), addr,
                             webSocketConfigDTO.getWsPath(),
-                            webSocketConfigDTO.getIdentity(), webSocketConfigDTO.getIdentity(),
-                            webSocketConfigDTO.getIdentityToken());
+                            webSocketConfigDTO.getNickName());
             URI websocketURI = new URI(url);
             // //根据升级协议，获取http请求头sec-websocket-version获取客户端支持版本
              //根据版本创建不同版本握手对象
@@ -137,18 +136,18 @@ public class WebSocketClient {
      * @param data            消息主体
      * @param targetGroupId   目标组别
      * @param tag             消息tag
-     * @param targetChannelId 目标ChannelId
+     * @param targetUserId 目标ChannelId
      */
     public void sendMsg(Object data, String targetGroupId,
-            String tag, String targetChannelId, WebSocketConfigDTO webSocketConfigDTO) {
+            String tag, String targetUserId, WebSocketConfigDTO webSocketConfigDTO) {
         NettyMsgDTO<Object> nettyMsgDTO = new NettyMsgDTO<>();
         try {
-            nettyMsgDTO.setIdentity(webSocketConfigDTO.getIdentity());
+            nettyMsgDTO.setNickName(webSocketConfigDTO.getNickName());
             nettyMsgDTO.setTargetGroupId(targetGroupId);
             nettyMsgDTO.setData(data);
             nettyMsgDTO.setTag(tag);
             nettyMsgDTO.setOnlySenderReceive(false);
-            nettyMsgDTO.setTargetChannelId(targetChannelId);
+            nettyMsgDTO.setTargetUserId(targetUserId);
             TextWebSocketFrame frame = new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO));
             if (channel == null) {
                 log.info("[WebSocketClient][sendMsg]channel is null, return");

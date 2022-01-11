@@ -33,7 +33,8 @@
         }
         function send(message){
             if(!window.WebSocket){return;}
-            if(socket.readyState == WebSocket.OPEN){
+            if(socket.readyState === WebSocket.OPEN){
+                console.log('message',message)
                 socket.send(message);
             }else{
                 alert("WebSocket 连接没有建立成功！");
@@ -45,9 +46,9 @@
 </head>
 <body>
 <form onSubmit="return false;">
-    <label>ID</label><input type="text" name="uid"  value="${uid}" id="uid" /> <br />
-    <label>TEXT</label><input type="text" name="message" value="这里输入消息" /> <br />
-    <br /> <input type="button" value="发送ws消息"
+    <label>ID</label><input type="text" name="uid"  id="uid" /> <br />
+    <label>TEXT</label><input type="text" name="message" /> <br />
+   <input type="button" value="发送ws消息"
                   onClick="send(this.form.message.value)" />
     <hr color="black" />
     <h3>服务端返回的应答消息</h3>

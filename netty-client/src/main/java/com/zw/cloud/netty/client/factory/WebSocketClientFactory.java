@@ -12,9 +12,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Set;
+import java.util.concurrent.*;
 
 
 @Slf4j
@@ -23,7 +22,7 @@ public class WebSocketClientFactory implements ApplicationRunner, DisposableBean
 
     private static List<WebSocketClient> websocketClientList = new CopyOnWriteArrayList<>();
 
-    private static ExecutorService executorService = Executors.newCachedThreadPool();
+    private static ExecutorService executorService = new ThreadPoolExecutor(4, 6, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(10240),new ThreadPoolExecutor.CallerRunsPolicy());
 
     @Autowired
     private WebSocketConfigDTO webSocketConfigDTO;
@@ -60,14 +59,15 @@ public class WebSocketClientFactory implements ApplicationRunner, DisposableBean
     @Override
     public void run(ApplicationArguments args) throws Exception {
         // 获取服务器和服务器列表 redis 测试数据 WEBSOCKET:NODE:LIST  127.0.0.1#18888  360
-        Map<String, Long> serviceMap = redisUtils.getMapValues("WEBSOCKET:NODE:LIST", Long.class);
+        Set<Object> serverList = redisUtils.sGet("netty-ws-server");
         log.info("[WebSocketClientFactory][run]webSocketConfigDTO is {}",JSON.toJSONString(webSocketConfigDTO));
 
-        for (String addr : serviceMap.keySet()) {
-            log.info("[WebSocketClientFactory][run]addr is {}",addr);
+        for (Object addr : serverList) {
+            String serverAddr = String.valueOf(addr);
+            log.info("[WebSocketClientFactory][run]serverAddr is {}",serverAddr);
             try {
-                addr = addr.replaceAll("#", ":");
-                String finalAddr = addr;
+                serverAddr = serverAddr.replaceAll("#", ":");
+                String finalAddr = serverAddr;
                 executorService.execute(() -> {
                     WebSocketClient webSocketClient = new WebSocketClient(finalAddr, webSocketConfigDTO);
                     //添加客户端列表

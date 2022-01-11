@@ -42,12 +42,12 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     private static ConcurrentHashMap<String, Channel> manage = new ConcurrentHashMap<String, Channel>();
 
-   /* public static  void put(String senderId,Channel channel){
+    public static void put(String senderId,Channel channel){
         manage.put(senderId,channel);
     }
     public static Channel get(String senderId){
         return manage.get(senderId);
-    }*/
+    }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -84,20 +84,20 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     for (String key : fileUploads.keySet()) {
                         //获取文件对象
                         FileUpload file = fileUploads.get(key);
-                        log.info("[ServerHandler][channelRead]FullHttpRequest fileName is {} ",  file.getFile().getPath());
+                        log.info("[ServerHandler][channelRead]FullHttpRequest FileUpload fileName is {} ",  file.getFile().getPath());
                         //获取文件流
                         InputStream in = new FileInputStream(file.getFile());
                         BufferedReader bf = new BufferedReader(new InputStreamReader(in));
                         String content = bf.lines().collect(Collectors.joining("\n"));
                         //打印文件
-                        log.info("[ServerHandler][channelRead]FullHttpRequest content is {}  \n", content);
+                        log.info("[ServerHandler][channelRead]FullHttpRequest FileUpload content is {}  \n", content);
 
                     }
                     //输出参数信息
                     JSONObject params = MultipartBody.getParams();
                     //输出文件信息
-                    log.info("[ServerHandler][channelRead]FullHttpRequest params is {}", JSONObject.toJSONString(params));
-
+                    log.info("[ServerHandler][channelRead]FullHttpRequest FileUpload params is {}", JSONObject.toJSONString(params));
+                    handlerWebSocketFrame(ctx, (WebSocketFrame) msg);
                 }
                 ctx.close();
             } else if(isWebSocketHandShake(request)) { //判断是否为websocket握手请求
@@ -105,17 +105,18 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 Map<String,String> paramMap = getUrlParams(uri);
                 if (MapUtils.isNotEmpty(paramMap)){
                     String newUri = uri.substring(0,uri.indexOf("?"));
-                    log.info("[ServerHandler][channelRead]FullHttpRequest 接收到客户端：{} newUri：{}", ctx.channel().id(),newUri);
+                    log.info("[ServerHandler][channelRead]WebSocketHandShake 接收到客户端：{} newUri：{}", ctx.channel().id(),newUri);
                 }
             } else {
                 Map<String,String> paramMap = getUrlParams(uri);
-                log.info("[ServerHandler][channelRead]FullHttpRequest 接收到客户端：{} 参数是：{}", ctx.channel().id(),JSON.toJSONString(paramMap));
+                log.info("[ServerHandler][channelRead] 接收到客户端：{} 参数是：{}", ctx.channel().id(),JSON.toJSONString(paramMap));
                 //如果url包含参数，需要处理
                 if(uri.contains("?")){
                     String newUri = uri.substring(0,uri.indexOf("?"));
-                    log.info("[ServerHandler][channelRead]FullHttpRequest 接收到客户端：{} newUri：{}", ctx.channel().id(),newUri);
+                    log.info("[ServerHandler][channelRead] 接收到客户端：{} newUri：{}", ctx.channel().id(),newUri);
                 }
                 if (uri.contains("/ws")) {
+                    manage.put(paramMap.get("nickName"),ctx.channel());
                     //接着建立请求
                     super.channelRead(ctx, msg);
                 } else {
@@ -123,7 +124,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 }
             }
 
-        }else if(msg instanceof WebSocketFrame){
+        } else if(msg instanceof WebSocketFrame){
             //处理websocket客户端的消息
             handlerWebSocketFrame(ctx, (WebSocketFrame) msg);
         }
@@ -138,20 +139,25 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     public static void sendAllMessage(String message){
         if (StringUtils.isBlank(message)){
-            System.out.println("message is null");
+            log.info("[ServerHandler][channelRead][sendAllMessage]message is null");
             return;
         }
         try {
-            NettyMsgDTO nettyMsgDTO = JSON.parseObject(message, NettyMsgDTO.class);
+            NettyMsgDTO<String> nettyMsgDTO = JSON.parseObject(message, NettyMsgDTO.class);
+            String nickName = nettyMsgDTO.getNickName();
+            String targetChannelId = nettyMsgDTO.getTargetUserId();
             if (EnumNettyMsgTag.HEART.getKey().equals(nettyMsgDTO.getTag())) {
-                log.info("收到 HEART 消息 , nettyMsgDTO = {}", JSON.toJSONString(nettyMsgDTO));
+                log.info("[ServerHandler][channelRead][sendAllMessage]nickName is {}, heart msg,nettyMsgDTO is {}",nickName,JSON.toJSONString(nettyMsgDTO));
+            } else if (StringUtils.isBlank(targetChannelId)){
+                clients.writeAndFlush(new TextWebSocketFrame(nettyMsgDTO.getData()));
             } else {
-                clients.writeAndFlush( new TextWebSocketFrame(message));
+                Channel channel = manage.get(targetChannelId);
+                channel.writeAndFlush(nettyMsgDTO.getData());
             }
         } catch (Exception e) {
-            log.error("msg转换DTO异常, msg={}", message);
+            log.error("[ServerHandler][channelRead][sendAllMessage]msg转换DTO异常,msg is {},error is ",message,e);
             //收到信息后，群发给所有channel
-            clients.writeAndFlush( new TextWebSocketFrame(message));
+            clients.writeAndFlush(new TextWebSocketFrame(message));
         }
     }
 
@@ -186,6 +192,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void handlerWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame){
+        log.info("[ServerHandler][channelRead]TextWebSocketFrame 接收到客户端：{}", ctx.channel().id());
+
         // 判断是否关闭链路的指令
         if (frame instanceof CloseWebSocketFrame) {
             WebSocketServerHandshaker handshaker = ctx.channel().attr(HAND_SHAKE_ATTR).get();
@@ -218,7 +226,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
             ByteBuf byteBuf = Unpooled.directBuffer(frame.content().capacity());
             byteBuf.writeBytes(frame.content());
-            ctx.writeAndFlush(new BinaryWebSocketFrame(byteBuf));
+            clients.writeAndFlush(new BinaryWebSocketFrame(byteBuf));
         }
     }
 
@@ -244,7 +252,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     }
     //处理握手
     private void handleShake(ChannelHandlerContext ctx, FullHttpRequest request){
-        WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(null, null, false);
+        WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(null, null, true);
         WebSocketServerHandshaker handshaker = wsFactory.newHandshaker(request);
         if (handshaker == null) {
             WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(ctx.channel());

@@ -26,6 +26,6 @@ public class ApplicationListenerReadyEvent implements ApplicationListener<Applic
 
     @Override
     public void destroy() throws Exception {
-        redisUtils.hdel("WEBSOCKET:NODE:LIST", IpAddressUtils.getIpAddress() + "#" + nettyServerPort);
+        redisUtils.del("netty-ws-server");
     }
 }

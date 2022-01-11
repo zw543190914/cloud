@@ -17,7 +17,6 @@ public class NettyHeartUtil {
     public static synchronized void dealClientActive(NettyMsgDTO nettyMsgDTO, WebSocketClient websocketClient) {
         //获取当前客户端连接当前服务端的channel信息
         if (EnumNettyMsgTag.ADD_CHANNEL.getKey().equals(nettyMsgDTO.getTag())) {
-            websocketClient.setChannelId(nettyMsgDTO.getTargetChannelId());
             log.info("[NettyHeartUtil][dealClientActive]收到 add_channel 消息 , nettyMsgDTO = {}", JSON.toJSONString(nettyMsgDTO));
             return;
         }
