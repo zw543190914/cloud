@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 @Component
@@ -47,7 +48,7 @@ public class WebScoketScheduleTask {
                         try {
                             webSocketClient
                                     .sendMsg(webSocketClient.getChannelId(),
-                                            webSocketConfigDTO.getNickName(),
+                                            webSocketConfigDTO.getUserId(),
                                             EnumNettyMsgTag.HEART.getKey(), null,
                                             webSocketConfigDTO);
                         } catch (Exception e) {
@@ -83,23 +84,22 @@ public class WebScoketScheduleTask {
         log.info("[WebScoketScheduleTask][reconnectionClientHeart] reconnectionClientHeart start... ");
 
         //获取系统websocket服务
-        Map<String, Long> serviceMap = redisUtils
-                .getMapValues("WEBSOCKET:NODE:LIST",Long.class);
-        if (MapUtils.isEmpty(serviceMap)){
+        Set<Object> serverSet = redisUtils.sGet("netty-ws-server");
+        if (CollectionUtils.isEmpty(serverSet)){
             log.info("[WebScoketScheduleTask][reconnectionClientHeart] websocket服务器列表为空...");
 
         }
         //服务器列表
-        List<String> webScocketList = new ArrayList<>(serviceMap.size());
+        List<String> webScocketList = new ArrayList<>();
 
-        for (String ipAndPortStr : serviceMap.keySet()) {
-
-            Long connectionTime = serviceMap.get(ipAndPortStr);
-            log.info("[WebScoketScheduleTask][reconnectionClientHeart] ipAndPortStr is {},connectionTime is {}",ipAndPortStr,connectionTime);
+        for (Object ipAndPortStr : serverSet) {
+            webScocketList.add(String.valueOf(ipAndPortStr).replaceAll("#", ":"));
+            //log.info("[WebScoketScheduleTask][reconnectionClientHeart] ipAndPortStr is {},connectionTime is {}",ipAndPortStr,connectionTime);
             //判断是否要添加到重连列表
-            if (connectionTime > webSocketConfigDTO.getTask().getServiceListenOutTime()) {
+            /*if (3600 > webSocketConfigDTO.getTask().getServiceListenOutTime()) {
+                ipAndPortStr = String.valueOf(ipAndPortStr);
                 webScocketList.add(ipAndPortStr.replaceAll("#", ":"));
-            }
+            }*/
         }
 
         List<String> currentSocketConnectionList = new ArrayList<>();

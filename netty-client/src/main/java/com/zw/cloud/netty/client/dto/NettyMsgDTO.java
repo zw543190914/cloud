@@ -13,7 +13,7 @@ public class NettyMsgDTO<T> implements Serializable {
     /**
      * 消息标签
      */
-    private String tag;
+    private Integer tag;
     /**
      * 消息内容
      */
@@ -22,7 +22,7 @@ public class NettyMsgDTO<T> implements Serializable {
     /**
      * 消息发送者身份标识
      */
-    private String nickName;
+    private String userId;
 
     /**
      * 发往的目标组id

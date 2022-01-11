@@ -107,9 +107,9 @@ public class WebSocketClient {
             });
 
             url = String
-                    .format("%s://%s%s?nickName=%s", webSocketConfigDTO.getWsProtocol(), addr,
+                    .format("%s://%s%s?userId=%s", webSocketConfigDTO.getWsProtocol(), addr,
                             webSocketConfigDTO.getWsPath(),
-                            webSocketConfigDTO.getNickName());
+                            webSocketConfigDTO.getUserId());
             URI websocketURI = new URI(url);
             // //根据升级协议，获取http请求头sec-websocket-version获取客户端支持版本
              //根据版本创建不同版本握手对象
@@ -139,10 +139,10 @@ public class WebSocketClient {
      * @param targetUserId 目标ChannelId
      */
     public void sendMsg(Object data, String targetGroupId,
-            String tag, String targetUserId, WebSocketConfigDTO webSocketConfigDTO) {
+            Integer tag, String targetUserId, WebSocketConfigDTO webSocketConfigDTO) {
         NettyMsgDTO<Object> nettyMsgDTO = new NettyMsgDTO<>();
         try {
-            nettyMsgDTO.setNickName(webSocketConfigDTO.getNickName());
+            nettyMsgDTO.setUserId(webSocketConfigDTO.getUserId());
             nettyMsgDTO.setTargetGroupId(targetGroupId);
             nettyMsgDTO.setData(data);
             nettyMsgDTO.setTag(tag);

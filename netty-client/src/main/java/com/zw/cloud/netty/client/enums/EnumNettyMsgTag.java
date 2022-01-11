@@ -8,28 +8,26 @@ import java.util.Set;
  */
 public enum EnumNettyMsgTag {
 
-    HEART("client_heart", "心跳"),
-    ADD_CHANNEL("add_channel", "新增channel信息"),
-    ADD_CHANNEL_FAILURE("failure_heart_channel", "心跳连接失败");
-
-    private String key;
+    CONNECT(1, "第一次(或重连)初始化连接"),
+    CHAT(2, "聊天消息"),
+    SIGNED(3, "消息签收"),
+    HEART(4, "客户端保持心跳"),
+    PULL_FRIEND(5, "拉取好友"),
+    CONNECT_FAIL(6, "连接失败");
+    private Integer key;
     private String desc;
 
-    EnumNettyMsgTag(String key, String desc) {
+    EnumNettyMsgTag(Integer key, String desc) {
         this.key = key;
         this.desc = desc;
     }
 
-    public String getKey() {
+    public Integer getKey() {
         return key;
     }
 
-    public String getDesc() {
-        return desc;
-    }
-
-    public static Set<String> allKeys(){
-        Set<String> keys = new HashSet<>();
+    public static Set<Integer> allKeys(){
+        Set<Integer> keys = new HashSet<>();
         for (EnumNettyMsgTag value : EnumNettyMsgTag.values()) {
             keys.add(value.key);
         }

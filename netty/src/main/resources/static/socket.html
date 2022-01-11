@@ -18,7 +18,6 @@
                 // var msgData = msg.toString().split(":")[1]
                 var msgData = event.data;
                 ta.value += msgData+"\r\n";
-                uidValue.value = uid;
             };
             socket.onopen = function(event){
                 var ta = document.getElementById('responseText');
@@ -31,11 +30,19 @@
         }else{
             alert("您的浏览器不支持WebSocket协议！");
         }
-        function send(message){
+        let count = 1;
+        function send(message,uid,targetId){
             if(!window.WebSocket){return;}
             if(socket.readyState === WebSocket.OPEN){
-                console.log('message',message)
-                socket.send(message);
+                const tag = count === 1 ? 1 : 2;
+                let msg = {
+                    tag:tag,
+                    userId:uid,
+                    targetUserId:targetId,
+                    data:message
+                };
+                console.log('msg',JSON.stringify(msg));
+                socket.send(JSON.stringify(msg));
             }else{
                 alert("WebSocket 连接没有建立成功！");
             }
@@ -47,9 +54,10 @@
 <body>
 <form onSubmit="return false;">
     <label>ID</label><input type="text" name="uid"  id="uid" /> <br />
+    <label>target ID</label><input type="text" name="targetId"  id="targetId" /> <br />
     <label>TEXT</label><input type="text" name="message" /> <br />
    <input type="button" value="发送ws消息"
-                  onClick="send(this.form.message.value)" />
+                  onClick="send(this.form.message.value,this.form.uid.value,this.form.targetId.value)" />
     <hr color="black" />
     <h3>服务端返回的应答消息</h3>
     <textarea id="responseText" style="width: 1024px;height: 300px;"></textarea>

@@ -74,11 +74,6 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
                     log.info("[WebSocketClientHandler][channelRead0] msg转换DTO, msg={}", msgJson);
                 } catch (Exception e) {
                     log.error("[WebSocketClientHandler][channelRead0] msg转换DTO异常, msg={}", msgJson);
-                    nettyMsgDTO = new NettyMsgDTO();
-                    nettyMsgDTO.setData(msgJson);
-                    nettyMsgDTO.setTag("add_channel");
-                    nettyMsgDTO.setNickName("system");
-
                 }
             }
             // 处理消息

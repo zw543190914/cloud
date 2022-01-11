@@ -10,6 +10,6 @@ public class SendMsgController {
     @GetMapping("/sendMsg")
     //http://localhost:18093/sendMsg?msg=test2
     public void sendMsg(String msg){
-        WebSocketSendMsgUtil.sendMsg(msg,"group1","tag1");
+        WebSocketSendMsgUtil.sendMsg(msg,"group1",2);
     }
 }
