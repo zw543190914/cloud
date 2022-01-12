@@ -59,7 +59,7 @@ public class WebScoketScheduleTask {
                                 .getWebSocketConfigDTO()
                                 .getTask()
                                 .getConnnetFailureCountNum();
-                        log.warn("[WebScoketScheduleTask][refreshWebsocketClientHeart] connnetFailureCountNum is {},failureCountNum is {}", connnetFailureCountNum,failureCountNum);
+                        log.warn("[WebScoketScheduleTask][refreshWebsocketClientHeart] connectFailureCountNum is {},config failureCountNum is {}", connnetFailureCountNum,failureCountNum);
                         if (connnetFailureCountNum >= failureCountNum) {
                             log.info("[WebScoketScheduleTask][refreshWebsocketClientHeart]服务器 {} 无法连接 ， 客户端关闭 ", webSocketClient.getAddr());
                             webSocketClient.getChannel().close();

@@ -26,11 +26,12 @@ public class IndexController {
 
     @GetMapping("/sendMsg")
     //http://localhost:18092/sendMsg?msg=test
-    public void sendMsg(String msg){
+    public void sendMsg(String msg,String targetUserId){
         NettyMsgDTO<String> nettyMsgDTO = new NettyMsgDTO<>();
         nettyMsgDTO.setUserId("0000");
         nettyMsgDTO.setData(msg);
-        ServerHandler.sendAllMessage(nettyMsgDTO);
+        nettyMsgDTO.setTargetUserId(targetUserId);
+        ServerHandler.sendTextMessage(nettyMsgDTO);
     }
 
 }

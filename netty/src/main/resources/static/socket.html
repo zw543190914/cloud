@@ -4,40 +4,44 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Netty-Websocket</title>
     <script type="text/javascript">
-        var socket;
+        let socket;
         if(!window.WebSocket){
             window.WebSocket = window.MozWebSocket;
         }
+        const userId = new Date().getTime();
         if(window.WebSocket){
-            socket = new WebSocket("ws://127.0.0.1:18888/ws");
+            socket = new WebSocket("ws://127.0.0.1:18888/ws/?userId=" + userId );
             socket.onmessage = function(event){
-                var ta = document.getElementById('responseText');
+                const ta = document.getElementById('responseText');
                 // var uidValue = document.getElementById('uid');
                 // var msg = event.data;
                 // var uid = msg.toString().split(":")[0];
                 // var msgData = msg.toString().split(":")[1]
-                var msgData = event.data;
-                ta.value += msgData+"\r\n";
+                const msgData = event.data;
+                const msg = JSON.parse(msgData);
+                ta.value += msg.data +"\r\n";
             };
             socket.onopen = function(event){
-                var ta = document.getElementById('responseText');
+                const ta = document.getElementById('responseText');
                 ta.value = "Netty-WebSocket服务器。。。。。。连接  \r\n";
+                const userIdEl = document.getElementById('userId');
+                userIdEl.innerText = userId;
             };
             socket.onclose = function(event){
-                var ta = document.getElementById('responseText');
+                const ta = document.getElementById('responseText');
                 ta.value = "Netty-WebSocket服务器。。。。。。关闭 \r\n";
             };
         }else{
             alert("您的浏览器不支持WebSocket协议！");
         }
         let count = 1;
-        function send(message,uid,targetId){
+        function send(message,targetId){
             if(!window.WebSocket){return;}
             if(socket.readyState === WebSocket.OPEN){
                 const tag = count === 1 ? 1 : 2;
                 let msg = {
                     tag:tag,
-                    userId:uid,
+                    userId:userId,
                     targetUserId:targetId,
                     data:message
                 };
@@ -53,11 +57,11 @@
 </head>
 <body>
 <form onSubmit="return false;">
-    <label>ID</label><input type="text" name="uid"  id="uid" /> <br />
-    <label>target ID</label><input type="text" name="targetId"  id="targetId" /> <br />
-    <label>TEXT</label><input type="text" name="message" /> <br />
+    <label>当前用户ID: </label><span id="userId"></span> <br />
+    <label>目标用户ID:</label><input type="text" name="targetId"  id="targetId" /> <br />
+    <label>消息内容:</label><input type="text"  style="width: 80%" name="message" /> <br />
    <input type="button" value="发送ws消息"
-                  onClick="send(this.form.message.value,this.form.uid.value,this.form.targetId.value)" />
+                  onClick="send(this.form.message.value,this.form.targetId.value)" />
     <hr color="black" />
     <h3>服务端返回的应答消息</h3>
     <textarea id="responseText" style="width: 1024px;height: 300px;"></textarea>

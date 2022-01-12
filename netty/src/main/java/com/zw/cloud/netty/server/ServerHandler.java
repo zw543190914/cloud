@@ -13,14 +13,12 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.multipart.*;
 import io.netty.handler.codec.http.websocketx.*;
-import io.netty.handler.stream.ChunkedStream;
 import io.netty.util.AttributeKey;
 import io.netty.util.CharsetUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.Assert;
 
 import java.io.*;
 import java.net.URLEncoder;
@@ -31,8 +29,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static io.netty.buffer.Unpooled.copiedBuffer;
-import static io.netty.handler.codec.http.HttpHeaderNames.CONNECTION;
-import static io.netty.handler.codec.http.HttpHeaderValues.KEEP_ALIVE;
 
 @Slf4j
 public class ServerHandler extends ChannelInboundHandlerAdapter {
@@ -124,12 +120,13 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     String newUri = uri.substring(0, uri.indexOf("?"));
                     log.info("[ServerHandler][channelRead] 接收到客户端：{} newUri：{}", ctx.channel().id(), newUri);
                 }
-                if (uri.contains("/ws")) {
-                    //接着建立请求
+               /* if (uri.contains("/ws")) {
+                    //接着建立请求--http一直保持
                     super.channelRead(ctx, msg);
                 } else {
                     ctx.close();
-                }
+                }*/
+                ctx.close();
             }
 
         } else if (msg instanceof WebSocketFrame) {
@@ -145,17 +142,21 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         ctx.channel().close();
     }
 
-    public static void sendAllMessage(NettyMsgDTO nettyMsgDTO) {
+    public static void sendTextMessage(NettyMsgDTO<String> nettyMsgDTO) {
 
         String userId = nettyMsgDTO.getUserId();
-        String targetChannelId = nettyMsgDTO.getTargetUserId();
+        String targetUserId = nettyMsgDTO.getTargetUserId();
         if (EnumNettyMsgTag.HEART.getKey().equals(nettyMsgDTO.getTag())) {
             log.info("[ServerHandler][channelRead][sendAllMessage]userId is {}, heart msg,nettyMsgDTO is {}", userId, JSON.toJSONString(nettyMsgDTO));
-        } else if (StringUtils.isNotBlank(targetChannelId)) {
-            Channel channel = userManage.get(targetChannelId);
-            channel.writeAndFlush(nettyMsgDTO.getData());
+        } else if (StringUtils.isNotBlank(targetUserId)) {
+            Channel channel = userManage.get(targetUserId);
+            if (channel.isActive()){
+                channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
+            } else {
+                log.info("[ServerHandler][channelRead][sendAllMessage]userId is {}, targetUserId is {},用户离线", userId, targetUserId);
+            }
         } else {
-            clients.writeAndFlush(new TextWebSocketFrame(String.valueOf(nettyMsgDTO.getData())));
+            clients.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
         }
 
     }
@@ -194,7 +195,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         ctx.writeAndFlush(resp).addListener(ChannelFutureListener.CLOSE);
     }
 
-    private String handlerWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame, JSONObject params) {
+    private void handlerWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame, JSONObject params) {
         log.info("[ServerHandler][channelRead]TextWebSocketFrame 接收到客户端：{}", ctx.channel().id());
 
         // 判断是否关闭链路的指令
@@ -202,16 +203,16 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             WebSocketServerHandshaker handshaker = ctx.channel().attr(HAND_SHAKE_ATTR).get();
             if (handshaker == null) {
                 ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
-                return null;
+                return;
             }
             handshaker.close(ctx.channel(), (CloseWebSocketFrame) frame.retain());
-            return null;
+            return;
         }
         // 判断是否ping消息
         if (frame instanceof PingWebSocketFrame) {
             ctx.channel().write(
                     new PongWebSocketFrame(frame.content().retain()));
-            return null;
+            return;
         }
         // 文本消息
         Integer tag = null;
@@ -222,18 +223,18 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             log.info("[ServerHandler][channelRead]TextWebSocketFrame channelId is {} msg is {}", ctx.channel().id(), msg.text());
             if (StringUtils.isBlank(msg.text())) {
                 log.info("[ServerHandler][channelRead][sendAllMessage]message is null");
-                return null;
+                return;
             }
-            NettyMsgDTO nettyMsgDTO = JSON.parseObject(msg.text(), NettyMsgDTO.class);
+            NettyMsgDTO<String> nettyMsgDTO = JSON.parseObject(msg.text(), NettyMsgDTO.class);
             tag = nettyMsgDTO.getTag();
             userId = nettyMsgDTO.getUserId();
             if (Objects.isNull(tag)) {
                 nettyMsgDTO.setData("msg tag is null");
                 nettyMsgDTO.setTargetUserId(userId);
-                sendAllMessage(nettyMsgDTO);
-                return "msg tag is null";
+                sendTextMessage(nettyMsgDTO);
+                return;
             } else {
-                sendAllMessage(nettyMsgDTO);
+                sendTextMessage(nettyMsgDTO);
 
             }
         }
@@ -253,7 +254,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         if (Objects.equals(tag,EnumNettyMsgTag.CONNECT.getKey()) && StringUtils.isNotBlank(userId)) {
             userManage.put(userId,ctx.channel());
         }
-        return null;
     }
 
     //判断是否为文件上传

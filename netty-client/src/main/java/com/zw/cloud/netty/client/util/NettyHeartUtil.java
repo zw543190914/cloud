@@ -17,15 +17,15 @@ public class NettyHeartUtil {
     public static synchronized void dealClientActive(NettyMsgDTO nettyMsgDTO, WebSocketClient websocketClient) {
         //获取当前客户端连接当前服务端的channel信息
         if (EnumNettyMsgTag.CONNECT.getKey().equals(nettyMsgDTO.getTag())) {
-            log.info("[NettyHeartUtil][dealClientActive]收到 CONNECT 消息 , nettyMsgDTO = {}", JSON.toJSONString(nettyMsgDTO));
+            log.info("[NettyHeartUtil][dealClientActive]收到 {} CONNECT 消息 , nettyMsgDTO = {}", nettyMsgDTO.getUserId(),JSON.toJSONString(nettyMsgDTO));
             return;
         }
         if (EnumNettyMsgTag.HEART.getKey().equals(nettyMsgDTO.getTag())) {
-            log.info("[NettyHeartUtil][dealClientActive]收到 HEART 消息 , nettyMsgDTO = {}", JSON.toJSONString(nettyMsgDTO));
+            log.info("[NettyHeartUtil][dealClientActive]收到 {} HEART 消息 , nettyMsgDTO = {}", nettyMsgDTO.getUserId(),JSON.toJSONString(nettyMsgDTO));
             return;
         }
         if (EnumNettyMsgTag.CONNECT_FAIL.getKey().equals(nettyMsgDTO.getTag())) {
-            log.info("[NettyHeartUtil][dealClientActive]收到 CONNECT_FAIL 消息 , nettyMsgDTO = {}", JSON.toJSONString(nettyMsgDTO));
+            log.info("[NettyHeartUtil][dealClientActive]收到 {} CONNECT_FAIL 消息 , nettyMsgDTO = {}",nettyMsgDTO.getUserId(), JSON.toJSONString(nettyMsgDTO));
             websocketClient.close();
         }
     }
