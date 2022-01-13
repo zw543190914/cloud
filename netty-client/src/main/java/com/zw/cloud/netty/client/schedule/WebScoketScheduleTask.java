@@ -40,17 +40,17 @@ public class WebScoketScheduleTask {
         if (CollectionUtils.isEmpty(socketClients)) {
             log.warn("[WebScoketScheduleTask][refreshWebsocketClientHeart] 客户端完成服务连接设备为 null 注意检查service服务器列表");
         } else {
-            for (WebSocketClient webSocketClient : WebSocketClientFactory.getWebsocketClientList()) {
+            for (WebSocketClient webSocketClient : socketClients) {
                 try {
                     WebSocketConfigDTO webSocketConfigDTO = webSocketClient.getWebSocketConfigDTO();
                     if (webSocketClient.getChannel() != null) {
                         log.info("[WebScoketScheduleTask][refreshWebsocketClientHeart] 客户端心跳 ---> {}", JSON.toJSONString(webSocketClient));
                         try {
                             webSocketClient
-                                    .sendMsg(webSocketClient.getChannelId(),
-                                            webSocketConfigDTO.getUserId(),
+                                    .sendMsg("ping",
+                                            null,
                                             EnumNettyMsgTag.HEART.getKey(), null,
-                                            webSocketConfigDTO);
+                                            webSocketConfigDTO.getUserId());
                         } catch (Exception e) {
                             log.warn("[WebScoketScheduleTask][refreshWebsocketClientHeart] 客户端心跳异常，", e);
                         }

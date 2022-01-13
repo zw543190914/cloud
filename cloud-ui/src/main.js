@@ -87,6 +87,7 @@ Vue.use(Tag);
 Vue.use(TimePicker)
 Vue.use(Upload)
 
+
 Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$message = Message
 

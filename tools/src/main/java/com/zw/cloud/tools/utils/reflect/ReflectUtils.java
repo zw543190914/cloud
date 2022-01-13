@@ -24,6 +24,7 @@ public class ReflectUtils {
         user.setCreateTime(new Date());
         System.out.println(ReflectUtil.getFieldValue(user,"gmtCreate"));
         System.out.println(ReflectUtil.getFieldValue(user,"name"));
+        System.out.println("parent baseId:" + ReflectUtil.getFieldValue(user,"baseId"));
 
         User user2 = new User();
         Class<User> userClass = User.class;
@@ -31,6 +32,9 @@ public class ReflectUtils {
         name.setAccessible(true);
         System.out.println("name value " + name.get(user));
         System.out.println("name value " + name.get(user2));
+        Class<? super User> superclass = userClass.getSuperclass();
+        System.out.println("parent class :" + superclass.getTypeName());
+
         Field[] declaredFields = userClass.getDeclaredFields();
         for (Field field : declaredFields) {
             if (field.getName().equals("serialVersionUID")) {

@@ -34,8 +34,6 @@ public class WebSocketClient {
 
     private Channel channel;
 
-    private String channelId;
-
     private Integer connnetFailureCountNum = 0;
 
     /**
@@ -139,10 +137,10 @@ public class WebSocketClient {
      * @param targetUserId 目标ChannelId
      */
     public void sendMsg(Object data, String targetGroupId,
-            Integer tag, String targetUserId, WebSocketConfigDTO webSocketConfigDTO) {
+            Integer tag, String targetUserId, String userId) {
         NettyMsgDTO<Object> nettyMsgDTO = new NettyMsgDTO<>();
         try {
-            nettyMsgDTO.setUserId(webSocketConfigDTO.getUserId());
+            nettyMsgDTO.setUserId(userId);
             nettyMsgDTO.setTargetGroupId(targetGroupId);
             nettyMsgDTO.setData(data);
             nettyMsgDTO.setTag(tag);

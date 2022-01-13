@@ -14,7 +14,7 @@ export function download(filename) {
         // const blob = new Blob([content])
         // saveAs(blob, filename)
         console.log(data)
-        download2(data,'application-qa.yml')
+        download2(data,filename)
         downloadLoadingInstance.close();
     }).catch((r) => {
         console.error(r)

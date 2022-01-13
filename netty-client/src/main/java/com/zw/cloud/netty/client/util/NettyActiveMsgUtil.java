@@ -7,7 +7,7 @@ import com.zw.cloud.netty.client.enums.EnumNettyMsgTag;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class NettyHeartUtil {
+public class NettyActiveMsgUtil {
 
     /**
      * 处理客户端上线、下线等存活问题，维护存活的客户端节点列表

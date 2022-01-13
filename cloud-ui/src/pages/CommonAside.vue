@@ -58,11 +58,16 @@
                         url:'MallManage/MallManage'
                     },
                     {
-                        path:'/user',
-                        name:'user',
                         label:'用户管理',
                         icon:'user',
-                        url:'UserManage/UserManage'
+                        children:[
+                          {
+                            path:'/ws/oneToMany',
+                            name:'ws-oneToMany',
+                            label:'websocket',
+                            icon:'setting',
+                          },
+                        ]
                     },
                   {
                     label:'TC',

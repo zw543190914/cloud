@@ -1,5 +1,6 @@
-package com.zw.cloud.netty.server;
+package com.zw.cloud.netty.server.handler;
 
+import com.zw.cloud.netty.server.handler.ServerHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -22,7 +23,7 @@ public class HeartBeatHandler extends ChannelInboundHandlerAdapter {
             } else if (event.state() == IdleState.WRITER_IDLE) {
                 log.info("[HeartBeatHandler][userEventTriggered]进入写空闲...");
             } else if (event.state() == IdleState.ALL_IDLE) {
-                log.info("[HeartBeatHandler][userEventTriggered]读写空闲，channel关闭前，clients的数量为：{}",ServerHandler.clients.size());
+                log.info("[HeartBeatHandler][userEventTriggered]读写空闲，channel关闭前，clients的数量为：{}", ServerHandler.clients.size());
                 Channel channel = ctx.channel();
                 /*if (ServerHandler.clients.contains(channel)){
                     NettyMsgDTO nettyMsgDTO = new NettyMsgDTO();

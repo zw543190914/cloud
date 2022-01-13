@@ -10,11 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 public class WebSocketSendMsgUtil {
 
 
-    public static boolean sendMsg(Object data, String targetGroupId, Integer tag) {
+    public static boolean sendMsg(Object data, String targetGroupId, String targetUserId, Integer tag) {
         log.info("[WebSocketSendMsgUtil][sendMsg]websocket消息发送，targetGroupId={}，tag={}，data={}", targetGroupId, tag, JSON.toJSONString(data));
         for (WebSocketClient websocketClient : WebSocketClientFactory.getWebsocketClientList()) {
-            websocketClient.sendMsg(data, targetGroupId, tag, null,
-                    websocketClient.getWebSocketConfigDTO());
+            websocketClient.sendMsg(data, targetGroupId, tag, targetUserId,
+                    websocketClient.getWebSocketConfigDTO().getUserId());
         }
         return true;
     }

@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class User implements Serializable {
+public class User extends Base implements Serializable {
     private Long id;
 
     private String name;
@@ -25,4 +25,8 @@ public class User implements Serializable {
 
     private String description;
 
+}
+
+class Base {
+    private Long baseId;
 }

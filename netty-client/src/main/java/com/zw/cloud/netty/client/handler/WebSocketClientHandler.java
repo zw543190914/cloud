@@ -4,9 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.zw.cloud.netty.client.enums.EnumNettyMsgTag;
 import com.zw.cloud.netty.client.factory.WebSocketClient;
 import com.zw.cloud.netty.client.dto.NettyMsgDTO;
-import com.zw.cloud.netty.client.util.NettyHeartUtil;
+import com.zw.cloud.netty.client.util.NettyActiveMsgUtil;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.websocketx.*;
@@ -59,6 +58,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
             }
         } else if (msg instanceof FullHttpResponse) {
             response = (FullHttpResponse) msg;
+            log.warn("[WebSocketClientHandler][channelRead0]FullHttpResponse response is {}",response.content());
             //this.listener.onFail(response.status().code(), response.content().toString(CharsetUtil.UTF_8));
             throw new IllegalStateException(
                     "Unexpected FullHttpResponse (getStatus=" + response.status() + ", content=" + response.content()
@@ -82,11 +82,9 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
             }
             if (EnumNettyMsgTag.allKeys().contains(nettyMsgDTO.getTag())) {
                 //处理客户端上线、下线等存活问题，维护存活的客户端节点列表
-                NettyHeartUtil.dealClientActive(nettyMsgDTO, webSocketClient);
+                NettyActiveMsgUtil.dealClientActive(nettyMsgDTO, webSocketClient);
             }
-           /* String targetGroupId = nettyMsgDTO.getTargetGroupId();
-            String identity = nettyMsgDTO.getIdentity();
-            String tag = nettyMsgDTO.getTag();*/
+
 
         } else if (msg instanceof BinaryWebSocketFrame) {
             ByteBuf content = ((BinaryWebSocketFrame) msg).content();

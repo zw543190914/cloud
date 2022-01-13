@@ -1,5 +1,7 @@
 package com.zw.cloud.netty.server;
 
+import com.zw.cloud.netty.server.handler.HeartBeatHandler;
+import com.zw.cloud.netty.server.handler.ServerHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -8,10 +10,8 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
-import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.TimeUnit;
 @Slf4j
 public class NettyServerInitializer extends ChannelInitializer<SocketChannel> {
     @Override

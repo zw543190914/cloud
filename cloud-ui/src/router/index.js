@@ -1,9 +1,8 @@
 import VueRouter from 'vue-router'
 
-import TcMain from '../pages/tc/TcMain'
 import Main from '../pages/Main'
-import Echarts from '../pages/echarts/Echarts'
-import EchartsTc from '../pages/echarts/EchartsTc'
+
+
 
 // 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
 const originalPush = VueRouter.prototype.push
@@ -23,6 +22,19 @@ const router =  new VueRouter({
                     path:'/',
                     meta:{title:'首页'},
                     component:()=>import('../pages/home/Home')
+                }
+            ]
+        },
+        {
+            path:'/user',
+            component:Main,
+            meta:{title:'ws'},
+            children:[
+                {
+                    name:'ws-oneToMany',
+                    path:'/ws/oneToMany',
+                    meta:{title:'聊天室'},
+                    component:()=>import('../pages/ws/OneToMany')
                 }
             ]
         },
