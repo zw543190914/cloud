@@ -64,7 +64,13 @@
                           {
                             path:'/ws/oneToMany',
                             name:'ws-oneToMany',
-                            label:'websocket',
+                            label:'聊天室',
+                            icon:'setting',
+                          },
+                          {
+                            path:'/ws/oneToOne',
+                            name:'ws-oneToOne',
+                            label:'单聊',
                             icon:'setting',
                           },
                         ]

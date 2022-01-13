@@ -11,6 +11,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.util.ResourceLeakDetector;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -41,7 +42,8 @@ public class Server {
             bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
             //禁止使用Nagle算法，便于小数据即时传输
             bootstrap.childOption(ChannelOption.TCP_NODELAY, true);
-
+            // LEAK: ByteBuf.release() was not called before it's garbage-collected.
+            ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED);
             // 	绑定端口，同步等待成功
             ChannelFuture future = bootstrap.bind(port).sync();
             future.addListener(f -> {

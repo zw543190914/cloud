@@ -27,6 +27,7 @@ const router =  new VueRouter({
         },
         {
             path:'/user',
+            name:'ws',
             component:Main,
             meta:{title:'ws'},
             children:[
@@ -35,6 +36,12 @@ const router =  new VueRouter({
                     path:'/ws/oneToMany',
                     meta:{title:'聊天室'},
                     component:()=>import('../pages/ws/OneToMany')
+                },
+                {
+                    name:'ws-oneToOne',
+                    path:'/ws/oneToOne',
+                    meta:{title:'单聊'},
+                    component:()=>import('../pages/ws/OneToOne')
                 }
             ]
         },

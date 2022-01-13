@@ -1,4 +1,5 @@
 <template>
+
   <div title="在线沟通" v-model="chatVisible"
                  :width="580" style="margin-top: 10px">
     <div class="chat">
@@ -25,14 +26,20 @@
         </div>
       </div>
       <div>
-        <el-input v-model = "messageVal" type = "textarea" :rows = "2"  style="width: 545px"  placeholder="主动一点，世界会更大！"/>
+        <el-input v-model = "messageVal" type = "textarea" :rows = "2"  style="width: 540px"  placeholder="主动一点，世界会更大！"/>
       </div>
       <div class="footer-btn">
+        <el-input v-model = "targetUserId" type = "input" style="width: 200px;height: 10px;margin-right: 15px"  placeholder="对方ID"/>
+
 <!--        <el-button class = "filter-item" size="mini" :disabled = "initDisabled" type = "primary" @click = "initWebSocket">初始化</el-button>-->
 
-        <el-button size="mini" type = "success" @click = "pushMessage">发送</el-button>
-
+        <el-button size="mini" type = "success" @click = "pushMsg">发送</el-button>
+        <br>
+        <span v-for="user in onlineUsers" class="message-time">
+          {{user}} <br>
+        </span>
       </div>
+
     </div>
 
   </div>
@@ -42,7 +49,7 @@
 
   const userId = new Date().getTime();
   export default {
-    name: 'ws-oneToMany',
+    name: 'ws-oneToOne',
     data() {
       return {
         initDisabled: false,
@@ -119,8 +126,9 @@
         })
         // 此时可以尝试刷新页面
       },
-      pushMessage() {
+      pushMsg() {
         if (this.websock !== null && this.websock.readyState === 3) {
+          console.log('pushMsg error')
           this.websock.close()
           this.initWebSocket()
         } else if (this.websock.readyState === 1) {
@@ -142,7 +150,7 @@
             isOneself:1})
 
         }
-        /*socketApi.pushMessage(this.messageWin, {message: this.messageVal}).then(res => {
+        /*socketApi.pushMsg(this.messageWin, {message: this.messageVal}).then(res => {
           console.log('发送消息结果：', res)
         })*/
       },
@@ -155,7 +163,7 @@
           if (this.Socket.readyState === 0) {
             this.connecting()
           } else {
-            this.pushMessage()
+            this.pushMsg()
           }
         }, 1000)
       },*/
@@ -175,6 +183,7 @@
 
     },
     mounted() {
+      console.log('mounted')
       this.close()
       this.initWebSocket()
     }
@@ -223,11 +232,10 @@
     font-size:5px;
     color:#D9DAD9;
   }
-
   .footer-btn {
     float:left;
     margin-bottom: 5px;
-    margin-left: 480px;
+    margin-left: 260px;
   }
   .spin-icon-load {
     animation:ani-spin 1s linear infinite;
