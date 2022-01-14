@@ -2,7 +2,7 @@
   <div title="在线沟通" v-model="chatVisible"
                  :width="580" style="margin-top: 10px">
     <div class="chat">
-      <div  class="chat-message-body">
+      <div  class="chat-message-body"  id ="chatform" >
         <span v-if="loading">
           <Icon type="ios-loading" size=18 class="spin-icon-load"></Icon>
         </span>
@@ -58,6 +58,11 @@
         loading:false,
         defualtAvatar:[require('../../../public/nick01.jpeg'),require('../../../public/nick02.jpeg'),require('../../../public/nick03.jpeg')], // 后端没有返回头像默认头像，注意：需要用require请求方式才能动态访问本地文件
         news: [],
+
+        heartTimeout: 60 * 1000, //60秒一次心跳
+        heartBeat: null, //心跳
+        lockReconnect: false, //是否真正建立连接
+        reconnectId: null //断开 重连倒计时
       }
     },
     methods: {
@@ -78,8 +83,32 @@
           this.websock.onclose = this.onclose
           // 发生了错误事件
           this.websock.onerror = this.onerror
+
+          clearInterval(this.heartBeat)
+          this.startHeart()
         }
       },
+      startHeart(){
+        const that = this
+        that.heartBeat = setInterval(function() {
+          //这里发送一个心跳
+          if (that.websock.readyState === 1) {
+            //如果连接正常
+            console.log(that.userId,' send heartbeat')
+            const msgContent = {
+              userId:that.userId,
+              tag:4,
+              data:"heartbeat",
+
+            }
+            that.websock.send(JSON.stringify(msgContent));
+          } else {
+            //否则重连
+            that.reconnect();
+          }
+        }, that.heartTimeout);
+      },
+
       onopen() {
         this.news.push({content:'Socket 已打开',
           createTime:new Date(),
@@ -109,18 +138,18 @@
           userId:this.userId,
           isOneself:1})
 
+        clearInterval(this.heartBeat)
+        clearTimeout(this.reconnectId);
       },
       onerror() {
-        this.$notify.error({
-          title: '发生了错误',
-          message: '此时可以尝试刷新页面',
-          type: 'error',
-          showClose: false
-        })
-        // 此时可以尝试刷新页面
+        console.log(this.userId + ' onerror')
+        clearInterval(this.heartBeat)
+        clearTimeout(this.reconnectId);
+        this.reconnect()
       },
       pushMessage() {
         if (this.websock !== null && this.websock.readyState === 3) {
+          console.log(this.userId + ' pushMsg error,websock.readyState ',this.websock.readyState)
           this.websock.close()
           this.initWebSocket()
         } else if (this.websock.readyState === 1) {
@@ -140,25 +169,29 @@
             createTime:new Date(),
             userId:this.userId,
             isOneself:1})
-
         }
+        this.scrollToBottom()
         /*socketApi.pushMessage(this.messageWin, {message: this.messageVal}).then(res => {
           console.log('发送消息结果：', res)
         })*/
       },
-      /**
-       * 发送数据但连接未建立时进行处理等待重发
-       * @param {any} message 需要发送的数据
-       */
-      /*connecting() {
-        setTimeout(() => {
-          if (this.Socket.readyState === 0) {
-            this.connecting()
-          } else {
-            this.pushMessage()
-          }
-        }, 1000)
-      },*/
+      reconnect() {
+        //重新连接
+        const that = this;
+        if (that.lockReconnect) {
+          return;
+        }
+        console.log('reconnect',that.userId)
+        that.lockReconnect = true;
+        //没连接上会一直重连，设置延迟避免请求过多
+        that.reconnectId && clearTimeout(that.reconnectId);
+        that.reconnectId = setTimeout(function() {
+          //新连接
+          that.initWebSocket();
+          that.lockReconnect = false;
+        }, 1000);
+      },
+
       initDisabledVal() {
         this.initDisabled = false
         this.close()
@@ -167,16 +200,35 @@
         if (this.websock === '') {
           return
         }
+        clearInterval(this.heartBeat)
+        clearTimeout(this.reconnectId)
         this.websock.close()// 关闭websocket
         this.websock.onclose = function (e) {
           console.log(e)// 监听关闭事件
         }
       },
-
+      scrollToBottom(){ // 滚动到窗体底部
+        this.$nextTick(() => {
+          setTimeout(() => {
+            const textarea = document.getElementById('chatform');
+            textarea.scrollTop = textarea.scrollHeight;
+          }, 13)
+        })
+      },
+      beforeunloadFn (e) {
+        this.close()
+      },
     },
     mounted() {
       this.close()
       this.initWebSocket()
+      window.addEventListener('beforeunload', e => this.beforeunloadFn(e))
+
+    },
+    beforeDestroy() {
+      clearInterval(this.heartBeat)
+      clearTimeout(this.reconnectId);
+      window.removeEventListener('beforeunload', e => this.beforeunloadFn(e))
     }
 }
 </script>

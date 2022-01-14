@@ -47,7 +47,7 @@ public class WebScoketScheduleTask {
                         log.info("[WebScoketScheduleTask][refreshWebsocketClientHeart] 客户端心跳 ---> {}", JSON.toJSONString(webSocketClient));
                         try {
                             webSocketClient
-                                    .sendMsg("ping",
+                                    .sendMsg("heart beat",
                                             null,
                                             EnumNettyMsgTag.HEART.getKey(), null,
                                             webSocketConfigDTO.getUserId());

@@ -35,7 +35,7 @@ websocket:
     task:
       # 心跳
       heart-listen-cron: "0 */2 * * * ?"
-      connnet-failure-count-num: 2
+      connnet-failure-count-num: 1
       reconnection-client-cron: "0 */1 * * * ?"
       service-listen-out-time: 10
 

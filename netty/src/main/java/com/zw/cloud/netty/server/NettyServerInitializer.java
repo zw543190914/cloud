@@ -10,7 +10,10 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class NettyServerInitializer extends ChannelInitializer<SocketChannel> {
@@ -30,7 +33,7 @@ public class NettyServerInitializer extends ChannelInitializer<SocketChannel> {
         // ====================== 增加心跳支持 start    ======================
         // 针对客户端，如果在30秒没有向服务端发送读写心跳(ALL)，则主动断开
         // 如果是读空闲或者写空闲，不处理,读写空闲超过300秒，则断开连接
-        //pipeline.addLast(new IdleStateHandler(0, 0, 300, TimeUnit.SECONDS));
+        pipeline.addLast(new IdleStateHandler(0, 0, 300, TimeUnit.SECONDS));
         // 自定义的空闲状态检测
         pipeline.addLast(new HeartBeatHandler());
         // ====================== 增加心跳支持 end    ======================

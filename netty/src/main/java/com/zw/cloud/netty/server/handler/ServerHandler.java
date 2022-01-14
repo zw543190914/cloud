@@ -80,7 +80,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         String userId = nettyMsgDTO.getUserId();
         String targetUserId = nettyMsgDTO.getTargetUserId();
         if (EnumNettyMsgTag.HEART.getKey().equals(nettyMsgDTO.getTag())) {
-            log.info("[ServerHandler][channelRead][sendAllMessage]userId is {}, heart msg,nettyMsgDTO is {}", userId, JSON.toJSONString(nettyMsgDTO));
+            log.info("[ServerHandler][channelRead][sendAllMessage] heart msg,userId is {},nettyMsgDTO is {}", userId, JSON.toJSONString(nettyMsgDTO));
         } else if (StringUtils.isNotBlank(targetUserId)) {
             Channel channel = userManage.get(targetUserId);
             if (channel.isActive()){
@@ -129,7 +129,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             TextWebSocketFrame msg = (TextWebSocketFrame) frame;
             log.info("[ServerHandler][channelRead]TextWebSocketFrame channelId is {} msg is {}", ctx.channel().id(), msg.text());
             if (StringUtils.isBlank(msg.text())) {
-                log.info("[ServerHandler][channelRead][sendAllMessage]message is null");
+                log.info("[ServerHandler][channelRead]TextWebSocketFrame message is null");
                 return;
             }
             NettyMsgDTO<String> nettyMsgDTO = JSON.parseObject(msg.text(), NettyMsgDTO.class);
@@ -142,7 +142,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 return;
             } else {
                 sendTextMessage(nettyMsgDTO);
-
             }
         }
         if (frame instanceof BinaryWebSocketFrame) {
