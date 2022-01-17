@@ -34,7 +34,7 @@ module.exports = {
         port:8087,
         proxy: {
           '/vue': {
-            target: 'http://localhost:9040',
+            target: 'http://localhost:18092',
             pathRewrite:{'^/vue':''},
             ws: true,
             changeOrigin: true

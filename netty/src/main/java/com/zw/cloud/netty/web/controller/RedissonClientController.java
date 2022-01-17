@@ -1,4 +1,4 @@
-package com.zw.cloud.netty.controller;
+package com.zw.cloud.netty.web.controller;
 
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;

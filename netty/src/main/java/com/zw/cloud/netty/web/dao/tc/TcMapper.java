@@ -1,6 +1,6 @@
-package com.zw.cloud.netty.dao.poem;
+package com.zw.cloud.netty.web.dao.tc;
 
-import com.zw.cloud.netty.entity.poem.Poem;
+import com.zw.cloud.netty.web.entity.tc.Tc;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author zw
  * @since 2022-01-17
  */
-public interface PoemMapper extends BaseMapper<Poem> {
+public interface TcMapper extends BaseMapper<Tc> {
 
 }

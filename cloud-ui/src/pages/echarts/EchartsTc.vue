@@ -95,15 +95,15 @@
                             alert(response.data.errorMsg)
                         }
                         this.data = response.data.data;
-                        let result = this.data.list
-                        let xAxisData = result.map((item,index) => item.id).reverse();
-                        let one = result.map((item,index) => item.one).reverse();
-                        let two = result.map((item,index) => item.two).reverse();
-                        let three = result.map((item,index) => item.three).reverse();
-                        let four = result.map((item,index) => item.four).reverse();
-                        let five = result.map((item,index) => item.five).reverse();
-                        let six = result.map((item,index) => item.six).reverse();
-                        let seven = result.map((item,index) => item.seven).reverse();
+                        let result = this.data.records
+                        let xAxisData = result.map((item,index) => item.id);
+                        let one = result.map((item,index) => item.one);
+                        let two = result.map((item,index) => item.two);
+                        let three = result.map((item,index) => item.three);
+                        let four = result.map((item,index) => item.four);
+                        let five = result.map((item,index) => item.five);
+                        let six = result.map((item,index) => item.six);
+                        let seven = result.map((item,index) => item.seven);
 
                         this.getCharts(xAxisData,one,two,three,four,five,six,seven)
                     },

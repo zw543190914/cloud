@@ -1,10 +1,8 @@
-package com.zw.cloud.netty.controller;
+package com.zw.cloud.netty.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.zw.cloud.netty.utils.IpAddressUtils;
-import com.zw.cloud.netty.utils.RedisLockUtil;
 import com.zw.cloud.netty.utils.RedisUtils;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 @RequestMapping("/redis")

@@ -4,7 +4,7 @@
             <el-container>
                 <el-main>
                     <el-table
-                            :data="data.list"
+                            :data="data.records"
                             border
                             style="width: 100%">
                         <el-table-column
@@ -104,7 +104,7 @@
         data() {
             return {
               data:{
-                list:[],
+                records:[],
               },
               queryDTO:{
                 pageNo:1,
@@ -115,6 +115,7 @@
       mounted() {
         tc_pageQuery(this.queryDTO).then(
           response=>{
+            //console.log('tc_pageQuery',response.data.data.records)
             if (!response.data.success) {
               alert(response.data.errorMsg)
             }

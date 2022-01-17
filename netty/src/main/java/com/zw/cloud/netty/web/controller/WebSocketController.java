@@ -1,4 +1,4 @@
-package com.zw.cloud.netty.controller;
+package com.zw.cloud.netty.web.controller;
 
 import com.zw.cloud.netty.entity.dto.NettyMsgDTO;
 import com.zw.cloud.netty.server.handler.ServerHandler;

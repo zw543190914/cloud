@@ -1,6 +1,6 @@
-package com.zw.cloud.netty.service.api.poem;
+package com.zw.cloud.netty.web.service.api.poem;
 
-import com.zw.cloud.netty.entity.poem.Poem;
+import com.zw.cloud.netty.web.entity.poem.Poem;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

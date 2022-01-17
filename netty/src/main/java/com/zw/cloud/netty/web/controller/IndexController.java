@@ -1,8 +1,7 @@
-package com.zw.cloud.netty.controller;
+package com.zw.cloud.netty.web.controller;
 
 
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

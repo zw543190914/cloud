@@ -1,8 +1,8 @@
-package com.zw.cloud.netty.service.impl.poem;
+package com.zw.cloud.netty.web.service.impl.poem;
 
-import com.zw.cloud.netty.entity.poem.Poem;
-import com.zw.cloud.netty.dao.poem.PoemMapper;
-import com.zw.cloud.netty.service.api.poem.IPoemService;
+import com.zw.cloud.netty.web.entity.poem.Poem;
+import com.zw.cloud.netty.web.dao.poem.PoemMapper;
+import com.zw.cloud.netty.web.service.api.poem.IPoemService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

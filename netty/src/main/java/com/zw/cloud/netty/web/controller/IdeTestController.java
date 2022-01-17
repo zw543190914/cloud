@@ -1,4 +1,4 @@
-package com.zw.cloud.netty.controller;
+package com.zw.cloud.netty.web.controller;
 
 import com.zw.cloud.netty.ide.annotation.Ide;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,7 +1,6 @@
-package com.zw.cloud.netty.entity.poem;
+package com.zw.cloud.netty.web.entity.poem;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;

@@ -44,13 +44,13 @@ public class GeneratorCodeUtils {
         // 包配置
         PackageConfig pc = new PackageConfig();
         //pc.setModuleName("模块名");
-        pc.setParent("com.zw.cloud.netty");
-        pc.setController("controller.poem");
-        pc.setService("service.api.poem");
-        pc.setServiceImpl("service.impl.poem");
-        pc.setMapper("dao.poem");
-        pc.setEntity("entity.poem");
-        pc.setXml("dao.poem");
+        pc.setParent("com.zw.cloud.netty.web");
+        pc.setController("controller.tc");
+        pc.setService("service.api.tc");
+        pc.setServiceImpl("service.impl.tc");
+        pc.setMapper("dao.tc");
+        pc.setEntity("entity.tc");
+        pc.setXml("dao.tc");
         mpg.setPackageInfo(pc);
 
         // 策略配置
@@ -58,7 +58,7 @@ public class GeneratorCodeUtils {
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         //表名，多个英文逗号分割
-        strategy.setInclude("poem");
+        strategy.setInclude("tc");
         // 逻辑删除
         strategy.setLogicDeleteFieldName("deleted");
         //strategy.setSuperEntityClass("你自己的父类实体,没有就不用设置!");
