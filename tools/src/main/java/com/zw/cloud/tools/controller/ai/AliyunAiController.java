@@ -1,4 +1,4 @@
-package com.zw.cloud.tools.controller;
+package com.zw.cloud.tools.controller.ai;
 
 import com.aliyuncs.CommonResponse;
 import com.zw.cloud.tools.utils.AliyunAiUtils;

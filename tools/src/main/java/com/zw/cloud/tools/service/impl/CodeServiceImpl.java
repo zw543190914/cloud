@@ -2,7 +2,7 @@ package com.zw.cloud.tools.service.impl;
 
 import com.zw.cloud.tools.entity.Code;
 import com.zw.cloud.tools.dao.CodeDao;
-import com.zw.cloud.tools.service.CodeService;
+import com.zw.cloud.tools.service.api.CodeService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

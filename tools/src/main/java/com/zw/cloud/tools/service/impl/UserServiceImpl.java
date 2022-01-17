@@ -2,7 +2,7 @@ package com.zw.cloud.tools.service.impl;
 
 import com.zw.cloud.tools.dao.UserMapper;
 import com.zw.cloud.tools.entity.User;
-import com.zw.cloud.tools.service.UserService;
+import com.zw.cloud.tools.service.api.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

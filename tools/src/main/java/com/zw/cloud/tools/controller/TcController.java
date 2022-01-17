@@ -10,7 +10,7 @@ import com.zw.cloud.tools.entity.Tc;
 import com.zw.cloud.tools.entity.TcExample;
 import com.zw.cloud.tools.entity.dto.QueryDTO;
 import com.zw.cloud.tools.modle.vo.TcResultVO;
-import com.zw.cloud.tools.service.TcService;
+import com.zw.cloud.tools.service.api.TcService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 

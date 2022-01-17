@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.zw.cloud.tools.entity.Tc;
 import com.zw.cloud.tools.dao.TcDao;
 import com.zw.cloud.tools.entity.dto.QueryDTO;
-import com.zw.cloud.tools.service.TcService;
+import com.zw.cloud.tools.service.api.TcService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

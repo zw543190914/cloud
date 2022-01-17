@@ -1,4 +1,4 @@
-package com.zw.cloud.tools.controller;
+package com.zw.cloud.tools.controller.ai;
 
 import com.zw.cloud.tools.utils.BaiduAiUtil;
 import org.json.JSONObject;

@@ -2,8 +2,7 @@ package com.zw.cloud.tools.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zw.cloud.tools.entity.User;
-import com.zw.cloud.tools.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.zw.cloud.tools.service.api.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

@@ -1,13 +1,11 @@
 package com.zw.cloud.tools.controller;
 
 import com.zw.cloud.tools.entity.Code;
-import com.zw.cloud.tools.service.CodeService;
+import com.zw.cloud.tools.service.api.CodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
 
 /**
  * (Code)表控制层
