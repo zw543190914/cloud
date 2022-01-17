@@ -1,19 +1,20 @@
 package com.zw.cloud.common.utils;
 
+import cn.hutool.http.HttpStatus;
 import com.alibaba.fastjson.JSON;
 
 import java.io.Serializable;
 
-public class WebResult implements Serializable {
+public class WebResult<T> implements Serializable {
     private boolean success;
-    private Object data;
+    private T data;
     private Integer errorCode;
     private String errorMsg;
 
     public WebResult() {
     }
 
-    public WebResult(boolean success, Object data, Integer errorCode, String errorMsg) {
+    public WebResult(boolean success, T data, Integer errorCode, String errorMsg) {
         this.success = success;
         this.data = data;
         this.errorCode = errorCode;
@@ -24,18 +25,18 @@ public class WebResult implements Serializable {
         this.success = success;
     }
 
-    public static WebResult success() {
-        return new WebResult(true);
+    public static WebResult<Object> success() {
+        return new WebResult<>(true);
     }
 
-    public static WebResult failed() {
-        WebResult failed = new WebResult(false);
-        failed.errorCode = WebResult.ErrorCode.UNDEFINED.code;
+    public static WebResult<Object> failed() {
+        WebResult<Object> failed = new WebResult<>(false);
+        failed.errorCode = HttpStatus.HTTP_BAD_REQUEST;
         return failed;
     }
 
-    public WebResult withErrorCode(WebResult.ErrorCode errorCode) {
-        this.errorCode = errorCode.code;
+    public WebResult withErrorCode(Integer errorCode) {
+        this.errorCode = errorCode;
         return this;
     }
 
@@ -44,7 +45,7 @@ public class WebResult implements Serializable {
         return this;
     }
 
-    public WebResult withData(Object data) {
+    public WebResult<T> withData(T data) {
         this.data = data;
         return this;
     }
@@ -68,20 +69,5 @@ public class WebResult implements Serializable {
     @Override
     public String toString() {
         return JSON.toJSONString(this);
-    }
-
-    public enum ErrorCode {
-        UNDEFINED(1),
-        PARAMETER_ILLEGAL(11),
-        PERSISTENT_ERROR(21),
-        RESOURCE_BUSY(31),
-        METHOD_NOT_ALLOWED(405),
-        ACCESS_DENIED(999);
-
-        private Integer code;
-
-        private ErrorCode(Integer code) {
-            this.code = code;
-        }
     }
 }

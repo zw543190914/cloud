@@ -58,7 +58,7 @@
                         url:'MallManage/MallManage'
                     },
                     {
-                        label:'用户管理',
+                        label:'即时通讯',
                         icon:'user',
                         children:[
                           {
