@@ -24,6 +24,45 @@ spring:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
     default-property-inclusion: non_null
+#    serialization:
+#      write-dates-as-timestamps: true
+
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      filter:
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 1000
+      filters: stat
+      initialSize: 100
+      maxActive: 1000
+      maxOpenPreparedStatements: 20
+      maxWait: 60000
+      minEvictableIdleTimeMillis: 300000
+      minIdle: 500
+      password: password
+      poolPreparedStatements: true
+      stat-view-servlet:
+        allow: 127.0.0.1,*
+        enabled: true
+        login-password: 123456
+        login-username: admin
+        reset-enable: false
+        url-pattern: /druid/*
+      testOnBorrow: false
+      testOnReturn: false
+      testWhileIdle: true
+      timeBetweenEvictionRunsMillis: 60000
+      url: jdbc:mysql://localhost:3306/test?characterEncoding=utf-8&useSSL=false&&serverTimezone=GMT%2B8
+      username: root
+      validationQuery: select 'x'
+      web-stat-filter:
+        enabled: true
+        exclusions: '*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*'
+        url-pattern: /*
+    type: com.alibaba.druid.pool.DruidDataSource
+
 
 server:
   port: 18092
@@ -31,5 +70,21 @@ server:
 netty:
   server:
     port: 18888
+
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: assign_id
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      table-underline: true
+  type-handlers-package: com.zw.cloud.tools.config.db.typehandlers.ext
+
+
 
 

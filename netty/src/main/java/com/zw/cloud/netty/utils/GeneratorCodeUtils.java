@@ -1,4 +1,4 @@
-package com.zw.cloud.tools.utils;
+package com.zw.cloud.netty.utils;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -14,7 +14,7 @@ import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
 
-public class GeneratorCode {
+public class GeneratorCodeUtils {
 
     public static void main(String[] args) {
         // 代码生成器
@@ -23,7 +23,7 @@ public class GeneratorCode {
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
-        gc.setOutputDir(projectPath + "/tools/src/main/java");
+        gc.setOutputDir(projectPath + "/netty/src/main/java");
         gc.setAuthor("zw");
         gc.setOpen(false);
         gc.setIdType(IdType.ASSIGN_ID);
@@ -44,7 +44,7 @@ public class GeneratorCode {
         // 包配置
         PackageConfig pc = new PackageConfig();
         //pc.setModuleName("模块名");
-        pc.setParent("com.zw.cloud.tools");
+        pc.setParent("com.zw.cloud.netty");
         pc.setController("controller.poem");
         pc.setService("service.api.poem");
         pc.setServiceImpl("service.impl.poem");

@@ -7,12 +7,7 @@ import org.apache.ibatis.type.MappedTypes;
 
 import java.util.Set;
 
-/**
- * 自动处理java.util.Set
- * <br>CreateDate 2021/3/25
- *
- * @author relam
- */
+
 @MappedTypes({Set.class})
 @MappedJdbcTypes(JdbcType.VARCHAR)
 public class SetTypeHandler extends JsonTypeHandler {
