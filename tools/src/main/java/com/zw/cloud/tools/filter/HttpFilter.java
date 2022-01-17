@@ -18,7 +18,6 @@ public class HttpFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        HttpServletResponse response = (HttpServletResponse) servletResponse;
         //打印路径和线程id日志
         log.info("[HttpFilter][doFilter]{},{}",request.getRequestURI(),Thread.currentThread().getId());
 

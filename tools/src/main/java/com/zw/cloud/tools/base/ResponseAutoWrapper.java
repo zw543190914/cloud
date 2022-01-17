@@ -1,6 +1,5 @@
 package com.zw.cloud.tools.base;
 
-import com.alibaba.fastjson.JSONObject;
 import com.zw.cloud.common.utils.WebResult;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -13,10 +12,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import java.util.Objects;
 
 @ControllerAdvice
-public class ResponseAutoWrapper implements ResponseBodyAdvice {
+public class ResponseAutoWrapper implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter methodParameter, Class aClass) {
+        if (Objects.isNull(methodParameter.getMethod())) {
+            return false;
+        }
         Class<?> returnType = methodParameter.getMethod().getReturnType();
         String returnTypeName = returnType.getName();
         // true 转换
@@ -30,7 +32,6 @@ public class ResponseAutoWrapper implements ResponseBodyAdvice {
             return WebResult.success();
         }
         if (data instanceof String
-                || data instanceof JSONObject
                 || data instanceof WebResult
                 || data instanceof ResponseEntity){
             return data;

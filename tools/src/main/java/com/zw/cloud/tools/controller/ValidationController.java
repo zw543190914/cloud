@@ -19,19 +19,19 @@ public class ValidationController {
 
     @PostMapping
     //http://localhost:9040/validation
-    public void test(@RequestBody @Validated(InsertCheckGroup.class) User user){
+    public void test(@RequestBody @Validated(InsertCheckGroup.class) User user) {
         System.out.println(JSON.toJSONString(user));
     }
 
     @PutMapping
     //http://localhost:9040/validation
-    public void testObject(@RequestBody User user){
+    public void testObject(@RequestBody User user) {
         validationService.testObject(user);
     }
 
     @GetMapping
     //http://localhost:9040/validation?id=1
-    public void testParam(Long id){
+    public void testParam(Long id) {
         validationService.testParam(id);
     }
 
