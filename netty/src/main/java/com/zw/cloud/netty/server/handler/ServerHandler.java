@@ -6,6 +6,7 @@ import com.zw.cloud.netty.entity.dto.NettyMsgDTO;
 import com.zw.cloud.netty.enums.EnumNettyMsgTag;
 import com.zw.cloud.netty.server.NettyFullHttpRequestHandlerService;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.group.ChannelGroup;
@@ -18,6 +19,13 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -64,7 +72,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         } else if (msg instanceof WebSocketFrame) {
             log.info("[ServerHandler][channelRead] WebSocketFrame 接收到客户端：{} ", ctx.channel().id());
             //处理websocket客户端的消息
-            handlerWebSocketFrame(ctx, (WebSocketFrame) msg, null);
+            handlerWebSocketFrame(ctx, (WebSocketFrame) msg);
         }
     }
 
@@ -102,7 +110,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         clients.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
     }
 
-    private void handlerWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame, JSONObject params) {
+    private void handlerWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame) {
         // 判断是否关闭链路的指令
         if (frame instanceof CloseWebSocketFrame) {
             log.info("[ServerHandler][channelRead]CloseWebSocketFrame 接收到客户端：{}", ctx.channel().id());
@@ -145,7 +153,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             }
         }
         if (frame instanceof BinaryWebSocketFrame) {
-            ByteBuf content = frame.content();
+            /* ByteBuf content = frame.content();
             content.markReaderIndex();
             int flag = content.readInt();
             log.info("[ServerHandler][channelRead]BinaryWebSocketFrame 接收到客户端：{} 二进制消息,标志位: {}", ctx.channel().id(), flag);
@@ -153,9 +161,42 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
             ByteBuf byteBuf = Unpooled.directBuffer(frame.content().capacity());
             byteBuf.writeBytes(frame.content());
-            clients.writeAndFlush(new BinaryWebSocketFrame(byteBuf));
+
+            clients.writeAndFlush(new BinaryWebSocketFrame(byteBuf));*/
             /*tag = (int)(params.get("tag"));
             userId = (String) (params.get("userId"));*/
+
+            // 写入磁盘
+            ByteBuf data = frame.content();
+            //先读一个byte，确定文件名长度
+            byte filenameLength = data.readByte();
+            //分配一个HeapBuffer用于读取文件名
+            ByteBuf fileName = ByteBufAllocator.DEFAULT.heapBuffer();
+            data.readBytes(fileName,filenameLength);
+
+            FileChannel fileChannel = null;
+            try {
+                String filePath = "C:\\download\\" + fileName.toString(StandardCharsets.UTF_8);
+                //写入
+                File file = new File(filePath);
+                file.createNewFile();
+                RandomAccessFile target = new RandomAccessFile(file, "rw");
+                fileChannel = target.getChannel();
+                //这里直接将PooledDirectByteBuf中余下的数据直接写入FileChannel
+                data.getBytes(0, fileChannel, 0L, data.readableBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                //最后要记得释放分配的内存空间，关闭FileChannel
+                frame.release();
+                try {
+                    fileChannel.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
         }
         /*if (Objects.equals(tag,EnumNettyMsgTag.CONNECT.getKey()) && StringUtils.isNotBlank(userId)) {
             userManage.put(userId,ctx.channel());

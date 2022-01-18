@@ -16,7 +16,7 @@
                     </div>
                   <el-upload
                       class="upload-demo"
-                      action="/vue/tools/file/uploadToLocal"
+                      action="/vue/netty/file/uploadToLocal"
                       :on-preview="handlePreview"
                       :on-remove="handleRemove"
                       :before-remove="beforeRemove"

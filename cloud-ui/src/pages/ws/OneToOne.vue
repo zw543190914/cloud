@@ -29,8 +29,17 @@
         <el-input v-model = "messageVal" type = "textarea" :rows = "2"  style="width: 540px"  placeholder="主动一点，世界会更大！"/>
       </div>
       <div class="footer-btn">
-        <el-input v-model = "targetUserId" type = "input" style="width: 200px;height: 10px;margin-right: 15px"  placeholder="对方ID"/>
+        <el-input v-model = "targetUserId" type = "input" style="width: 200px;height: 10px;margin-right: 15px" size="mini" placeholder="对方ID"/>
 
+<!--        <el-upload-->
+<!--            class="upload-demo"-->
+<!--            action="/websocket/ws/upload"-->
+<!--            :on-preview="handlePreview"-->
+<!--            :on-remove="handleRemove"-->
+<!--            :before-remove="beforeRemove"-->
+<!--            :file-list="fileList">-->
+<!--          <el-button size="mini" type="primary">点击上传</el-button>-->
+<!--        </el-upload>-->
 <!--        <el-button class = "filter-item" size="mini" :disabled = "initDisabled" type = "primary" @click = "initWebSocket">初始化</el-button>-->
 
         <el-button size="mini" type = "success" @click = "pushMsg">发送</el-button>
@@ -55,6 +64,7 @@
         initDisabled: false,
         initVal: '',
         websock: '',
+        websocketUrl:'ws://127.0.0.1:18888/ws',
         userId: userId,//接入的ID
         messageVal: '',
         targetUserId:'',
@@ -69,7 +79,10 @@
         heartTimeout: 60 * 1000, //60秒一次心跳
         heartBeat: null, //心跳
         lockReconnect: false, //是否真正建立连接
-        reconnectId: null //断开 重连倒计时
+        reconnectId: null, //断开 重连倒计时
+
+        fileName:'',
+        fileList:[]
       }
     },
     methods: {
@@ -81,7 +94,7 @@
         } else {
           this.close()
           this.initDisabled = true
-          this.websock = new WebSocket('ws://127.0.0.1:18888/ws?userId=' + this.userId)
+          this.websock = new WebSocket(this.websocketUrl + '?userId=' + this.userId)
           // 打开事件
           this.websock.onopen = this.onopen
           // 获得消息事件
@@ -232,6 +245,17 @@
       beforeunloadFn (e) {
         this.close()
       },
+
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
+
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
+      }
     },
     mounted() {
       console.log('mounted')

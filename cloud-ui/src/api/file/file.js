@@ -6,7 +6,7 @@ export function download(filename) {
     let downloadLoadingInstance = Loading.service({ text: "正在下载数据，请稍后", spinner: "el-icon-loading", background: "rgba(0, 0, 0, 0.7)", })
     return axios({
         method: 'get',
-        url:`/tools/file/downloadFileFromLocal?fileName=${filename}`,
+        url:`/netty/file/downloadFileFromLocal?fileName=${filename}`,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8;' },
         responseType: 'blob',
     }).then(({data}) => {

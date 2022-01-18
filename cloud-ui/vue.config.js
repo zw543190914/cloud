@@ -39,6 +39,12 @@ module.exports = {
             ws: true,
             changeOrigin: true
           },
+          '/websocket': {
+            target: 'ws://localhost:18888',
+            pathRewrite:{'^/websocket':''},
+            ws: true,
+            changeOrigin: true
+          },
          /*  '/foo': {
             target: '<other_url>'
           } */
