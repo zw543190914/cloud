@@ -271,7 +271,7 @@
     }
   }
 </script>
-<style lang="less" scoped>
+<style scoped lang="less"  >
   .message {
     height: 350px;
   }

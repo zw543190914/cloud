@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
 import router from './router'
+//移动端rem适配
+// import 'amfe-flexible/index'
 // 引入 store
 import store from './store'
 import dayjs from "./utils/dayjs.min"

@@ -21,7 +21,7 @@ module.exports = {
         //subpage: 'src/subpage/main.js'
       },
       // 关闭语法检查
-      lintOnSave:false, 
+    lintOnSave:false,
 
       // 代理服务器--不能配置多个代理
      /*  devServer: {
@@ -30,7 +30,7 @@ module.exports = {
       */
 
       // 代理服务器 方式2
-      devServer: {
+    devServer: {
         port:8087,
         proxy: {
           '/vue': {
@@ -50,5 +50,25 @@ module.exports = {
           } */
         },
       },
-    publicPath:"./"
-  }
+    publicPath:"./",
+    /*css: {
+      loaderOptions: {
+        postcss: {
+          plugins: [
+            require('postcss-pxtorem')({ // 把px单位换算成rem单位
+              rootValue: 75, // 换算的基数(设计图750的根字体为75)
+              // selectorBlackList: ['weui', 'mu'], // 忽略转换正则匹配项
+              propList: ['*']//!*代表将项目中的全部进行转换，单个转换如width、height等
+            })
+          ]
+        }
+      }
+    },
+    configureWebpack: config => {
+      if (process.env.NODE_ENV === 'production') {
+        // 为生产环境修改配置...
+      } else {
+        // 为开发环境修改配置...
+      }
+    }*/
+}
