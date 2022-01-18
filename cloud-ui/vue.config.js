@@ -44,10 +44,11 @@ module.exports = {
             pathRewrite:{'^/websocket':''},
             ws: true,
             changeOrigin: true
-          },
+          }
          /*  '/foo': {
             target: '<other_url>'
           } */
-        }
-      }
+        },
+      },
+    publicPath:"./"
   }
