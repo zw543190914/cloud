@@ -47,8 +47,7 @@ public class TcController {
     public WebResult pageQuery(@RequestBody QueryDTO queryDTO) {
         //int offset = (queryDTO.getPageNo() - 1) * queryDTO.getPageSize();
         IPage<Tc> page = new Page<>(queryDTO.getPageNo(), queryDTO.getPageSize());
-        LambdaQueryWrapper<Tc> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.orderByDesc(Tc::getId);
+        LambdaQueryWrapper<Tc> queryWrapper = new LambdaQueryWrapper<Tc>().orderByDesc(Tc::getId);
 
         IPage<Tc> pageResult = tcService.page(page, queryWrapper);
         List<Tc> records = pageResult.getRecords();

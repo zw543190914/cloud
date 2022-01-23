@@ -29,7 +29,6 @@ spring:
 
   datasource:
     druid:
-      driver-class-name: com.mysql.cj.jdbc.Driver
       filter:
         stat:
           log-slow-sql: true
@@ -41,7 +40,6 @@ spring:
       maxWait: 60000
       minEvictableIdleTimeMillis: 300000
       minIdle: 500
-      password: password
       poolPreparedStatements: true
       stat-view-servlet:
         allow: 127.0.0.1,*
@@ -50,18 +48,20 @@ spring:
         login-username: admin
         reset-enable: false
         url-pattern: /druid/*
-      testOnBorrow: false
       testOnReturn: false
       testWhileIdle: true
       timeBetweenEvictionRunsMillis: 60000
       url: jdbc:mysql://localhost:3306/test?characterEncoding=utf-8&useSSL=false&&serverTimezone=GMT%2B8
       username: root
+      password: password
       validationQuery: select 'x'
       web-stat-filter:
         enabled: true
         exclusions: '*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*'
         url-pattern: /*
     type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
 
 
 server:
@@ -74,7 +74,7 @@ netty:
 
 mybatis-plus:
   configuration:
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
   global-config:
     db-config:
@@ -83,7 +83,7 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
       table-underline: true
-  type-handlers-package: com.zw.cloud.tools.config.db.typehandlers.ext
+  type-handlers-package: com.zw.cloud.netty.config.db.typehandlers.ext
 
 
 
