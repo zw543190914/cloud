@@ -1,9 +1,11 @@
 package com.zw.cloud.tools.test;
 
+import com.zw.cloud.tools.entity.User;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 
 
 public class BigDecimalTest {
@@ -25,6 +27,14 @@ public class BigDecimalTest {
         System.out.println(a1.divide(total,3, RoundingMode.HALF_DOWN));
         System.out.println(a2.divide(total,3, RoundingMode.HALF_DOWN));
         System.out.println(a3.divide(total,3, RoundingMode.HALF_DOWN));
+        User user = new User();
+        user.setId(1L);
+        user.setName("");
+        user.setDescription("de");
+        String format = String.format("%s_%s_%s", user.getId(), user.getName(), user.getDescription());
+        System.out.println(format);
+        String[] s = format.split("_");
+        System.out.println(Arrays.toString(s));
     }
 
     private static  Integer buildTemp(BigDecimal num, int size) {

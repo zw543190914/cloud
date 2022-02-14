@@ -37,6 +37,11 @@ public class PoemController {
         poemService.saveBatch(poemList);
     }
 
+    @PostMapping("/updateBatchById")
+    public void updateBatchById(@RequestBody List<Poem> poemList) {
+        poemService.updateBatchById(poemList);
+    }
+
     @PostMapping("/saveOrUpdateBatch")
     public void saveOrUpdateBatch(@RequestBody List<Poem> poemList) {
 

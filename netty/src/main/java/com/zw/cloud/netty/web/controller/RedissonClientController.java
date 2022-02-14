@@ -19,10 +19,12 @@ public class RedissonClientController {
     @GetMapping("/tryLock")
     //http://localhost:18092/redisson/tryLock
     public void tryLock(){
-        /*for (int j = 0; j < 100; j++) {
+        long start = System.currentTimeMillis();
+        /*for (int j = 0; j < 3; j++) {
             test();
         }*/
         test();
+        System.out.println(System.currentTimeMillis() - start);
     }
     //AtomicInteger atomicInteger = new AtomicInteger(1);
     int i = 1;
@@ -32,7 +34,7 @@ public class RedissonClientController {
             // 尝试加锁，最多等待100秒，上锁以后10秒自动解锁 --watchLock失效
             //tryLock = lock.tryLock(100,10, TimeUnit.SECONDS);
             // 要使 watchLog机制生效 ，lock时 不要设置 过期时间
-        boolean tryLock = lock.tryLock();
+        /*boolean tryLock = lock.tryLock();
         if (tryLock) {
             try {
                 System.out.println(i++);
@@ -42,7 +44,13 @@ public class RedissonClientController {
             } finally {
                 lock.unlock();
             }
+        }*/
+        lock.lock(5,TimeUnit.SECONDS);
+        System.out.println(i++);
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-
     }
 }
