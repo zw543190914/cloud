@@ -1,6 +1,7 @@
 package com.zw.cloud.tools.test;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import com.zw.cloud.tools.entity.User;
 
 import java.util.*;
@@ -22,9 +23,12 @@ public class SortedTest {
         map.forEach((k,v) ->{
             list.add(new User());
         });
-        Map<String, List<User>> map1 = list.stream().collect(Collectors.groupingBy(User::getName));
-        System.out.println(JSON.toJSONString(map1));
+      /*  Map<String, List<User>> map1 = list.stream().collect(Collectors.groupingBy(User::getName));
+        System.out.println(JSON.toJSONString(map1));*/
 
+        ArrayList<String> strings = Lists.newArrayList( "013", "100", "101","001", "002", "010");
+        strings.sort(Comparator.comparing(s -> s));
+        System.out.println(strings.toString());
     }
     public static int compare(User user){
         if (Objects.equals(user.getName(),"zw4")){

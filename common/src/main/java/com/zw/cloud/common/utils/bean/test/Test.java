@@ -15,7 +15,7 @@ public class Test {
         student.setId(1L);
         student.setBirthday(LocalDateTime.now());
         StudentVO studentVO = new StudentVO();
-        BeanUtils.copyBean(student, studentVO);
+        BeanUtils.copyProperties(student, studentVO);
         System.out.println(JSONUtil.toJsonStr(studentVO));
     }
 }

@@ -11,6 +11,7 @@ import com.zw.cloud.mybatis.plus.mapper.UserInfoMapper;
 import com.zw.cloud.mybatis.plus.service.api.IUserTestService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -79,7 +80,11 @@ public class UserTestController {
     //http://localhost:8080/user-test/batchInsertByMapper
     public void batchInsertByMapper() {
 
-        userService.batchSaveOrUpdate(buildData());
+        try {
+            userService.batchSaveOrUpdate(buildData());
+        } catch (DuplicateKeyException e) {
+            throw new RuntimeException("名称重复");
+        }
 
     }
 
@@ -135,8 +140,8 @@ public class UserTestController {
         user.setAge(11);
         UserInfo user2 = new UserInfo();
         //user2.setId(1438688954489552898L);
-        user2.setName("r挺剂TF-630ff");
-        user2.setAge(22);
+        user2.setName("zzzz");
+        user2.setAge(11);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("2222","name11");
         jsonObject.put("date",new Date());
