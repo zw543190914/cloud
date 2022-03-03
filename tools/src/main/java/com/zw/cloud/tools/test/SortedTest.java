@@ -26,8 +26,10 @@ public class SortedTest {
       /*  Map<String, List<User>> map1 = list.stream().collect(Collectors.groupingBy(User::getName));
         System.out.println(JSON.toJSONString(map1));*/
 
-        ArrayList<String> strings = Lists.newArrayList( "013", "100", "101","001", "002", "010");
+        ArrayList<String> strings = Lists.newArrayList( "013", "100", "101","000", "002", "010","1","3");
         strings.sort(Comparator.comparing(s -> s));
+        System.out.println(strings.toString());
+        strings.sort(Comparator.comparing(Integer::parseInt));
         System.out.println(strings.toString());
     }
     public static int compare(User user){

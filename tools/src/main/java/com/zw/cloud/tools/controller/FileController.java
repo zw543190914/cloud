@@ -15,6 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.WritableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.Future;
 
 @RestController
@@ -78,9 +83,10 @@ public class FileController {
     }
 
     @GetMapping("/downloadFileFromLocal")
+    //http://10.30.2.162:9040/tools/file/downloadFileFromLocal?fileName=ideaIU-2020.3.4.exe
     public void downloadFileFromLocal(@RequestParam String fileName,HttpServletResponse response) {
         //String fileName = "lc.png";// 设置文件名，根据业务需要替换成要下载的文件名
-        if (StringUtils.isBlank(fileName)) {
+        /*if (StringUtils.isBlank(fileName)) {
             throw new RuntimeException("文件不存在");
         }
         //设置文件路径
@@ -93,8 +99,7 @@ public class FileController {
         response.setContentType("application/force-download");// 设置强制下载不打开
         response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);// 设置文件名
         byte[] buffer = new byte[1024];
-        try (FileInputStream fis = new FileInputStream(file);
-             BufferedInputStream bis = new BufferedInputStream(fis);) {
+        try (FileInputStream fis = new FileInputStream(file); BufferedInputStream bis = new BufferedInputStream(fis);) {
             OutputStream os = response.getOutputStream();
             int i = bis.read(buffer);
             while (i != -1) {
@@ -103,6 +108,24 @@ public class FileController {
             }
         } catch (Exception e) {
             log.error("[FileController][downloadFileFromLocal]error is ", e);
+        }*/
+        try (OutputStream os = response.getOutputStream()){
+            //设置文件路径
+            String realPath = "C:/download/";
+            File file = new File(realPath,fileName);
+            // 取得输出流
+            String contentType = Files.probeContentType(Paths.get(file.getAbsolutePath()));
+            response.setHeader("Content-Type", contentType);
+            response.setHeader("Content-Disposition", "attachment;filename="+ new String(file.getName().getBytes("utf-8"),"ISO8859-1"));
+            FileInputStream fileInputStream = new FileInputStream(file);
+            WritableByteChannel writableByteChannel = Channels.newChannel(os);
+            FileChannel fileChannel = fileInputStream.getChannel();
+            fileChannel.transferTo(0,fileChannel.size(),writableByteChannel);
+            fileChannel.close();
+            os.flush();
+            writableByteChannel.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }

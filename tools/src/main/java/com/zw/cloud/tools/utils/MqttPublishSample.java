@@ -22,17 +22,17 @@ public class MqttPublishSample {
         String topic = "d/dev_test_device_stenter_03/report";
         String clientId = "subscribe_test_device";*/
         // qa
-       /* String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+        String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|qa_test_device_stenter_02|0|MD5";
         String password = "3509803995f1748b7d4c5f1ad9dfb615";
         String topic = "d/qa_test_device_stenter_02/report";
-        String clientId = "subscribe_test_device";*/
-        // 线上
-        String host = "tcp://afswjqe.iot.gz.baidubce.com";
-        String userName = "thingidp@afswjqe|prod_test_device_stenter_02|0|MD5";
-        String password = "bab98f8c00ca2b66e0d6c19f6809e452";
-        String topic = "d/prod_test_device_stenter_02/report";
         String clientId = "subscribe_test_device";
+        // 线上
+     /*   String host = "tcp://afswjqe.iot.gz.baidubce.com";
+        String userName = "thingidp@amgjjzk|8888|0|MD5";
+        String password = "bdf6a12cb4d85d36954a9759e24b12d4";
+        String topic = "d/8888/report";
+        String clientId = "subscribe_test_device";*/
 
         int qos = 1;
         // 内存存储
@@ -48,20 +48,21 @@ public class MqttPublishSample {
         connOpts.setPassword(password.toCharArray());
         // 建立连接
         sampleClient.connect(connOpts);
-        long second = 1641432677;
+        //long second = 1641432677;
         int stop;
-        int j ;
-        //Long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
-        for (int i = 0; i < 1; i++) {
+        int j = 100 ;
+        Long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
+        for (int i = 0; i < 120; i++) {
 
             second = second + i;
             if (i%2 == 1) {
                 stop = 0;
-                j = 189;
+                //j = 189;
             } else {
-                stop = 20;
-                j = 178;
+                stop = 100;
+                //j = 178;
             }
+            j ++;
             String content = buildContent(j,stop,second);
             try {
 
