@@ -8,6 +8,8 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
@@ -44,9 +46,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
-    public WebResult bindException(BindException e,HttpServletRequest request) {
-        if (Objects.nonNull(request)) {
-            log.error("[GlobalExceptionHandler][bindException]uri is {},error is ",request.getRequestURI(),e);
+    public WebResult bindException(BindException e) {
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+
+        if (Objects.nonNull(requestAttributes)) {
+            log.error("[GlobalExceptionHandler][bindException]uri is {},error is ",requestAttributes.getRequest().getRequestURI(),e);
         } else {
             log.error("[GlobalExceptionHandler][bindException] error is ",e);
         }
