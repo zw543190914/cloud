@@ -13,7 +13,7 @@ public class DingTalkUtils {
     private static String br = " \n\n ";
 
     public static void main(String[] args) throws Exception {
-        sendDingTalkMsg("505e45d4253e2a98976d15de6b98a56c8635ddcab9d8b42de029ebb462c72db6",DingTalkUtils.class,"sendDingTalkMsg",new RuntimeException("running exception..."));
+        sendDingTalkMsg("7b66a82f1620672a1f5b2229d536d41cd978fb9f949141df8b40cd3b8bc9dd54",DingTalkUtils.class,"sendDingTalkMsg",new RuntimeException("running exception..."));
     }
 
     public static void sendDingTalkMsg(String token,Class clazz,String methodName,Exception e) throws Exception{
@@ -41,13 +41,13 @@ public class DingTalkUtils {
         OapiRobotSendRequest.Markdown markdown = new OapiRobotSendRequest.Markdown();
         markdown.setTitle("请注意");
         markdown.setText("#### 程序运行出错\n" +
-                "> className is "+ clazz + br +
-                "> methodName is "+ methodName + br +
-                "> error is "+ e + br +
+                "> className : "+ clazz + br +
+                "> methodName : "+ methodName + br +
+                "> error : "+ e + br +
                 //"> ![screenshot](https://gw.alicdn.com/tfs/TB1ut3xxbsrBKNjSZFpXXcXhFXa-846-786.png)\n"  +
-                //"> ![screenshot](https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic.jj20.com%2Fup%2Fallimg%2Fmx12%2F0F420115037%2F200F4115037-11.jpg&refer=http%3A%2F%2Fpic.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638372678&t=004b8405f7b0780a5226dbb99b04c924)\n"  +
+                "> ![screenshot](https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic.jj20.com%2Fup%2Fallimg%2Fmx12%2F0F420115037%2F200F4115037-11.jpg&refer=http%3A%2F%2Fpic.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638372678&t=004b8405f7b0780a5226dbb99b04c924)\n"  +
                 "> ![screenshot](https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F2017-10-19%2F59e806207e3e2.jpg%3Fdown&refer=http%3A%2F%2Fpic1.win4000.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638372666&t=ea3288d53c577bba50562e8b82460812)\n"  +
-                "> [天气](http://www.thinkpage.cn/) \n");
+                "> [百度一下](http://www.baidu.com/) \n");
         request.setMarkdown(markdown);
         OapiRobotSendResponse response = client.execute(request);
         log.info("[DingTalkUtils][sendDingTalkMsg] response is {}", JSONUtil.toJsonStr(response));
