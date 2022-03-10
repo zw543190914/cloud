@@ -100,6 +100,15 @@
             <artifactId>easyexcel</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-annotation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-base</artifactId>
+        </dependency>
+
         <!--七牛云对象存储-->
         <dependency>
             <groupId>com.qiniu</groupId>
@@ -289,6 +298,14 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.5.4</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>10</source>
+                    <target>10</target>
+                </configuration>
             </plugin>
 
         </plugins>

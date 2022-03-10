@@ -16,14 +16,15 @@ public class ResponseAutoWrapper implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter methodParameter, Class aClass) {
-        if (Objects.isNull(methodParameter.getMethod())) {
+        /*if (Objects.isNull(methodParameter.getMethod())) {
             return false;
         }
         Class<?> returnType = methodParameter.getMethod().getReturnType();
         String returnTypeName = returnType.getName();
         // true 转换
         return !Objects.equals(returnTypeName,String.class.getName()) && !Objects.equals(returnTypeName,WebResult.class.getName());
-
+*/
+        return true;
     }
 
     @Override
