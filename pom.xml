@@ -113,6 +113,7 @@
         <netty-all.version>4.1.63.Final</netty-all.version>
         <mqtt-client.version>0.4.0</mqtt-client.version>
         <dingtalk.version>1.0.1</dingtalk.version>
+        <kafka.version>2.8.0</kafka.version>
     </properties>
 
     <dependencyManagement>
@@ -503,6 +504,13 @@
                 <artifactId>easypoi-base</artifactId>
                 <version>${easypoi.version}</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka -->
+            <dependency>
+                <groupId>org.springframework.kafka</groupId>
+                <artifactId>spring-kafka</artifactId>
+                <version>${kafka.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
