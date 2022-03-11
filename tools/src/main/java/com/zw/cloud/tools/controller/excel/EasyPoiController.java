@@ -3,12 +3,16 @@ package com.zw.cloud.tools.controller.excel;
 import cn.afterturn.easypoi.handler.inter.IExcelDictHandler;
 import com.alibaba.fastjson.JSON;
 import com.zw.cloud.tools.entity.dto.ShipmentOrderDTO;
-import com.zw.cloud.tools.utils.ExcelExportUtil;
+import com.zw.cloud.tools.utils.excel.ExcelExportUtils;
+import com.zw.cloud.tools.utils.excel.ExcelImportUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.assertj.core.util.Lists;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
@@ -23,6 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/easy-poi")
+@Slf4j
 public class EasyPoiController {
 
     @GetMapping("/export")
@@ -35,13 +40,20 @@ public class EasyPoiController {
         } else {
             title = System.currentTimeMillis() + "+" + shipmentOrderDTOS.size() + ".xlsx";
         }
-        Workbook workbook = ExcelExportUtil.export(title, "发货通知单", 0, shipmentOrderDTOS, ShipmentOrderDTO.class, null);
+        Workbook workbook = ExcelExportUtils.export(null, "发货通知单", 0, shipmentOrderDTOS, ShipmentOrderDTO.class, null);
 
         response.setCharacterEncoding("UTF-8");
         response.setHeader("content-Type", "application/vnd.ms-excel");
         response.setHeader("Content-Disposition",
                 "attachment;filename=" + URLEncoder.encode(title, StandardCharsets.UTF_8));
         workbook.write(response.getOutputStream());
+    }
+
+    @PostMapping("/importData")
+    //http://localhost:9040/easy-poi/importData
+    public void importData(MultipartFile file) throws Exception {
+        List<ShipmentOrderDTO> shipmentOrderDTOList = ExcelImportUtils.importExcel(file, 0, 1, ShipmentOrderDTO.class);
+        log.info("[EasyPoiController][importData] shipmentOrderDTOList is {}",JSON.toJSONString(shipmentOrderDTOList));
     }
 
     @GetMapping("/test")
@@ -87,7 +99,7 @@ public class EasyPoiController {
 
         // 导出workbook
         int headerRows = 1;
-        Workbook workbook = ExcelExportUtil.export(title, title, headerRows, Lists.newArrayList(excelDemoDTO),
+        Workbook workbook = ExcelExportUtils.export(title, title, headerRows, Lists.newArrayList(excelDemoDTO),
                 ExcelDemoDTO.class, new IExcelDictHandler() {
                     @Override
                     public String toName(String dict, Object obj, String name, Object value) {

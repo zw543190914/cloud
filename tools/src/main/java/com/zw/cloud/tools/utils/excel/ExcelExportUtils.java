@@ -1,4 +1,4 @@
-package com.zw.cloud.tools.utils;
+package com.zw.cloud.tools.utils.excel;
 
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.export.ExcelBatchExportService;
@@ -20,7 +20,7 @@ import static org.apache.poi.ss.usermodel.CellType.STRING;
 /**
  * EXCEL导出工具类
  */
-public abstract class ExcelExportUtil {
+public abstract class ExcelExportUtils {
 
     public static Workbook export(String title, String sheetName, Integer headerRows, Collection<?> dataSet, Class<?> pojoClass) {
         return export(title, sheetName, headerRows, dataSet, pojoClass, null);

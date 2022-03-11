@@ -47,7 +47,7 @@ public class ShipmentOrderDTO implements Serializable {
     /**
      * 计划发货日期
      */
-    @Excel(name = "计划发货日期",needMerge = true, exportFormat = "yyyy-MM-dd", orderNum = "2")
+    @Excel(name = "计划发货日期",needMerge = true, exportFormat = "yyyy-MM-dd", importFormat = "yyyy-MM-dd",orderNum = "2")
     private LocalDateTime planShipmentDate;
 
     /**
@@ -83,13 +83,13 @@ public class ShipmentOrderDTO implements Serializable {
     /**
      * 通知下发时间
      */
-    @Excel(name = "通知下发时间", orderNum = "8",needMerge = true,exportFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "通知下发时间", orderNum = "8",needMerge = true,exportFormat = "yyyy-MM-dd HH:mm:ss", importFormat = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime noticeIssuingTime;
 
     /**
      * 确认发货单时间
      */
-    @Excel(name = "确认发货单时间", orderNum = "9",needMerge = true,exportFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "确认发货单时间", orderNum = "9",needMerge = true, importFormat = "yyyy-MM-dd HH:mm:ss",exportFormat = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime confirmShipmentTime;
 
     /**
