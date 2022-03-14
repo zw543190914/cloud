@@ -134,7 +134,7 @@ public class SnowflakeIdWorker {
             System.out.println(Long.toBinaryString(id));
             System.out.println(id);
             // cn.hutool.core.util
-            System.out.println(IdUtil.getSnowflake(0,0).nextId());
+            System.out.println(IdUtil.getSnowflake().nextId());
         }
 
     }

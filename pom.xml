@@ -79,7 +79,7 @@
         <jsoup.version>1.14.2</jsoup.version>
         <JsoupXpath.version>2.3.2</JsoupXpath.version>
         <hanlp.version>portable-1.7.5</hanlp.version>
-        <hutool-all.version>5.1.1</hutool-all.version>
+        <hutool-all.version>5.7.22</hutool-all.version>
         <ikanalyzer.version>2012_u6</ikanalyzer.version>
         <fastjson.version>1.2.78</fastjson.version>
         <guava.version>30.0-jre</guava.version>
