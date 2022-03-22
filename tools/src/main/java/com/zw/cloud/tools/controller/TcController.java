@@ -2,6 +2,7 @@ package com.zw.cloud.tools.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.zw.cloud.common.utils.HttpClientUtils;
 import com.zw.cloud.common.utils.WebResult;
@@ -49,9 +50,9 @@ public class TcController {
 
     @PostMapping("pageQuery")
     //http://localhost:9040/tc/pageQuery
-    public WebResult pageQuery(@RequestBody QueryDTO queryDTO) {
+    public WebResult<PageInfo<Tc>> pageQuery(@RequestBody QueryDTO queryDTO) {
         //int offset = (queryDTO.getPageNo() - 1) * queryDTO.getPageSize();
-        return WebResult.success().withData(this.tcService.pageQuery(queryDTO));
+        return WebResult.build(this.tcService.pageQuery(queryDTO));
     }
 
     @GetMapping("/add")

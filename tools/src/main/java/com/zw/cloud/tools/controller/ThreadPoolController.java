@@ -35,6 +35,7 @@ public class ThreadPoolController {
     public String query(@RequestParam("id") String id)throws Exception{
         logger.info("[query]id is {}, thread name is {}", id,Thread.currentThread().getName());
         Future<String> future = CustomerExecutorService.pool.submit(() -> queryData(id));
+
         //阻塞
         String result = future.get();
         logger.info("[query]id is {}, thread name is {},result is {}", id,Thread.currentThread().getName(),result);

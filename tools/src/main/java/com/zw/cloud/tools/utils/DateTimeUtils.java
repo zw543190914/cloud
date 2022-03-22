@@ -24,7 +24,7 @@ public class DateTimeUtils {
         System.out.println(Instant.parse("2021-11-03T20:37:30.00Z"));
         String date = "2017-03-08T12:30:54";
         LocalDateTime localdatetime = LocalDateTime.parse(date);
-        System.out.println(localdatetime);
+        System.out.println("localdatetime:" + localdatetime);
 
         LocalDateTime dateTime = LocalDateTime.of(localdatetime.getYear(), localdatetime.getMonth(), localdatetime.getDayOfMonth(), Integer.parseInt("09"), Integer.parseInt("59"), 0);
         System.out.println(dateTime);
@@ -33,6 +33,7 @@ public class DateTimeUtils {
         System.out.println(between.getSeconds());
 
         System.out.println(getNumOfMonth("2021-02"));
+        System.out.println("localdatetime2:" + LocalDateTime.now().toString());
     }
 
     public static LocalDateTime dateToLocalDateTime(Date date) {

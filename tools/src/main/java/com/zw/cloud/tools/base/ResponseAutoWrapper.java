@@ -32,11 +32,9 @@ public class ResponseAutoWrapper implements ResponseBodyAdvice<Object> {
         if (Objects.isNull(data)) {
             return WebResult.success();
         }
-        if (data instanceof String
-                || data instanceof WebResult
-                || data instanceof ResponseEntity){
+        if (data instanceof WebResult || data instanceof ResponseEntity){
             return data;
         }
-        return WebResult.success().withData(data);
+        return WebResult.build(data);
     }
 }

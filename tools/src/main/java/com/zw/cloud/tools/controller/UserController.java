@@ -36,7 +36,6 @@ public class UserController {
         userPlus.setAge((byte)age);
         userPlus.setName(name);
         userPlus.setDescription(desc);
-        int a = 1/0;
         userService.insertOrUpdate(userPlus);
     }
 

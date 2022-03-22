@@ -36,6 +36,6 @@ public class ResponseAutoWrapper implements ResponseBodyAdvice<Object> {
                 || data instanceof ResponseEntity){
             return data;
         }
-        return WebResult.success().withData(data);
+        return WebResult.build(data);
     }
 }

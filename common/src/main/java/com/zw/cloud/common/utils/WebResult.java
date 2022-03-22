@@ -35,6 +35,13 @@ public class WebResult<T> implements Serializable {
         return failed;
     }
 
+    public static <T> WebResult<T> build(T data) {
+        WebResult<T> webResult = new WebResult<>();
+        webResult.success = true;
+        webResult.data = data;
+        return webResult;
+    }
+
     public WebResult withErrorCode(Integer errorCode) {
         this.errorCode = errorCode;
         return this;

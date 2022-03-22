@@ -22,6 +22,6 @@ public class ResponseAutoWrapper extends AbstractMappingJacksonResponseBodyAdvic
                 || data instanceof ResponseEntity){
             return;
         }
-        mappingJacksonValue.setValue(WebResult.success().withData(data));
+        mappingJacksonValue.setValue(WebResult.build(data));
     }
 }
