@@ -32,8 +32,6 @@ public class User extends Base implements Serializable {
 
     private String description;
 
-    private List<User> userList;
-
 }
 
 class Base {
