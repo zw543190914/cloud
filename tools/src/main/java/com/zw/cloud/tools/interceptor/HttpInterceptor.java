@@ -2,6 +2,7 @@ package com.zw.cloud.tools.interceptor;
 
 import com.zw.cloud.tools.threadlocal.RequestHolder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -14,6 +15,10 @@ public class HttpInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("[HttpInterceptor][preHandle]");
+        String accessToken = request.getHeader("accessToken");
+        if (StringUtils.isBlank(accessToken)) {
+            throw new Exception("请先登录");
+        }
         return true;
     }
 
