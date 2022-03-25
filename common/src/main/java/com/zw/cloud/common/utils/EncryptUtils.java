@@ -1,4 +1,4 @@
-package com.zw.cloud.tools.test;
+package com.zw.cloud.common.utils;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -7,17 +7,32 @@ import javax.crypto.spec.DESKeySpec;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-public class EncryptTest {
+public class EncryptUtils {
 
     private static final String ALGO = "DES";
+    private static final String PSW = "tycwfkereexzbfjf";
 
-    private static final String PSW = "12345678";
+    public static void main(String[] args) {
+        String data = "hello Test symmetric encry";
+        String encrypted = encrypted(data);
+        System.out.println(encrypted);
+        System.out.println(decrypted(encrypted));
+    }
+
+    public static String encrypted(String password){
+        return Base64.getEncoder().encodeToString(encrypt(password.getBytes()));
+    }
+
+    public static String decrypted(String data){
+        byte[] decode = Base64.getDecoder().decode(data);
+        return new String(decrypt(decode));
+    }
 
     private static byte[] encrypt(byte[] src) {
         try {
             // DES 算法要求有一个可信任的随机数源
             SecureRandom random = new SecureRandom();
-            DESKeySpec desKey = new DESKeySpec(EncryptTest.PSW.getBytes());
+            DESKeySpec desKey = new DESKeySpec(PSW.getBytes());
             // 创建一个密匙工厂，然后用它把 DESKeySpec 转换成 SecretKey
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(ALGO);
             SecretKey securekey = keyFactory.generateSecret(desKey);
@@ -38,7 +53,7 @@ public class EncryptTest {
             // DES 算法要求有一个可信任的随机数源
             SecureRandom random = new SecureRandom();
             // 创建一个 DESKeySpec 对象
-            DESKeySpec desKey = new DESKeySpec(EncryptTest.PSW.getBytes());
+            DESKeySpec desKey = new DESKeySpec(PSW.getBytes());
             // 创建一个密匙工厂
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(ALGO);
             // 将 DESKeySpec 对象转换成 SecretKey 对象
@@ -55,23 +70,4 @@ public class EncryptTest {
         return null;
     }
 
-    public static void main(String[] args) {
-        String data = "hello Test symmetric encry";
-//        byte[] encryData = encrypt(data.getBytes());
-//        System.out.println("encryData = " + new String(encryData));
-//        byte[] decryData = decrypt(encryData);
-//        System.out.println("decryData = " + new String(decryData));
-        String encrypted = encrypted(data);
-        System.out.println(encrypted);
-        System.out.println(decrypted("II/KEzGFvHp8HH2z1rw0YSZc9AVbP66NMIEqUPYRT+w="));
-    }
-
-    public static String encrypted(String password){
-        return Base64.getEncoder().encodeToString(encrypt(password.getBytes()));
-    }
-
-    public static String decrypted(String data){
-        byte[] decode = Base64.getDecoder().decode(data);
-        return new String(decrypt(decode));
-    }
 }

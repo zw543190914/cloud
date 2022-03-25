@@ -16,9 +16,9 @@ public class HttpInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("[HttpInterceptor][preHandle]");
         String accessToken = request.getHeader("accessToken");
-        if (StringUtils.isBlank(accessToken)) {
+        /*if (StringUtils.isBlank(accessToken)) {
             throw new Exception("请先登录");
-        }
+        }*/
         return true;
     }
 

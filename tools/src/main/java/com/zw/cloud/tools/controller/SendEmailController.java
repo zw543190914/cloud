@@ -31,9 +31,10 @@ public class SendEmailController {
     }
 
     @GetMapping("/sendHtmlMail")
+    //http://localhost:9040/mail/sendHtmlMail
     public void sendHtmlMail() throws Exception {
         String[] to = new String[]{"543190914@qq.com", "1131419236@qq.com"};
-        eMailSendService.sendHtmlMail(to, null, "主题：你好html邮件", "<h1>内容：第一封html邮件</h1>");
+        eMailSendService.sendHtmlMail(to, null, "主题：你好html邮件", "<h1>内容：第一封html邮件,http://localhost:9040/user/queryAll</h1>");
     }
 
     @GetMapping("/sendAttachmentsMail")
