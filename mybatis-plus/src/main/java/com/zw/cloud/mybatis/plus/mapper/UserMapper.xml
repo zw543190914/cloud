@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zw.cloud.mybatis.plus.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.zw.cloud.mybatis.plus.entity.User">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="bir" property="bir" jdbcType="TIMESTAMP"/>
+        <result column="password" property="password"/>
+        <result column="remark" property="remark"/>
+        <result column="tel" property="tel"/>
+        <result column="status" property="status"/>
+        <result column="other" property="other" typeHandler="com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user" property="createUser"/>
+        <result column="update_user" property="updateUser"/>
+        <collection property="roleList" ofType="com.zw.cloud.mybatis.plus.entity.UserRole">
+            <result property="userId" column="user_id"/>
+            <result property="roleId" column="role_id"/>
+            <result property="remark" column="remark"/>
+            <result column="create_time" property="createTime"/>
+            <result column="update_time" property="updateTime"/>
+            <result column="create_user" property="createUser"/>
+            <result column="update_user" property="updateUser"/>
+        </collection>
+    </resultMap>
+
+
+
+    <select id="queryUserRoleIdList" resultMap="BaseResultMap">
+        select * from user
+        left join user_role
+        on user.id = user_role.user_id
+    </select>
+</mapper>

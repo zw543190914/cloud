@@ -39,7 +39,7 @@ mybatis-plus:
   type-handlers-package: com.zw.cloud.mybatis.plus.db.typehandlers.ext
   configuration:
     map-underscore-to-camel-case: true
-    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     banner: false
     db-config:
