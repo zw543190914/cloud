@@ -6,8 +6,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 @Configuration
 @EnableScheduling
@@ -18,9 +17,9 @@ public class ScheduleConfig implements SchedulingConfigurer {
         taskRegistrar.setScheduler(scheduleTaskExecutor());
     }
 
-    @Bean(destroyMethod="shutdown")
+    @Bean
     public Executor scheduleTaskExecutor() {
-        return Executors.newScheduledThreadPool(8);
+        return  new ScheduledThreadPoolExecutor(Runtime.getRuntime().availableProcessors(),new ThreadPoolExecutor.AbortPolicy());
     }
 }
 

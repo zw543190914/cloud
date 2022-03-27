@@ -10,12 +10,9 @@ public class ScheduleTask {
 
     AtomicInteger count = new AtomicInteger();
 
-    //@Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 5000)
     public void task() {
         int increment = count.getAndIncrement();
-        System.out.println(increment);
-        if (increment % 2 == 0) {
-            throw new RuntimeException("error...");
-        }
+        System.out.println(Thread.currentThread().getName() + ":" +increment);
     }
 }
