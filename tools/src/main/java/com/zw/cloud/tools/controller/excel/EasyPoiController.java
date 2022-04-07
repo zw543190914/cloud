@@ -1,12 +1,21 @@
 package com.zw.cloud.tools.controller.excel;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.ExcelImportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.afterturn.easypoi.excel.entity.ImportParams;
+import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
+import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
 import cn.afterturn.easypoi.handler.inter.IExcelDictHandler;
 import com.alibaba.fastjson.JSON;
 import com.zw.cloud.tools.entity.dto.ShipmentOrderDTO;
 import com.zw.cloud.tools.utils.excel.ExcelExportUtils;
 import com.zw.cloud.tools.utils.excel.ExcelImportUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.assertj.core.util.Lists;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +29,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * https://www.cnblogs.com/huanghuanghui/p/9365849.html
@@ -40,7 +51,36 @@ public class EasyPoiController {
         } else {
             title = System.currentTimeMillis() + "+" + shipmentOrderDTOS.size() + ".xlsx";
         }
-        Workbook workbook = ExcelExportUtils.export(null, "发货通知单", 0, shipmentOrderDTOS, ShipmentOrderDTO.class, null);
+        // 单个sheet 导出
+        //Workbook workbook = ExcelExportUtils.export(null, "发货通知单", 0, shipmentOrderDTOS, ShipmentOrderDTO.class, null);
+
+        // https://blog.csdn.net/baidu_36821021/article/details/85216855
+        ExportParams sheet1Params = new ExportParams();
+        // 设置sheet得名称
+        sheet1Params.setSheetName("sheet1");
+        // 创建sheet1使用得map
+        Map<String, Object> sheet1ExportMap = new HashMap<>();
+        // title的参数为ExportParams类型，目前仅仅在ExportParams中设置了sheetName
+        sheet1ExportMap.put("title", sheet1Params);
+        // 模版导出对应得实体类型
+        sheet1ExportMap.put("entity", ShipmentOrderDTO.class);
+        // sheet中要填充得数据
+        sheet1ExportMap.put("data", shipmentOrderDTOS);
+
+        ExportParams sheet2Params = new ExportParams();
+        sheet2Params.setSheetName("sheet2");
+        // 创建sheet2使用得map
+        Map<String, Object> sheet2ExportMap = new HashMap<>();
+        sheet2ExportMap.put("title", sheet2Params);
+        sheet2ExportMap.put("entity", ShipmentOrderDTO.class);
+        sheet2ExportMap.put("data", buildData());
+
+        // 将sheet1、sheet2、sheet3使用得map进行包装
+        List<Map<String, Object>> sheetsList = new ArrayList<>();
+        sheetsList.add(sheet1ExportMap);
+        sheetsList.add(sheet2ExportMap);
+
+        Workbook workbook = ExcelExportUtil.exportExcel(sheetsList, ExcelType.HSSF);
 
         response.setCharacterEncoding("UTF-8");
         response.setHeader("content-Type", "application/vnd.ms-excel");
@@ -52,7 +92,33 @@ public class EasyPoiController {
     @PostMapping("/importData")
     //http://localhost:9040/easy-poi/importData
     public void importData(MultipartFile file) throws Exception {
-        List<ShipmentOrderDTO> shipmentOrderDTOList = ExcelImportUtils.importExcel(file, 0, 1, ShipmentOrderDTO.class);
+        // 单个sheet
+        //List<ShipmentOrderDTO> shipmentOrderDTOList = ExcelImportUtils.importExcel(file, 0, 1, ShipmentOrderDTO.class);
+        String fileName = file.getOriginalFilename();
+        Workbook hssfWorkbook ;
+        if (fileName.endsWith("xlsx")){
+            hssfWorkbook = new HSSFWorkbook(file.getInputStream());//Excel 2007
+        } else if (fileName.endsWith("xls")){
+            hssfWorkbook = new XSSFWorkbook(file.getInputStream());//Excel 2003
+        } else {
+            return;
+        }
+        ImportParams params = new ImportParams();
+        List<ShipmentOrderDTO> shipmentOrderDTOList = new ArrayList<>();
+        for (int numSheet = 0; numSheet < hssfWorkbook.getNumberOfSheets(); numSheet++) {
+            //表头在第几行
+            params.setTitleRows(0);
+            //距离表头中间有几行不要的数据
+            //params.setStartRows(1);
+            //第几个sheet页
+            params.setStartSheetIndex(numSheet);
+            ExcelImportResult<ShipmentOrderDTO> objectExcelImportResult = ExcelImportUtil.importExcelMore(file.getInputStream(), ShipmentOrderDTO.class, params);
+            List<ShipmentOrderDTO> list = objectExcelImportResult.getList();
+            if (CollectionUtils.isNotEmpty(list)) {
+                shipmentOrderDTOList.addAll(list);
+            }
+        }
+
         log.info("[EasyPoiController][importData] shipmentOrderDTOList is {}",JSON.toJSONString(shipmentOrderDTOList));
     }
 
