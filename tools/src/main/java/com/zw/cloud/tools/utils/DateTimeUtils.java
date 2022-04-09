@@ -1,9 +1,12 @@
 package com.zw.cloud.tools.utils;
+import com.alibaba.fastjson.JSON;
 import com.google.common.base.Preconditions;
+import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
@@ -12,6 +15,7 @@ public class DateTimeUtils {
     public static void main(String[] args) throws Exception{
         //获取秒数
         LocalDateTime now = LocalDateTime.now();
+        System.out.println(now.toString());
         Long second = now.toEpochSecond(ZoneOffset.of("+8"));
         System.out.println(second);
         //获取毫秒数
@@ -34,6 +38,13 @@ public class DateTimeUtils {
 
         System.out.println(getNumOfMonth("2021-02"));
         System.out.println("localdatetime2:" + LocalDateTime.now().toString());
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String localDateTimeStr = dateTimeFormatter.format(LocalDateTime.now());
+        System.out.println("localDateTimeStr==" + localDateTimeStr);
+        System.out.println(LocalDateTime.parse(localDateTimeStr,dateTimeFormatter));
+
+        System.out.println(3600 * 24 * 30 * 3);
     }
 
     public static LocalDateTime dateToLocalDateTime(Date date) {

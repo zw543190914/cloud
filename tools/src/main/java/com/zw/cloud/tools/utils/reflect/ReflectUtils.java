@@ -48,6 +48,8 @@ public class ReflectUtils {
             Object value = readMethod.invoke(user);
             field.set(user2,value);
             //field.set(user2,field.get(user));
+            System.out.println("field:" + field.getName() + ",value:" + field.get(user));
+
         }
         System.out.println(JSONUtil.toJsonStr(user2));
 
@@ -62,7 +64,7 @@ public class ReflectUtils {
         updateFiledValue(user);
         System.out.println(JSONUtil.toJsonStr(user));
         System.out.println("=====字段必填校验=====");
-        checkFiledIsFilled(user);
+        //checkFiledIsFilled(user);
     }
 
     public static void updateFiledValue(Object obj) throws Exception{
