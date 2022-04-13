@@ -48,6 +48,8 @@
         <module>rabbit</module>
         <module>rocketMq</module>
         <module>influxdb</module>
+        <module>kafka</module>
+
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

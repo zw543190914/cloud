@@ -85,7 +85,7 @@ public class EasyPoiController {
         response.setCharacterEncoding("UTF-8");
         response.setHeader("content-Type", "application/vnd.ms-excel");
         response.setHeader("Content-Disposition",
-                "attachment;filename=" + URLEncoder.encode(title, StandardCharsets.UTF_8));
+                "attachment;filename=" + URLEncoder.encode(title, String.valueOf(StandardCharsets.UTF_8)));
         workbook.write(response.getOutputStream());
     }
 
@@ -186,7 +186,7 @@ public class EasyPoiController {
         response.setCharacterEncoding("UTF-8");
         response.setHeader("content-Type", "application/vnd.ms-excel");
         response.setHeader("Content-Disposition",
-                "attachment;filename=" + URLEncoder.encode(title, StandardCharsets.UTF_8));
+                "attachment;filename=" + URLEncoder.encode(title, String.valueOf(StandardCharsets.UTF_8)));
         workbook.write(response.getOutputStream());
 
     }
