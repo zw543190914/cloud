@@ -26,8 +26,8 @@ public class GeneratorCode {
         gc.setOutputDir(projectPath + "/mybatis-plus/src/main/java");
         gc.setAuthor("zw");
         gc.setOpen(false);
-        gc.setIdType(IdType.AUTO);
-        gc.setDateType(DateType.ONLY_DATE);
+        gc.setIdType(IdType.ASSIGN_ID);
+        //gc.setDateType(DateType.ONLY_DATE);
         gc.setFileOverride(true);
         // gc.setSwagger2(true); 实体属性 Swagger2 注解
         mpg.setGlobalConfig(gc);

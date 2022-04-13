@@ -27,7 +27,7 @@ public class GeneratorCodeUtils {
         gc.setAuthor("zw");
         gc.setOpen(false);
         gc.setIdType(IdType.ASSIGN_ID);
-        gc.setDateType(DateType.ONLY_DATE);
+        //gc.setDateType(DateType.ONLY_DATE);
         gc.setFileOverride(true);
         // gc.setSwagger2(true); 实体属性 Swagger2 注解
         mpg.setGlobalConfig(gc);
