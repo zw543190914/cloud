@@ -9,6 +9,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ZXingCodeSimpleUtils {
     /**
@@ -18,7 +20,10 @@ public class ZXingCodeSimpleUtils {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
             QRCodeWriter writer = new QRCodeWriter();
-            BitMatrix bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 200, 200);
+            Map map = new HashMap<>(4);
+            map.put(EncodeHintType.CHARACTER_SET, "utf-8");
+
+            BitMatrix bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 200, 200,map);
             BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
             ImageIO.write(bufferedImage, "png", os);      //添加图片标识
             return "data:image/png;base64," + Base64.encode(os.toByteArray());

@@ -13,7 +13,7 @@ import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ZXingCodeUtils {
+public class ZXingBarCodeUtils {
 
     public static void generateCode(File file, String code, int width, int height){
         // 定义位图矩阵BitMatrix

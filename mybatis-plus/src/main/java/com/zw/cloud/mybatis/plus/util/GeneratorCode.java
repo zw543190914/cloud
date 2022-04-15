@@ -66,14 +66,16 @@ public class GeneratorCode {
         // 逻辑删除
         strategy.setLogicDeleteFieldName("deleted");
         //strategy.setSuperEntityClass("你自己的父类实体,没有就不用设置!");
+        // 配置 lombok 模式
         strategy.setEntityLombokModel(true);
+        // 配置 rest 风格的控制器（@RestController）
+        strategy.setRestControllerStyle(true);
 
         // 自动填充
         TableFill createTime = new TableFill("create_time", FieldFill.INSERT);
         TableFill updateTime = new TableFill("update_time", FieldFill.INSERT_UPDATE);
-        TableFill orgCode = new TableFill("org_code", FieldFill.INSERT);
-        TableFill clientId = new TableFill("client_id", FieldFill.INSERT_UPDATE);
-        ArrayList<TableFill> fills = Lists.newArrayList(createTime,updateTime,orgCode,clientId);
+        TableFill userId = new TableFill("user_id", FieldFill.INSERT_UPDATE);
+        ArrayList<TableFill> fills = Lists.newArrayList(createTime,updateTime,userId);
         strategy.setTableFillList(fills);
         // 乐观锁
         strategy.setVersionFieldName("version");

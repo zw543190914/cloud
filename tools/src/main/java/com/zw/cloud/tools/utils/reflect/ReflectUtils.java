@@ -3,6 +3,7 @@ package com.zw.cloud.tools.utils.reflect;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.json.JSONUtil;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.zw.cloud.tools.entity.User;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class ReflectUtils {
@@ -36,6 +38,8 @@ public class ReflectUtils {
         System.out.println("parent class :" + superclass.getTypeName());
 
         Field[] declaredFields = userClass.getDeclaredFields();
+        Set<String> fieldSet = Lists.newArrayList(declaredFields).stream().map(Field::getName).collect(Collectors.toSet());
+        System.out.println("fieldSet : " + fieldSet.toString());
         for (Field field : declaredFields) {
             if (field.getName().equals("serialVersionUID")) {
                 continue;
