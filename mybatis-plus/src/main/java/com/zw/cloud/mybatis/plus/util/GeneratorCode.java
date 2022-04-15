@@ -8,8 +8,8 @@ import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.PackageConfig;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.po.TableFill;
-import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
@@ -59,6 +59,10 @@ public class GeneratorCode {
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         //表名，多个英文逗号分割
         strategy.setInclude("user");
+        // 表前缀
+        //strategy.setTablePrefix(pc.getModuleName() + "_");
+
+
         // 逻辑删除
         strategy.setLogicDeleteFieldName("deleted");
         //strategy.setSuperEntityClass("你自己的父类实体,没有就不用设置!");
@@ -74,8 +78,6 @@ public class GeneratorCode {
         // 乐观锁
         strategy.setVersionFieldName("version");
 
-        //strategy.setTablePrefix(pc.getModuleName() + "_");
-
         // 公共父类
         //strategy.setSuperControllerClass("你自己的父类控制器,没有就不用设置!");
         // 写于父类中的公共字段
@@ -83,7 +85,7 @@ public class GeneratorCode {
         strategy.setRestControllerStyle(true);
         strategy.setControllerMappingHyphenStyle(true);
         mpg.setStrategy(strategy);
-
+        mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         // 执行
         mpg.execute();
     }
