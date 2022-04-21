@@ -1,4 +1,4 @@
-package com.zw.cloud.tools.config;
+package com.zw.cloud.netty.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
