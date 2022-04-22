@@ -29,6 +29,14 @@ public class RedissonConfig {
 //        config.useMasterSlaveServers().setMasterAddress("").setPassword("").addSlaveAddress(new String[]{"",""});
 
         return Redisson.create(config);
+
+       /* Config config = new Config();
+        config.useClusterServers()
+                .setScanInterval(2000) // 集群状态扫描间隔时间，单位是毫秒
+                //可以用"rediss://"来启用SSL连接
+                .addNodeAddress("redis://127.0.0.1:7000", "redis://127.0.0.1:7001")
+                .addNodeAddress("redis://127.0.0.1:7002");
+        return Redisson.create(config);*/
     }
 
 }

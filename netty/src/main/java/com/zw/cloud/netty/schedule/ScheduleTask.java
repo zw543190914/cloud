@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -20,52 +21,49 @@ public class ScheduleTask {
     @Autowired
     private RedissonClient redissonClient;
 
-    @Scheduled(cron = "0/10 * * * * ? ")
+    @Scheduled(cron = "0/5 * * * * ? ")
+    @Async
     public void task1() {
         RLock lock = redissonClient.getLock("test_lock");
         boolean hasLock;
         try {
-            hasLock = lock.tryLock(0,1,TimeUnit.SECONDS);
+            hasLock = lock.tryLock(0,3, TimeUnit.SECONDS);
         } catch (Exception e) {
-            log.error("[ScheduleTask][task1] error is ",e);
+            log.error("[ScheduleTask][task1] error is ", e);
             return;
         }
-        if (!hasLock){
-            log.info("[ScheduleTask][task1] 获取锁失败, {}",Thread.currentThread().getName());
+        if (!hasLock) {
+            log.info("[ScheduleTask][task1] 获取锁失败, {}", Thread.currentThread().getName());
             return;
         }
+        log.info("[ScheduleTask][task1] start, {}", Thread.currentThread().getName());
         try {
-            log.info("[ScheduleTask][task1] start, {}",Thread.currentThread().getName());
-            //Thread.sleep(5000);
-        } catch (Exception e) {
-            if (lock.isLocked()){
-                lock.unlock();
-            }
+            Thread.sleep(6000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
-    @Scheduled(cron = "0/10 * * * * ? ")
-    public void task2(){
+    @Scheduled(cron = "0/5 * * * * ? ")
+    @Async
+    public void task2() {
         RLock lock = redissonClient.getLock("test_lock");
         boolean hasLock;
         try {
-            hasLock = lock.tryLock(0,1,TimeUnit.SECONDS);
+            hasLock = lock.tryLock(0,3, TimeUnit.SECONDS);
         } catch (Exception e) {
-            log.error("[ScheduleTask][task2] error is ",e);
+            log.error("[ScheduleTask][task2] error is ", e);
             return;
         }
-        if (!hasLock){
-            log.info("[ScheduleTask][task2] 获取锁失败, {}",Thread.currentThread().getName());
+        if (!hasLock) {
+            log.info("[ScheduleTask][task2] 获取锁失败, {}", Thread.currentThread().getName());
             return;
         }
+        log.info("[ScheduleTask][task2] start, {}", Thread.currentThread().getName());
         try {
-            log.info("[ScheduleTask][task2] start, {}",Thread.currentThread().getName());
-            //Thread.sleep(5000);
-        } catch (Exception e) {
-            if (lock.isLocked()){
-                lock.unlock();
-            }
+            Thread.sleep(6000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-
     }
 }
