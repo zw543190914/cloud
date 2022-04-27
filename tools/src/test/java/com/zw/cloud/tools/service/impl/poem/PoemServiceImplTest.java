@@ -7,10 +7,12 @@ import com.zw.cloud.tools.entity.poem.Poem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.boot.test.context.SpringBootTest;
+
 
 import static org.mockito.ArgumentMatchers.*;
 
-
+@SpringBootTest
 class PoemServiceImplTest {
 
     @InjectMocks
@@ -33,6 +35,6 @@ class PoemServiceImplTest {
         Mockito.when(service.saveBatch(any())).thenReturn(true);
         Poem poem = new Poem();
         poem.setContent("test");
-        poemService.saveBatch(Lists.newArrayList());
+        poemService.saveBatch(Lists.newArrayList(poem));
     }
 }
