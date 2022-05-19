@@ -19,10 +19,10 @@ public class SortedTest {
 
         List<User> collect = list.stream().sorted(Comparator.comparing(SortedTest::compare)).collect(Collectors.toList());
         System.out.println(JSON.toJSONString(collect));
-        Map<String, List<User>> map = list.stream().collect(Collectors.groupingBy(User::getName));
+       /* Map<String, List<User>> map = list.stream().collect(Collectors.groupingBy(User::getName));
         map.forEach((k,v) ->{
             list.add(new User());
-        });
+        });*/
       /*  Map<String, List<User>> map1 = list.stream().collect(Collectors.groupingBy(User::getName));
         System.out.println(JSON.toJSONString(map1));*/
 
@@ -31,6 +31,13 @@ public class SortedTest {
         System.out.println(strings.toString());
         strings.sort(Comparator.comparing(Integer::parseInt));
         System.out.println(strings.toString());
+
+        List<User> users = list.stream().filter(user -> user.getAge() > 11).sorted(Comparator.comparing(User::getAge)).collect(Collectors.toList());
+        System.out.println(JSON.toJSONString(users));
+        List<String> names = list.stream().filter(user -> user.getAge() > 11).map(User::getName).collect(Collectors.toList());
+        System.out.println(JSON.toJSONString(names));
+
+
     }
     public static int compare(User user){
         if (Objects.equals(user.getName(),"zw4")){

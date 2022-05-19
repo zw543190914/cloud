@@ -1,6 +1,7 @@
 package com.zw.cloud.tools.utils;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Preconditions;
+import com.zw.cloud.tools.entity.LocalDateTimeDTO;
 import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +46,14 @@ public class DateTimeUtils {
         System.out.println(LocalDateTime.parse(localDateTimeStr,dateTimeFormatter));
 
         System.out.println(3600 * 24 * 30 * 3);
+        String start = "2022-05-18T23:59:00";
+        LocalDateTime startTime = LocalDateTime.parse(start);
+        String end = "2022-05-19T23:59:00";
+        LocalDateTime endTime = LocalDateTime.parse(end);
+        String config = "2022-05-19T23:50:00";
+        LocalDateTime configTime = LocalDateTime.parse(config);
+        List<LocalDateTimeDTO> localDateTimeDTOS = calBetweenTime(startTime, endTime, configTime);
+        System.out.println(JSON.toJSONString(localDateTimeDTOS));
     }
 
     public static LocalDateTime dateToLocalDateTime(Date date) {
@@ -302,6 +311,58 @@ public class DateTimeUtils {
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM");
         calendar.setTime(simpleDate.parse(date));
         return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+    }
+
+    /**
+     * 根据指定时间 切分时间
+     */
+    public static List<LocalDateTimeDTO> calBetweenTime(LocalDateTime startTime, LocalDateTime endTime, LocalDateTime configTime) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        // 日开始统计时间
+        List<LocalDateTimeDTO> result = new ArrayList<>();
+        // 开始时间和结束时间都在配置时间之前
+        if (startTime.isBefore(configTime) && endTime.isBefore(configTime)) {
+            LocalDateTimeDTO productDefectStatisticDTO = new LocalDateTimeDTO();
+            productDefectStatisticDTO.setStartTime(startTime);
+            productDefectStatisticDTO.setEndTime(endTime);
+            productDefectStatisticDTO.setDateStr(dateTimeFormatter.format(startTime.minusDays(1)));
+            result.add(productDefectStatisticDTO);
+            return result;
+        }
+        // 开始时间和结束时间都在配置时间之后
+        if (startTime.isAfter(configTime) && endTime.isAfter(configTime) && endTime.isBefore(configTime.plusDays(1))) {
+            LocalDateTimeDTO productDefectStatisticDTO = new LocalDateTimeDTO();
+            productDefectStatisticDTO.setStartTime(startTime);
+            productDefectStatisticDTO.setEndTime(endTime);
+            productDefectStatisticDTO.setDateStr(dateTimeFormatter.format(startTime.plusDays(1)));
+            result.add(productDefectStatisticDTO);
+            return result;
+        }
+        if (startTime.isBefore(configTime)) {
+            LocalDateTimeDTO first = new LocalDateTimeDTO();
+            first.setStartTime(startTime);
+            first.setEndTime(configTime);
+            first.setDateStr(dateTimeFormatter.format(startTime.minusDays(1)));
+            result.add(first);
+        }
+
+        while (endTime.isAfter(configTime)) {
+            LocalDateTimeDTO dto = new LocalDateTimeDTO();
+            if (startTime.isAfter(configTime)) {
+                dto.setStartTime(startTime);
+            } else {
+                dto.setStartTime(configTime);
+            }
+            dto.setDateStr(dateTimeFormatter.format(dto.getStartTime()));
+            configTime = configTime.plusDays(1);
+            dto.setEndTime(configTime);
+            result.add(dto);
+        }
+        LocalDateTimeDTO last = result.get(result.size() - 1);
+        if (!last.getEndTime().equals(endTime)){
+            last.setEndTime(endTime);
+        }
+        return result;
     }
 
 }

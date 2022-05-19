@@ -33,6 +33,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @RestController
@@ -145,13 +147,19 @@ public class ExcelController {
         }
 
         //输出Excel文件
-        OutputStream output=response.getOutputStream();
+/*        OutputStream output=response.getOutputStream();
         response.reset();
         response.setHeader("Content-disposition", "attachment; filename="
                 + new String("用户数据".getBytes("gbk"), "iso8859-1") + ".xlsx");
         response.setContentType("application/octet-stream");
         wb.write(output);
-        output.close();
+        output.close();*/
+
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("content-Type", "application/vnd.ms-excel");
+        response.setHeader("Content-Disposition",
+                "attachment;filename=" + URLEncoder.encode("用户数据", String.valueOf(StandardCharsets.UTF_8)));
+        wb.write(response.getOutputStream());
 
     }
 

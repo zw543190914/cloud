@@ -24,11 +24,14 @@ public class LockScheduleTask {
         RLock lock = redissonClient.getLock("test_lock");
         lock.lock();
         log.info("[LockScheduleTask][task1] start, {}", Thread.currentThread().getName());
-        try {
+        throw new RuntimeException("ex");
+        /*try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        } finally {
+            lock.unlock();
+        }*/
     }
 
     @Scheduled(cron = "0/2 * * * * ? ")
@@ -41,6 +44,8 @@ public class LockScheduleTask {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            lock.unlock();
         }
     }
 }
