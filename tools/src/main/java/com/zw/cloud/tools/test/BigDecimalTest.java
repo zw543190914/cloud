@@ -6,6 +6,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
+import java.util.Objects;
 
 
 public class BigDecimalTest {
@@ -35,7 +36,44 @@ public class BigDecimalTest {
         System.out.println(format);
         String[] s = format.split("_");
         System.out.println(Arrays.toString(s));
+
+        BigDecimal bigDecimal1 = parseBigDecimal(new BigDecimal("163.545"));
+
+        System.out.println( bigDecimal1.toString());
+
+        BigDecimal bigDecimal2 = parseBigDecimalToInteger(new BigDecimal("163.545"));
+        System.out.println( bigDecimal2.toString());
+
     }
+
+    /**
+     * 四舍五入，精确到5
+     */
+    private static BigDecimal parseBigDecimal(BigDecimal bigDecimal){
+        bigDecimal = bigDecimal.setScale(0, RoundingMode.HALF_UP);
+        int value = bigDecimal.intValue();
+        int gw = value % 10;
+        if (gw == 5) {
+            return bigDecimal;
+        }
+        return bigDecimal.divide(new BigDecimal("10"), 0, RoundingMode.HALF_DOWN).multiply(new BigDecimal("10"));
+    }
+
+    /**
+     * 四舍五入，精确到整数
+     */
+    private static BigDecimal parseBigDecimalToInteger(BigDecimal bigDecimal){
+        if (Objects.isNull(bigDecimal)) {
+            return null;
+        }
+        if (bigDecimal.compareTo(new BigDecimal("100")) > 0) {
+            return bigDecimal.divide(new BigDecimal("100"), 0, RoundingMode.HALF_DOWN).multiply(new BigDecimal("100"));
+
+        } else {
+            return bigDecimal.setScale(0, RoundingMode.HALF_UP);
+        }
+    }
+
 
     private static  Integer buildTemp(BigDecimal num, int size) {
         if (ObjectUtils.isEmpty(num)) {
