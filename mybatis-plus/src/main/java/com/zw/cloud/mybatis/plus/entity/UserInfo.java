@@ -26,9 +26,10 @@ public class UserInfo implements Serializable {
 
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
-//    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-//    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime updateTime;
+
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
     private String description;
 

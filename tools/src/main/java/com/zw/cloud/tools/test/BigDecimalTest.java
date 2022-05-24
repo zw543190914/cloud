@@ -41,7 +41,7 @@ public class BigDecimalTest {
 
         System.out.println( bigDecimal1.toString());
 
-        BigDecimal bigDecimal2 = parseBigDecimalToInteger(new BigDecimal("163.545"));
+        BigDecimal bigDecimal2 = parseBigDecimalToInteger(new BigDecimal("1368.545"));
         System.out.println( bigDecimal2.toString());
 
     }

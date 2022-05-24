@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/redis")
@@ -39,6 +40,23 @@ public class RedisController {
         });
 
         return zw;
+    }
+
+    @GetMapping("/setadd")
+    //http://localhost:18092/redis/setadd
+    public void setadd(){
+        for (int j = 0; j < 10; j++) {
+            redisTemplate.opsForSet().add("set",String.valueOf(j));
+        }
+        Boolean hasKey = redisTemplate.hasKey("set");
+        System.out.println(hasKey);
+    }
+
+    @GetMapping("/setnx")
+    //http://localhost:18092/redis/setnx
+    public void setnx(){
+        Boolean aBoolean = redisTemplate.opsForValue().setIfAbsent("key", "value", 60, TimeUnit.SECONDS);
+        System.out.println(aBoolean);
     }
 
     @GetMapping("/tryLock")
