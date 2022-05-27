@@ -26,7 +26,7 @@ public class MqttPublishSample {
         String userName = "thingidp@amgjjzk|qa_test_device_stenter_02|0|MD5";
         String password = "3509803995f1748b7d4c5f1ad9dfb615";
         String topic = "d/qa_test_device_stenter_02/report";
-        String clientId = "subscribe_test_device";
+        String clientId = "subscribe_test";
         // 线上
      /*   String host = "tcp://afswjqe.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|8888|0|MD5";
@@ -51,7 +51,7 @@ public class MqttPublishSample {
         //long second = 1641432677;
         int stop;
         int j = 100 ;
-        Long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
+        long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
         for (int i = 0; i < 120; i++) {
 
             second = second + i;

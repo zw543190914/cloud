@@ -21,7 +21,7 @@ public class HttpInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info("[HttpInterceptor][preHandle]");
+        //log.info("[HttpInterceptor][preHandle]");
         String accessToken = request.getHeader("accessToken");
         /*if (StringUtils.isBlank(accessToken)) {
             throw new Exception("请先登录");
@@ -49,14 +49,14 @@ public class HttpInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request,
                            HttpServletResponse response, Object handler,
                            ModelAndView modelAndView) throws Exception {
-        log.info("[HttpInterceptor][postHandle]");
+        //log.info("[HttpInterceptor][postHandle]");
 
     }
 
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        log.info("[HttpInterceptor][afterCompletion]ThreadId:"+ RequestHolder.getValue());
+        //log.info("[HttpInterceptor][afterCompletion]ThreadId:"+ RequestHolder.getValue());
         RequestHolder.remove();
 
     }
