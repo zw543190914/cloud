@@ -53,9 +53,9 @@ public class ExcelController {
         String fileName = file.getOriginalFilename();
         Workbook hssfWorkbook = null;
         if (fileName.endsWith("xlsx")){
-            hssfWorkbook = new HSSFWorkbook(file.getInputStream());//Excel 2007
+            hssfWorkbook = new XSSFWorkbook(file.getInputStream());//Excel 2007
         } else if (fileName.endsWith("xls")){
-            hssfWorkbook = new XSSFWorkbook(file.getInputStream());//Excel 2003
+            hssfWorkbook = new HSSFWorkbook(file.getInputStream());//Excel 2003
         } else {
             return;
         }

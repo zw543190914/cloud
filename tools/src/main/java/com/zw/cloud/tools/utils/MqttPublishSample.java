@@ -8,6 +8,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Random;
 
 /**
  *发布端
@@ -22,17 +23,18 @@ public class MqttPublishSample {
         String topic = "d/dev_test_device_stenter_03/report";
         String clientId = "subscribe_test_device";*/
         // qa
-        String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+        // 定型机#02
+        /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|qa_test_device_stenter_02|0|MD5";
         String password = "3509803995f1748b7d4c5f1ad9dfb615";
         String topic = "d/qa_test_device_stenter_02/report";
-        String clientId = "subscribe_test";
+        String clientId = "subscribe_test";*/
         // 线上
-     /*   String host = "tcp://afswjqe.iot.gz.baidubce.com";
-        String userName = "thingidp@amgjjzk|8888|0|MD5";
-        String password = "bdf6a12cb4d85d36954a9759e24b12d4";
-        String topic = "d/8888/report";
-        String clientId = "subscribe_test_device";*/
+        String host = "tcp://afswjqe.iot.gz.baidubce.com";
+        String userName = "thingidp@afswjqe|3123|0|MD5";
+        String password = "a538bf35aa1ce0442cbea7fcef3592cb";
+        String topic = "d/3123/report";
+        String clientId = "9746842599496";
 
         int qos = 1;
         // 内存存储
@@ -48,10 +50,11 @@ public class MqttPublishSample {
         connOpts.setPassword(password.toCharArray());
         // 建立连接
         sampleClient.connect(connOpts);
-        //long second = 1641432677;
+        long second = 1655371800;
         int stop;
-        int j = 100 ;
-        long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
+        Random random = new Random();
+        int j = 121 ;
+        //long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
         for (int i = 0; i < 120; i++) {
 
             second = second + i;
