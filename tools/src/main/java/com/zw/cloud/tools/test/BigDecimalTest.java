@@ -44,6 +44,8 @@ public class BigDecimalTest {
         BigDecimal bigDecimal2 = parseBigDecimalToInteger(new BigDecimal("1368.545"));
         System.out.println( bigDecimal2.toString());
 
+        System.out.println( new BigDecimal("1368.00").stripTrailingZeros().toPlainString());
+
     }
 
     /**
