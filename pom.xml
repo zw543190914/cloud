@@ -111,6 +111,7 @@
         <pig4cloud.version>1.0.1</pig4cloud.version>
         <mybatis.plus.version>3.4.3</mybatis.plus.version>
         <mybatis-plus-generator.version>3.4.1</mybatis-plus-generator.version>
+        <mybatis-enhance-actable.version>1.5.0.RELEASE</mybatis-enhance-actable.version>
         <velocity-engine-core.version>2.2</velocity-engine-core.version>
         <netty-all.version>4.1.63.Final</netty-all.version>
         <mqtt-client.version>0.4.0</mqtt-client.version>
@@ -460,6 +461,13 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-generator</artifactId>
                 <version>${mybatis-plus-generator.version}</version>
+            </dependency>
+            <!--创建表的插件-->
+            <!-- https://mvnrepository.com/artifact/com.gitee.sunchenbin.mybatis.actable/mybatis-enhance-actable -->
+            <dependency>
+                <groupId>com.gitee.sunchenbin.mybatis.actable</groupId>
+                <artifactId>mybatis-enhance-actable</artifactId>
+                <version>${mybatis-enhance-actable.version}</version>
             </dependency>
            <!-- 影响mybatis-plus generate-->
            <!-- <dependency>

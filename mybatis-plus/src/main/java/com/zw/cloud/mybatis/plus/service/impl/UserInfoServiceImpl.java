@@ -1,13 +1,10 @@
 package com.zw.cloud.mybatis.plus.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.google.common.collect.Lists;
 import com.zw.cloud.mybatis.plus.entity.UserInfo;
 import com.zw.cloud.mybatis.plus.mapper.UserInfoMapper;
-import com.zw.cloud.mybatis.plus.service.api.IUserTestService;
+import com.zw.cloud.mybatis.plus.service.api.IUserInfoService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -16,13 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @Service
 @Slf4j
-public class UserTestServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> implements IUserTestService {
+public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> implements IUserInfoService {
 
     @Autowired
     private UserInfoMapper userInfoMapper;
@@ -79,7 +75,21 @@ public class UserTestServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         saveOrUpdateBatch(userInfoList);
     }
 
-
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void testMvcc(Long id) {
+        UserInfo userInfo = userInfoMapper.selectById(id);
+        //UserInfo userInfo = userInfoMapper.queryByIdForUpdate(id);
+        Integer age = userInfo.getAge();
+        log.info("[testMvcc] age is {}", age);
+        try {
+            Thread.sleep(2000);
+            Integer age2 = userInfoMapper.selectById(id).getAge();
+            log.info("[testMvcc] age2 is {}", age2);
+        } catch (Exception e) {
+            log.error("[testMvcc] error is ", e);
+        }
+    }
 
     @Override
     public List<UserInfo> queryJsonData(String name){

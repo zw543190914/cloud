@@ -1,12 +1,13 @@
 CREATE TABLE `user_info` (
-                             `id` bigint(20) NOT NULL AUTO_INCREMENT,
-                             `name` varchar(255) NOT NULL,
-                             `age` tinyint(4) DEFAULT NULL,
-                             `bir` datetime DEFAULT NULL,
-                             `other` json DEFAULT NULL,
-                             `create_time` datetime NOT NULL,
-                             `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP,
-                             `deleted` int(11) NOT NULL DEFAULT '0',
-                             PRIMARY KEY (`id`),
-                             UNIQUE KEY `uk_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=1439464213926895618 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+                             `id` bigint NOT NULL AUTO_INCREMENT,
+                             `name` varchar(128) NOT NULL DEFAULT '' COMMENT '姓名',
+                             `bir` date DEFAULT NULL COMMENT '生日',
+                             `age` tinyint DEFAULT NULL COMMENT '年龄',
+                             `description` varchar(255) DEFAULT NULL COMMENT '描述',
+                             `other` json DEFAULT NULL COMMENT '其他',
+                             `deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否删除',
+                             `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                             `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+                             `org_code` varchar(255) NOT NULL DEFAULT '' COMMENT '组织id',
+                             PRIMARY KEY (`id`)
+) ENGINE=InnoDB COMMENT='用户表';

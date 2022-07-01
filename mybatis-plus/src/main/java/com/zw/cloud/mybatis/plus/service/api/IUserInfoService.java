@@ -6,7 +6,7 @@ import com.zw.cloud.mybatis.plus.entity.UserInfo;
 import java.util.List;
 import java.util.Map;
 
-public interface IUserTestService extends IService<UserInfo> {
+public interface IUserInfoService extends IService<UserInfo> {
 
     void testBatchInsertOneByOne(List<UserInfo> userInfoList);
 
@@ -21,6 +21,8 @@ public interface IUserTestService extends IService<UserInfo> {
     void batchUpdateUserList(List<UserInfo> userInfoList);
 
     void batchSaveOrUpdate(List<UserInfo> userInfoList);
+
+    void testMvcc(Long id);
 
     List<UserInfo> queryJsonData(String name);
 

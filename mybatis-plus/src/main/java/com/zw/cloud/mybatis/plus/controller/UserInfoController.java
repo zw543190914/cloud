@@ -8,40 +8,42 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.zw.cloud.mybatis.plus.entity.UserInfo;
 import com.zw.cloud.mybatis.plus.mapper.UserInfoMapper;
-import com.zw.cloud.mybatis.plus.service.api.IUserTestService;
+import com.zw.cloud.mybatis.plus.service.api.IUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController
-@RequestMapping("/user-test")
+@RequestMapping("/user-info")
 @Slf4j
-public class UserTestController {
+public class UserInfoController {
     @Autowired
-    private IUserTestService userService;
+    private IUserInfoService userService;
     @Autowired
     private UserInfoMapper mapper;
 
     @GetMapping("/testBatchInsertOneByOne")
-    //http://localhost:8080/user-test/testBatchInsertOneByOne
+    //http://localhost:8080/user-info/testBatchInsertOneByOne
     public void testBatchInsertOneByOne() {
         userService.testBatchInsertOneByOne(buildUserList());
     }
 
     @GetMapping("/testBatchInsertByMapper")
-    //http://localhost:8080/user-test/testBatchInsertByMapper
+    //http://localhost:8080/user-info/testBatchInsertByMapper
     public void testBatchInsertByMapper() {
         userService.testBatchInsertByMapper(buildUserList());
     }
 
     @GetMapping("/testBatchInsertByMybatisPlus")
-    //http://localhost:8080/user-test/testBatchInsertByMybatisPlus
+    //http://localhost:8080/user-info/testBatchInsertByMybatisPlus
     public void testBatchInsertByMybatisPlus() {
         long start = System.currentTimeMillis();
         userService.saveBatch(buildUserList(),2000);
@@ -51,7 +53,7 @@ public class UserTestController {
     }
 
     @GetMapping("/insertWithJson")
-    //http://localhost:8080/user-test/insertWithJson
+    //http://localhost:8080/user-info/insertWithJson
     public void insertWithJson() {
         UserInfo user = new UserInfo();
         user.setName("test121");
@@ -64,10 +66,11 @@ public class UserTestController {
     }
 
     @GetMapping
-    //http://localhost:8080/user-test?name=test2
+    //http://localhost:8080/user-info?name=test2
     public void saveOrUpdate(String name) {
         UserInfo user = new UserInfo();
         user.setName(name);
+        user.setAge(22);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("2222","name11");
         jsonObject.put("date",new Date());
@@ -77,7 +80,7 @@ public class UserTestController {
     }
 
     @GetMapping("/batchInsertByMapper")
-    //http://localhost:8080/user-test/batchInsertByMapper
+    //http://localhost:8080/user-info/batchInsertByMapper
     public void batchInsertByMapper() {
 
         try {
@@ -90,13 +93,19 @@ public class UserTestController {
 
 
     @GetMapping("/batchUpdate")
-    //http://localhost:8080/user-test/batchUpdate
+    //http://localhost:8080/user-info/batchUpdate
     public void batchUpdate() {
         userService.batchSaveOrUpdate(buildData());
     }
 
+    @GetMapping("/testMvcc")
+    //http://localhost:8080/user-info/testMvcc?id=1542758664088105011
+    public void testMvcc(@RequestParam Long id) {
+        userService.testMvcc(id);
+    }
+
     @GetMapping("/query")
-    //http://localhost:8080/user-test/query?name=fd2
+    //http://localhost:8080/user-info/query?name=fd2
     public Page<UserInfo> pageQuery(String name) {
         UserInfo user = new UserInfo();
         user.setName(name);
@@ -116,19 +125,19 @@ public class UserTestController {
     }
 
     @GetMapping("/queryJsonData")
-    //http://localhost:8080/user-test/queryJsonData?name=ee挺剂TF-630
+    //http://localhost:8080/user-info/queryJsonData?name=ee挺剂TF-630
     public List<UserInfo> queryJsonData(String name) {
         return userService.queryJsonData(name);
     }
 
     @GetMapping("/queryJsonDataLike")
-    //http://localhost:8080/user-test/queryJsonDataLike?name=挺剂
+    //http://localhost:8080/user-info/queryJsonDataLike?name=挺剂
     public List<UserInfo> queryJsonDataLike(String name) {
         return userService.queryJsonDataLike(name);
     }
 
     @GetMapping("/queryAllDataTest")
-    //http://localhost:8080/user-test/queryAllDataTest
+    //http://localhost:8080/user-info/queryAllDataTest
     public List<UserInfo> queryAllDataTest() {
         return userService.queryAllDataTest();
     }
@@ -153,16 +162,16 @@ public class UserTestController {
 
     private List<UserInfo> buildUserList(){
         List<UserInfo> userInfoList = new ArrayList<>(30000);
+        Random random = new Random();
         for (int i = 0; i < 2000; i++) {
-            UserInfo user2 = new UserInfo();
-            //user2.setId(1438688954489552898L);
-            user2.setName("test");
-            user2.setAge(22);
+            UserInfo user = new UserInfo();
+            user.setName("test" + i);
+            user.setAge(random.nextInt(100));
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("2222","name11");
-            jsonObject.put("date",new Date());
-            user2.setOther(Lists.newArrayList(jsonObject));
-            userInfoList.add(user2);
+            jsonObject.put("nickName",user.getName());
+            jsonObject.put("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            user.setOther(Lists.newArrayList(jsonObject));
+            userInfoList.add(user);
         }
         return userInfoList;
     }
