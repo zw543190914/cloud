@@ -1,14 +1,14 @@
 package com.zw.cloud.dubboprovider.service.impl;
 
 import com.zw.cloud.dubboproviderapi.service.IProviderService;
-import org.apache.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.dubbo.rpc.RpcContext;
 import org.springframework.beans.factory.annotation.Value;
 
 /**
  * dubbo 服务提供者，使用 dubbo 提供的service注解
  */
-@Service
+@DubboService
 public class DubboProviderImpl implements IProviderService {
 
     @Value("${environment}")

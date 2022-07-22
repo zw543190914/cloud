@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.zw.cloud.tools.entity.User;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.math.BigDecimal;
@@ -69,6 +70,8 @@ public class BigDecimalTest {
         System.out.println(getAvgByList(bigDecimalArrayList));
         ArrayList<Integer> list = Lists.newArrayList(null, null);
         System.out.println(list.stream().filter(Objects::nonNull).max(Comparator.comparing(v -> v)).isPresent());
+        Object obj = null;
+        System.out.println(MapUtils.isNotEmpty((Map)obj));
     }
 
     /**

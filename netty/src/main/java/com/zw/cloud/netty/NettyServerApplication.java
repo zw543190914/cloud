@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @MapperScan(basePackages = "com.zw.cloud.netty.web.dao")
-@EnableScheduling
+//@EnableScheduling
 public class NettyServerApplication {
     public static void main(String[] args) {
         //http://localhost:18092/socket.html

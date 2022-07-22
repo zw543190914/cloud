@@ -1,10 +1,12 @@
 package com.zw.cloud.feignconsumer.config.datasource;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -19,11 +21,27 @@ import javax.sql.DataSource;
 @MapperScan(basePackages = "com.zw.cloud.test.dao", sqlSessionFactoryRef = "test1SqlSessionFactory")
 public class DataSource1Config {
 
+    @Value("${spring.datasource.test1.url}")
+    private String url;
+
+    @Value("${spring.datasource.test1.username}")
+    private String user;
+
+    @Value("${spring.datasource.test1.password}")
+    private String password;
+
+    @Value("${spring.datasource.driver-class-name}")
+    private String driverClass;
+
     @Bean(name = "test1DataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.test1")
     @Primary
     public DataSource testDataSource() {
-        return DataSourceBuilder.create().build();
+        DruidDataSource dataSource = new DruidDataSource();
+        dataSource.setDriverClassName(driverClass);
+        dataSource.setUrl(url);
+        dataSource.setUsername(user);
+        dataSource.setPassword(password);
+        return dataSource;
     }
 
 

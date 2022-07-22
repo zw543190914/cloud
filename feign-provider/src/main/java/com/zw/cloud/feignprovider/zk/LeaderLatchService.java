@@ -35,7 +35,7 @@ public class LeaderLatchService {
 
 
     //@PostConstruct 相当于 init，初始化时调用
-    @PostConstruct
+    //@PostConstruct
     public void start() throws Exception{
         logger.info("[LeaderLatchService] start ,port is {}", port);
 

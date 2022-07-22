@@ -3,7 +3,7 @@ package com.zw.cloud.dubboconsumer.controller;
 import com.zw.cloud.dubboconsumer.base.ThreadContext;
 import com.zw.cloud.dubboproviderapi.service.IProviderService;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.dubbo.config.annotation.Reference;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.rpc.RpcContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/dubbo/consumer")
 public class DubboConsumerController {
-    @Reference
+    @DubboReference(check = false)
     private IProviderService providerService;
     @Autowired
     private ThreadContext threadContext;
