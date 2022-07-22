@@ -37,6 +37,12 @@ public class SortedTest {
         List<String> names = list.stream().filter(user -> user.getAge() > 11).map(User::getName).collect(Collectors.toList());
         System.out.println(JSON.toJSONString(names));
 
+        Map<String, Integer> map = fillValue(6, 600);
+        System.out.println(JSON.toJSONString(map));
+        Map<String, Integer> map2 = fillValue(10, 600);
+        System.out.println(JSON.toJSONString(map2));
+        Map<String, Integer> map3 = fillValue(12, 600);
+        System.out.println(JSON.toJSONString(map3));
 
     }
     public static int compare(User user){
@@ -50,5 +56,24 @@ public class SortedTest {
             return 3;
         }
         return 5;
+    }
+
+    private static LinkedHashMap<String,Integer> fillValue(int count,int maxValue) {
+        String s = "{\"dryingRoomPresetTemp1\": 18, \"dryingRoomPresetTemp2\": 28, \"dryingRoomPresetTemp3\": 38, \"dryingRoomPresetTemp4\": 88, \"dryingRoomPresetTemp5\": 88, \"dryingRoomPresetTemp6\": 48, \"dryingRoomPresetTemp7\": 68, \"dryingRoomPresetTemp8\": 78, \"dryingRoomPresetTemp9\": 88, \"dryingRoomPresetTemp10\": 88}";
+        LinkedHashMap<String, Integer> map = JSON.parseObject(s, LinkedHashMap.class);
+        if (count == 10) {
+            return map;
+        }
+        map.put("dryingRoomPresetTemp" + count,Optional.ofNullable(map.get("dryingRoomPresetTemp10")).orElse(maxValue));
+        if (count > 10) {
+            for (int i = 10; i <= count-1; i++) {
+                map.put("dryingRoomPresetTemp" + i,maxValue);
+            }
+            return map;
+        }
+        for (int i = count; i <= 10; i++) {
+            map.remove("dryingRoomPresetTemp" + i);
+        }
+        return map;
     }
 }

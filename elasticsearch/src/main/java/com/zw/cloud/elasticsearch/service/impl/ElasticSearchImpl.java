@@ -15,6 +15,7 @@ import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -100,5 +101,26 @@ public class ElasticSearchImpl {
             result.add(sourceAsMap);
         }
         return result;
+    }
+
+    public SearchResponse queryLog(String keyword,int pageNo,int pageSize)throws Exception{
+        if (pageNo < 1){
+            pageNo = 1;
+        }
+        SearchRequest searchRequest = new SearchRequest("qa-quanbu-dyeing-2022.07.17");
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(keyword);
+        sourceBuilder.from( (pageNo - 1) * pageSize);
+        sourceBuilder.size(pageSize);
+        sourceBuilder.query(multiMatchQueryBuilder);
+        sourceBuilder.timeout(new TimeValue(5, TimeUnit.SECONDS));
+       /* MatchQueryBuilder queryBuilder = QueryBuilders.matchQuery("message", keyword);
+        sourceBuilder.from( (pageNo - 1) * pageSize);
+        sourceBuilder.size(pageSize);
+        sourceBuilder.query(queryBuilder);
+        sourceBuilder.timeout(new TimeValue(5, TimeUnit.SECONDS));*/
+
+        searchRequest.source(sourceBuilder);
+        return client.search(searchRequest, RequestOptions.DEFAULT);
     }
 }

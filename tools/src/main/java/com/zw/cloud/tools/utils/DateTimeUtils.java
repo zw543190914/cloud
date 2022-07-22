@@ -16,16 +16,26 @@ public class DateTimeUtils {
     public static void main(String[] args) throws Exception{
         //获取秒数
         LocalDateTime now = LocalDateTime.now();
-        System.out.println(now.toString());
+        System.out.println(now);
         Long second = now.toEpochSecond(ZoneOffset.of("+8"));
         System.out.println(second);
         //获取毫秒数
         Long milliSecond = now.toInstant(ZoneOffset.of("+8")).toEpochMilli();
+        System.out.println("=========毫秒数===========");
         System.out.println(milliSecond);
+        System.out.println(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(milliSecond), ZoneId.systemDefault()));
+
+        System.out.println("=========LocalDateTime 转为 Instant===========");
+        System.out.println(now.atZone(ZoneId.systemDefault()).toInstant());
+        System.out.println("=========Instant 转为 LocalDateTime===========");
+        System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(milliSecond), ZoneId.systemDefault()));
+
         Instant instant = Instant.ofEpochSecond(second);
         System.out.println(instant);
         System.out.println(instant.atZone(ZoneId.systemDefault()));
         System.out.println(ZoneId.systemDefault());
+        System.out.println(instant.toEpochMilli());
         System.out.println(Instant.parse("2021-11-03T20:37:30.00Z"));
         String date = "2017-03-08T12:30:54";
         LocalDateTime localdatetime = LocalDateTime.parse(date);
@@ -54,6 +64,19 @@ public class DateTimeUtils {
         LocalDateTime configTime = LocalDateTime.parse(config);
         List<LocalDateTimeDTO> localDateTimeDTOS = calBetweenTime(startTime, endTime, configTime);
         System.out.println(JSON.toJSONString(localDateTimeDTOS));
+        System.out.println(LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8")));
+        System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(1656915925000L), ZoneId.systemDefault()));
+        Instant instant1 = Instant.ofEpochSecond(System.currentTimeMillis()/1000);
+        System.out.println(instant1);
+
+        System.out.println("=========时间间隔===========");
+        Duration duration = Duration.between(LocalDateTime.parse("2022-05-18T23:58:00"), LocalDateTime.parse("2022-05-18T23:59:00"));
+        System.out.println(duration.toMinutes());
+        System.out.println("instant = " + instant + ",instant + 60s = " + instant.plusSeconds(60));
+        Duration between1 = Duration.between(instant, instant.plusSeconds(60));
+        System.out.println(between1.toMinutes());
+        System.out.println(Duration.between(instant.plusSeconds(60), now.atZone(ZoneId.systemDefault()).toInstant()).toMinutes());
+
     }
 
     public static LocalDateTime dateToLocalDateTime(Date date) {

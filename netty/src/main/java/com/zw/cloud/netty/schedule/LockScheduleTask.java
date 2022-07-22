@@ -18,27 +18,31 @@ public class LockScheduleTask {
     @Autowired
     private RedissonClient redissonClient;
 
-    /*@Scheduled(cron = "0/2 * * * * ? ")
+    @Scheduled(cron = "0/2 * * * * ? ")
     @Async
     public void task1() {
         RLock lock = redissonClient.getLock("test_lock");
-        lock.lock();
+        lock.lock(1,TimeUnit.SECONDS);
         log.info("[LockScheduleTask][task1] start, {}", Thread.currentThread().getName());
-        throw new RuntimeException("ex");
+        try {
+            throw new RuntimeException("ex");
+        } catch (RuntimeException e) {
+            //e.printStackTrace();
+        } finally {
+            lock.unlock();
+        }
     }
 
     @Scheduled(cron = "0/2 * * * * ? ")
     @Async
     public void task2() {
         RLock lock = redissonClient.getLock("test_lock");
-        lock.lock();
+        lock.lock(1,TimeUnit.SECONDS);
         log.info("[LockScheduleTask][task2] start, {}", Thread.currentThread().getName());
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        } finally {
-            lock.unlock();
         }
-    }*/
+    }
 }

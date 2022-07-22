@@ -1,6 +1,7 @@
 package com.zw.cloud.elasticsearch.controller;
 
 import com.zw.cloud.elasticsearch.service.impl.ElasticSearchImpl;
+import org.elasticsearch.action.search.SearchResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,5 +36,13 @@ public class ElasticSearchController {
     public List<Map<String, Object>> queryGoods(@PathVariable("keyword") String keyword,
                                                 @PathVariable("pageNo") int pageNo,@PathVariable("pageSize") int pageSize)throws Exception{
         return elasticSearch.queryGoods(keyword,pageNo,pageSize);
+    }
+
+    @GetMapping("/queryLog/{keyword}/{pageNo}/{pageSize}")
+    @ResponseBody
+    //http://localhost:9050/queryLog/productCardCode/1/30
+    public SearchResponse queryLog(@PathVariable("keyword") String keyword,
+                                   @PathVariable("pageNo") int pageNo, @PathVariable("pageSize") int pageSize)throws Exception{
+        return elasticSearch.queryLog(keyword,pageNo,pageSize);
     }
 }

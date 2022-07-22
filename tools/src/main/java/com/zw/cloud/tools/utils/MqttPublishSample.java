@@ -17,24 +17,24 @@ public class MqttPublishSample {
     public static void main(String[] args) throws Exception{
 
         // dev
-        /*String host = "tcp://axdkagn.iot.gz.baidubce.com";
+        String host = "tcp://axdkagn.iot.gz.baidubce.com";
         String userName = "thingidp@axdkagn|dev_test_device_stenter_03|0|MD5";
         String password = "a1b48d70a8d106b861f58c1c32bdb04a";
         String topic = "d/dev_test_device_stenter_03/report";
-        String clientId = "subscribe_test_device";*/
+        String clientId = "subscribe_test_device";
         // qa
         // 定型机#02
-        /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+       /* String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|qa_test_device_stenter_02|0|MD5";
         String password = "3509803995f1748b7d4c5f1ad9dfb615";
         String topic = "d/qa_test_device_stenter_02/report";
         String clientId = "subscribe_test";*/
         // 线上
-        String host = "tcp://afswjqe.iot.gz.baidubce.com";
-        String userName = "thingidp@afswjqe|3123|0|MD5";
-        String password = "a538bf35aa1ce0442cbea7fcef3592cb";
-        String topic = "d/3123/report";
-        String clientId = "9746842599496";
+        /*String host = "tcp://afswjqe.iot.gz.baidubce.com";
+        String userName = "thingidp@afswjqe|xnbh06|0|MD5";
+        String password = "885c1c1ba9c32c96f2c0e4f5dd0b4e01";
+        String topic = "d/xnbh06/report";
+        String clientId = "subscribe_test";*/
 
         int qos = 1;
         // 内存存储
@@ -50,10 +50,10 @@ public class MqttPublishSample {
         connOpts.setPassword(password.toCharArray());
         // 建立连接
         sampleClient.connect(connOpts);
-        long second = 1655371800;
+        long second = 1658383250;
         int stop;
         Random random = new Random();
-        int j = 121 ;
+        int j = 113 ;
         //long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
         for (int i = 0; i < 120; i++) {
 
