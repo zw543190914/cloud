@@ -10,20 +10,34 @@ spring:
     gateway:
       discovery:
         locator:
-          enabled: true  # 让gateway可以发现nacos中的微服务
-      routes: # 路由数组[路由 就是指定当请求满足什么条件的时候转到哪个微服务]
-        - id: feign-provider # 当前路由的标识, 要求唯一
-          uri: lb://feign-provider # lb指的是从nacos中按照名称获取微服务,并遵循负载均衡策略
-          order: 1 # 路由的优先级,数字越小级别越高
-          predicates: # 断言(就是路由转发要满足的条件)
-            - Path=/user/** # 当请求路径满足Path指定的规则时,才进行路由转发
-          filters: # 过滤器,请求在传递过程中可以通过过滤器对其进行一定的修改
-#            - StripPrefix=1 # 转发之前去掉1层路径
-        - id: feign-consumer
-          uri: lb://feign-consumer # lb指的是从nacos中按照名称获取微服务,并遵循负载均衡策略
+          # 让gateway可以发现nacos中的微服务
+          enabled: true
+          lower-case-service-id: true
+      # 路由数组[路由 就是指定当请求满足什么条件的时候转到哪个微服务]
+      routes:
+        # 当前路由的标识, 要求唯一
+        - id: feign-provider01
+          # lb指的是从nacos中按照名称获取微服务,并遵循负载均衡策略
+          uri: lb://feign-provider/**
+          # 路由的优先级,数字越小级别越高
+          order: 1
+          # 断言(就是路由转发要满足的条件)
           predicates:
-            - Path=/feign-consumer/** # 当请求路径满足Path指定的规则时,才进行路由转发
-          filters: # 过滤器,请求在传递过程中可以通过过滤器对其进行一定的修改
-            - StripPrefix=1 # 转发之前去掉1层路径
+            # 当请求路径满足Path指定的规则时,才进行路由转发
+            # http://127.0.0.1:8000/feign-provider/user/queryAllUser/1/10
+            - Path=/feign-provider/**
+          # 过滤器,请求在传递过程中可以通过过滤器对其进行一定的修改
+          filters:
+            # 转发之前去掉1层路径
+            - StripPrefix=1
+        - id: feign-consumer01
+          uri: lb://feign-consumer
+          predicates:
+            - Path=/feign-consumer/**
+          filters:
+            - StripPrefix=1
+    loadbalancer:
+      retry:
+        enabled: true
   main:
     allow-circular-references: true
