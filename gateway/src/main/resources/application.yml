@@ -1,13 +1,22 @@
 server:
   port: 8000 # 指定网关服务的端口
 spring:
-  application:
-    name: api-gateway
+  environment: test
   cloud:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+#        namespace: f0acd74c-f780-4b01-9c05-fe669cb07270
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowCredentials: true
+            allowedOriginPatterns: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+        add-to-simple-url-handler-mapping: true
+
       discovery:
         locator:
           # 让gateway可以发现nacos中的微服务
@@ -36,6 +45,9 @@ spring:
             - Path=/feign-consumer/**
           filters:
             - StripPrefix=1
+      httpclient:
+        connect-timeout: 3000
+        response-timeout: 30s
     loadbalancer:
       retry:
         enabled: true

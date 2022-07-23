@@ -1,7 +1,8 @@
 # springcloudAlibaba-demo
+    springboot:2.6.7 springcloudAlibaba:2021.1
   1. 整合 springcloudAlibaba 组件。</br>
   2. 使用 nacos 作为 注册中心和配置中心，代替 Eureka和Config。参考 dubbo-provider 模块 </br>
-  3. 使用 zuul 作为网关，只是简单事例，工作中使用的是 nginx。 参考 zuul 模块 </br>
+  3. 使用 gateway 作为网关，只是简单事例，工作中使用的是 nginx。 参考 gateway 模块 </br>
   4. 整合 dubbo 作为内部rpc调用，序列化使用 kryo 。参考 dubbo相关模块 </br>
   5. 使用 feign 进行 http 远程调用,符合开发时接口调用规范。参考 sentinel + feign 相关模块 </br>
   6. 分布式事务 强一致性使用 Seata , 弱一致性使用 MQ 处理分布式事务。业务中应尽量避免分布式事务产生。
@@ -13,7 +14,7 @@
   11. sso单点登录使用 xxl-sso(客户端)，xxl-sso-server 为服务端。参考xxl-sso,xxl-sso-server 模块 </br>
   12. 分布式锁 zookeeper(ZkInterProcessMutex,LeaderLatch)。参考 feign-provider 模块。
   13. activiti工作流引擎使用整合。参考 activiti 模块。  </br>
-  14. 多数据源整合, 参考 feign-consumer 模块。 </br>
+  14. 多数据源整合, 参考 feign-consumer 模块。[mybatis-plus多数据源](https://www.yuque.com/zhengwei-tl3g2/zl9d8x/cp0yup) </br>
   15.一些开发常用工具，比如 HttpUtils ，JwtUtils 参考 common 模块。 </br>
   16. 整合使用IK分词器(自定义分词)或者 HanLP 分词进行文本相似度分析。参考 common 模块。 </br>
   17. 使用 Pinyin4jUtils 进行 中文转拼音的相关处理， 参考 common 模块。 </br>
@@ -34,6 +35,6 @@
   23. websocket 、 netty(netty-server)、 netty-client, 参考对应模块。</br>
   24. redis 分布式锁，幂等控制，参考 netty(netty-server) 模块。</br>
   25. rocketMq整合&rabbitMq整合& influxDB使用</br>
-  26. 常用插件：https://blog.csdn.net/weixin_41846320/article/details/82697818
+  26. [常用插件](https://blog.csdn.net/weixin_41846320/article/details/82697818)
   
   父POM中配置了自己nexus私服，已注释，settings-nexus.xml 为自己私服对应配置文件，方便后期查找使用。</br> 

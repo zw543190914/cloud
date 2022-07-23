@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    nacos:
+      config:
+        group: DEFAULT_GROUP
+#        namespace: f0acd74c-f780-4b01-9c05-fe669cb07270
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+        enabled: true
