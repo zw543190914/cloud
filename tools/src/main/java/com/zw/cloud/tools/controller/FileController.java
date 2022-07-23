@@ -18,6 +18,7 @@ import java.io.*;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.Future;
@@ -109,15 +110,15 @@ public class FileController {
         } catch (Exception e) {
             log.error("[FileController][downloadFileFromLocal]error is ", e);
         }*/
-        try (OutputStream os = response.getOutputStream()){
-            //设置文件路径
-            String realPath = "C:/download/";
-            File file = new File(realPath,fileName);
+        //设置文件路径
+        String realPath = "C:/download/";
+        File file = new File(realPath,fileName);
+        try (OutputStream os = response.getOutputStream();FileInputStream fileInputStream = new FileInputStream(file)){
+
             // 取得输出流
             String contentType = Files.probeContentType(Paths.get(file.getAbsolutePath()));
             response.setHeader("Content-Type", contentType);
-            response.setHeader("Content-Disposition", "attachment;filename="+ new String(file.getName().getBytes("utf-8"),"ISO8859-1"));
-            FileInputStream fileInputStream = new FileInputStream(file);
+            response.setHeader("Content-Disposition", "attachment;filename="+ new String(file.getName().getBytes(StandardCharsets.UTF_8),"ISO8859-1"));
             WritableByteChannel writableByteChannel = Channels.newChannel(os);
             FileChannel fileChannel = fileInputStream.getChannel();
             fileChannel.transferTo(0,fileChannel.size(),writableByteChannel);

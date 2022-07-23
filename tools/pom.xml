@@ -221,6 +221,13 @@
             <artifactId>spring-integration-mqtt</artifactId>
         </dependency>
 
+        <!--图片转pdf-->
+        <dependency>
+            <groupId>com.lowagie</groupId>
+            <artifactId>itext</artifactId>
+            <version>2.1.7</version>
+        </dependency>
+
         <dependency>
             <groupId>org.openjdk.jol</groupId>
             <artifactId>jol-core</artifactId>
