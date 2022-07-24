@@ -7,6 +7,9 @@ import com.lowagie.text.PageSize;
 import com.lowagie.text.pdf.PdfWriter;
 
 import java.io.*;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.WritableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,6 +18,33 @@ import java.util.Objects;
  * 图片转成pdf工具类
  */
 public class ImageToPdfUtils {
+
+    public static void main(String[] args) {
+        List<String> filePathList = new ArrayList<>();
+        ImageToPdfUtils.getAllFile(new File("D:\\相册"), filePathList);
+        System.out.println(JSON.toJSONString(filePathList));
+        File file = ImageToPdfUtils.imageToPdf(filePathList, "testPdf.pdf");
+        if (Objects.isNull(file)) {
+            throw new RuntimeException("文件夹没有图片");
+        }
+        File out = new File("D:\\downLoad\\testPdf.pdf");
+        FileInputStream fileInputStream = null;
+        FileOutputStream outputStream = null;
+        try {
+            fileInputStream = new FileInputStream(file);
+            outputStream = new FileOutputStream(out);
+            WritableByteChannel writableByteChannel = Channels.newChannel(outputStream);
+            FileChannel fileChannel = fileInputStream.getChannel();
+            fileChannel.transferTo(0,fileChannel.size(),writableByteChannel);
+            fileChannel.close();
+            writableByteChannel.close();
+            fileInputStream.close();
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * imageUrlList：图片路径集合，
