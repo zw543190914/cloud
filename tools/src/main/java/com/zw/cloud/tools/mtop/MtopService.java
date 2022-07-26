@@ -3,7 +3,6 @@ package com.zw.cloud.tools.mtop;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Preconditions;
 import com.zw.cloud.common.utils.WebResult;
-import com.zw.cloud.tools.threadlocal.InheritableThreadLocalUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerMapping;
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
+import org.springframework.web.servlet.mvc.condition.PathPatternsRequestCondition;
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -52,10 +51,10 @@ public class MtopService {
                     for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
                         RequestMappingInfo requestMappingInfo = entry.getKey();
                         HandlerMethod handlerMethod = entry.getValue();
-                        PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
+                        PathPatternsRequestCondition pathPatternsCondition = requestMappingInfo.getPathPatternsCondition();
                         String uri = null;
-                        if (CollectionUtils.isNotEmpty(patternsCondition.getPatterns())) {
-                            uri = patternsCondition.getPatterns().iterator().next();
+                        if (Objects.nonNull(pathPatternsCondition) && CollectionUtils.isNotEmpty(pathPatternsCondition.getPatterns())) {
+                            uri = pathPatternsCondition.getPatterns().iterator().next().getPatternString();
                         }
                         if (StringUtils.isNotBlank(uri)) {
                             if (uri.contains("/user/plus")) {
