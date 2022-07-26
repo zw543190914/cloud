@@ -9,3 +9,9 @@ spring:
         server-addr: 127.0.0.1:8848
         file-extension: yaml
         enabled: true
+        # 公共配置
+        shared-configs:
+          - data-id: common.yml
+            group: DEFAULT_GROUP
+            refresh: true
+
