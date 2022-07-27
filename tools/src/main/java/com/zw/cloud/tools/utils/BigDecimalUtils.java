@@ -1,4 +1,4 @@
-package com.zw.cloud.tools.test;
+package com.zw.cloud.tools.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class BigDecimalTest {
+public class BigDecimalUtils {
 
     public static void main(String[] args) {
 
@@ -47,8 +47,8 @@ public class BigDecimalTest {
 
         System.out.println("=========精确到100=========");
         System.out.println( parseBigDecimalToInteger(new BigDecimal("1368.545")));
-        System.out.println(new BigDecimal("50.545").divide(new BigDecimal("100"), 0, RoundingMode.HALF_UP).multiply(new BigDecimal("100")));
-        System.out.println(new BigDecimal("50").divide(new BigDecimal("100"), 0, RoundingMode.HALF_UP).multiply(new BigDecimal("100")));
+        System.out.println(new BigDecimal("150.545").divide(new BigDecimal("100"), 0, RoundingMode.HALF_UP).multiply(new BigDecimal("100")));
+        System.out.println(new BigDecimal("150").divide(new BigDecimal("100"), 0, RoundingMode.HALF_UP).multiply(new BigDecimal("100")));
         System.out.println("=========去除小数点后的0=========");
         System.out.println(new BigDecimal("1368.00").stripTrailingZeros().toPlainString());
 
@@ -72,6 +72,9 @@ public class BigDecimalTest {
         System.out.println(list.stream().filter(Objects::nonNull).max(Comparator.comparing(v -> v)).isPresent());
         Object obj = null;
         System.out.println(MapUtils.isNotEmpty((Map)obj));
+        String k = "dryingRoomPresetTemp12";
+        String key = k.substring(k.lastIndexOf("p") + 1);
+        System.out.println(key);
     }
 
     /**
@@ -169,6 +172,23 @@ public class BigDecimalTest {
             }
         }
         return temp;
+    }
+
+    /**
+     * 取集合中相同值最多的，存在多个取最大值
+     * key -> 第几节
+     * value -> key:数字，value:出现次数
+     */
+    public static Map<String,Integer> filterEachSectionMaxSameValueFromMap(Map<String, Map<Integer, Integer>> dryingRoomActualTempMap){
+        // 取相同最多的值  按节分组
+        Map<String,Integer> dryingRoomActualMap = new LinkedHashMap<>();
+        dryingRoomActualTempMap.forEach((k,map) -> {
+            Integer temp = filterMaxSameValueFromMap(map);
+            if (Objects.nonNull(temp)) {
+                dryingRoomActualMap.put(k,temp);
+            }
+        });
+        return dryingRoomActualMap;
     }
 
     /**
