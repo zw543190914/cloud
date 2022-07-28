@@ -3,9 +3,9 @@ server:
 spring:
   environment: test
   cloud:
-    nacos:
-      discovery:
-        server-addr: 127.0.0.1:8848
+#    nacos:
+#      discovery:
+#        server-addr: 127.0.0.1:8848
 #        namespace: f0acd74c-f780-4b01-9c05-fe669cb07270
     gateway:
       globalcors:
@@ -42,14 +42,23 @@ spring:
         - id: feign-consumer01
           uri: lb://feign-consumer
           predicates:
+            # http://127.0.0.1:8000/feign-consumer/feign/consumer/queryAllUser/1/10
             - Path=/feign-consumer/**
           filters:
             - StripPrefix=1
+        - id: dubbo-consumer
+          uri: lb://dubbo-consumer
+          predicates:
+            # http://127.0.0.1:8000/dubbo-consumer/dubbo/consumer/consumerToProvider/consumer
+            - Path=/dubbo-consumer/**
+          filters:
+            - StripPrefix=1
+
       httpclient:
         connect-timeout: 3000
         response-timeout: 30s
     loadbalancer:
       retry:
         enabled: true
-  main:
-    allow-circular-references: true
+#  main:
+#    allow-circular-references: true

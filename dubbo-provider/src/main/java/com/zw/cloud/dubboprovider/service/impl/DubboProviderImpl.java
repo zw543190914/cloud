@@ -11,15 +11,15 @@ import org.springframework.beans.factory.annotation.Value;
 @DubboService
 public class DubboProviderImpl implements IProviderService {
 
-    @Value("${environment}")
-    private String environment;
+    @Value("${spring.datasource.druid.url}")
+    private String url;
     @Value("${server.port}")
     private int port;
 
     @Override
     public String testProvider(String msg) {
         String workId = (String)RpcContext.getContext().getObjectAttachments().get("workId");
-        return String.format("this is dubbo provider, server port is %s, nacos environment is %s,consumer msg is %s,workId is %s",
-                port,environment,msg,workId);
+        return String.format("this is dubbo provider, server port is %s, nacos url is %s,consumer msg is %s,workId is %s",
+                port,url,msg,workId);
     }
 }

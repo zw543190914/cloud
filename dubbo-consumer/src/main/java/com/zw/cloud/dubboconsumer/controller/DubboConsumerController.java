@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.rpc.RpcContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,8 @@ public class DubboConsumerController {
     private IProviderService providerService;
     @Autowired
     private ThreadContext threadContext;
+    @Value("${spring.datasource.druid.url}")
+    private String url;
 
     @GetMapping("/consumerToProvider/{msg}")
     //http://localhost:8020/dubbo/consumer/consumerToProvider/consumer

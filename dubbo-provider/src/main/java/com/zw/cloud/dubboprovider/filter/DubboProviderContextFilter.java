@@ -20,7 +20,7 @@ public class DubboProviderContextFilter implements Filter {
             //执行业务逻辑
             return invoker.invoke(invocation);
         } catch (RpcException e) {
-            logger.error("[DubboProviderContextFilter][invoke] error is {}",e);
+            logger.error("[DubboProviderContextFilter][invoke] error is ",e);
             throw e;
         }
     }
@@ -32,7 +32,7 @@ public class DubboProviderContextFilter implements Filter {
             String workId = (String) objectAttachments.get("workId");
             logger.info("[DubboProviderContextFilter][invoke]workId is {}",workId);
         }catch(Exception e) {
-            logger.error("[DubboProviderContextFilter][invoke]getAttachment error is {}",e);
+            logger.error("[DubboProviderContextFilter][invoke]getAttachment error is ",e);
             throw e;
         }
     }
