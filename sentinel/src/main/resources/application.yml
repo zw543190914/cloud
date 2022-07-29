@@ -1,0 +1,32 @@
+feign:
+  sentinel:
+    enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+server:
+  port: 8090
+spring:
+  application:
+    name: sentinel
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+    sentinel:
+      datasource:
+        ds1:
+          nacos:
+            data-id: sentinel
+            data-type: json
+            group-id: DEFAULT_GROUP
+            rule-type: flow
+            server-addr: 127.0.0.1:8848
+      transport:
+        dashboard: 127.0.0.1:8080
+        port: 8791
+  main:
+    allow-circular-references: true
