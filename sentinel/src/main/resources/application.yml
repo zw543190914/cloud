@@ -18,12 +18,25 @@ spring:
         server-addr: 127.0.0.1:8848
     sentinel:
       datasource:
-        ds1:
+        flow-rule:
           nacos:
-            data-id: sentinel
+            data-id: sentinel-flow
             data-type: json
+            namespace: f0acd74c-f780-4b01-9c05-fe669cb07270
             group-id: DEFAULT_GROUP
+            # flow代表流程控制，degrade代表熔断规则,
+            # 系统自适应保护，则引入的rule-type为system,热点参数，则引入的rule-type为param-flow。
+            # 黑白名单控制 rule-type为authority
             rule-type: flow
+            server-addr: 127.0.0.1:8848
+        degrade-rule:
+          nacos:
+            data-id: sentinel-degrade
+            data-type: json
+            namespace: f0acd74c-f780-4b01-9c05-fe669cb07270
+            group-id: DEFAULT_GROUP
+            # flow代表流程控制，degrade代表熔断规则
+            rule-type: degrade
             server-addr: 127.0.0.1:8848
       transport:
         dashboard: 127.0.0.1:8080

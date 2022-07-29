@@ -42,6 +42,12 @@ public class WebResult<T> implements Serializable {
         return webResult;
     }
 
+    public WebResult withErrorCodeAndMsg(Integer errorCode,String errorMsg) {
+        this.errorCode = errorCode;
+        this.errorMsg = errorMsg;
+        return this;
+    }
+
     public WebResult withErrorCode(Integer errorCode) {
         this.errorCode = errorCode;
         return this;

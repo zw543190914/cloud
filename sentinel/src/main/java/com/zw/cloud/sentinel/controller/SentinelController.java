@@ -18,7 +18,7 @@ public class SentinelController {
     private Logger logger = LoggerFactory.getLogger(SentinelController.class);
 
     @GetMapping(value = "/testHotKey")
-    @SentinelResource(value = "testHotKey",blockHandler = "deal_testHotKey")
+    @SentinelResource(value = "testHotKey"/*,blockHandler = "deal_testHotKey"*/)
     // http://localhost:8090/sentinel/testHotKey?name=1&value=2
     public WebResult testHotKey(@RequestParam String name, @RequestParam(required = false)  String value) {
         return WebResult.success().withData("success");
@@ -33,8 +33,7 @@ public class SentinelController {
      * @return
      */
     @GetMapping(value = "/customerBlockHandler")
-    @SentinelResource(value = "customerBlockHandler",
-            blockHandlerClass = CustomerBlockHandler.class,blockHandler = "handlerExceptionB")
+    @SentinelResource(value = "customerBlockHandler")
     // http://localhost:8090/sentinel/customerBlockHandler
     public WebResult customerBlockHandler() {
 
@@ -47,7 +46,7 @@ public class SentinelController {
      * @return
      */
     @GetMapping(value = "/runtimeException")
-    @SentinelResource(value = "runtimeException",fallback = "fallback",exceptionsToIgnore = {IllegalArgumentException.class})
+    @SentinelResource(value = "runtimeException"/*,fallback = "fallback",exceptionsToIgnore = {IllegalArgumentException.class}*/)
     // http://localhost:8090/sentinel/runtimeException?age=1
     public WebResult runtimeException(int age) {
         if (5 == age){

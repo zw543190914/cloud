@@ -1,0 +1,105 @@
+java -Dserver.port=8080 -Dcsp.sentinel.dashboard.server=localhost:8080 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard-1.8.4.jar
+
+http://127.0.0.1:8080/
+sentinel
+sentinel
+
+
+
+持久化到nacos
+https://blog.csdn.net/ZHANGLIZENG/article/details/121855667
+
+流控配置
+
+resource：资源名
+limitApp：流控针对的调用来源，default不区分来源
+grade：限流阈值类型(0-根据并发数量来限流 1-根据QPS来进行流量控制)
+count：限流阈值
+strategy：流控模式 0:直接，1：关联，2：链路
+controlBehavior：流量控制效果(0：直接拒绝、1：WarmUP、2：匀速排队)
+clusterMode：是否集群模式
+[
+    {
+        "resource": "/sentinel/testHotKey",
+        "limitApp": "default",
+        "grade": 1,
+        "count": 5,
+        "strategy": 0,
+        "controlBehavior": 0,
+        "clusterMode": false
+    }
+]
+
+熔断配置：
+resource：资源名
+grade：限流阈值类型(0-RT 1-异常比例，2-异常数)
+count：阈值
+timeWindow:窗口时长，触发该规则的有效期，超过后重新统计
+
+异常数2，熔断服务5秒，统计时长3秒，最小请求数2
+[{
+    "grade":"2",
+    "limitApp":"default",
+    "minRequestAmount":2,
+    "statIntervalMs":3000,
+    "count":2,
+    "timeWindow":5,
+    "resource":"/sentinel/runtimeException"
+}]
+每次请求处理的最大时长为1秒，大于1秒则为慢调用；3秒内，请求数大于2，且有1次是慢调用，则熔断服务3秒。
+[
+  {
+  "resource": "todolist/getTestListSentinelDegrade",
+  "grade":0,
+  "count":1000,
+  "timeWindow":3,
+  "minRequestAmount": 2,
+  "statIntervalMs":3000,
+  "slowRatioThreshold":0.1
+  }
+]
+
+
+cpu使用率阈值为5%，大于5%则触发系统保护规则。
+[
+  {
+    "resource": "todolist/system",
+    "highestSystemLoad":3.0,
+    "highestCpuUsage":0.05,
+    "avgRt":10,
+    "qps": 20,
+    "maxThread":10
+  }
+]
+
+给接口getById的第一个参数（index为0）添加热点限流，普通参数qps最大2，参数为1时，最大qps可以达到5。
+[
+  {
+    "burstCount": 0,
+    "clusterMode": false,
+    "controlBehavior": 0,
+    "count": 2,
+    "durationInSec": 1,
+    "grade": 1,
+    "limitApp": "default",
+    "maxQueueingTimeMs": 0,
+    "paramFlowItemList": [
+      {
+      "classType": "int",
+      "count": 5,
+      "object": "1"
+      }
+    ],
+    "paramIdx": 0,
+    "resource": "todolist/getById"
+  }
+]
+
+给ip为10.18.xx.xx的请求来源添加对资源/todolist/getTestList1访问的黑名单。
+[
+    {
+        "resource": "/todolist/getTestList1",
+        "limitApp": "10.18.xx.xx",
+        "strategy": 1
+    }
+]
