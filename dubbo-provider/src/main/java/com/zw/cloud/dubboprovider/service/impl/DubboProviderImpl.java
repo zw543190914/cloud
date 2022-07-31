@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 /**
  * dubbo 服务提供者，使用 dubbo 提供的service注解
  */
-@DubboService
+@DubboService(retries = 1,loadbalance = "roundrobin")
 public class DubboProviderImpl implements IProviderService {
 
     @Value("${spring.datasource.druid.url}")
