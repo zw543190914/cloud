@@ -1,8 +1,9 @@
 package com.zw.cloud.dubboprovider.service.impl;
 
+import com.zw.cloud.dubboprovider.base.ThreadContext;
 import com.zw.cloud.dubboproviderapi.service.IProviderService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.apache.dubbo.rpc.RpcContext;
 import org.springframework.beans.factory.annotation.Value;
 
 /**
@@ -18,7 +19,10 @@ public class DubboProviderImpl implements IProviderService {
 
     @Override
     public String testProvider(String msg) {
-        String workId = (String)RpcContext.getContext().getObjectAttachments().get("workId");
+        String workId = ThreadContext.getWorkIdThreadLocal().get();
+        if (StringUtils.equals("ex",msg)) {
+            throw new RuntimeException("exception");
+        }
         return String.format("this is dubbo provider, server port is %s, nacos url is %s,consumer msg is %s,workId is %s",
                 port,url,msg,workId);
     }
