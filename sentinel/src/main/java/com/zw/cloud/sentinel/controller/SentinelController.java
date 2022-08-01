@@ -19,14 +19,14 @@ public class SentinelController {
     private Logger logger = LoggerFactory.getLogger(SentinelController.class);
 
     @GetMapping(value = "/hotKey")
-    @SentinelResource(value = "hotKey")
+    @SentinelResource(value = "hotKey", blockHandler = "dealHotKey")
     // http://localhost:8090/sentinel/hotKey?name=1&value=2
     public WebResult testHotKey(@RequestParam String name, @RequestParam(required = false)  String value) {
         return WebResult.success().withData(name);
     }
 
-    public WebResult deal_testHotKey(String name, String value, BlockException exception) {
-        return WebResult.failed().withErrorMsg("deal_testHotKey" + exception.getClass().getCanonicalName());
+    public WebResult dealHotKey(String name, String value, BlockException exception) {
+        return WebResult.failed().withErrorMsg("热点被限流:" + exception.getClass().getCanonicalName());
     }
 
     /**
