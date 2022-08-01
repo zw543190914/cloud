@@ -1,10 +1,13 @@
 package com.zw.cloud.tools.utils;
 
+import com.google.common.collect.Lists;
 import com.zw.cloud.tools.entity.User;
+import org.apache.commons.lang3.StringUtils;
 import org.stringtemplate.v4.ST;
 
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -14,7 +17,16 @@ import java.util.regex.Pattern;
 public class StringTemplete {
 
     public static void main(String[] args) {
-        test();
+        ArrayList<String> strings = Lists.newArrayList("「助剂名称A(助剂编号A)」", "「助剂名称B(助剂编号B)」");
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String string : strings) {
+            stringBuilder.append(string).append("、");
+        }
+        if (StringUtils.isNotBlank(stringBuilder)) {
+            String noticeMsg = stringBuilder.substring(0, stringBuilder.lastIndexOf("、"));
+            System.out.println(noticeMsg);
+        }
+        //test();
     }
 
     private String test02(Map<String,Object> dataMap) throws Exception{

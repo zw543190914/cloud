@@ -34,6 +34,8 @@ public class CustomerBlockHandler implements BlockExceptionHandler {
             webResult = WebResult.failed().withErrorCodeAndMsg(303,"接口触发系统保护规则了");
         } else if(e instanceof AuthorityException){
             webResult = WebResult.failed().withErrorCodeAndMsg(304,"授权接口不通过");
+        } else {
+            webResult = WebResult.failed().withErrorCodeAndMsg(500,"服务错误");
         }
         //返回json格式
         httpServletResponse.setStatus(500);

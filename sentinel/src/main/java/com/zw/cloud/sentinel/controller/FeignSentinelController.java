@@ -1,5 +1,6 @@
 package com.zw.cloud.sentinel.controller;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.zw.cloud.common.utils.WebResult;
 import com.zw.cloud.sentinel.service.ISentinelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ public class FeignSentinelController {
     private ISentinelService sentinelService;
 
     @GetMapping("/{pageNo}/{pageSize}")
+    @SentinelResource(value = "/sentinel/customerBlockHandler")
     //http://localhost:8090/sentinel/feign/1/10
     public WebResult queryAllUser(@PathVariable Integer pageNo, @PathVariable Integer pageSize) {
         return sentinelService.queryAllUser(pageNo, pageSize);

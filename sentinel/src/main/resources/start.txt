@@ -9,7 +9,7 @@ sentinel
 持久化到nacos
 https://blog.csdn.net/ZHANGLIZENG/article/details/121855667
 
-流控配置
+限流配置
 
 resource：资源名
 limitApp：流控针对的调用来源，default不区分来源
@@ -20,7 +20,7 @@ controlBehavior：流量控制效果(0：直接拒绝、1：WarmUP、2：匀速�
 clusterMode：是否集群模式
 [
     {
-        "resource": "/sentinel/testHotKey",
+        "resource": "/sentinel/customerBlockHandler",
         "limitApp": "default",
         "grade": 1,
         "count": 5,
@@ -72,29 +72,32 @@ cpu使用率阈值为5%，大于5%则触发系统保护规则。
   }
 ]
 
-给接口getById的第一个参数（index为0）添加热点限流，普通参数qps最大2，参数为1时，最大qps可以达到5。
+
+热点参数限流：param-flow
+给接口testHotKey的第一个参数（index为0）添加热点限流，普通参数qps最大2，参数为1时，最大qps可以达到5。durationInSec：统计窗口时长
 [
   {
     "burstCount": 0,
     "clusterMode": false,
     "controlBehavior": 0,
     "count": 2,
-    "durationInSec": 1,
+    "durationInSec": 2,
     "grade": 1,
     "limitApp": "default",
     "maxQueueingTimeMs": 0,
     "paramFlowItemList": [
       {
-      "classType": "int",
-      "count": 5,
+      "classType": "java.lang.String",
+      "count": 4,
       "object": "1"
       }
     ],
     "paramIdx": 0,
-    "resource": "todolist/getById"
+    "resource": "hotKey"
   }
 ]
 
+系统自适应保护，则引入的rule-type为system。
 给ip为10.18.xx.xx的请求来源添加对资源/todolist/getTestList1访问的黑名单。
 [
     {

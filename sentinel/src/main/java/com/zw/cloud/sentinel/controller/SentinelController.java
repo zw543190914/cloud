@@ -18,11 +18,11 @@ public class SentinelController {
 
     private Logger logger = LoggerFactory.getLogger(SentinelController.class);
 
-    @GetMapping(value = "/testHotKey")
-    @SentinelResource(value = "testHotKey"/*,blockHandler = "deal_testHotKey"*/)
-    // http://localhost:8090/sentinel/testHotKey?name=1&value=2
+    @GetMapping(value = "/hotKey")
+    @SentinelResource(value = "hotKey")
+    // http://localhost:8090/sentinel/hotKey?name=1&value=2
     public WebResult testHotKey(@RequestParam String name, @RequestParam(required = false)  String value) {
-        return WebResult.success().withData("success");
+        return WebResult.success().withData(name);
     }
 
     public WebResult deal_testHotKey(String name, String value, BlockException exception) {
