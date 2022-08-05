@@ -6,10 +6,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @FeignClient("order")
-@RequestMapping("/order")
 public interface IOrderService {
 
-    @GetMapping("/insert/{userId}/{commodityCode}/{count}/{money}")
+    @GetMapping("/order/insert/{userId}/{commodityCode}/{count}/{money}")
     void insert(@PathVariable("userId") String userId, @PathVariable("commodityCode") String commodityCode,
                 @PathVariable("count") Integer count, @PathVariable("money") Integer money);
 

@@ -27,6 +27,6 @@ public class BusinessImpl implements IBusinessService {
             logger.error("[BusinessImpl][createOrder] error is {}",e);
             throw e;
         }
-        throw new RuntimeException("error");
+        //throw new RuntimeException("error");
     }
 }

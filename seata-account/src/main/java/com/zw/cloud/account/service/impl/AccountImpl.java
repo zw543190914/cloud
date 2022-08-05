@@ -33,7 +33,7 @@ public class AccountImpl implements IAccountService {
         try {
             mapper.updateByUserId(userId, money);
         } catch (Exception e) {
-            logger.error("[AccountImpl][update] error is {}",e);
+            logger.error("[AccountImpl][update] error is ",e);
             throw e;
         }
     }
