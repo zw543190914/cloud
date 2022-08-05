@@ -1,19 +1,24 @@
 package com.zw.cloud.order.service.impl;
 
-import com.zw.cloud.order.dao.OrderTblMapper;
 import com.zw.cloud.order.entity.OrderTbl;
-import com.zw.cloud.order.entity.OrderTblExample;
-import com.zw.cloud.order.service.IOrderService;
+import com.zw.cloud.order.mapper.OrderTblMapper;
+import com.zw.cloud.order.service.api.IOrderTblService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.seata.spring.annotation.GlobalTransactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.beans.Transient;
-import java.util.List;
+import java.time.LocalDateTime;
+
+/**
+ * <p>
+ *  服务实现类
+ * </p>
+ *
+ * @author zw
+ * @since 2022-08-05
+ */
 @Service
-public class OrderImpl implements IOrderService {
-    @Autowired
-    private OrderTblMapper mapper;
+public class OrderTblServiceImpl extends ServiceImpl<OrderTblMapper, OrderTbl> implements IOrderTblService {
 
     @Override
     @GlobalTransactional
@@ -23,11 +28,7 @@ public class OrderImpl implements IOrderService {
         order.setCommodityCode(commodityCode);
         order.setCount(count);
         order.setMoney(money);
-        mapper.insertSelective(order);
-    }
-
-    @Override
-    public List<OrderTbl> query(){
-        return mapper.selectByExample(new OrderTblExample());
+        order.setUpdateTime(LocalDateTime.now());
+        baseMapper.insert(order);
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-@MapperScan(basePackages = "com.zw.cloud.account.dao")
+@MapperScan(basePackages = "com.zw.cloud.account.mapper")
 public class AccountApplication {
 
     public static void main(String[] args) {
