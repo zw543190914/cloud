@@ -37,3 +37,5 @@
   26. [常用插件](https://blog.csdn.net/weixin_41846320/article/details/82697818)
   
   父POM中配置了自己nexus私服，已注释，settings-nexus.xml 为自己私服对应配置文件，方便后期查找使用。</br> 
+  
+  后续更新在[gitee](https://gitee.com/moon-in-the-mirror/cloud)
