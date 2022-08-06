@@ -2,7 +2,7 @@
     springboot:2.6.7 spring-cloud:2021.0.3 springcloudAlibaba:2021.1
   1. 整合 springcloudAlibaba 组件。</br>
   2. 使用 nacos 作为 注册中心和配置中心，代替 Eureka和Config。参考 gateway 模块 </br>
-  3. 使用 gateway 作为网关，只是简单事例，工作中使用的是 nginx。 参考 gateway 模块 </br>
+  3. 使用 gateway 作为网关。 参考 gateway 模块 </br>
   4. 整合 dubbo 作为内部rpc调用，序列化使用 kryo 。参考 dubbo相关模块 </br>
   5. 使用 feign 进行 http 远程调用,符合开发时接口调用规范。参考 sentinel + feign 相关模块 </br>
   6. 分布式事务 强一致性使用 Seata , 弱一致性使用 MQ 处理分布式事务。案例提供基于 AT模式和TCC模式事务处理，参考 seata 相关模块 </br>
