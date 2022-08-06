@@ -14,10 +14,17 @@ public class GTXController {
     @Autowired
     private IBusinessService businessService;
 
-    @GetMapping("/createOrder/{userId}/{commodityCode}/{count}/{money}")
-    //http://localhost:8030/user/createOrder/1/1/2/100
-    public void createOrder(@PathVariable String userId, @PathVariable String commodityCode,
+    @GetMapping("/createOrderAT/{userId}/{commodityCode}/{count}/{money}")
+    //http://localhost:8030/user/createOrderAT/1/novel7/2/100
+    public void createOrderAT(@PathVariable String userId, @PathVariable String commodityCode,
                             @PathVariable Integer count, @PathVariable Integer money) {
-        businessService.createOrder(userId, commodityCode, count, money);
+        businessService.createOrderAT(userId, commodityCode, count, money);
+    }
+
+    @GetMapping("/createOrderTcc/{userId}/{commodityCode}/{count}/{money}")
+    //http://localhost:8030/user/createOrderTcc/1/apple14/2/100
+    public void createOrderTcc(@PathVariable String userId, @PathVariable String commodityCode,
+                            @PathVariable Integer count, @PathVariable Integer money) {
+        businessService.createOrderTcc(userId, commodityCode, count, money);
     }
 }

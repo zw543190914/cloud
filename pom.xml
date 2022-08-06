@@ -120,7 +120,8 @@
         <jjwt.version>0.9.1</jjwt.version>
         <freemarker.version>2.3.31</freemarker.version>
         <kryo-serializers.version>0.45</kryo-serializers.version>
-        <esotericsoftware.version>2.24.0</esotericsoftware.version>
+        <esotericsoftware.version>4.0.2</esotericsoftware.version>
+        <seata-spring-boot-starter.version>1.5.2</seata-spring-boot-starter.version>
     </properties>
 
     <dependencyManagement>
@@ -573,15 +574,21 @@
                 <version>${kryo-serializers.version}</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/com.esotericsoftware.kryo/kryo -->
-            <dependency>
+            <!--<dependency>
                 <groupId>com.esotericsoftware.kryo</groupId>
                 <artifactId>kryo</artifactId>
                 <version>${esotericsoftware.version}</version>
-            </dependency>
+            </dependency>-->
             <dependency>
                 <groupId>com.esotericsoftware</groupId>
                 <artifactId>kryo</artifactId>
-                <version>4.0.2</version>
+                <version>${esotericsoftware.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/io.seata/seata-spring-boot-starter -->
+            <dependency>
+                <groupId>io.seata</groupId>
+                <artifactId>seata-spring-boot-starter</artifactId>
+                <version>${seata-spring-boot-starter.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

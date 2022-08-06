@@ -16,5 +16,8 @@ import org.apache.ibatis.annotations.Update;
 public interface AccountTblMapper extends BaseMapper<AccountTbl> {
 
     @Update("update account_tbl set money = money - ${money} where user_id = ${userId}")
-    int updateByUserId(@Param("userId") String userId, @Param("money") Integer money);
+    int deductionMoneyByUserId(@Param("userId") String userId, @Param("money") Integer money);
+
+    @Update("update account_tbl set money = money + ${money} where user_id = ${userId}")
+    int increaseMoneyByUserId(@Param("userId") String userId, @Param("money") Integer money);
 }

@@ -21,7 +21,8 @@ public class AccountTblServiceImpl extends ServiceImpl<AccountTblMapper, Account
     @Override
     @GlobalTransactional
     public void update(String userId,Integer money){
-        baseMapper.updateByUserId(userId, money);
+        baseMapper.deductionMoneyByUserId(userId, money);
+        //throw new RuntimeException("test");
     }
 
 }

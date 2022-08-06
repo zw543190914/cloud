@@ -12,4 +12,9 @@ public interface IOrderService {
     void insert(@PathVariable("userId") String userId, @PathVariable("commodityCode") String commodityCode,
                 @PathVariable("count") Integer count, @PathVariable("money") Integer money);
 
+
+    @GetMapping("/order/insertTcc/{userId}/{commodityCode}/{count}/{money}")
+    void insertTcc(@PathVariable("userId") String userId, @PathVariable("commodityCode") String commodityCode,
+                @PathVariable("count") Integer count, @PathVariable("money") Integer money);
+
 }
