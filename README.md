@@ -1,12 +1,11 @@
-# springcloudAlibaba-demo
-    springboot:2.6.7 springcloudAlibaba:2021.1
+# springcloudAlibaba 案例
+    springboot:2.6.7 spring-cloud:2021.0.3 springcloudAlibaba:2021.1
   1. 整合 springcloudAlibaba 组件。</br>
   2. 使用 nacos 作为 注册中心和配置中心，代替 Eureka和Config。参考 gateway 模块 </br>
-  3. 使用 gateway 作为网关，只是简单事例，工作中使用的是 nginx。 参考 gateway 模块 </br>
+  3. 使用 gateway 作为网关。 参考 gateway 模块 </br>
   4. 整合 dubbo 作为内部rpc调用，序列化使用 kryo 。参考 dubbo相关模块 </br>
   5. 使用 feign 进行 http 远程调用,符合开发时接口调用规范。参考 sentinel + feign 相关模块 </br>
-  6. 分布式事务 强一致性使用 Seata , 弱一致性使用 MQ 处理分布式事务。业务中应尽量避免分布式事务产生。
-  目前仅为测试，api和dao 未单独分离。参考 seata 相关模块 </br>
+  6. 分布式事务 强一致性使用 Seata , 弱一致性使用 MQ 处理分布式事务。案例提供基于 AT模式和TCC模式事务处理，参考 seata 相关模块 </br>
   7. 熔断、降级、限流 使用 Sentinel 代替 Hystrix 更加灵活，代码侵入性更低。参考 sentinel 相关模块 </br>
   8. 分布式链路追踪 Zipkin ,参考 feign 相关模块。 </br>
   9. 分布式链路监控与追踪系统使用 Zipkin。参考 feign-provider </br>
@@ -38,3 +37,5 @@
   26. [常用插件](https://blog.csdn.net/weixin_41846320/article/details/82697818)
   
   父POM中配置了自己nexus私服，已注释，settings-nexus.xml 为自己私服对应配置文件，方便后期查找使用。</br> 
+  
+  后续更新在[gitee](https://gitee.com/moon-in-the-mirror/cloud)

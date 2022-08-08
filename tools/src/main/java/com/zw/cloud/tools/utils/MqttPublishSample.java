@@ -9,6 +9,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  *发布端
@@ -17,11 +18,12 @@ public class MqttPublishSample {
     public static void main(String[] args) throws Exception{
 
         // dev
+        // 18hao设备5
         String host = "tcp://axdkagn.iot.gz.baidubce.com";
-        String userName = "thingidp@axdkagn|dev_test_device_stenter_03|0|MD5";
-        String password = "a1b48d70a8d106b861f58c1c32bdb04a";
-        String topic = "d/dev_test_device_stenter_03/report";
-        String clientId = "subscribe_test_device";
+        String userName = "thingidp@axdkagn|rr|0|MD5";
+        String password = "20f582bfab251a639a8893d13d90bdc1";
+        String topic = "stenter";
+        String clientId = "subscribe_test_device01";
         // qa
         // 定型机#02
        /* String host = "tcp://amgjjzk.iot.gz.baidubce.com";
@@ -50,23 +52,23 @@ public class MqttPublishSample {
         connOpts.setPassword(password.toCharArray());
         // 建立连接
         sampleClient.connect(connOpts);
-        long second = 1658383250;
+        //long second = 1658383250;
         int stop;
         Random random = new Random();
-        int j = 113 ;
-        //long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
+        int actValue = 113 ;
+        long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
         for (int i = 0; i < 120; i++) {
 
-            second = second + i;
-            if (i%2 == 1) {
-                stop = 0;
-                //j = 189;
+            second = second + 30;
+            if (i == 2) {
+                stop = 33;
+                //actValue = 189;
             } else {
                 stop = 100;
-                //j = 178;
+                //actValue = 178;
             }
-            j ++;
-            String content = buildContent(j,stop,second);
+            actValue =  actValue + 50;
+            String content = buildContent(180,actValue,stop,second);
             try {
 
                 // 创建消息
@@ -85,9 +87,9 @@ public class MqttPublishSample {
                 me.printStackTrace();
                 throw me;
             }
-            System.out.println("finish " + i);
+            System.out.println("finish " + second);
             //System.out.println(content);
-            Thread.sleep(1000);
+            TimeUnit.SECONDS.sleep(30);
         }
         // 断开连接
         sampleClient.disconnect();
@@ -96,111 +98,111 @@ public class MqttPublishSample {
 
     }
 
-    private static String buildContent(int j,int stop,Long second){
+    private static String buildContent(int setValue,int actValue,int speed,Long second){
         String content = "{\n" +
                 "\"stenterStatus\":{\n" +
                 "    \"rtime\": "+ second +",     \n" +
                 "    \"ctime\": "+ second +",    \n" +
                 "    \"mt\": 1,\n" +
                 "    \"ec\": 8830,\n" +
-                "    \"d01\": "+ stop +",\n" +
-                "    \"d02\": "+ stop +",\n" +
-                "    \"d03\": " + j +",\n" +
-                "    \"d04\": " + j +",\n" +
-                "    \"d05\": " + j +",\n" +
-                "    \"d06\": " + j +",\n" +
-                "    \"d07\": " + j +",\n" +
-                "    \"d08\": " + j +",\n" +
-                "    \"d09\": " + j +",\n" +
-                "    \"d10\": " + j +",\n" +
-                "    \"d11\": " + j +",\n" +
-                "    \"d12\": " + j +",\n" +
-                "    \"d13\": " + j +",\n" +
-                "    \"d14\": " + j +",\n" +
-                "    \"d15\": " + j +",\n" +
-                "    \"d16\": " + j +",\n" +
-                "    \"d17\": " + j +",\n" +
-                "    \"d18\": " + j +",\n" +
-                "    \"d19\": " + j +",\n" +
-                "    \"d20\": " + j +",\n" +
-                "    \"d21\": " + j +",\n" +
-                "    \"d22\": " + j +",\n" +
-                "    \"d23\": " + j +",\n" +
-                "    \"d24\": " + j +",\n" +
-                "    \"d25\": " + j +",\n" +
-                "    \"d26\": " + j +",\n" +
-                "    \"d27\": " + j +",\n" +
-                "    \"d28\": " + j +",\n" +
-                "    \"d29\": " + j +",\n" +
-                "    \"d30\": " + j +",\n" +
-                "    \"d31\": " + j +",\n" +
-                "    \"d32\": " + j +",\n" +
-                "    \"d33\": " + j +",\n" +
-                "    \"d34\": " + j +",\n" +
-                "    \"d35\": " + j +",\n" +
-                "    \"d36\": " + j +",\n" +
-                "    \"d37\": " + j +",\n" +
-                "    \"d38\": " + j +",\n" +
-                "    \"d39\": " + j +",\n" +
-                "    \"d40\": " + j +",\n" +
-                "    \"d41\": " + j +",\n" +
-                "    \"d42\": " + j +",\n" +
-                "    \"d43\": " + j +",\n" +
-                "    \"d44\": " + j +",\n" +
-                "    \"d45\": " + j +",\n" +
-                "    \"d46\": " + j +",\n" +
-                "    \"d47\": " + j +",\n" +
-                "    \"d48\": " + j +",\n" +
-                "    \"d49\": " + j +",\n" +
-                "    \"d50\": " + j +",\n" +
-                "    \"d51\": " + j +",\n" +
-                "    \"d52\": " + j +",\n" +
-                "    \"d53\": " + j +",\n" +
-                "    \"d54\": " + j +",\n" +
-                "    \"d55\": " + j +",\n" +
-                "    \"d56\": " + j +",\n" +
-                "    \"d57\": " + j +",\n" +
-                "    \"d58\": " + j +",\n" +
-                "    \"d59\": " + j +",\n" +
-                "    \"d60\": " + j +",\n" +
-                "    \"d61\": " + j +",\n" +
-                "    \"d65\": " + j +",\n" +
-                "    \"d66\": " + j +",\n" +
-                "    \"d67\": " + j +",\n" +
-                "    \"d68\": " + j +",\n" +
-                "    \"d69\": " + j +",\n" +
-                "    \"d70\": " + j +",\n" +
-                "    \"d71\": " + j +",\n" +
-                "    \"d72\": " + j +",\n" +
-                "    \"d73\": " + j +",\n" +
-                "    \"d74\": " + j +",\n" +
-                "    \"d75\": " + j +",\n" +
-                "    \"d76\": " + j +",\n" +
-                "    \"d77\": " + j +",\n" +
-                "    \"d78\": " + j +",\n" +
-                "    \"d79\": " + j +",\n" +
-                "    \"d80\": " + j +",\n" +
-                "    \"d81\": " + j +",\n" +
-                "    \"d82\": " + j +",\n" +
-                "    \"d83\": " + j +",\n" +
-                "    \"d84\": " + j +",\n" +
-                "    \"d85\": " + j +",\n" +
-                "    \"d86\": " + j +",\n" +
-                "    \"d87\": " + j +",\n" +
-                "    \"d88\": " + j +",\n" +
-                "    \"d89\": " + j +",\n" +
-                "    \"d90\": " + j +",\n" +
-                "    \"d91\": " + j +",\n" +
-                "    \"d92\": " + j +",\n" +
-                "    \"d93\": " + j +",\n" +
-                "    \"d94\": " + j +",\n" +
-                "    \"d95\": " + j +",\n" +
-                "    \"d96\": " + j +",\n" +
-                "    \"d97\": " + j +",\n" +
-                "    \"d98\": " + j +",\n" +
-                "    \"d99\": " + j +",\n" +
-                "    \"d100\": " + j +",\n" +
-                "    \"d101\": " + j +" \n" +
+                "    \"d01\": "+ setValue +",\n" +
+                "    \"d02\": "+ speed +",\n" +
+                "    \"d04\": " + actValue +",\n" +
+                "    \"d05\": " + actValue +",\n" +
+                "    \"d03\": " + actValue +",\n" +
+                "    \"d06\": " + setValue +",\n" +
+                "    \"d07\": " + actValue +",\n" +
+                "    \"d08\": " + setValue +",\n" +
+                "    \"d09\": " + actValue +",\n" +
+                "    \"d10\": " + setValue +",\n" +
+                "    \"d11\": " + actValue +",\n" +
+                "    \"d12\": " + setValue +",\n" +
+                "    \"d13\": " + actValue +",\n" +
+                "    \"d14\": " + setValue +",\n" +
+                "    \"d15\": " + actValue +",\n" +
+                "    \"d16\": " + setValue +",\n" +
+                "    \"d17\": " + actValue +",\n" +
+                "    \"d18\": " + setValue +",\n" +
+                "    \"d19\": " + actValue +",\n" +
+                "    \"d20\": " + setValue +",\n" +
+                "    \"d21\": " + actValue +",\n" +
+                "    \"d22\": " + setValue +",\n" +
+                "    \"d23\": " + actValue +",\n" +
+                "    \"d24\": " + actValue +",\n" +
+                "    \"d25\": " + actValue +",\n" +
+                "    \"d26\": " + actValue +",\n" +
+                "    \"d27\": " + actValue +",\n" +
+                "    \"d28\": " + actValue +",\n" +
+                "    \"d29\": " + actValue +",\n" +
+                "    \"d30\": " + actValue +",\n" +
+                "    \"d31\": " + actValue +",\n" +
+                "    \"d32\": " + actValue +",\n" +
+                "    \"d33\": " + actValue +",\n" +
+                "    \"d34\": " + setValue +",\n" +
+                "    \"d35\": " + actValue +",\n" +
+                "    \"d36\": " + setValue +",\n" +
+                "    \"d37\": " + actValue +",\n" +
+                "    \"d38\": " + setValue +",\n" +
+                "    \"d39\": " + actValue +",\n" +
+                "    \"d40\": " + setValue +",\n" +
+                "    \"d41\": " + actValue +",\n" +
+                "    \"d42\": " + setValue +",\n" +
+                "    \"d43\": " + actValue +",\n" +
+                "    \"d44\": " + setValue +",\n" +
+                "    \"d45\": " + actValue +",\n" +
+                "    \"d46\": " + setValue +",\n" +
+                "    \"d47\": " + actValue +",\n" +
+                "    \"d48\": " + setValue +",\n" +
+                "    \"d49\": " + actValue +",\n" +
+                "    \"d50\": " + setValue +",\n" +
+                "    \"d51\": " + actValue +",\n" +
+                "    \"d52\": " + setValue +",\n" +
+                "    \"d53\": " + actValue +",\n" +
+                "    \"d54\": " + setValue +",\n" +
+                "    \"d55\": " + actValue +",\n" +
+                "    \"d56\": " + setValue +",\n" +
+                "    \"d57\": " + actValue +",\n" +
+                "    \"d58\": " + setValue +",\n" +
+                "    \"d59\": " + actValue +",\n" +
+                "    \"d60\": " + actValue +",\n" +
+                "    \"d61\": " + actValue +",\n" +
+                "    \"d65\": " + setValue +",\n" +
+                "    \"d66\": " + actValue +",\n" +
+                "    \"d67\": " + setValue +",\n" +
+                "    \"d68\": " + actValue +",\n" +
+                "    \"d69\": " + setValue +",\n" +
+                "    \"d70\": " + actValue +",\n" +
+                "    \"d71\": " + setValue +",\n" +
+                "    \"d72\": " + actValue +",\n" +
+                "    \"d73\": " + setValue +",\n" +
+                "    \"d74\": " + actValue +",\n" +
+                "    \"d75\": " + setValue +",\n" +
+                "    \"d76\": " + actValue +",\n" +
+                "    \"d77\": " + setValue +",\n" +
+                "    \"d78\": " + actValue +",\n" +
+                "    \"d79\": " + setValue +",\n" +
+                "    \"d80\": " + actValue +",\n" +
+                "    \"d81\": " + setValue +",\n" +
+                "    \"d82\": " + actValue +",\n" +
+                "    \"d83\": " + 80 +",\n" +
+                "    \"d84\": " + 80 +",\n" +
+                "    \"d85\": " + 80 +",\n" +
+                "    \"d86\": " + 80 +",\n" +
+                "    \"d87\": " + 80 +",\n" +
+                "    \"d88\": " + 80 +",\n" +
+                "    \"d89\": " + 80 +",\n" +
+                "    \"d90\": " + 80 +",\n" +
+                "    \"d91\": " + 80 +",\n" +
+                "    \"d92\": " + 80 +",\n" +
+                "    \"d93\": " + 80 +",\n" +
+                "    \"d94\": " + 80 +",\n" +
+                "    \"d95\": " + 80 +",\n" +
+                "    \"d96\": " + 80 +",\n" +
+                "    \"d97\": " + 80 +",\n" +
+                "    \"d98\": " + 80 +",\n" +
+                "    \"d99\": " + 80 +",\n" +
+                "    \"d100\": " + 80 +",\n" +
+                "    \"d101\": " + 80 +" \n" +
                 "  }\n" +
                 "}";
         return content;

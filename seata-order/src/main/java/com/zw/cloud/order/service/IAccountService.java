@@ -1,9 +1,8 @@
-package com.zw.cloud.user.service;
+package com.zw.cloud.order.service;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @FeignClient("account")
 public interface IAccountService {
