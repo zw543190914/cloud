@@ -39,8 +39,8 @@ public class FcController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @RequestMapping("/insert")
-    //http://localhost:8080/fc/insert
+    @RequestMapping("/insertFcList")
+    //http://localhost:8080/fc/insertFcList
     public void insertFcList() {
         List<Fc> fcList = main(null);
         fcService.saveBatch(fcList,fcList.size());
@@ -50,10 +50,9 @@ public class FcController {
     //http://localhost:8080/fc/queryFcList
     public void queryFcList() {
         LambdaQueryWrapper<Fc> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.lt(Fc::getId,22088);
         queryWrapper.orderByDesc(Fc::getId).last("limit 5");
         List<Fc> fcList = fcService.list(queryWrapper);
-        Set<Integer> codeSet = new HashSet<>(10);
+        Set<Integer> codeSet = new HashSet<>(30);
         fcList.forEach(tc -> {
             codeSet.add(tc.getOne());
             codeSet.add(tc.getTwo());
@@ -68,7 +67,12 @@ public class FcController {
     }
 
     public static List<Fc> main(String[] args) {
-        List<Fc> fcList = Lists.newArrayList("22086\t01\t04\t08\t21\t23\t24\t11",
+        List<Fc> fcList = Lists.newArrayList(
+                "22090\t01\t04\t25\t27\t29\t30\t07",
+                "22089\t02\t07\t15\t29\t31\t33\t15",
+                "22088\t03\t09\t15\t17\t20\t22\t06",
+                "22087\t05\t06\t09\t13\t23\t25\t08",
+                "22086\t01\t04\t08\t21\t23\t24\t11",
                 "22085\t07\t09\t14\t31\t32\t33\t13",
                 "22084\t03\t18\t23\t24\t25\t32\t09",
                 "22083\t08\t12\t13\t14\t19\t20\t05",
@@ -78,7 +82,9 @@ public class FcController {
                 "22079\t01\t09\t15\t17\t22\t23\t16",
                 "22078\t01\t04\t05\t15\t17\t31\t09",
                 "22077\t03\t17\t18\t19\t20\t27\t16",
-                "22076\t08\t09\t10\t13\t24\t29\t02")
+                "22076\t08\t09\t10\t13\t24\t29\t02",
+                "22075\t01\t02\t04\t25\t26\t30\t10",
+                "22074\t05\t07\t15\t19\t29\t33\t15")
                 .stream().map(str -> {
                     String[] split = str.split("\t");
                     Fc.FcBuilder builder = Fc.builder();
@@ -88,7 +94,6 @@ public class FcController {
                             .six(Integer.parseInt(split[6])).seven(Integer.parseInt(split[7]));
                     return builder.build();
                 }).collect(Collectors.toList());
-        System.out.println(JSON.toJSONString(fcList));
         return fcList;
     }
 }
