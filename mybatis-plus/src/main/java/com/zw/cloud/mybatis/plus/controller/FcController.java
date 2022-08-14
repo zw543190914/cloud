@@ -1,24 +1,29 @@
 package com.zw.cloud.mybatis.plus.controller;
 
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.google.common.collect.Lists;
 import com.zw.cloud.mybatis.plus.entity.Fc;
+import com.zw.cloud.mybatis.plus.entity.Tc;
+import com.zw.cloud.mybatis.plus.entity.dto.FcResultDTO;
 import com.zw.cloud.mybatis.plus.service.api.IFcService;
+import com.zw.cloud.mybatis.plus.service.api.ITcService;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-import java.net.*;
+import javax.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,20 +42,59 @@ public class FcController {
     @Autowired
     private IFcService fcService;
     @Autowired
+    private ITcService tcService;
+    @Autowired
     private RestTemplate restTemplate;
 
-    @RequestMapping("/insertFcList")
-    //http://localhost:8080/fc/insertFcList
-    public void insertFcList() {
-        List<Fc> fcList = main(null);
+    @GetMapping("/insertFcList/{start}/{end}")
+    //http://localhost:8080/fc/insertFcList/2020001/2020076
+    public void insertFcList(@PathVariable("start") String start,@PathVariable("end") String end) {
+        //String url = "http://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice?name=ssq&issueCount=&issueStart=&issueEnd=&dayStart="+ dayStart +"&dayEnd=" + dayEnd;
+        String url = "http://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice?name=ssq&issueCount=&issueStart=" + start + "&issueEnd=" + end + "&dayStart=&dayEnd=";
+        Map<String, String> uriVariables = new HashMap<>();
+        uriVariables.put("Cache-Control","no-cache, no-store, max-age=0, must-revalidate");
+        uriVariables.put("Content-Encoding","gzip");
+        uriVariables.put("Content-Type","text/json;charset=UTF-8");
+        uriVariables.put("Date","Sun, 14 Aug 2022 08:17:47 GMT");
+        uriVariables.put("Pragma","no-cache");
+        uriVariables.put("Server","waf/4.31.12-0.el7");
+        uriVariables.put("Transfer-Encoding","chunked");
+        uriVariables.put("X-Frame-Options","SAMEORIGIN");
+        uriVariables.put("X-Via","1.1 PSjsczsx2mh91:6 (Cdn Cache Server V2.0), 1.1 CS-000-01qMz147:11 (Cdn Cache Server V2.0)");
+        uriVariables.put("X-Ws-Request-Id","62f8afab_CS-000-01cd3123_45887-60099");
+        uriVariables.put("X-XSS-Protection","1; mode=block");
+        String result = restTemplate.getForObject(url, String.class,uriVariables);
+        FcResultDTO fcResultDTO = JSON.parseObject(result, FcResultDTO.class);
+        System.out.println(JSON.toJSONString(fcResultDTO));
+        if (Objects.isNull(fcResultDTO) || CollectionUtils.isEmpty(fcResultDTO.getResult())) {
+            return;
+        }
+        List<FcResultDTO.FcDTO> fcDTOList = fcResultDTO.getResult();
+        List<Fc> fcList = fcDTOList.stream().map(fcDTO -> {
+            Fc.FcBuilder builder = Fc.builder();
+            String[] split = fcDTO.getRed().split(",");
+            builder.id(Integer.parseInt(fcDTO.getCode())).one(Integer.parseInt(split[0]))
+                    .two(Integer.parseInt(split[1])).three(Integer.parseInt(split[2]))
+                    .four(Integer.parseInt(split[3])).five(Integer.parseInt(split[4]))
+                    .six(Integer.parseInt(split[5])).seven(Integer.parseInt(fcDTO.getBlue()));
+            return builder.build();
+        }).collect(Collectors.toList());
         fcService.saveBatch(fcList,fcList.size());
     }
 
-    @RequestMapping("queryFcList")
-    //http://localhost:8080/fc/queryFcList
-    public void queryFcList() {
+    @GetMapping("/queryFcList/{count}")
+    //http://localhost:8080/fc/queryFcList/5
+    public List<Fc> queryFcList(@PathVariable("count") Integer count) {
         LambdaQueryWrapper<Fc> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.orderByDesc(Fc::getId).last("limit 5");
+        queryWrapper.orderByDesc(Fc::getId).last("limit " + count);
+        return fcService.list(queryWrapper);
+    }
+
+    @GetMapping("/queryMaxCountFcList/{count}")
+    //http://localhost:8080/fc/queryMaxCountFcList/5
+    public Map<String,List<Integer>> queryMaxCountFcList(@PathVariable("count") Integer count) {
+        LambdaQueryWrapper<Fc> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Fc::getId).last("limit " + count);
         List<Fc> fcList = fcService.list(queryWrapper);
         Set<Integer> codeSet = new HashSet<>(30);
         fcList.forEach(tc -> {
@@ -62,38 +106,123 @@ public class FcController {
             codeSet.add(tc.getSix());
         });
         Set<Integer> blueSet = fcList.stream().map(Fc::getSeven).collect(Collectors.toSet());
-        System.out.println(JSON.toJSONString(codeSet.stream().sorted(Comparator.comparingInt(Integer::intValue)).collect(Collectors.toList())));
-        System.out.println(JSON.toJSONString(blueSet.stream().sorted(Comparator.comparingInt(Integer::intValue)).collect(Collectors.toList())));
+        List<Integer> list = codeSet.stream().sorted(Comparator.comparingInt(Integer::intValue)).collect(Collectors.toList());
+        List<Integer> blueList = blueSet.stream().sorted(Comparator.comparingInt(Integer::intValue)).collect(Collectors.toList());
+        System.out.println(JSON.toJSONString(list));
+        System.out.println(JSON.toJSONString(blueList));
+        Map<String,List<Integer>> result = new HashMap<>();
+        result.put("list",list);
+        result.put("blueList",blueList);
+        return result;
     }
 
-    public static List<Fc> main(String[] args) {
-        List<Fc> fcList = Lists.newArrayList(
-                "22090\t01\t04\t25\t27\t29\t30\t07",
-                "22089\t02\t07\t15\t29\t31\t33\t15",
-                "22088\t03\t09\t15\t17\t20\t22\t06",
-                "22087\t05\t06\t09\t13\t23\t25\t08",
-                "22086\t01\t04\t08\t21\t23\t24\t11",
-                "22085\t07\t09\t14\t31\t32\t33\t13",
-                "22084\t03\t18\t23\t24\t25\t32\t09",
-                "22083\t08\t12\t13\t14\t19\t20\t05",
-                "22082\t04\t10\t11\t23\t30\t32\t14",
-                "22081\t04\t08\t11\t21\t27\t30\t01",
-                "22080\t05\t12\t15\t17\t18\t27\t04",
-                "22079\t01\t09\t15\t17\t22\t23\t16",
-                "22078\t01\t04\t05\t15\t17\t31\t09",
-                "22077\t03\t17\t18\t19\t20\t27\t16",
-                "22076\t08\t09\t10\t13\t24\t29\t02",
-                "22075\t01\t02\t04\t25\t26\t30\t10",
-                "22074\t05\t07\t15\t19\t29\t33\t15")
-                .stream().map(str -> {
-                    String[] split = str.split("\t");
-                    Fc.FcBuilder builder = Fc.builder();
-                    builder.id(Integer.parseInt(split[0])).one(Integer.parseInt(split[1]))
-                            .two(Integer.parseInt(split[2])).three(Integer.parseInt(split[3]))
-                            .four(Integer.parseInt(split[4])).five(Integer.parseInt(split[5]))
-                            .six(Integer.parseInt(split[6])).seven(Integer.parseInt(split[7]));
-                    return builder.build();
-                }).collect(Collectors.toList());
-        return fcList;
+    @GetMapping("/queryFcCountList/{count}/{limit}")
+    //http://localhost:8080/fc/queryFcCountList/100
+    public Map<Integer,Integer> queryFcCountList(@PathVariable("count") Integer count,@PathVariable("limit") Integer limit) {
+        LambdaQueryWrapper<Fc> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Fc::getId).last("limit " + count);
+        List<Fc> fcList = fcService.list(queryWrapper);
+        List<Integer> codeList = new ArrayList<>(count * 6);
+        List<Integer> blueList = new ArrayList<>(count);
+        fcList.forEach(fc -> {
+            codeList.add(fc.getOne());
+            codeList.add(fc.getTwo());
+            codeList.add(fc.getThree());
+            codeList.add(fc.getFour());
+            codeList.add(fc.getFive());
+            codeList.add(fc.getSix());
+            blueList.add(fc.getSeven());
+            //fc.getOne() + fc.getTwo() + fc.getThree() + fc.getFour() + fc.getFive() + fc.getFive() + fc.getSeven()
+        });
+        // k->数值，v->出现次数
+        Map<Integer,Integer> map = new TreeMap<>();
+        for (Integer value : codeList) {
+            if (Objects.isNull(value)) {
+                continue;
+            }
+            int intValue = value;
+            Integer sum = map.get(intValue);
+            if (Objects.isNull(sum)) {
+                map.put(intValue,1);
+            } else {
+                map.put(intValue,sum + 1);
+            }
+        }
+        Map<Integer,Integer> result = new TreeMap<>();
+        map.forEach((k,v) -> {
+            if (v >= limit) {
+                result.put(k,v);
+            }
+        });
+        return result;
     }
+
+    @GetMapping(value = {"/queryFcByCondition/{one}/{two}/{three}/{four}/{five}","/queryFcByCondition/{one}/{two}/{three}/{four}",
+            "/queryFcByCondition/{one}/{two}/{three}","/queryFcByCondition/{one}/{two}"})
+    //http://localhost:8080/fc/queryFcByCondition/7/17/18
+    public List<Fc> queryFcByCondition(@PathVariable(value = "one",required = false) Integer one,
+                                                   @PathVariable(value = "two",required = false) Integer two,
+                                                   @PathVariable(value = "three",required = false) Integer three,
+                                                   @PathVariable(value = "four",required = false) Integer four,
+                                                   @PathVariable(value = "five",required = false) Integer five) {
+        LambdaQueryWrapper<Fc> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Objects.nonNull(one),Fc::getOne,one)
+                .eq(Objects.nonNull(two),Fc::getTwo,two)
+                .eq(Objects.nonNull(three),Fc::getThree,three)
+                .eq(Objects.nonNull(four),Fc::getFour,four)
+                .eq(Objects.nonNull(five),Fc::getFive,five)
+                .orderByDesc(Fc::getId);
+        return fcService.list(queryWrapper);
+    }
+
+    @GetMapping("/export/{count}")
+    //http://localhost:8080/fc/export/100
+    public void export(@PathVariable("count") Integer count,HttpServletResponse response) throws Exception {
+        LambdaQueryWrapper<Fc> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Fc::getId).last("limit " + count);
+        List<Fc> fcList = fcService.list(queryWrapper);
+        String title = "cp.xlsx";
+
+        // 单个sheet 导出
+        //Workbook workbook = ExcelExportUtils.export(null, "发货通知单", 0, shipmentOrderDTOS, ShipmentOrderDTO.class, null);
+
+        // https://blog.csdn.net/baidu_36821021/article/details/85216855
+        ExportParams sheet1Params = new ExportParams();
+        // 设置sheet得名称
+        sheet1Params.setSheetName("fc");
+        // 创建sheet1使用得map
+        Map<String, Object> sheet1ExportMap = new HashMap<>();
+        // title的参数为ExportParams类型，目前仅仅在ExportParams中设置了sheetName
+        sheet1ExportMap.put("title", sheet1Params);
+        // 模版导出对应得实体类型
+        sheet1ExportMap.put("entity", Fc.class);
+        // sheet中要填充得数据
+        sheet1ExportMap.put("data", fcList);
+
+        LambdaQueryWrapper<Tc> tcQueryWrapper = new LambdaQueryWrapper<>();
+        tcQueryWrapper.orderByDesc(Tc::getId).last("limit " + count);
+        List<Tc> tcList = tcService.list(tcQueryWrapper);
+        ExportParams sheet2Params = new ExportParams();
+        sheet2Params.setSheetName("tc");
+        // 创建sheet2使用得map
+        Map<String, Object> sheet2ExportMap = new HashMap<>();
+        sheet2ExportMap.put("title", sheet2Params);
+        sheet2ExportMap.put("entity", Tc.class);
+        sheet2ExportMap.put("data", tcList);
+
+        // 将sheet1、sheet2、sheet3使用得map进行包装
+        List<Map<String, Object>> sheetsList = new ArrayList<>();
+        sheetsList.add(sheet1ExportMap);
+        sheetsList.add(sheet2ExportMap);
+
+        Workbook workbook = ExcelExportUtil.exportExcel(sheetsList, ExcelType.HSSF);
+
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("content-Type", "application/vnd.ms-excel");
+        response.setHeader("Content-Disposition",
+                "attachment;filename=" + URLEncoder.encode(title, String.valueOf(StandardCharsets.UTF_8)));
+        workbook.write(response.getOutputStream());
+    }
+
+
 }

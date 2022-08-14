@@ -53,6 +53,13 @@ spring:
             - Path=/dubbo-consumer/**
           filters:
             - StripPrefix=1
+        - id: mybatis-plus
+          uri: lb://mybatis-plus
+          predicates:
+            # http://127.0.0.1:8000/mybatis-plus/fc/queryFcList/5
+            - Path=/mybatis-plus/**
+          filters:
+            - StripPrefix=1
 
       httpclient:
         connect-timeout: 3000

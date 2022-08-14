@@ -11,3 +11,29 @@ CREATE TABLE `user_info` (
                              `org_code` varchar(255) NOT NULL DEFAULT '' COMMENT '组织id',
                              PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='用户表';
+
+CREATE TABLE `fc` (
+                      `id` int NOT NULL,
+                      `one` int NOT NULL,
+                      `two` int NOT NULL,
+                      `three` int NOT NULL,
+                      `four` int NOT NULL,
+                      `five` int NOT NULL,
+                      `six` int NOT NULL,
+                      `seven` int NOT NULL,
+                      `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                      PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE `tc` (
+                      `id` int NOT NULL,
+                      `one` int NOT NULL,
+                      `two` int NOT NULL,
+                      `three` int NOT NULL,
+                      `four` int NOT NULL,
+                      `five` int NOT NULL,
+                      `six` int NOT NULL,
+                      `seven` int NOT NULL,
+                      `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                      PRIMARY KEY (`id`)
+) ENGINE=InnoDB;

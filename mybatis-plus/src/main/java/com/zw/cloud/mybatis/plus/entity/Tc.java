@@ -8,23 +8,20 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
-
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 体彩
+ * 
  * </p>
  *
  * @author zw
- * @since 2022-08-03
+ * @since 2022-08-14
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Builder
-public class Fc implements Serializable {
+public class Tc implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
