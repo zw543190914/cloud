@@ -53,7 +53,7 @@ public class BigDecimalUtils {
         System.out.println(new BigDecimal("1368.00").stripTrailingZeros().toPlainString());
 
         System.out.println("=========精确到5=========");
-        System.out.println(parseBigDecimalToFive(new BigDecimal("132.5")));
+        System.out.println(parseBigDecimalToFive(new BigDecimal("282.43")));
         System.out.println(parseBigDecimalToFive(new BigDecimal("235.55")));
         System.out.println(parseBigDecimalToFive(new BigDecimal("1037.5")));
         System.out.println(parseBigDecimalToFive(new BigDecimal("339.23")));
@@ -94,7 +94,7 @@ public class BigDecimalUtils {
      * 如 35 ≤ A < 40，则A取值为 40；如 30 ≤ A < 35，则A取值为 35。
      */
     private static BigDecimal parseBigDecimalToFive(BigDecimal bigDecimal){
-        bigDecimal = bigDecimal.subtract(new BigDecimal("2.5")).setScale(0, RoundingMode.HALF_UP);
+        bigDecimal = bigDecimal.subtract(new BigDecimal("2.5")).setScale(2, RoundingMode.HALF_UP);
         int value = bigDecimal.intValue();
         // 个位
         int gw = value % 10;
@@ -169,6 +169,7 @@ public class BigDecimalUtils {
             }
             if (happenCount > count) {
                 temp = actualValue;
+                count = happenCount;
             }
         }
         return temp;
