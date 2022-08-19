@@ -1,8 +1,6 @@
-package com.zw.cloud.tools.utils;
+package com.zw.cloud.common.utils;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
-import com.zw.cloud.tools.entity.User;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -32,14 +30,6 @@ public class BigDecimalUtils {
         System.out.println(a1.divide(total,3, RoundingMode.HALF_DOWN));
         System.out.println(a2.divide(total,3, RoundingMode.HALF_DOWN));
         System.out.println(a3.divide(total,3, RoundingMode.HALF_DOWN));
-        User user = new User();
-        user.setId(1L);
-        user.setName("");
-        user.setDescription("de");
-        String format = String.format("%s_%s_%s", user.getId(), user.getName(), user.getDescription());
-        System.out.println(format);
-        String[] s = format.split("_");
-        System.out.println(Arrays.toString(s));
 
         BigDecimal bigDecimal1 = parseBigDecimal(new BigDecimal("163.545"));
 

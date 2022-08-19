@@ -1,4 +1,4 @@
-package com.zw.cloud.tools.utils;
+package com.zw.cloud.common.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
