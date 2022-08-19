@@ -9,16 +9,12 @@ public enum ConsumerEnum {
     /**
      * 事件
      */
-    EVENT_TASK_CONSUMER("task1", "TOPIC1","tag1", "任务1","eventConsumerHandlerInstance"),
+    EVENT_TASK_CONSUMER( "TOPIC1","tag1", "任务1","eventConsumerHandlerInstance"),
     /**
      * 变更
      */
-    CHANGE_TASK_CONSUMER("task2","TOPIC2","tag1", "任务2","changeConsumerHandlerInstance");
+    CHANGE_TASK_CONSUMER("TOPIC2","tag1", "任务2","changeConsumerHandlerInstance");
 
-    /**
-     * code
-     */
-    private final String code;
 
     /**
      * topic
@@ -39,17 +35,16 @@ public enum ConsumerEnum {
      */
     private final String beanName;
 
-    ConsumerEnum(String code, String topic, String tag, String description,String beanName) {
-        this.code = code;
+    ConsumerEnum(String topic, String tag, String description,String beanName) {
         this.topic = topic;
         this.tag = tag;
         this.description = description;
         this.beanName = beanName;
     }
 
-    public static String getBeanNameByCode(String code){
+    public static String getBeanNameByTopicAndTag(String topic,String tag){
         for (ConsumerEnum value : ConsumerEnum.values()) {
-            if (StringUtils.equals(value.code,code)) {
+            if (StringUtils.equals(value.topic,topic) && StringUtils.equals(value.tag,tag) ) {
                 return value.beanName;
             }
         }

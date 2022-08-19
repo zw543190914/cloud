@@ -29,9 +29,10 @@ public class RocketConsumer implements RocketMQListener<MessageExt> {
             return;
         }
 
+        String topic = messageExt.getTopic();
         String tag = messageExt.getTags();
         log.info("[RabbitConsumer][RabbitConsumer] tag is {},receive messageBody is {}", tag, messageBody);
-        ConsumerHandler task1 = ConsumerHandler.getConsumerHandlerInstance("task1");
-        task1.handleRocketMQMsg(messageBody);
+        ConsumerHandler handlerInstance = ConsumerHandler.getConsumerHandlerInstance(topic,tag);
+        handlerInstance.handleRocketMQMsg(messageBody);
     }
 }

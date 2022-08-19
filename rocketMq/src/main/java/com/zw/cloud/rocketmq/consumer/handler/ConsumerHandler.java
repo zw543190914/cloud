@@ -5,8 +5,8 @@ import com.zw.cloud.rocketmq.enums.ConsumerEnum;
 
 public abstract class ConsumerHandler {
 
-    public static ConsumerHandler getConsumerHandlerInstance(String code) {
-        String beanName = ConsumerEnum.getBeanNameByCode(code);
+    public static ConsumerHandler getConsumerHandlerInstance(String topic,String tag) {
+        String beanName = ConsumerEnum.getBeanNameByTopicAndTag(topic,tag);
         return SpringUtil.getBean(beanName, ConsumerHandler.class);
     }
 

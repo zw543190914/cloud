@@ -49,11 +49,11 @@ public class RocketProductOrderly {
         }
     }
 
-    @GetMapping("/testStrategy/{code}")
-    //http://localhost:10000/rocket/testStrategy/task1
-    public void testStrategy(@PathVariable String code) {
-        ConsumerHandler task1 = ConsumerHandler.getConsumerHandlerInstance(code);
-        task1.handleRocketMQMsg(code);
+    @GetMapping("/testStrategy/{topic}/{tag}")
+    //http://localhost:10000/rocket/testStrategy/topic
+    public void testStrategy(@PathVariable String topic,@PathVariable String tag) {
+        ConsumerHandler task1 = ConsumerHandler.getConsumerHandlerInstance(topic,tag);
+        task1.handleRocketMQMsg(tag);
     }
 
 }
