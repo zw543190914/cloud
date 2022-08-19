@@ -56,7 +56,7 @@ public class MqttCallBackService implements MqttCallback {
     public void deliveryComplete(IMqttDeliveryToken token) {
         IMqttAsyncClient client = token.getClient();
         int messageId = token.getMessageId();
-        log.info("[Mqtt][deliveryComplete]client {}, {} 发布消息成功",client.getClientId(),messageId);
+        log.info("[Mqtt][deliveryComplete]client is {}, messageId is {} 发布消息成功",client.getClientId(),messageId);
     }
 
 }

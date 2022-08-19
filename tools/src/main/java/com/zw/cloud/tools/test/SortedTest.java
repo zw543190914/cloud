@@ -27,6 +27,8 @@ public class SortedTest {
         System.out.println(JSON.toJSONString(map1));*/
 
         ArrayList<String> strings = Lists.newArrayList( "013", "100", "101","000", "002", "010","1","3");
+        List<String> strings1 = strings.subList(strings.size() - 2, strings.size());
+        System.out.println(strings1.toString());
         strings.sort(Comparator.comparing(s -> s));
         System.out.println(strings.toString());
         strings.sort(Comparator.comparing(Integer::parseInt));
