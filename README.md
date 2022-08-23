@@ -14,27 +14,29 @@
   12. 分布式锁 zookeeper(ZkInterProcessMutex,LeaderLatch)。参考 feign-provider 模块。
   13. activiti工作流引擎使用整合。参考 activiti 模块。  </br>
   14. 多数据源整合, 参考 feign-consumer 模块。[mybatis-plus多数据源](https://www.yuque.com/zhengwei-tl3g2/zl9d8x/cp0yup) </br>
-  15.一些开发常用工具，比如 HttpUtils ，JwtUtils 参考 common 模块。 </br>
-  16. 整合使用IK分词器(自定义分词)或者 HanLP 分词进行文本相似度分析。参考 common 模块。 </br>
-  17. 使用 Pinyin4jUtils 进行 中文转拼音的相关处理， 参考 common 模块。 </br>
-  18. 整合 shiro 进行权限控制，缓存使用 ehcache(单机) 或者 redis(微服务) 。参考 shiro 模块 </br>
-  19. poi excel 导出(百万数据使用 SXSSF),数据读取(百万数据量 使用事件模型进行读取), </br>
-    小图片data url 数据库存储, 大文件 七牛云对象存储， </br>
-    二维码生成和解析，</br>
-    使用 百度AI / 阿里云AI 进行人脸识别 登录。(百度AI 被注释) </br>
-    时间相关转换,返回值统一封装,全局异常处理, Mybatis 代码生成插件 </br>
-    Java简单爬虫 WebmagicUtils,StringTemplete 消息模板 。 </br>
-    并发相关内容 锁，JUC工具类 线程池。</br>
-    SPRINGBOOT单元测试 & MOCK静态方法。</br>
-    参考 tools 模块 </br>
-    
-  20. elasticsearch 整合，工具类封装，数据来源为Jsoup获取网页数据。 参考 elasticsearch 模块。 </br>
-  21. shop 商品模块，主要添加秒杀相关。
-  22. mybatis-plus整合，mybatis-plus generate 代码生成，参考 mybatis-plus 模块。</br>
-  23. websocket 、 netty(netty-server)、 netty-client, 参考对应模块。</br>
-  24. redis 分布式锁，幂等控制，参考 netty(netty-server) 模块。</br>
-  25. rocketMq整合&rabbitMq整合& influxDB使用</br>
-  26. [常用插件](https://blog.csdn.net/weixin_41846320/article/details/82697818)
+  15. influxDB 整合。</br>
+  16. 整合 shiro 进行权限控制，缓存使用 ehcache(单机) 或者 redis(微服务) 。参考 shiro 模块 </br>
+  17. elasticsearch 整合，工具类封装，数据来源为Jsoup获取网页数据。 参考 elasticsearch 模块。 </br>
+  18. shop 商品模块，主要添加秒杀相关。
+  19. mybatis-plus整合，mybatis-plus generate 代码生成，参考 mybatis-plus 模块。</br>
+  20. websocket 、 netty(netty-server)、 netty-client, 参考对应模块。</br>
+  21. redis 分布式锁，幂等控制，参考 netty(netty-server) 模块。</br>
+  22. MQ整合 rocketMq、rabbitMq、kafka. rocketMQ 使用策略模式进行消息消费</br>
+  23. poi excel 导出(百万数据使用 SXSSF),数据读取(百万数据量 使用事件模型进行读取), </br>
+      小图片data url 数据库存储, 大文件 七牛云对象存储， </br>
+      二维码生成和解析，</br>
+      使用 百度AI / 阿里云AI 进行人脸识别 登录。(百度AI 被注释) </br>
+      返回值统一封装,全局异常处理, Mybatis 代码生成插件 </br>
+      Java简单爬虫 WebmagicUtils,StringTemplete 消息模板 。 </br>
+      并发相关内容 锁，JUC工具类 线程池。</br>
+      SPRINGBOOT单元测试 & MOCK静态方法。</br>
+      参考 tools 模块 </br>
+  24. 一些开发常用工具，比如 HttpUtils ，JwtUtils </br>
+      整合使用IK分词器(自定义分词)或者 HanLP 分词进行文本相似度分析, </br>
+      BigDecimalUtils 对数字计算和统计  </br>
+      DateTimeUtils 日期工具  </br>
+      使用 Pinyin4jUtils 进行 中文转拼音的相关处理， 参考 common 模块。 </br>
+  25. [常用插件](https://blog.csdn.net/weixin_41846320/article/details/82697818)
   
   父POM中配置了自己nexus私服，已注释，settings-nexus.xml 为自己私服对应配置文件，方便后期查找使用。</br> 
   

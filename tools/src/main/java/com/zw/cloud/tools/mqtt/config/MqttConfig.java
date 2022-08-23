@@ -11,17 +11,20 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Slf4j
 public class MqttConfig {
-    @Value("${spring.mqtt.username}")
+    @Value("${mqtt.username}")
     private String username;
 
-    @Value("${spring.mqtt.password}")
+    @Value("${mqtt.password}")
     private String password;
 
-    @Value("${spring.mqtt.url}")
+    @Value("${mqtt.url}")
     private String hostUrl;
 
-    @Value("${spring.mqtt.client.id}")
+    @Value("${mqtt.client.id}")
     private String clientId;
+
+    @Value("${mqtt.topic}")
+    private String topic;
 
     /**
      * 客户端对象
@@ -68,9 +71,9 @@ public class MqttConfig {
 
             //订阅主题
             //消息等级，和主题数组一一对应，服务端将按照指定等级给订阅了主题的客户端推送消息
-            int[] qos = {1,1};
+            int[] qos = {1};
             //主题
-            String[] topics = {"d/qa_test_device_stenter_02/#","topic2"};
+            String[] topics = {topic};
             //订阅主题
             client.subscribe(topics,qos);
             log.info("[Mqtt][connect] success");
@@ -96,7 +99,7 @@ public class MqttConfig {
 
     }
 
-    public void publish(String topic,String message) throws Exception{
+    public void publish(String message) throws Exception{
         MqttMessage mqttMessage = new MqttMessage();
         // QoS 1 最少一次
         mqttMessage.setQos(1);

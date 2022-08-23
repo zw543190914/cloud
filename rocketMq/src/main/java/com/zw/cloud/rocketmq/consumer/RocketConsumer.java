@@ -1,5 +1,6 @@
 package com.zw.cloud.rocketmq.consumer;
 
+import com.zw.cloud.rocketmq.consumer.handler.ConsumerHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.common.message.MessageExt;
@@ -28,8 +29,10 @@ public class RocketConsumer implements RocketMQListener<MessageExt> {
             return;
         }
 
+        String topic = messageExt.getTopic();
         String tag = messageExt.getTags();
         log.info("[RabbitConsumer][RabbitConsumer] tag is {},receive messageBody is {}", tag, messageBody);
-
+        ConsumerHandler handlerInstance = ConsumerHandler.getConsumerHandlerInstance(topic,tag);
+        handlerInstance.handleRocketMQMsg(messageBody);
     }
 }

@@ -19,18 +19,18 @@ public class MqttPublishSample {
 
         // dev
         // 18hao设备5
-        String host = "tcp://axdkagn.iot.gz.baidubce.com";
+        /*String host = "tcp://axdkagn.iot.gz.baidubce.com";
         String userName = "thingidp@axdkagn|rr|0|MD5";
         String password = "20f582bfab251a639a8893d13d90bdc1";
-        String topic = "stenter";
-        String clientId = "subscribe_test_device01";
+        String topic = "d/rr/report";
+        String clientId = "subscribe_test_device01";*/
         // qa
         // 定型机#02
-       /* String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+        String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|qa_test_device_stenter_02|0|MD5";
         String password = "3509803995f1748b7d4c5f1ad9dfb615";
         String topic = "d/qa_test_device_stenter_02/report";
-        String clientId = "subscribe_test";*/
+        String clientId = "subscribe_test";
         // 线上
         /*String host = "tcp://afswjqe.iot.gz.baidubce.com";
         String userName = "thingidp@afswjqe|xnbh06|0|MD5";
@@ -57,14 +57,15 @@ public class MqttPublishSample {
         Random random = new Random();
         int actValue = 113 ;
         long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
+
         for (int i = 0; i < 120; i++) {
 
             second = second + 30;
-            if (i == 2) {
-                stop = 33;
+            if (i == 3) {
+                stop = 8;
                 //actValue = 189;
             } else {
-                stop = 100;
+                stop = 66;
                 //actValue = 178;
             }
             actValue =  actValue + 50;
@@ -85,7 +86,6 @@ public class MqttPublishSample {
                 System.out.println("cause " + me.getCause());
                 System.out.println("excep " + me);
                 me.printStackTrace();
-                throw me;
             }
             System.out.println("finish " + second);
             //System.out.println(content);
