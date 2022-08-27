@@ -47,22 +47,20 @@ public class FcController {
     private RestTemplate restTemplate;
 
     @GetMapping("/insertFcList/{start}/{end}")
-    //http://localhost:8080/fc/insertFcList/2020001/2020076
+    //http://localhost:8080/fc/insertFcList/22093/22095
     public void insertFcList(@PathVariable("start") String start,@PathVariable("end") String end) {
         //String url = "http://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice?name=ssq&issueCount=&issueStart=&issueEnd=&dayStart="+ dayStart +"&dayEnd=" + dayEnd;
         String url = "http://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice?name=ssq&issueCount=&issueStart=" + start + "&issueEnd=" + end + "&dayStart=&dayEnd=";
         Map<String, String> uriVariables = new HashMap<>();
-        uriVariables.put("Cache-Control","no-cache, no-store, max-age=0, must-revalidate");
-        uriVariables.put("Content-Encoding","gzip");
-        uriVariables.put("Content-Type","text/json;charset=UTF-8");
-        uriVariables.put("Date","Sun, 14 Aug 2022 08:17:47 GMT");
-        uriVariables.put("Pragma","no-cache");
-        uriVariables.put("Server","waf/4.31.12-0.el7");
-        uriVariables.put("Transfer-Encoding","chunked");
-        uriVariables.put("X-Frame-Options","SAMEORIGIN");
-        uriVariables.put("X-Via","1.1 PSjsczsx2mh91:6 (Cdn Cache Server V2.0), 1.1 CS-000-01qMz147:11 (Cdn Cache Server V2.0)");
-        uriVariables.put("X-Ws-Request-Id","62f8afab_CS-000-01cd3123_45887-60099");
-        uriVariables.put("X-XSS-Protection","1; mode=block");
+        uriVariables.put("Accept","application/json, text/javascript, */*; q=0.01");
+        uriVariables.put("Accept-Encoding","gzip, deflate");
+        uriVariables.put("Accept-Language","zh-CN,zh;q=0.9");
+        uriVariables.put("Connection","keep-alive");
+        uriVariables.put("Cookie","HMF_CI=3859b88291680b8738a6027765d9d685e6bb77b035c00b8065e85a6628fbc8381fac338e9f474f312a9a66c7c4fb6e978aef6fcf3ba919cdda44a9597fed1c2155; 21_vq=18");
+        uriVariables.put("Host","www.cwl.gov.cn");
+        uriVariables.put("Referer","http://www.cwl.gov.cn/ygkj/wqkjgg/ssq/");
+        uriVariables.put("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36");
+        uriVariables.put("X-Requested-With","XMLHttpRequest");
         String result = restTemplate.getForObject(url, String.class,uriVariables);
         FcResultDTO fcResultDTO = JSON.parseObject(result, FcResultDTO.class);
         System.out.println(JSON.toJSONString(fcResultDTO));
@@ -117,7 +115,7 @@ public class FcController {
     }
 
     @GetMapping("/queryFcCountList/{count}/{limit}")
-    //http://localhost:8080/fc/queryFcCountList/100
+    //http://localhost:8080/fc/queryFcCountList/60/5
     public Map<Integer,Integer> queryFcCountList(@PathVariable("count") Integer count,@PathVariable("limit") Integer limit) {
         LambdaQueryWrapper<Fc> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.orderByDesc(Fc::getId).last("limit " + count);
@@ -159,7 +157,7 @@ public class FcController {
 
     @GetMapping(value = {"/queryFcByCondition/{one}/{two}/{three}/{four}/{five}","/queryFcByCondition/{one}/{two}/{three}/{four}",
             "/queryFcByCondition/{one}/{two}/{three}","/queryFcByCondition/{one}/{two}"})
-    //http://localhost:8080/fc/queryFcByCondition/7/17/18
+    //http://localhost:8080/fc/queryFcByCondition/4/5/10
     public List<Fc> queryFcByCondition(@PathVariable(value = "one",required = false) Integer one,
                                                    @PathVariable(value = "two",required = false) Integer two,
                                                    @PathVariable(value = "three",required = false) Integer three,

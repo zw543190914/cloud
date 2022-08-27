@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
-@EnableDiscoveryClient
+//@EnableDiscoveryClient
 @MapperScan(basePackages = "com.zw.cloud.mybatis.plus.mapper")
 public class MybatisPlusApplication {
     public static void main(String[] args) {

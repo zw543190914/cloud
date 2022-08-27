@@ -4,6 +4,8 @@ import com.zw.cloud.tools.utils.CustomerExecutorService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -19,8 +21,21 @@ public class ScheduleTask {
     }
 
     public static void main(String[] args) {
-        CustomerExecutorService.scheduledExecutorService.scheduleAtFixedRate(() -> {
+        /*CustomerExecutorService.scheduledExecutorService.scheduleAtFixedRate(() -> {
             System.out.println("haha");
-        },0, 30, TimeUnit.SECONDS);
+        },0L,0L, TimeUnit.SECONDS);*/
+        CustomerExecutorService.scheduledExecutorService.schedule(() -> {
+            System.out.println(Thread.currentThread().getId() + ":" + System.currentTimeMillis());
+            runTask();
+        }, 5L, TimeUnit.SECONDS);
+
+        //CustomerExecutorService.scheduledExecutorService.shutdown();
+    }
+
+    private static void runTask(){
+        CustomerExecutorService.scheduledExecutorService.schedule(() -> {
+            System.out.println(Thread.currentThread().getId() + ":" + System.currentTimeMillis());
+            runTask();
+        }, 5L, TimeUnit.SECONDS);
     }
 }
