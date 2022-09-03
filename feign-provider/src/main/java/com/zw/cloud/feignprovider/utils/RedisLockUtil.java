@@ -1,4 +1,4 @@
-package com.zw.cloud.feignprovider02.utils;
+package com.zw.cloud.feignprovider.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.RedisStringCommands;

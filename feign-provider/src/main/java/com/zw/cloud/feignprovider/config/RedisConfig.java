@@ -1,4 +1,4 @@
-package com.zw.cloud.feignprovider02.config;
+package com.zw.cloud.feignprovider.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;

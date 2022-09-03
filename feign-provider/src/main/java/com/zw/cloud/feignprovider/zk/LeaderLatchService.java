@@ -1,4 +1,4 @@
-package com.zw.cloud.feignprovider02.zk;
+package com.zw.cloud.feignprovider.zk;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.leader.LeaderLatch;
