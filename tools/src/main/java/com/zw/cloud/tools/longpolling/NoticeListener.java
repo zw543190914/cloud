@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,9 +36,12 @@ public class NoticeListener implements ApplicationListener<NoticeEvent> {
             response.setDateHeader("Expires", 0);
             response.setHeader("Cache-Control", "no-cache,no-store");
             response.setStatus(HttpServletResponse.SC_OK);
+            PrintWriter writer = response.getWriter();
             JSONObject result = new JSONObject();
-            result.put(deviceId,changeTag);
-            response.getWriter().print(result.toJSONString());
+            result.put("data",changeTag);
+            result.put("status",200);
+            writer.write(result.toJSONString());
+            writer.flush();
             asyncContext.complete();
             SUB_HTTP_CLIENT_MAP.remove(deviceId);
         } catch (Exception e) {

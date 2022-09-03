@@ -1,5 +1,6 @@
 package com.zw.cloud.tools.longpolling;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.AsyncContext;
@@ -32,10 +33,12 @@ public class AppAsyncListener implements AsyncListener {
         AsyncContext asyncContext = asyncEvent.getAsyncContext();
         try {
             ServletResponse response = asyncEvent.getAsyncContext().getResponse();
-            PrintWriter out = response.getWriter();
-            //返回code码，以便前端识别，并重建请求
-            out.write(501 +" longPolling error " + asyncEvent.getThrowable());
-            out.flush();
+            PrintWriter writer = response.getWriter();
+            JSONObject result = new JSONObject();
+            result.put("data","longPolling error " + asyncEvent.getThrowable());
+            result.put("status",501);
+            writer.write(result.toJSONString());
+            writer.flush();
         } catch (Exception e) {
             log.error("[AppAsyncListener][onError] error is ",e);
         } finally {
@@ -56,10 +59,12 @@ public class AppAsyncListener implements AsyncListener {
         AsyncContext asyncContext = asyncEvent.getAsyncContext();
         try {
             ServletResponse response = asyncEvent.getAsyncContext().getResponse();
-            PrintWriter out = response.getWriter();
-            //返回code码，以便前端识别，并重建请求
-            out.write(201 +" longPolling timeout");
-            out.flush();
+            PrintWriter writer = response.getWriter();
+            JSONObject result = new JSONObject();
+            result.put("data","longPolling timeout");
+            result.put("status",201);
+            writer.write(result.toJSONString());
+            writer.flush();
         } catch (Exception e) {
             log.error("[AppAsyncListener][onTimeout] error is ",e);
         } finally {
