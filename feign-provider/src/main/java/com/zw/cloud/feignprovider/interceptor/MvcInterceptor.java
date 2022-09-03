@@ -1,4 +1,4 @@
-package com.zw.cloud.feignprovider02.interceptor;
+package com.zw.cloud.feignprovider.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;

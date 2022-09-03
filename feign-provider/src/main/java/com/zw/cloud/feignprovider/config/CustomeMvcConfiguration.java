@@ -1,6 +1,6 @@
-package com.zw.cloud.feignprovider02.config;
+package com.zw.cloud.feignprovider.config;
 
-import com.zw.cloud.feignprovider02.interceptor.MvcInterceptor;
+import com.zw.cloud.feignprovider.interceptor.MvcInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

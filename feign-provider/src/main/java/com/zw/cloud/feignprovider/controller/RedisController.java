@@ -1,8 +1,8 @@
-package com.zw.cloud.feignprovider02.controller;
+package com.zw.cloud.feignprovider.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.zw.cloud.feignprovider02.entity.User;
-import com.zw.cloud.feignprovider02.utils.RedisUtils;
+import com.zw.cloud.feignprovider.utils.RedisUtils;
+import com.zw.cloud.feignprovider.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

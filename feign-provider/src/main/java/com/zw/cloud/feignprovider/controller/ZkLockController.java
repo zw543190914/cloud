@@ -1,6 +1,6 @@
-package com.zw.cloud.feignprovider02.controller;
+package com.zw.cloud.feignprovider.controller;
 
-import com.zw.cloud.feignprovider02.zk.ZkInterProcessMutexService;
+import com.zw.cloud.feignprovider.zk.ZkInterProcessMutexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

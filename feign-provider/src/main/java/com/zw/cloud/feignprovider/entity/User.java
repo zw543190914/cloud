@@ -1,4 +1,4 @@
-package com.zw.cloud.feignprovider02.entity;
+package com.zw.cloud.feignprovider.entity;
 
 import java.io.Serializable;
 import java.util.Date;

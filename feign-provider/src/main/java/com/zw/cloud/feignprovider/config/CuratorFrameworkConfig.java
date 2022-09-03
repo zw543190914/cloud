@@ -1,4 +1,4 @@
-package com.zw.cloud.feignprovider02.config;
+package com.zw.cloud.feignprovider.config;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;

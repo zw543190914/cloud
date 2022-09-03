@@ -1,4 +1,4 @@
-package com.zw.cloud.feignprovider02.base;
+package com.zw.cloud.feignprovider.base;
 
 import cn.hutool.http.HttpStatus;
 import com.zw.cloud.common.utils.MyPermissionCheckException;

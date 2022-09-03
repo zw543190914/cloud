@@ -1,4 +1,4 @@
-package com.zw.cloud.feignprovider02.service.impl;
+package com.zw.cloud.feignprovider.service.impl;
 
 import com.zw.cloud.common.utils.WebResult;
 import com.zw.cloud.feignproviderapi.service.IFeignProviderService;

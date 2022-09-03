@@ -1,4 +1,4 @@
-package com.zw.cloud.feignprovider02.utils;
+package com.zw.cloud.feignprovider.utils;
 
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
