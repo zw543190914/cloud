@@ -22,17 +22,18 @@
   20. websocket 、 netty(netty-server)、 netty-client, 参考对应模块。</br>
   21. redis 分布式锁，幂等控制，参考 netty(netty-server) 模块。</br>
   22. MQ整合 rocketMq、rabbitMq、kafka. rocketMQ 使用策略模式进行消息消费</br>
-  23. poi excel 导出(百万数据使用 SXSSF),数据读取(百万数据量 使用事件模型进行读取), </br>
-      小图片data url 数据库存储, 大文件 七牛云对象存储， </br>
-      二维码生成和解析，</br>
+  23. 长轮询实现 </br>
+      poi excel 导出(百万数据使用 SXSSF),数据读取(百万数据量 使用事件模型进行读取) </br>
+      小图片data url 数据库存储, 大文件 七牛云对象存储 </br>
+      二维码生成和解析 </br>
       使用 百度AI / 阿里云AI 进行人脸识别 登录。(百度AI 被注释) </br>
       返回值统一封装,全局异常处理, Mybatis 代码生成插件 </br>
-      Java简单爬虫 WebmagicUtils,StringTemplete 消息模板 。 </br>
-      并发相关内容 锁，JUC工具类 线程池。</br>
-      SPRINGBOOT单元测试 & MOCK静态方法。</br>
+      Java简单爬虫 WebmagicUtils,StringTemplete 消息模板  </br>
+      并发相关内容 锁，JUC工具类 线程池 </br>
+      SPRINGBOOT单元测试 & MOCK静态方法 </br>
       参考 tools 模块 </br>
   24. 一些开发常用工具，比如 HttpUtils ，JwtUtils </br>
-      整合使用IK分词器(自定义分词)或者 HanLP 分词进行文本相似度分析, </br>
+      整合使用IK分词器(自定义分词)或者 HanLP 分词进行文本相似度分析 </br>
       BigDecimalUtils 对数字计算和统计  </br>
       DateTimeUtils 日期工具  </br>
       使用 Pinyin4jUtils 进行 中文转拼音的相关处理， 参考 common 模块。 </br>

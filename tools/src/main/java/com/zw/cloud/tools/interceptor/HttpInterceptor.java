@@ -38,7 +38,7 @@ public class HttpInterceptor implements HandlerInterceptor {
                 throw new RuntimeException("非法的操作");
             }
         } else {
-            RateLimiter rateLimiter = RateLimiter.create(2);
+            RateLimiter rateLimiter = RateLimiter.create(100);
             rateLimiterMap.put(rateLimiterKey, rateLimiter);
         }
 

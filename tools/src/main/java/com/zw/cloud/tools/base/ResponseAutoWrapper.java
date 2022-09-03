@@ -1,6 +1,7 @@
 package com.zw.cloud.tools.base;
 
 import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.tools.annotation.NotNeedResponseAutoWrapper;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +9,6 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
-
 import java.util.Objects;
 
 @ControllerAdvice
@@ -16,15 +16,11 @@ public class ResponseAutoWrapper implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter methodParameter, Class aClass) {
-        /*if (Objects.isNull(methodParameter.getMethod())) {
+        if (Objects.isNull(methodParameter.getMethod())) {
             return false;
         }
-        Class<?> returnType = methodParameter.getMethod().getReturnType();
-        String returnTypeName = returnType.getName();
-        // true 转换
-        return !Objects.equals(returnTypeName,String.class.getName()) && !Objects.equals(returnTypeName,WebResult.class.getName());
-*/
-        return true;
+        NotNeedResponseAutoWrapper annotation = methodParameter.getMethod().getAnnotation(NotNeedResponseAutoWrapper.class);
+        return Objects.isNull(annotation);
     }
 
     @Override
