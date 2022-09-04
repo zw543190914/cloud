@@ -36,7 +36,7 @@ public class AppAsyncListener implements AsyncListener {
             PrintWriter writer = response.getWriter();
             JSONObject result = new JSONObject();
             result.put("data","longPolling error " + asyncEvent.getThrowable());
-            result.put("status",501);
+            result.put("status",500);
             writer.write(result.toJSONString());
             writer.flush();
         } catch (Exception e) {
@@ -62,7 +62,7 @@ public class AppAsyncListener implements AsyncListener {
             PrintWriter writer = response.getWriter();
             JSONObject result = new JSONObject();
             result.put("data","longPolling timeout");
-            result.put("status",201);
+            result.put("status",408);
             writer.write(result.toJSONString());
             writer.flush();
         } catch (Exception e) {

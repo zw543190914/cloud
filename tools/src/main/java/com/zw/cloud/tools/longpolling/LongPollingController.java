@@ -32,12 +32,13 @@ public class LongPollingController {
         String headerTimeout = req.getHeader(LONG_POLLING_HEADER);
         long timeout;
         if (StringUtils.isBlank(headerTimeout)) {
-            timeout = 15 * 1000;
+            timeout = 30 * 1000;
         } else {
             timeout = Long.parseLong(headerTimeout);
         }
         AsyncContext asyncContext = req.startAsync();
-        asyncContext.setTimeout(timeout);
+        // 客户端超时之前返回
+        asyncContext.setTimeout(timeout - 500);
         asyncContext.addListener(new AppAsyncListener(deviceId));
         SUB_HTTP_CLIENT_MAP.put(deviceId,asyncContext);
     }
