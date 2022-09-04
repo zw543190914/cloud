@@ -15,18 +15,18 @@ import java.util.List;
 @Slf4j
 public class KafkaConsumerService {
 
-/*    @KafkaListener(topics = {"topic1"},groupId = "group01",id = "group1")
+    @KafkaListener(topics = {"topic1"},groupId = "group01",id = "group1")
     public void onMessage(ConsumerRecord<?, ?> record){
         // 消费的哪个topic、partition的消息,打印出消息内容
         log.info("[KafkaConsumerService][onMessage] thread is {},partition is {},msg is {}",Thread.currentThread().getName(),record.partition(),record.value());
-    }*/
+    }
 
-    @KafkaListener(topics = "topic1",groupId = "group02",id = "group2")
+    /*@KafkaListener(topics = "topic1",groupId = "group02",id = "group2")
     public void onMessage2(List<ConsumerRecord<?, ?>> records) {
         log.info("[KafkaConsumerService][onMessage2] thread is {}, 批量消费一次，records.size is {}",Thread.currentThread().getName(),records.size());
         for (ConsumerRecord<?, ?> record : records) {
             log.info("[KafkaConsumerService][onMessage2] thread is {},partition is {},msg is {}",Thread.currentThread().getName(),record.partition(),record.value());
         }
-    }
+    }*/
 
 }
