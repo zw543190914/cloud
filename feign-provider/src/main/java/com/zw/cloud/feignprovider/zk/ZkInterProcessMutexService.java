@@ -30,13 +30,13 @@ public class ZkInterProcessMutexService {
             try {
                 logger.info("执行业务.....");
             } catch (Exception e) {
-                logger.error("[ZklocakDemo][testZkLock] error is {}",e);
+                logger.error("[ZklocakDemo][testZkLock] error is ",e);
                 throw e;
             }finally {
                 try {
                     lock.release();
                 } catch (Exception e) {
-                    logger.error("[ZklocakDemo][testZkLock]release error is {}",e);
+                    logger.error("[ZklocakDemo][testZkLock]release error is ",e);
                 }
             }
         } else {
