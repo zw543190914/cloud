@@ -28,7 +28,7 @@ public class RocketProductOrderly {
      * consumeMode = ConsumeMode.ORDERLY
      */
     @GetMapping("/syncSendOrderly")
-    //http://localhost:10000/rocket/syncSendOrderly?topic=topicA:tag1
+    //http://localhost:10000/rocket/syncSendOrderly?topic=topicA:tag2
     public void syncSendOrderly(@RequestParam String topic) {
         for (int i = 0; i < 100; i++) {
             String msg = String.valueOf(atomicInteger.getAndAdd(1));
@@ -39,11 +39,11 @@ public class RocketProductOrderly {
             rocketMQTemplate.asyncSendOrderly(topic, message, "hashKey", new SendCallback() {
                 @Override
                 public void onSuccess(SendResult sendResult) {
-                    //log.info("send success " + sendResult);
+                    log.info("[syncSendOrderly] send success " + sendResult);
                 }
                 @Override
                 public void onException(Throwable throwable) {
-                    //log.info("send error is " + throwable.getMessage());
+                    log.info("[syncSendOrderly] send error is " + throwable.getMessage());
                 }
             });
         }

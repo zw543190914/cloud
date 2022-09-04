@@ -9,11 +9,11 @@ public enum ConsumerEnum {
     /**
      * 事件
      */
-    EVENT_TASK_CONSUMER( "TOPIC1","tag1", "任务1","eventConsumerHandlerInstance"),
+    EVENT_TASK_CONSUMER( "topicA","tag1", "任务1","eventConsumerHandlerInstance"),
     /**
      * 变更
      */
-    CHANGE_TASK_CONSUMER("TOPIC2","tag1", "任务2","changeConsumerHandlerInstance");
+    CHANGE_TASK_CONSUMER("topicB","tag1", "任务2","changeConsumerHandlerInstance");
 
 
     /**
