@@ -124,6 +124,7 @@
         <kryo-serializers.version>0.45</kryo-serializers.version>
         <esotericsoftware.version>4.0.2</esotericsoftware.version>
         <seata-spring-boot-starter.version>1.5.2</seata-spring-boot-starter.version>
+        <sentinel-apache-dubbo-adapter.vwesion>1.8.5</sentinel-apache-dubbo-adapter.vwesion>
     </properties>
 
     <dependencyManagement>
@@ -202,6 +203,13 @@
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis-spring-boot-starter.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.alibaba.csp/sentinel-apache-dubbo-adapter -->
+            <dependency>
+                <groupId>com.alibaba.csp</groupId>
+                <artifactId>sentinel-apache-dubbo-adapter</artifactId>
+                <version>${sentinel-apache-dubbo-adapter.vwesion}</version>
             </dependency>
 
             <dependency>
