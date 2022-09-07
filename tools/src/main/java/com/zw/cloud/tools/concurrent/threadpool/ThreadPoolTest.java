@@ -1,5 +1,7 @@
 package com.zw.cloud.tools.concurrent.threadpool;
 
+import com.zw.cloud.tools.utils.CustomerExecutorService;
+
 import java.util.concurrent.*;
 import java.util.stream.Stream;
 
@@ -11,7 +13,7 @@ public class ThreadPoolTest {
      * ThreadPoolExecutor.DiscardPolicy() 丢弃任务 不会抛出异常
      * ThreadPoolExecutor.DiscardOldestPolicy() 尝试和最早的竞争，竞争失败丢弃任务 不会抛出异常
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         ThreadFactory threadFactory = Executors.defaultThreadFactory();
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
                 4,
@@ -38,8 +40,72 @@ public class ThreadPoolTest {
         Thread[] threads = new Thread[activeCount];
         mainThreadGroup.enumerate(threads);
         Stream.of(threads).filter(Thread::isAlive).forEach(System.out::println);
-
         threadPoolExecutor.shutdown();
+
+        CompletionService<String> completionService = new ExecutorCompletionService<>(CustomerExecutorService.pool);
+
+        for (int i = 0; i < 5; i++) {
+            int finalI = i;
+            completionService.submit(() -> {
+                try {
+                    TimeUnit.SECONDS.sleep(2);
+                    System.out.println("task1:" + finalI);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            },"result");
+        }
+        CompletionService<String> completionService2 = new ExecutorCompletionService<>(CustomerExecutorService.pool);
+        for (int i = 6; i < 10; i++) {
+            int finalI = i;
+            completionService2.submit(() -> {
+                try {
+                    TimeUnit.SECONDS.sleep(2);
+                    System.out.println("task1:" + finalI);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            },"result");
+        }
+        for (int i = 0; i < 5; i++) {
+            Future<String> take = completionService.take();
+            take.get();
+        }
+        System.out.println("end1");
+
+        CountDownLatch countDownLatch = new CountDownLatch(5);
+        for (int i = 0; i < 5; i++) {
+            int finalI = i;
+            completionService.submit(() -> {
+                try {
+                    TimeUnit.SECONDS.sleep(2);
+                    System.out.println("task2:" + finalI);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                countDownLatch.countDown();
+            },"result");
+        }
+
+        for (int i = 5; i < 10; i++) {
+            int finalI = i;
+            completionService.submit(() -> {
+                try {
+                    TimeUnit.SECONDS.sleep(2);
+                    System.out.println("task2:" + finalI);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            },"result");
+        }
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("end2");
+
     }
 
     public static void executor() {

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -27,24 +28,29 @@ public class MqttSendController {
     @Autowired
     private MqttConfig mqttClient;
 
-    @RequestMapping("/sendMessage/{duration}")
-    //http://localhost:9040/mqtt/sendMessage/5
-    public WebResult<Boolean> sendMessage(@PathVariable Integer duration){
+    @RequestMapping("/sendMessage/{setValue}/{actValue}")
+    //http://localhost:9040/mqtt/sendMessage/80/96
+    public WebResult<Boolean> sendMessage(@PathVariable Integer setValue,@PathVariable Integer actValue) throws Exception{
         AtomicInteger count = new AtomicInteger(0);
-        CustomerExecutorService.scheduledExecutorService.scheduleAtFixedRate(() -> {
+        CountDownLatch countDownLatch = new CountDownLatch(20);
+        ScheduledFuture<?> scheduledFuture = CustomerExecutorService.scheduledExecutorService.scheduleAtFixedRate(() -> {
             long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
-            String message = buildContent(180, 168, 55, second);
+            int incrementAndGet = count.incrementAndGet();
+            String message = buildContent(setValue, actValue + incrementAndGet, actValue + incrementAndGet, second);
             try {
                 mqttClient.publish(message);
-                log.info("[MqttSendController][sendMessage] count  is {}", count.incrementAndGet());
+                log.info("[MqttSendController][sendMessage] count  is {}", incrementAndGet);
+                countDownLatch.countDown();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, 0, duration, TimeUnit.SECONDS);
+        }, 0, 15, TimeUnit.SECONDS);
+        countDownLatch.await();
+        scheduledFuture.cancel(false);
         return WebResult.build(true);
     }
 
-    private String buildContent(int setValue,int actValue,int speed,Long second){
+    private static String buildContent(int setValue,int actValue,int speed,Long second){
         String content = "{\n" +
                 "\"stenterStatus\":{\n" +
                 "    \"rtime\": "+ second +",     \n" +
@@ -149,6 +155,52 @@ public class MqttSendController {
                 "    \"d99\": " + 80 +",\n" +
                 "    \"d100\": " + 80 +",\n" +
                 "    \"d101\": " + 80 +" \n" +
+              /*  "    \"d150\": " + 100 +" \n" +
+                "    \"d300\": " + 2 +" \n" +
+                "    \"d400\": " + setValue +",\n" +
+                "    \"d401\": " + actValue +",\n" +
+                "    \"d500\": " + actValue +",\n" +
+                "    \"d501\": " + actValue +",\n" +
+                "    \"d502\": " + actValue +",\n" +
+                "    \"d600\": " + actValue +",\n" +
+                "    \"d601\": " + actValue +",\n" +
+                "    \"d602\": " + actValue +",\n" +
+                "    \"d603\": " + actValue +",\n" +
+                "    \"d604\": " + setValue +",\n" +
+                "    \"d605\": " + actValue +",\n" +
+                "    \"d606\": " + setValue +",\n" +
+                "    \"d607\": " + actValue +",\n" +
+                "    \"d608\": " + setValue +",\n" +
+                "    \"d609\": " + actValue +",\n" +
+                "    \"d610\": " + setValue +",\n" +
+                "    \"d611\": " + actValue +",\n" +
+                "    \"d612\": " + setValue +",\n" +
+                "    \"d613\": " + actValue +",\n" +
+                "    \"d614\": " + setValue +",\n" +
+                "    \"d615\": " + actValue +",\n" +
+                "    \"d616\": " + setValue +",\n" +
+                "    \"d617\": " + actValue +",\n" +
+                "    \"d618\": " + setValue +",\n" +
+                "    \"d619\": " + actValue +",\n" +
+                "    \"d620\": " + setValue +",\n" +
+                "    \"d621\": " + actValue +",\n" +
+                "    \"d622\": " + setValue +",\n" +
+                "    \"d623\": " + actValue +",\n" +
+                "    \"d624\": " + setValue +",\n" +
+                "    \"d625\": " + actValue +",\n" +
+                "    \"d626\": " + setValue +",\n" +
+                "    \"d627\": " + actValue +",\n" +
+                "    \"d628\": " + setValue +",\n" +
+                "    \"d629\": " + actValue +",\n" +
+                "    \"d700\": " + setValue +",\n" +
+                "    \"d701\": " + actValue +",\n" +
+                "    \"d702\": " + actValue +",\n" +
+                "    \"d703\": " + actValue +",\n" +
+                "    \"d704\": " + actValue +",\n" +
+                "    \"d705\": " + actValue +",\n" +
+                "    \"d706\": " + actValue +",\n" +
+                "    \"d707\": " + actValue +",\n" +
+                "    \"d708\": " + actValue +",\n" +*/
                 "  }\n" +
                 "}";
         return content;

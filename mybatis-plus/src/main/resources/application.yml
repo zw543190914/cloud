@@ -17,9 +17,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
-      initial-size: 1
-      min-idle: 3
-      max-active: 50
+      initial-size: 100
+      min-idle: 50
+      max-active: 200
       max-wait: 10000
       test-on-borrow: false
       test-on-return: false

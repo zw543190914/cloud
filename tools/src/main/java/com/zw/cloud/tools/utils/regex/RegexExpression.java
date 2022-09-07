@@ -14,7 +14,7 @@ public class RegexExpression {
         System.out.println(NUMBER_PATTERN.matcher("100").matches());
         System.out.println(NUMBER_PATTERN.matcher("010").matches());
         System.out.println(NUMBER_PATTERN.matcher("-010").matches());
-        System.out.println(Validator.isNumber("-010"));
+        System.out.println(Validator.isNumber("-010.100"));
         System.out.println(Validator.hasChinese("han01"));
 
     }

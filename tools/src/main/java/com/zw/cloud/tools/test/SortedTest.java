@@ -25,7 +25,11 @@ public class SortedTest {
         });*/
       /*  Map<String, List<User>> map1 = list.stream().collect(Collectors.groupingBy(User::getName));
         System.out.println(JSON.toJSONString(map1));*/
-
+        Iterator<User> iterator = list.iterator();
+        while (iterator.hasNext()){
+            User next = iterator.next();
+            System.out.println(JSON.toJSONString(next));
+        }
         ArrayList<String> strings = Lists.newArrayList( "013", "100", "101","000", "002", "010","1","3");
         List<String> strings1 = strings.subList(strings.size() - 2, strings.size());
         System.out.println(strings1.toString());
@@ -45,7 +49,12 @@ public class SortedTest {
         System.out.println(JSON.toJSONString(map2));
         Map<String, Integer> map3 = fillValue(12, 600);
         System.out.println(JSON.toJSONString(map3));
-
+        String str1= "abc";
+        String str2= new String("abc");
+        String str3= str2.intern();
+        System.out.println((str1 == str2));
+        System.out.println(str2==str3);
+        System.out.println(str1==str3);
     }
     public static int compare(User user){
         if (Objects.equals(user.getName(),"zw4")){

@@ -124,6 +124,7 @@
         <kryo-serializers.version>0.45</kryo-serializers.version>
         <esotericsoftware.version>4.0.2</esotericsoftware.version>
         <seata-spring-boot-starter.version>1.5.2</seata-spring-boot-starter.version>
+        <skywalking.toolkit.version>8.9.0</skywalking.toolkit.version>
     </properties>
 
     <dependencyManagement>
@@ -608,6 +609,20 @@
                 <artifactId>seata-spring-boot-starter</artifactId>
                 <version>${seata-spring-boot-starter.version}</version>
             </dependency>
+
+            <!-- skywalking toolkit -->
+            <dependency>
+                <groupId>org.apache.skywalking</groupId>
+                <artifactId>apm-toolkit-trace</artifactId>
+                <version>${skywalking.toolkit.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.skywalking</groupId>
+                <artifactId>apm-toolkit-logback-1.x</artifactId>
+                <version>${skywalking.toolkit.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

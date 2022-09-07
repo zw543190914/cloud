@@ -55,21 +55,20 @@ public class MqttPublishSample {
         //long second = 1658383250;
         int stop;
         Random random = new Random();
-        int actValue = 113 ;
+        int actValue = 233 ;
         long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
 
         for (int i = 0; i < 120; i++) {
 
             second = second + 30;
             if (i == 3) {
-                stop = 8;
+                stop = 22;
                 //actValue = 189;
             } else {
                 stop = 66;
                 //actValue = 178;
             }
-            actValue =  actValue + 50;
-            String content = buildContent(180,actValue,stop,second);
+            String content = buildContent(181,actValue,stop,second);
             try {
 
                 // 创建消息
@@ -203,6 +202,52 @@ public class MqttPublishSample {
                 "    \"d99\": " + 80 +",\n" +
                 "    \"d100\": " + 80 +",\n" +
                 "    \"d101\": " + 80 +" \n" +
+              /*  "    \"d150\": " + 100 +" \n" +
+                "    \"d300\": " + 2 +" \n" +
+                "    \"d400\": " + setValue +",\n" +
+                "    \"d401\": " + actValue +",\n" +
+                "    \"d500\": " + actValue +",\n" +
+                "    \"d501\": " + actValue +",\n" +
+                "    \"d502\": " + actValue +",\n" +
+                "    \"d600\": " + actValue +",\n" +
+                "    \"d601\": " + actValue +",\n" +
+                "    \"d602\": " + actValue +",\n" +
+                "    \"d603\": " + actValue +",\n" +
+                "    \"d604\": " + setValue +",\n" +
+                "    \"d605\": " + actValue +",\n" +
+                "    \"d606\": " + setValue +",\n" +
+                "    \"d607\": " + actValue +",\n" +
+                "    \"d608\": " + setValue +",\n" +
+                "    \"d609\": " + actValue +",\n" +
+                "    \"d610\": " + setValue +",\n" +
+                "    \"d611\": " + actValue +",\n" +
+                "    \"d612\": " + setValue +",\n" +
+                "    \"d613\": " + actValue +",\n" +
+                "    \"d614\": " + setValue +",\n" +
+                "    \"d615\": " + actValue +",\n" +
+                "    \"d616\": " + setValue +",\n" +
+                "    \"d617\": " + actValue +",\n" +
+                "    \"d618\": " + setValue +",\n" +
+                "    \"d619\": " + actValue +",\n" +
+                "    \"d620\": " + setValue +",\n" +
+                "    \"d621\": " + actValue +",\n" +
+                "    \"d622\": " + setValue +",\n" +
+                "    \"d623\": " + actValue +",\n" +
+                "    \"d624\": " + setValue +",\n" +
+                "    \"d625\": " + actValue +",\n" +
+                "    \"d626\": " + setValue +",\n" +
+                "    \"d627\": " + actValue +",\n" +
+                "    \"d628\": " + setValue +",\n" +
+                "    \"d629\": " + actValue +",\n" +
+                "    \"d700\": " + setValue +",\n" +
+                "    \"d701\": " + actValue +",\n" +
+                "    \"d702\": " + actValue +",\n" +
+                "    \"d703\": " + actValue +",\n" +
+                "    \"d704\": " + actValue +",\n" +
+                "    \"d705\": " + actValue +",\n" +
+                "    \"d706\": " + actValue +",\n" +
+                "    \"d707\": " + actValue +",\n" +
+                "    \"d708\": " + actValue +",\n" +*/
                 "  }\n" +
                 "}";
         return content;

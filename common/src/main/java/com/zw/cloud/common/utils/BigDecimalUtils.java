@@ -1,9 +1,11 @@
 package com.zw.cloud.common.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -58,6 +60,7 @@ public class BigDecimalUtils {
                 new BigDecimal(19), new BigDecimal(19));
         System.out.println(filterMaxSameValueFromList(bigDecimalArrayList));
         System.out.println(getAvgByList(bigDecimalArrayList));
+
         ArrayList<Integer> list = Lists.newArrayList(null, null);
         System.out.println(list.stream().filter(Objects::nonNull).max(Comparator.comparing(v -> v)).isPresent());
         Object obj = null;
@@ -65,6 +68,15 @@ public class BigDecimalUtils {
         String k = "dryingRoomPresetTemp12";
         String key = k.substring(k.lastIndexOf("p") + 1);
         System.out.println(key);
+        Map<String,Object> map = new HashMap<>();
+        map.put("test1","");
+        map.put("test5","11");
+        map.put("test2","3");
+        map.put("test7","13");
+        map.put("test4",null);
+        System.out.println(findLastValueFromJsonObject(map, "test"));
+        map.put("test7",new BigDecimal("2"));
+        System.out.println(new BigDecimal(map.get("test7").toString()));
     }
 
     /**
@@ -180,6 +192,34 @@ public class BigDecimalUtils {
             }
         });
         return dryingRoomActualMap;
+    }
+
+    /**
+     * 查询 JSON 中有值的最后一个
+     */
+    public static Object findLastValueFromJsonObject(Object jsonValue,String prefix){
+        if (Objects.isNull(jsonValue)) {
+            return null;
+        }
+        Map<String, Object> jsonMap = JSON.parseObject(JSON.toJSONString(jsonValue), Map.class);
+        if (MapUtils.isEmpty(jsonMap)) {
+            return null;
+        }
+        Object result = null;
+        int index = 0;
+        for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if (Objects.isNull(value) || StringUtils.isBlank(String.valueOf(value))) {
+                continue;
+            }
+            int currentIndex = Integer.parseInt(key.replace(prefix, ""));
+            if (currentIndex > index) {
+                index = currentIndex;
+                result = value;
+            }
+        }
+        return result;
     }
 
     /**
