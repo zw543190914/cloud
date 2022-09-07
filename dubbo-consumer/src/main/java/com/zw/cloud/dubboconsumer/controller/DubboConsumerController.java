@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class DubboConsumerController {
 
-    @DubboReference(check = false)
+    @DubboReference(check = false,mock = "com.zw.cloud.dubboconsumer.service.ProviderServiceMock")
     private IProviderService providerService;
 
     @Value("${spring.datasource.druid.url}")

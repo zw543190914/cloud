@@ -20,19 +20,24 @@ public class RocketConsumer implements RocketMQListener<MessageExt> {
     @Override
     public void onMessage(MessageExt messageExt) {
         if (Objects.isNull(messageExt)) {
+            log.info("[RabbitConsumer][onMessage] messageExt is null");
             return;
         }
 
         String messageBody = new String(messageExt.getBody(), StandardCharsets.UTF_8);
         if (StringUtils.isEmpty(messageBody)) {
-            log.warn("[RabbitConsumer][RabbitConsumer] msg is null");
+            log.warn("[RabbitConsumer][onMessage] msg is null");
             return;
         }
 
         String topic = messageExt.getTopic();
         String tag = messageExt.getTags();
-        log.info("[RabbitConsumer][RabbitConsumer] tag is {},receive messageBody is {}", tag, messageBody);
+        log.info("[RabbitConsumer][onMessage] tag is {},receive messageBody is {}", tag, messageBody);
         ConsumerHandler handlerInstance = ConsumerHandler.getConsumerHandlerInstance(topic,tag);
+        if (Objects.isNull(handlerInstance)) {
+            log.error("[RabbitConsumer][onMessage] tag is {},receive messageBody is {},handlerInstance is null", tag, messageBody);
+            return;
+        }
         handlerInstance.handleRocketMQMsg(messageBody);
     }
 }

@@ -30,10 +30,10 @@ public class RocketController {
 
     //发送消息
     @GetMapping("/sendMsg")
-    //http://localhost:10000/rocket/sendMsg?msg=aaa&topic=topicA
-    public void sendMsg(@RequestParam String msg,@RequestParam String topic) {
+    //http://localhost:10000/rocket/sendMsg?msg=aaa&topic=topicA&tag=tag1
+    public void sendMsg(@RequestParam String msg,@RequestParam String topic,@RequestParam String tag) {
         //SendResult hashkey = rocketMQTemplate.syncSendOrderly(topic, msg + " : " + atomicInteger.getAndAdd(1), "hashkey");
-        topic = topic +":"+"tag1";
+        topic = topic + ":" + tag;
         for (int i = 0; i < 100; i++) {
             msg = String.valueOf(atomicInteger.getAndAdd(1));
             Message<byte[]> message = MessageBuilder.withPayload(msg.getBytes(StandardCharsets.UTF_8)).build();

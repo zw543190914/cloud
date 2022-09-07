@@ -75,8 +75,8 @@
         <commons-collections4.version>4.4</commons-collections4.version>
         <druid.version>1.2.8</druid.version>
         <dubbo-serialization-kryo.version>2.7.7</dubbo-serialization-kryo.version>
-        <curator.version>4.0.0</curator.version>
-        <zookeeper.version>3.4.14</zookeeper.version>
+        <curator.version>5.3.0</curator.version>
+        <zookeeper.version>3.8.0</zookeeper.version>
         <activiti.version>7.1.0.M6</activiti.version>
         <jjwt.version>0.9.1</jjwt.version>
         <pinyin4j.version>2.5.1</pinyin4j.version>
@@ -124,6 +124,7 @@
         <kryo-serializers.version>0.45</kryo-serializers.version>
         <esotericsoftware.version>4.0.2</esotericsoftware.version>
         <seata-spring-boot-starter.version>1.5.2</seata-spring-boot-starter.version>
+        <sentinel-apache-dubbo-adapter.vwesion>1.8.5</sentinel-apache-dubbo-adapter.vwesion>
         <skywalking.toolkit.version>8.9.0</skywalking.toolkit.version>
     </properties>
 
@@ -203,6 +204,13 @@
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis-spring-boot-starter.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.alibaba.csp/sentinel-apache-dubbo-adapter -->
+            <dependency>
+                <groupId>com.alibaba.csp</groupId>
+                <artifactId>sentinel-apache-dubbo-adapter</artifactId>
+                <version>${sentinel-apache-dubbo-adapter.vwesion}</version>
             </dependency>
 
             <dependency>
