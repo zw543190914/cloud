@@ -16,4 +16,6 @@ import java.util.List;
 public interface IPoemService extends IService<Poem> {
 
     List<Poem> queryByTitleOrContent(String title);
+
+    Poem testLock(Long id,String title) throws Exception;
 }
