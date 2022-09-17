@@ -26,11 +26,24 @@ public class MqttPublishSample {
         String clientId = "subscribe_test_device01";*/
         // qa
         // 定型机#02
-        String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+        /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|qa_test_device_stenter_02|0|MD5";
         String password = "3509803995f1748b7d4c5f1ad9dfb615";
         String topic = "d/qa_test_device_stenter_02/report";
+        String clientId = "subscribe_test";*/
+        // 定型机17
+        String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+        String userName = "thingidp@amgjjzk|test_qa_17|0|MD5";
+        String password = "5ce6946268fc3acbccd0e2b53790bd0e";
+        String topic = "d/test_qa_17/report";
         String clientId = "subscribe_test";
+        // 定型机16
+        /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+        String userName = "thingidp@amgjjzk|test_device_16|0|MD5";
+        String password = "20ea5758be5e367d606287b8eeca8539";
+        String topic = "d/test_device_16/report";
+        String clientId = "subscribe_test001";*/
+
         // 线上
         /*String host = "tcp://afswjqe.iot.gz.baidubce.com";
         String userName = "thingidp@afswjqe|xnbh06|0|MD5";
@@ -55,7 +68,7 @@ public class MqttPublishSample {
         //long second = 1658383250;
         int stop;
         Random random = new Random();
-        int actValue = 233 ;
+        int actValue = 60 ;
         long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
 
         for (int i = 0; i < 120; i++) {
@@ -68,7 +81,7 @@ public class MqttPublishSample {
                 stop = 66;
                 //actValue = 178;
             }
-            String content = buildContent(181,actValue,stop,second);
+            String content = buildContent(181,actValue ++,stop,second);
             try {
 
                 // 创建消息
@@ -97,8 +110,8 @@ public class MqttPublishSample {
 
     }
 
-    private static String buildContent(int setValue,int actValue,int speed,Long second){
-        String content = "{\n" +
+    public static String buildContent(int setValue,int actValue,int speed,Long second){
+        return "{\n" +
                 "\"stenterStatus\":{\n" +
                 "    \"rtime\": "+ second +",     \n" +
                 "    \"ctime\": "+ second +",    \n" +
@@ -201,9 +214,8 @@ public class MqttPublishSample {
                 "    \"d98\": " + 80 +",\n" +
                 "    \"d99\": " + 80 +",\n" +
                 "    \"d100\": " + 80 +",\n" +
-                "    \"d101\": " + 80 +" \n" +
-              /*  "    \"d150\": " + 100 +" \n" +
-                "    \"d300\": " + 2 +" \n" +
+                "    \"d101\": " + 80 +", \n" +
+                "    \"d150\": " + 60 +",\n" +
                 "    \"d400\": " + setValue +",\n" +
                 "    \"d401\": " + actValue +",\n" +
                 "    \"d500\": " + actValue +",\n" +
@@ -239,7 +251,7 @@ public class MqttPublishSample {
                 "    \"d627\": " + actValue +",\n" +
                 "    \"d628\": " + setValue +",\n" +
                 "    \"d629\": " + actValue +",\n" +
-                "    \"d700\": " + setValue +",\n" +
+                "    \"d700\": " + actValue +",\n" +
                 "    \"d701\": " + actValue +",\n" +
                 "    \"d702\": " + actValue +",\n" +
                 "    \"d703\": " + actValue +",\n" +
@@ -247,9 +259,8 @@ public class MqttPublishSample {
                 "    \"d705\": " + actValue +",\n" +
                 "    \"d706\": " + actValue +",\n" +
                 "    \"d707\": " + actValue +",\n" +
-                "    \"d708\": " + actValue +",\n" +*/
+                "    \"d708\": " + actValue +"\n" +
                 "  }\n" +
                 "}";
-        return content;
     }
 }

@@ -12,10 +12,7 @@ import com.zw.cloud.mybatis.plus.service.api.IUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -65,15 +62,14 @@ public class UserInfoController {
         System.out.println(JSON.toJSONString(user));
     }
 
-    @GetMapping
-    //http://localhost:8080/user-info?name=test2
-    public void saveOrUpdate(String name) {
-        UserInfo user = new UserInfo();
-        user.setName(name);
+    @PostMapping
+    //http://localhost:8080/user-info?name=test100000
+    public void saveOrUpdate(@RequestBody UserInfo user) {
         user.setAge(22);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("2222","name11");
         jsonObject.put("date",new Date());
+
         user.setOther(Lists.newArrayList(jsonObject));
         userService.saveOrUpdate(user);
         System.out.println(JSON.toJSONString(user));
@@ -105,7 +101,7 @@ public class UserInfoController {
     }
 
     @GetMapping("/query")
-    //http://localhost:8080/user-info/query?name=fd2
+    //http://localhost:8080/user-info/query?name=test100000
     public Page<UserInfo> pageQuery(String name) {
         UserInfo user = new UserInfo();
         user.setName(name);
