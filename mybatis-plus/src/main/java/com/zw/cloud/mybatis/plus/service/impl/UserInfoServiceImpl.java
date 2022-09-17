@@ -30,9 +30,15 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     public void testBatchInsertOneByOne(List<UserInfo> userInfoList) {
         long start = System.currentTimeMillis();
         SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);
-        UserInfoMapper mapper = sqlSession.getMapper(UserInfoMapper.class);
-        userInfoList.forEach(mapper::insertByMapper);
-        sqlSession.commit();
+        try {
+            UserInfoMapper mapper = sqlSession.getMapper(UserInfoMapper.class);
+            userInfoList.forEach(mapper::insertByMapper);
+            sqlSession.commit();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            sqlSession.close();
+        }
         // 1362 2793 2862
         log.info("[testBatchInsertOneByOne] use time {}", System.currentTimeMillis() - start);
     }
