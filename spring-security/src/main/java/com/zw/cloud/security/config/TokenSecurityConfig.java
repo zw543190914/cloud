@@ -25,10 +25,6 @@ public class TokenSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private MyUserDetailService userDetailService;
-    @Autowired
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    @Autowired
-    private JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
@@ -43,7 +39,7 @@ public class TokenSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .exceptionHandling().accessDeniedHandler(jwtAccessDeniedHandler).authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .exceptionHandling().accessDeniedHandler(jwtAccessDeniedHandler()).authenticationEntryPoint(jwtAuthenticationEntryPoint())
                 .and()
                 .authorizeRequests()
                 .antMatchers("/doLogin").permitAll()
@@ -77,6 +73,16 @@ public class TokenSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
         return new JwtAuthenticationTokenFilter(authenticationManagerBean());
+    }
+
+    @Bean
+    public JwtAccessDeniedHandler jwtAccessDeniedHandler(){
+        return new JwtAccessDeniedHandler();
+    }
+
+    @Bean
+    public JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint(){
+        return new JwtAuthenticationEntryPoint();
     }
 
 
