@@ -39,6 +39,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         } finally {
             sqlSession.close();
         }
+        // 2000条数据 260
+        // 10000条数据 810
         // 1362 2793 2862
         log.info("[testBatchInsertOneByOne] use time {}", System.currentTimeMillis() - start);
     }
@@ -48,6 +50,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     public void testBatchInsertByMapper(List<UserInfo> userInfoList) {
         long start = System.currentTimeMillis();
         userInfoMapper.batchInsertByMapper(userInfoList);
+        // 2000条数据 330
+        // 10000条数据 1180
         // 556 1129 1115
         log.info("[testBatchInsertByMapper] use time {}", System.currentTimeMillis() - start);
     }
@@ -56,7 +60,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Transactional(rollbackFor = Exception.class)
     public void testBatchInsertByMybatisPlus(List<UserInfo> userInfoList) {
         long start = System.currentTimeMillis();
-        saveBatch(userInfoList,20000);
+        saveBatch(userInfoList,10000);
+        // 2000条数据 320
+        // 10000条数据 1140
         // 1895 3369 3252
         log.info("[testBatchInsertByMybatisPlus] use time {}", System.currentTimeMillis() - start);
     }

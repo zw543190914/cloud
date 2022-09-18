@@ -43,7 +43,7 @@ public class UserInfoController {
     //http://localhost:8080/user-info/testBatchInsertByMybatisPlus
     public void testBatchInsertByMybatisPlus() {
         long start = System.currentTimeMillis();
-        userService.saveBatch(buildUserList(),2000);
+        userService.testBatchInsertByMybatisPlus(buildUserList());
         // 1895 3369 3252
         log.info("[testBatchInsertByMybatisPlus] use time {}", System.currentTimeMillis() - start);
 
@@ -159,7 +159,7 @@ public class UserInfoController {
     private List<UserInfo> buildUserList(){
         List<UserInfo> userInfoList = new ArrayList<>(30000);
         Random random = new Random();
-        for (int i = 0; i < 2000; i++) {
+        for (int i = 0; i < 10000; i++) {
             UserInfo user = new UserInfo();
             user.setName("test" + i);
             user.setAge(random.nextInt(100));
