@@ -40,9 +40,9 @@ class PoemServiceImplTest {
         Mockito.doReturn(true).when(spy).saveBatch(Mockito.anyCollection());*/
         //Mockito.when(poemService.saveBatch(poems)).thenReturn(true);
         try (MockedStatic<SqlHelper> sqlHelperMockedStatic = mockStatic(SqlHelper.class)) {
-            sqlHelperMockedStatic.when(() -> SqlHelper.executeBatch(any(),any(),any())).thenReturn(true);
-            poemService.saveBatch(Lists.newArrayList(poems));
-
+            sqlHelperMockedStatic.when(() -> SqlHelper.executeBatch(any(),any(),anyCollection(),anyInt(),any())).thenReturn(true);
+            boolean b = poemService.saveBatch(Lists.newArrayList(poems));
+            System.out.println(b);
         }
 
     }
