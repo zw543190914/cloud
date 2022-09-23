@@ -1,5 +1,6 @@
 package com.zw.cloud.netty.web.service.impl.poem;
 
+import com.alibaba.fastjson.JSON;
 import com.zw.cloud.netty.web.entity.poem.Poem;
 import com.zw.cloud.netty.web.dao.poem.PoemMapper;
 import com.zw.cloud.netty.web.service.api.poem.IPoemService;
@@ -17,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author zw
@@ -29,31 +30,34 @@ public class PoemServiceImpl extends ServiceImpl<PoemMapper, Poem> implements IP
 
     @Autowired
     private RedissonClient redissonClient;
+    @Autowired
+    private PoemMapper mapper;
 
     @Override
-    public List<Poem> queryByTitleOrContent(String title){
+    public List<Poem> queryByTitleOrContent(String title) {
         return baseMapper.queryByTitleOrContent(title);
     }
 
     @Override
     @Transactional
-    public Poem testLock(Long id,String title) throws Exception{
-        // 加锁应该放到事务之外,否则无法读取最新数据,锁没有起到作用
+    public Poem testLock(Long id, String title) throws Exception {
+        // 加锁应该放到事务之外,否则无法读取最新数据,锁没有起到作用  ---使用postman测试
         RLock lock = redissonClient.getLock(String.valueOf(id));
-        lock.lock();
-        try {
-            Poem poem = baseMapper.selectById(id);
-            if (Objects.isNull(poem)) {
-                log.info("[PoemServiceImpl][testLock] poem is null");
-                poem = new Poem();
-                poem.setId(id);
-                poem.setTitle(title);
-                baseMapper.insert(poem);
-            }
-            TimeUnit.SECONDS.sleep(3);
-            return poem;
-        } finally {
-            lock.unlock();
+        lock.lock(2, TimeUnit.SECONDS);
+        log.info("[PoemServiceImpl][testLock] has lock + " + Thread.currentThread().getName());
+
+        Poem poem = mapper.queryByTitle(title);
+        log.info("[PoemServiceImpl][testLock] poem is {}", JSON.toJSONString(poem));
+        if (Objects.isNull(poem)) {
+            poem = new Poem();
+            poem.setId(id);
+            poem.setTitle(title);
+            baseMapper.insert(poem);
         }
+        log.info("[PoemServiceImpl][testLock] end");
+        TimeUnit.SECONDS.sleep(5);
+
+        return poem;
+
     }
 }

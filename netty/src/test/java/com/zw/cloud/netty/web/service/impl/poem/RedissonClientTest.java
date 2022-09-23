@@ -34,7 +34,7 @@ public class RedissonClientTest {
         Mockito.when(redissonClient.getLock(anyString())).thenReturn(lock);
         Mockito.doNothing().when(lock).lock();
         try {
-            poemService.testLock(0L,"1");
+            poemService.testLock(1L,"1");
         } catch (Exception e) {
             e.printStackTrace();
         }
