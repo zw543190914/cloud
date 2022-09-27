@@ -26,17 +26,17 @@ public class MqttPublishSample {
         String clientId = "subscribe_test_device01";*/
         // qa
         // 定型机#02
-        /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+        String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|qa_test_device_stenter_02|0|MD5";
         String password = "3509803995f1748b7d4c5f1ad9dfb615";
         String topic = "d/qa_test_device_stenter_02/report";
-        String clientId = "subscribe_test";*/
+        String clientId = "subscribe_test";
         // 定型机17
-        String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+       /* String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|test_qa_17|0|MD5";
         String password = "5ce6946268fc3acbccd0e2b53790bd0e";
         String topic = "d/test_qa_17/report";
-        String clientId = "subscribe_test";
+        String clientId = "subscribe_test";*/
         // 定型机16
         /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|test_device_16|0|MD5";
@@ -66,22 +66,35 @@ public class MqttPublishSample {
         // 建立连接
         sampleClient.connect(connOpts);
         //long second = 1658383250;
-        int stop;
+        int stop = 66;
         Random random = new Random();
-        int actValue = 60 ;
+        int actValue = 75 ;
         long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
 
-        for (int i = 0; i < 120; i++) {
+        for (int i = 0; i < 1200000000000L; i++) {
 
-            second = second + 30;
-            if (i == 3) {
-                stop = 22;
-                //actValue = 189;
-            } else {
+            second = second + 60;
+            String content = null;
+            if (i == 0) {
+                content = buildContent(181,actValue ,130.4,180.56,100 ,stop,second);
+            } else if (i == 1){
                 stop = 66;
-                //actValue = 178;
+                content = buildContent(181,actValue ,130.4,180.56,200 ,stop,second);
+            } else if (i == 2){
+                stop = 66;
+                content = buildContent(181,actValue ,130.4,180.56,300.1 ,stop,second);
+            }else if (i == 3){
+                stop = 66;
+                content = buildContent(181,actValue ,160,179.6,400 ,stop,second);
+            }else if (i == 4){
+                stop = 66;
+                content = buildContent(181,actValue ,160,179.6,500 ,stop,second);
+            }else if (i == 5){
+                stop = 66;
+                content = buildContent(181,actValue ,170,179.6,600 ,stop,second);
+            } else {
+                content = buildContent(181,actValue ,170,179.6,600 ,stop,second);
             }
-            String content = buildContent(181,actValue ++,stop,second);
             try {
 
                 // 创建消息
@@ -101,7 +114,7 @@ public class MqttPublishSample {
             }
             System.out.println("finish " + second);
             //System.out.println(content);
-            TimeUnit.SECONDS.sleep(30);
+            TimeUnit.MINUTES.sleep(1);
         }
         // 断开连接
         sampleClient.disconnect();
@@ -110,7 +123,7 @@ public class MqttPublishSample {
 
     }
 
-    public static String buildContent(int setValue,int actValue,int speed,Long second){
+    public static String buildContent(int setValue,int actValue,double actValue01,double actValue02,double actValue03,int speed,Long second){
         return "{\n" +
                 "\"stenterStatus\":{\n" +
                 "    \"rtime\": "+ second +",     \n" +
@@ -123,13 +136,13 @@ public class MqttPublishSample {
                 "    \"d05\": " + actValue +",\n" +
                 "    \"d03\": " + actValue +",\n" +
                 "    \"d06\": " + setValue +",\n" +
-                "    \"d07\": " + actValue +",\n" +
+                "    \"d07\": " + actValue01 +",\n" +
                 "    \"d08\": " + setValue +",\n" +
-                "    \"d09\": " + actValue +",\n" +
+                "    \"d09\": " + actValue02 +",\n" +
                 "    \"d10\": " + setValue +",\n" +
-                "    \"d11\": " + actValue +",\n" +
+                "    \"d11\": " + actValue03 +",\n" +
                 "    \"d12\": " + setValue +",\n" +
-                "    \"d13\": " + actValue +",\n" +
+                //"    \"d13\": " + actValue +",\n" +
                 "    \"d14\": " + setValue +",\n" +
                 "    \"d15\": " + actValue +",\n" +
                 "    \"d16\": " + setValue +",\n" +
@@ -250,7 +263,7 @@ public class MqttPublishSample {
                 "    \"d626\": " + setValue +",\n" +
                 "    \"d627\": " + actValue +",\n" +
                 "    \"d628\": " + setValue +",\n" +
-                "    \"d629\": " + actValue +",\n" +
+                "    \"d629\": " + 110 +",\n" +
                 "    \"d700\": " + actValue +",\n" +
                 "    \"d701\": " + actValue +",\n" +
                 "    \"d702\": " + actValue +",\n" +

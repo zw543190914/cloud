@@ -37,7 +37,7 @@ public class MqttSendController {
         ScheduledFuture<?> scheduledFuture = CustomerExecutorService.scheduledExecutorService.scheduleAtFixedRate(() -> {
             long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
             int incrementAndGet = count.incrementAndGet();
-            String message = MqttPublishSample.buildContent(setValue, actValue + incrementAndGet, actValue + incrementAndGet, second);
+            String message = MqttPublishSample.buildContent(setValue, actValue + incrementAndGet,170,179.6,600 ,actValue + incrementAndGet, second);
             try {
                 mqttClient.publish(message);
                 log.info("[MqttSendController][sendMessage] count  is {}", incrementAndGet);
