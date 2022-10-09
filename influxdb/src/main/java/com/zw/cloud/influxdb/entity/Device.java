@@ -22,24 +22,24 @@ public class Device {
      * 表示设备发送数据的时间戳，单位(秒），必填  数据上报时间
      */
     @Column(name = "rtime")
-    private Long rtime;
+    private Float rtime;
     /**
      * 表示设备发送数据的时间戳，单位(秒），必填  采集时间
      */
     @Column(name = "ctime")
-    private Long ctime;
+    private Float ctime;
     /**
      * 消息类型
      * 1：事件类、2： 状态类
      */
     @Column(name = "messageType")
-    private Integer messageType = 1;
+    private Float messageType = 1f;
     /**
      * 【事件类】事件编码
      * 参考 字典 【事件类】事件编码 字典
      */
     @Column(name = "eventCode")
-    private Integer eventCode;
+    private Float eventCode;
     /**
      * 车速设定值
      */
@@ -400,4 +400,15 @@ public class Device {
      */
     @Column(name = "cycleWindSpeed10")
     private Float cycleWindSpeed10;
+
+    /**
+     * dataType
+     */
+    @Column(name = "dataType")
+    private String dataType;
+    /**
+     * 设备
+     */
+    @Column(name = "device")
+    private String device;
 }

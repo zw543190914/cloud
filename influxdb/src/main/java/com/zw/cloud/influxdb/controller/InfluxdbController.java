@@ -6,6 +6,7 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.zw.cloud.influxdb.entity.Device;
 import com.zw.cloud.influxdb.entity.DeviceVO;
 import com.zw.cloud.influxdb.util.InfluxdbUtils;
@@ -36,11 +37,37 @@ public class InfluxdbController {
     @Autowired
     private InfluxDB influxDB;
 
+
+    /**
+     * 插入
+     */
+    @GetMapping("/insert")
+    //http://localhost:10010/influxdb/insert
+    public void insert(){
+        Device device = buildDevice(38f, 66);
+        Point point = Point.measurementByPOJO(device.getClass()).addFieldsFromPOJO(device).build();
+        influxDB.write(point);
+    }
+
+    /**
+     * 批量插入
+     */
+    @GetMapping("/batchInsert")
+    //http://localhost:10010/influxdb/batchInsert
+    public void batchInsert(){
+        Device device = buildDevice(33f, 66);
+        BatchPoints.Builder builder = BatchPoints.builder();
+        Lists.newArrayList(device).forEach(m -> builder.point(Point.measurementByPOJO(m.getClass()).addFieldsFromPOJO(m).build()));
+        //写入
+        influxDB.write(builder.build());
+    }
+
+
     /**
      * 批量插入第一种方式
      */
     @GetMapping("/batchInsert1")
-    //http://localhost:10010/influxdb/batchInsert1
+    //http://localhost:10010/influxdb/batchInsert1?stop=11
     public void insert(Float stop){
         List<String> lines = new ArrayList<>();
         Long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
@@ -175,6 +202,7 @@ public class InfluxdbController {
                 .addField("windSpeed7", 99f)
                 .addField("windSpeed8", 99f)
                 .addField("windSpeed9", 99f)
+                .addField("dataType","report")
                 .build();
     }
     private Device buildDevice(Float value, Integer stop){
@@ -182,10 +210,10 @@ public class InfluxdbController {
         Long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
         Instant instant = Instant.ofEpochSecond(second);
         device.setTime(instant);
-        device.setRtime(second);
-        device.setCtime(second);
-        device.setMessageType(1);
-        device.setEventCode(8830);
+        device.setRtime(Float.valueOf(String.valueOf(second)));
+        device.setCtime(Float.valueOf(String.valueOf(second)));
+        device.setMessageType(1f);
+        device.setEventCode(8830f);
         device.setSpeedSetting(value);
         device.setSpeed(value);
         device.setInClothTension(value);
@@ -227,8 +255,8 @@ public class InfluxdbController {
         device.setWindSpeed3(value);
         device.setSpeciWindSpeed4(value);
         device.setWindSpeed4(value);
-        device.setSpeciCycleWindSpeed1(value + "d");
-        device.setCycleWindSpeed1(value + "d");
+        device.setSpeciCycleWindSpeed1(String.valueOf(value));
+        device.setCycleWindSpeed1(String.valueOf(value));
         device.setSpeciCycleWindSpeed2(value);
         device.setCycleWindSpeed2(value);
         device.setSpeciCycleWindSpeed3(value);
@@ -256,6 +284,8 @@ public class InfluxdbController {
         device.setDryingRoomActualTemp10(value);
         device.setSpeciCycleWindSpeed10(value);
         device.setCycleWindSpeed10(value);
+        device.setDataType("report");
+        device.setDevice("rr");
         return device ;
     }
 
