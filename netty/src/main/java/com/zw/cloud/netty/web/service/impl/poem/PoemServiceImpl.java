@@ -1,6 +1,7 @@
 package com.zw.cloud.netty.web.service.impl.poem;
 
 import com.alibaba.fastjson.JSON;
+import com.zw.cloud.netty.ide.annotation.IdeLock;
 import com.zw.cloud.netty.web.entity.poem.Poem;
 import com.zw.cloud.netty.web.dao.poem.PoemMapper;
 import com.zw.cloud.netty.web.service.api.poem.IPoemService;
@@ -36,6 +37,22 @@ public class PoemServiceImpl extends ServiceImpl<PoemMapper, Poem> implements IP
     @Override
     public List<Poem> queryByTitleOrContent(String title) {
         return baseMapper.queryByTitleOrContent(title);
+    }
+
+    @Override
+    @IdeLock(perFix = "netty_lock",timeOutSecond = 4,paramIndex = 0,useTryLock = false)
+    @Transactional
+    public int updatePoemById(Long id,String title) {
+        Poem poem = baseMapper.selectById(id);
+        log.info("[PoemServiceImpl][updatePoemById] poem is {}",JSON.toJSONString(poem));
+        try {
+            TimeUnit.SECONDS.sleep(3);
+            poem.setTitle(title);
+            return baseMapper.updateById(poem);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
