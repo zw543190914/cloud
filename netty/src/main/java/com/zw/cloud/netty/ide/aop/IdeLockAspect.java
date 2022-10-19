@@ -34,32 +34,35 @@ public class IdeLockAspect {
         Object arg = args[argsIndex];
 
         String perFix = ide.perFix();
-        String lockKey;
+        StringBuilder lockKey = new StringBuilder(perFix);
         if (arg instanceof Byte || arg instanceof Short || arg instanceof Integer || arg instanceof Long
                 || arg instanceof Double || arg instanceof Float || arg instanceof Boolean || arg instanceof Character
                 || arg instanceof String || arg instanceof BigDecimal) {
             // 基本类型 + String类型直接取 指定参数值 作为 锁标志
-            lockKey = perFix + "_" + arg;
+            lockKey.append("_").append(arg);
         } else {
             // 其他类型 获取参数对应字段
-            String fieldName = ide.objectFieldName();
-            if (StringUtils.isBlank(fieldName)) {
-                throw new RuntimeException("加锁对象字段名称为空");
-            }
+            String[] fieldNames = ide.objectFieldName();
+
             try {
-                Field declaredField = arg.getClass().getDeclaredField(fieldName);
-                declaredField.setAccessible(true);
-                Object fieldValue = declaredField.get(arg);
-                if (Objects.isNull(fieldValue)) {
-                    throw new RuntimeException("加锁对象字段值为空");
+                for (String fieldName : fieldNames) {
+                    if (StringUtils.isBlank(fieldName)) {
+                        throw new RuntimeException("加锁对象字段名称为空");
+                    }
+                    Field declaredField = arg.getClass().getDeclaredField(fieldName);
+                    declaredField.setAccessible(true);
+                    Object fieldValue = declaredField.get(arg);
+                    if (Objects.isNull(fieldValue)) {
+                        throw new RuntimeException("加锁对象字段值为空,字段名称为" + fieldName);
+                    }
+                    lockKey.append("_").append(fieldValue);
                 }
-                lockKey = perFix + "_" + fieldValue;
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 throw new RuntimeException("加锁时ide.objectFieldName错误");
             }
         }
-        log.info("[IdeLockAspect][doBefore] lockKey is {}",lockKey);
-        RLock lock = redissonClient.getLock(lockKey);
+        log.info("[IdeLockAspect][doBefore] lockKey is {}",lockKey.toString());
+        RLock lock = redissonClient.getLock(lockKey.toString());
         if (ide.useTryLock()) {
             boolean tryLock;
             try {

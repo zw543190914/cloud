@@ -61,6 +61,13 @@ public class PoemServiceImpl extends ServiceImpl<PoemMapper, Poem> implements IP
     }
 
     @Override
+    @IdeLock(perFix = "netty_lock",timeOutSecond = 4,objectFieldName = {"title","content"},useTryLock = false)
+    @Transactional
+    public void updatePoemById(Poem poem) {
+        log.info("[PoemServiceImpl][updatePoemById] poem is {}",JSON.toJSONString(poem));
+    }
+
+    @Override
     @Transactional
     public Poem testLock(Long id, String title) throws Exception {
         // 加锁应该放到事务之外,否则无法读取最新数据,锁没有起到作用  ---使用postman测试

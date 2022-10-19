@@ -19,5 +19,7 @@ public interface IPoemService extends IService<Poem> {
 
     int updatePoemById(long id,String title);
 
+    void updatePoemById(Poem poem);
+
     Poem testLock(Long id,String title) throws Exception;
 }

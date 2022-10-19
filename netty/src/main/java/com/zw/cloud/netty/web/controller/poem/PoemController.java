@@ -61,6 +61,12 @@ public class PoemController {
         return poemService.updatePoemById(id, title);
     }
 
+    @PostMapping("/updatePoemById")
+    //http://localhost:18092/poem/updatePoemById
+    public void updatePoemById(@RequestBody Poem poem) {
+        poemService.updatePoemById(poem);
+    }
+
     @GetMapping("/testLock")
     //http://localhost:18092/poem/testLock?id=1&title=11
     public Poem queryByTitleOrContent(@RequestParam Long id,@RequestParam String title) throws Exception{
