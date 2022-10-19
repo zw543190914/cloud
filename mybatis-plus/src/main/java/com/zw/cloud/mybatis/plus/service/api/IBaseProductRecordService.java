@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IBaseProductRecordService extends IService<BaseProductRecord> {
 
+    void insertBaseProductRecord(BaseProductRecord productRecord);
 }

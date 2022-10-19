@@ -53,13 +53,13 @@
         <result column="brand" jdbcType="VARCHAR" property="brand" />
 
         <!--        json字段-->
-        <result column="speci_wind_speed"  property="speciWindSpeed" typeHandler="tech.zj.quanbu.dyeing.stenter.common.db.typehandlers.JsonTypeHandler"/>
-        <result column="speci_cycle_wind_speed" property="speciCycleWindSpeed" typeHandler="tech.zj.quanbu.dyeing.stenter.common.db.typehandlers.JsonTypeHandler"/>
-        <result column="drying_room_preset_temp" property="dryingRoomPresetTemp" typeHandler="tech.zj.quanbu.dyeing.stenter.common.db.typehandlers.JsonTypeHandler"/>
-        <result column="assistant"  property="assistant" typeHandler="tech.zj.quanbu.dyeing.stenter.common.db.typehandlers.JsonTypeHandler"/>
-        <result column="dynamic_field"  property="dynamicField" typeHandler="tech.zj.quanbu.dyeing.stenter.common.db.typehandlers.JsonTypeHandler"/>
-        <result column="device_ids" property="deviceIds" typeHandler="tech.zj.quanbu.dyeing.stenter.common.db.typehandlers.JsonTypeHandler"/>
-        <result column="door_width_actual" property="doorWidthActual" typeHandler="tech.zj.quanbu.dyeing.stenter.common.db.typehandlers.JsonTypeHandler" />
+        <result column="speci_wind_speed"  property="speciWindSpeed" typeHandler="com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler"/>
+        <result column="speci_cycle_wind_speed" property="speciCycleWindSpeed" typeHandler="com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler"/>
+        <result column="drying_room_preset_temp" property="dryingRoomPresetTemp" typeHandler="com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler"/>
+        <result column="assistant"  property="assistant" typeHandler="com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler"/>
+        <result column="dynamic_field"  property="dynamicField" typeHandler="com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler"/>
+        <result column="device_ids" property="deviceIds" typeHandler="com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler"/>
+        <result column="door_width_actual" property="doorWidthActual" typeHandler="com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler" />
 
     </resultMap>
 </mapper>
