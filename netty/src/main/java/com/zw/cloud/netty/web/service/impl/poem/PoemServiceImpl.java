@@ -39,10 +39,15 @@ public class PoemServiceImpl extends ServiceImpl<PoemMapper, Poem> implements IP
         return baseMapper.queryByTitleOrContent(title);
     }
 
+    /**
+     * 前缀为 netty_lock
+     * 使用下标为0的参数作为key 即 id，如果参数id为1 最终key为：netty_lock_1
+     * 使用 lock.lock() 方式加锁
+     */
     @Override
     @IdeLock(perFix = "netty_lock",timeOutSecond = 4,paramIndex = 0,useTryLock = false)
     @Transactional
-    public int updatePoemById(Long id,String title) {
+    public int updatePoemById(long id,String title) {
         Poem poem = baseMapper.selectById(id);
         log.info("[PoemServiceImpl][updatePoemById] poem is {}",JSON.toJSONString(poem));
         try {

@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Validated
 public class ValidationServiceImpl {
 
-    @Ide(perFix = "tool_test",paramIndex = 0,objectKey = User.class,objectFieldName = "name")
+    @Ide(perFix = "tool_test",paramIndex = 0,objectFieldName = "name")
     public void testObject(@Valid User user){
         log.info("[ValidationServiceImpl][testObject] user is {}", JSON.toJSONString(user));
     }

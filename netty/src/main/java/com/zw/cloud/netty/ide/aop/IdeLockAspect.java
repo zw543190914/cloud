@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -32,24 +34,31 @@ public class IdeLockAspect {
         Object arg = args[argsIndex];
 
         String perFix = ide.perFix();
-        Class clazz = ide.objectKey();
         String lockKey;
-        if (StringUtils.equalsIgnoreCase(clazz.getTypeName(),String.class.getTypeName())) {
-            // String类型直接取 指定参数值 作为 锁标志
+        if (arg instanceof Byte || arg instanceof Short || arg instanceof Integer || arg instanceof Long
+                || arg instanceof Double || arg instanceof Float || arg instanceof Boolean || arg instanceof Character
+                || arg instanceof String || arg instanceof BigDecimal) {
+            // 基本类型 + String类型直接取 指定参数值 作为 锁标志
             lockKey = perFix + "_" + arg;
         } else {
             // 其他类型 获取参数对应字段
             String fieldName = ide.objectFieldName();
+            if (StringUtils.isBlank(fieldName)) {
+                throw new RuntimeException("加锁对象字段名称为空");
+            }
             try {
                 Field declaredField = arg.getClass().getDeclaredField(fieldName);
                 declaredField.setAccessible(true);
                 Object fieldValue = declaredField.get(arg);
+                if (Objects.isNull(fieldValue)) {
+                    throw new RuntimeException("加锁对象字段值为空");
+                }
                 lockKey = perFix + "_" + fieldValue;
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 throw new RuntimeException("加锁时ide.objectFieldName错误");
             }
         }
-        log.info("[IdeAspect][doBefore] lockKey is {}",lockKey);
+        log.info("[IdeLockAspect][doBefore] lockKey is {}",lockKey);
         RLock lock = redissonClient.getLock(lockKey);
         if (ide.useTryLock()) {
             boolean tryLock;
@@ -57,7 +66,7 @@ public class IdeLockAspect {
                 tryLock = lock.tryLock(0, ide.timeOutSecond(), TimeUnit.SECONDS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-                log.warn("[IdeAspect][doBefore] lockKey is {},tryLock error is ",lockKey,e);
+                log.warn("[IdeLockAspect][doBefore] lockKey is {},tryLock error is ",lockKey,e);
                 throw e;
             }
             if (!tryLock) {

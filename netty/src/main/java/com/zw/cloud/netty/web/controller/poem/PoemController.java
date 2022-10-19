@@ -57,7 +57,7 @@ public class PoemController {
 
     @GetMapping("/updatePoemById")
     //http://localhost:18092/poem/updatePoemById?id=1&title=2
-    public int updatePoemById(@RequestParam Long id,@RequestParam String title) {
+    public int updatePoemById(@RequestParam long id,@RequestParam String title) {
         return poemService.updatePoemById(id, title);
     }
 

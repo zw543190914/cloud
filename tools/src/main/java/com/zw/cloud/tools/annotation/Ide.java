@@ -15,8 +15,6 @@ public @interface Ide {
 
     int paramIndex() default 0;
 
-    Class objectKey() default String.class;
-
     String objectFieldName() default "";
 
     boolean useTryLock() default true;
