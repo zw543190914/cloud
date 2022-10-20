@@ -45,7 +45,7 @@ public class PoemServiceImpl extends ServiceImpl<PoemMapper, Poem> implements IP
      * 使用 lock.lock() 方式加锁
      */
     @Override
-    @IdeLock(perFix = "netty_lock",timeOutSecond = 4,paramIndex = 0,useTryLock = false)
+    @IdeLock(perFix = "netty_lock",timeOutSecond = 2,paramIndex = 0,useTryLock = true)
     @Transactional
     public int updatePoemById(long id,String title) {
         Poem poem = baseMapper.selectById(id);
@@ -54,7 +54,7 @@ public class PoemServiceImpl extends ServiceImpl<PoemMapper, Poem> implements IP
             TimeUnit.SECONDS.sleep(3);
             poem.setTitle(title);
             return baseMapper.updateById(poem);
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;
