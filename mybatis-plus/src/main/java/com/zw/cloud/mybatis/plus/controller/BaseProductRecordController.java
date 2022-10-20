@@ -4,11 +4,9 @@ package com.zw.cloud.mybatis.plus.controller;
 import com.zw.cloud.mybatis.plus.entity.BaseProductRecord;
 import com.zw.cloud.mybatis.plus.service.api.IBaseProductRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 /**
  * <p>
@@ -31,4 +29,9 @@ public class BaseProductRecordController {
         baseProductRecordService.insertBaseProductRecord(productRecord);
     }
 
+    @PostMapping("/queryList")
+    //http://localhost:8080/base-product-record/queryList
+    public List<BaseProductRecord> queryList(@RequestBody BaseProductRecord productRecord) {
+        return baseProductRecordService.queryList(productRecord);
+    }
 }

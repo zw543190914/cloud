@@ -5,6 +5,9 @@ import com.alibaba.fastjson.JSON;
 
 import java.io.Serializable;
 
+/**
+ * @author 镜中水月
+ */
 public class WebResult<T> implements Serializable {
     private boolean success;
     private T data;
@@ -25,12 +28,12 @@ public class WebResult<T> implements Serializable {
         this.success = success;
     }
 
-    public static WebResult<Object> success() {
+    public static <T>WebResult<T> success() {
         return new WebResult<>(true);
     }
 
-    public static WebResult<Object> failed() {
-        WebResult<Object> failed = new WebResult<>(false);
+    public static <T>WebResult<T> failed() {
+        WebResult<T> failed = new WebResult<>(false);
         failed.errorCode = HttpStatus.HTTP_BAD_REQUEST;
         return failed;
     }
@@ -42,18 +45,18 @@ public class WebResult<T> implements Serializable {
         return webResult;
     }
 
-    public WebResult withErrorCodeAndMsg(Integer errorCode,String errorMsg) {
+    public WebResult<T> withErrorCodeAndMsg(Integer errorCode,String errorMsg) {
         this.errorCode = errorCode;
         this.errorMsg = errorMsg;
         return this;
     }
 
-    public WebResult withErrorCode(Integer errorCode) {
+    public WebResult<T> withErrorCode(Integer errorCode) {
         this.errorCode = errorCode;
         return this;
     }
 
-    public WebResult withErrorMsg(String errorMsg) {
+    public WebResult<T> withErrorMsg(String errorMsg) {
         this.errorMsg = errorMsg;
         return this;
     }

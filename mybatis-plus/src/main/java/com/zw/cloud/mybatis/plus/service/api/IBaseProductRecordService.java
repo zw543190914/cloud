@@ -3,6 +3,8 @@ package com.zw.cloud.mybatis.plus.service.api;
 import com.zw.cloud.mybatis.plus.entity.BaseProductRecord;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 生产记录表 服务类
@@ -14,4 +16,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IBaseProductRecordService extends IService<BaseProductRecord> {
 
     void insertBaseProductRecord(BaseProductRecord productRecord);
+
+    List<BaseProductRecord> queryList(BaseProductRecord productRecord);
+
 }

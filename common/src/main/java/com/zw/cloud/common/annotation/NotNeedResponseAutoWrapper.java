@@ -1,4 +1,4 @@
-package com.zw.cloud.tools.annotation;
+package com.zw.cloud.common.annotation;
 
 import java.lang.annotation.*;
 
