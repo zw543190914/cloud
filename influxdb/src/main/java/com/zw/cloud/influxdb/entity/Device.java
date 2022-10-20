@@ -249,12 +249,12 @@ public class Device {
      * 循环风设定转速1
      */
     @Column(name = "speciCycleWindSpeed1")
-    private String speciCycleWindSpeed1;
+    private Float speciCycleWindSpeed1;
     /**
      * 循环风转速1
      */
     @Column(name = "cycleWindSpeed1")
-    private String cycleWindSpeed1;
+    private Float cycleWindSpeed1;
     /**
      * 循环风设定转速2
      */
@@ -344,7 +344,7 @@ public class Device {
      * 启停、急停信号
      */
     @Column(name = "stopSignal")
-    private Integer stopSignal;
+    private Float stopSignal;
     /**
      * 允许开机信号
      */

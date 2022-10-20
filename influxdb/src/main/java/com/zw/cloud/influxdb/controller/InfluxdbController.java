@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.BatchPoints;
 import org.influxdb.dto.Point;
+import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,6 +64,18 @@ public class InfluxdbController {
         influxDB.write(builder.build());
     }
 
+    /**
+     * 删除数据
+     */
+    @GetMapping("/delete")
+    //http://localhost:10010/influxdb/delete
+    public QueryResult delete(){
+        String command = "delete from device_report_data where device='rr' and dataType = 'report' and cycleWindSpeed1 = 75;";
+        /**
+         * fields not supported in WHERE clause during deletion
+         */
+        return influxDB.query(new Query(command, database));
+    }
 
     /**
      * 批量插入第一种方式
@@ -255,8 +269,8 @@ public class InfluxdbController {
         device.setWindSpeed3(value);
         device.setSpeciWindSpeed4(value);
         device.setWindSpeed4(value);
-        device.setSpeciCycleWindSpeed1(String.valueOf(value));
-        device.setCycleWindSpeed1(String.valueOf(value));
+        device.setSpeciCycleWindSpeed1(value);
+        device.setCycleWindSpeed1(value);
         device.setSpeciCycleWindSpeed2(value);
         device.setCycleWindSpeed2(value);
         device.setSpeciCycleWindSpeed3(value);
@@ -274,7 +288,7 @@ public class InfluxdbController {
         device.setSpeciCycleWindSpeed9(value);
         device.setCycleWindSpeed9(value);
         device.setTroughTemp(value);
-        device.setStopSignal(stop);
+        device.setStopSignal((float)stop);
 
         device.setSpeciWindSpeed5(value);
         device.setWindSpeed5(value);
