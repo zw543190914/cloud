@@ -3,9 +3,9 @@ package com.zw.cloud.netty.ide.aop;
 import com.zw.cloud.netty.ide.annotation.IdeLock;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,9 @@ public class IdeLockAspect {
     @Autowired
     private RedissonClient redissonClient;
 
-    @Before("@annotation(ide)")
-    public void doBefore(JoinPoint joinPoint, IdeLock ide) throws Exception{
+
+    @Around("@annotation(ide)")
+    public Object process(ProceedingJoinPoint joinPoint, IdeLock ide) throws Throwable{
         Object[] args = joinPoint.getArgs();
         int argsIndex = ide.paramIndex();
         if (argsIndex >= args.length) {
@@ -61,15 +62,14 @@ public class IdeLockAspect {
                 throw new RuntimeException("加锁时ide.objectFieldName错误");
             }
         }
-        log.info("[IdeLockAspect][doBefore] lockKey is {}",lockKey.toString());
+        log.info("[IdeLockAspect][process] lockKey is {}",lockKey.toString());
         RLock lock = redissonClient.getLock(lockKey.toString());
         if (ide.useTryLock()) {
             boolean tryLock;
             try {
                 tryLock = lock.tryLock(0, ide.timeOutSecond(), TimeUnit.SECONDS);
             } catch (InterruptedException e) {
-                e.printStackTrace();
-                log.warn("[IdeLockAspect][doBefore] lockKey is {},tryLock error is ",lockKey,e);
+                log.warn("[IdeLockAspect][process] lockKey is {},tryLock error is ",lockKey,e);
                 throw e;
             }
             if (!tryLock) {
@@ -78,8 +78,21 @@ public class IdeLockAspect {
         } else {
             lock.lock(ide.timeOutSecond(), TimeUnit.SECONDS);
         }
-
+        log.info("[IdeLockAspect][process] lockKey is {},获取锁成功",lockKey.toString());
+        try {
+            return joinPoint.proceed();
+        } catch (Throwable throwable) {
+            log.warn("[IdeLockAspect][process] throwable is ",throwable);
+            throw throwable;
+        } finally {
+            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
+                log.info("[IdeLockAspect][process] lockKey is {},主动释放锁成功",lockKey.toString());
+                lock.unlock();
+            }
+        }
     }
+
+
 
     public static void main(String[] args) {
         // java.lang.String
