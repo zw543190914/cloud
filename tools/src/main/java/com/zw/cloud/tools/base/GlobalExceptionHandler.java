@@ -1,6 +1,7 @@
 package com.zw.cloud.tools.base;
 
 import cn.hutool.http.HttpStatus;
+import com.zw.cloud.common.exception.BizException;
 import com.zw.cloud.common.utils.MyPermissionCheckException;
 import com.zw.cloud.common.utils.WebResult;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,10 @@ public class GlobalExceptionHandler {
             return WebResult.failed()
                     .withErrorCode(HttpStatus.HTTP_FORBIDDEN)
                     .withErrorMsg("没有操作权限");
+        } else if (exception instanceof BizException) {
+            return WebResult.failed()
+                    .withErrorCode(HttpStatus.HTTP_INTERNAL_ERROR)
+                    .withErrorMsg(exception.getMessage());
         }
 
         return WebResult.failed()

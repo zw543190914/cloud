@@ -1,6 +1,7 @@
 package com.zw.cloud.common.aop;
 
 import com.zw.cloud.common.annotation.SendDingTalkMsgOnException;
+import com.zw.cloud.common.exception.BizException;
 import com.zw.cloud.common.utils.DingTalkUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -17,6 +18,7 @@ public class DingTalkAspect {
 
     @AfterThrowing(pointcut = "execution(* com.zw.cloud..*.*(..))",throwing = "ex")
     public void afterthrowing(JoinPoint joinPoint, Exception ex) {
+
         Signature joinPointSignature = joinPoint.getSignature();
         Class classType = joinPointSignature.getDeclaringType();
         //String className = joinPointSignature.getDeclaringTypeName();
@@ -24,6 +26,9 @@ public class DingTalkAspect {
         String token = "7b66a82f1620672a1f5b2229d536d41cd978fb9f949141df8b40cd3b8bc9dd54";
         log.info("[DingTalkAspect][afterthrowing] class is {},method is {},error is {}",
                 classType,methodName,ex);
+        if (ex instanceof BizException) {
+            return;
+        }
         try {
             DingTalkUtils.sendDingTalkMsg(token,classType,methodName,joinPoint.getArgs(),ex);
         } catch (Exception e) {
@@ -41,6 +46,9 @@ public class DingTalkAspect {
         String token = sendDingTalkMsgOnException.token();
         log.info("[DingTalkAspect][afterthrowing] class is {},method is {},error is {}",
                 classType,methodName,ex);
+        if (ex instanceof BizException) {
+            return;
+        }
         try {
             DingTalkUtils.sendDingTalkMsg(token,classType,methodName,joinPoint.getArgs(),ex);
         } catch (Exception e) {
