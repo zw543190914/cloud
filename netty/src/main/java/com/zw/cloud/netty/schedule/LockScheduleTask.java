@@ -25,11 +25,13 @@ public class LockScheduleTask {
         lock.lock(1,TimeUnit.SECONDS);
         log.info("[LockScheduleTask][task1] start, {}", Thread.currentThread().getName());
         try {
-            throw new RuntimeException("ex");
-        } catch (RuntimeException e) {
+            Thread.sleep(3000);
+        } catch (Exception e) {
             //e.printStackTrace();
         } finally {
-            lock.unlock();
+            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
         }
     }
 
@@ -43,6 +45,10 @@ public class LockScheduleTask {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
         }
     }
 }
