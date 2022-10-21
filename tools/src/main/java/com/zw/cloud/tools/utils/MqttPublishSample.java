@@ -19,18 +19,18 @@ public class MqttPublishSample {
 
         // dev
         // 18hao设备5
-        /*String host = "tcp://axdkagn.iot.gz.baidubce.com";
+        String host = "tcp://axdkagn.iot.gz.baidubce.com";
         String userName = "thingidp@axdkagn|rr|0|MD5";
         String password = "20f582bfab251a639a8893d13d90bdc1";
         String topic = "d/rr/report";
-        String clientId = "subscribe_test_device01";*/
+        String clientId = "subscribe_test_device01";
         // qa
         // 定型机#02
-        String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+        /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|qa_test_device_stenter_02|0|MD5";
         String password = "3509803995f1748b7d4c5f1ad9dfb615";
         String topic = "d/qa_test_device_stenter_02/report";
-        String clientId = "subscribe_test";
+        String clientId = "subscribe_test";*/
         // 定型机17
        /* String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|test_qa_17|0|MD5";
@@ -66,22 +66,22 @@ public class MqttPublishSample {
         // 建立连接
         sampleClient.connect(connOpts);
         //long second = 1658383250;
-        int stop = 66;
+        int stop = 0;
         Random random = new Random();
         int actValue = 75 ;
         long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
 
-        for (int i = 0; i < 1200000000000L; i++) {
+        for (int i = 0; i < 120; i++) {
 
             second = second + 60;
             String content = null;
             if (i == 0) {
                 content = buildContent(181,actValue ,130.4,180.56,100 ,stop,second);
             } else if (i == 1){
-                stop = 66;
+                stop = 0;
                 content = buildContent(181,actValue ,130.4,180.56,200 ,stop,second);
             } else if (i == 2){
-                stop = 66;
+                stop = 0;
                 content = buildContent(181,actValue ,130.4,180.56,300.1 ,stop,second);
             }else if (i == 3){
                 stop = 66;
@@ -130,7 +130,7 @@ public class MqttPublishSample {
                 "    \"ctime\": "+ second +",    \n" +
                 "    \"mt\": 1,\n" +
                 "    \"ec\": 8830,\n" +
-                "    \"d01\": "+ setValue +",\n" +
+                "    \"d01\": "+ speed +",\n" +
                 "    \"d02\": "+ speed +",\n" +
                 "    \"d04\": " + actValue +",\n" +
                 "    \"d05\": " + actValue +",\n" +

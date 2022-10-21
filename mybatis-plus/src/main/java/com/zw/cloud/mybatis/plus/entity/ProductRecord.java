@@ -21,7 +21,7 @@ import lombok.Data;
  */
 @Data
 @TableName(value = "base_product_record", autoResultMap = true)
-public class BaseProductRecord implements Serializable {
+public class ProductRecord implements Serializable {
 
 
     /**

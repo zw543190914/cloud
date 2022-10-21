@@ -59,7 +59,7 @@ CREATE TABLE `base_tender_craft` (
                                      `dynamic_field` json DEFAULT NULL COMMENT '动态字段',
                                      `device_ids` json DEFAULT NULL COMMENT '设备id,支持多条',
                                      `craft_mold` bigint DEFAULT '1478970733311668666' COMMENT '工艺类型',
-                                     `device_name` varchar(32) NOT NULL DEFAULT '' COMMENT '设备名称',
+                                     `device_name` varchar(32) DEFAULT '' COMMENT '设备名称',
                                      `stereotype_requirement` varchar(255) DEFAULT '' COMMENT '定型要求',
                                      `craft_source` tinyint DEFAULT '0' COMMENT '工艺来源(0-标准工艺,1-算法工艺)',
                                      `product_record_id` bigint DEFAULT NULL COMMENT '生产记录表id(base_product_record)',
