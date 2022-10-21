@@ -174,5 +174,5 @@ CREATE TABLE `base_product_record` (
                                        `thickness` varchar(100) DEFAULT '' COMMENT '厚度',
                                        `process_report_type` tinyint NOT NULL DEFAULT '0' COMMENT '报工标识(0:初始状态 10: 不可报工,20:未报工,30:已报工)',
                                        PRIMARY KEY (`id`) USING BTREE,
-                                       KEY `product_card_idx` (`org_code`,`product_card_code`,`device_id`) USING BTREE
+                                       KEY `idx_org_code_end_time` (`org_code`,`end_time`) USING BTREE
 ) ENGINE=InnoDB  COMMENT='生产记录表';

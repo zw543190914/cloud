@@ -75,7 +75,7 @@ public class ProductRecordServiceImpl extends ServiceImpl<ProductRecordMapper, P
              * 2489787800  100%  t1
              * 011906800  000%  t2
              */
-            //ProductRecordDTO productRecordDTO = copyProductRecord(productRecord);
+            ProductRecordDTO productRecordDTO = copyProductRecord(productRecord);
 
             /**
              * ---------------------------------------------
@@ -90,8 +90,8 @@ public class ProductRecordServiceImpl extends ServiceImpl<ProductRecordMapper, P
              * 2965117300  026%  t1
              * 8424624200  074%  t2
              */
-            ProductRecordDTO productRecordDTO = new ProductRecordDTO();
-            BeanUtils.copyProperties(productRecord,productRecordDTO);
+           /* ProductRecordDTO productRecordDTO = new ProductRecordDTO();
+            BeanUtils.copyProperties(productRecord,productRecordDTO);*/
             /*ProductRecordDTO productRecordDTO = new ProductRecordDTO();
             for (Field recordField : recordFields) {
                 recordField.setAccessible(true);
