@@ -156,4 +156,6 @@ public class ProductRecordReportQueryDTO extends Page {
      */
     private Long workshopId;
 
+    private List<Long> idList;
+
 }

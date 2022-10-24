@@ -18,6 +18,10 @@ import java.util.Map;
  */
 public interface ProductRecordMapper extends BaseMapper<ProductRecord> {
 
+    List<ProductRecord> queryAllFinishedProductForReportById(@Param("record") ProductRecordReportQueryDTO productRecordReportQueryDTO);
+
+    List<Long> queryAllFinishedProductIdListForReport(@Param("record") ProductRecordReportQueryDTO productRecordReportQueryDTO);
+
     List<ProductRecord> queryAllFinishedProductForReport(@Param("record") ProductRecordReportQueryDTO productRecordReportQueryDTO);
 
     List<ProductRecord> pageQueryAllFinishedProductForReport(@Param("record") ProductRecordReportQueryDTO productRecordReportQueryDTO);

@@ -1,5 +1,6 @@
 package com.zw.cloud.mybatis.plus.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zw.cloud.common.exception.BizException;
@@ -13,7 +14,6 @@ import com.zw.cloud.mybatis.plus.service.api.IProductRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +41,7 @@ public class ProductRecordServiceImpl extends ServiceImpl<ProductRecordMapper, P
      */
     @Override
     public List<ProductRecordDTO> queryAllFinishedProductForReport(ProductRecordReportQueryDTO productRecordReportQueryDTO) {
+        log.info("[ProductRecordServiceImpl][queryAllFinishedProductForReport]productRecordReportQueryDTO is {}", JSON.toJSONString(productRecordReportQueryDTO));
         if (Objects.isNull(productRecordReportQueryDTO.getStartTime()) && Objects.isNull(productRecordReportQueryDTO.getEndTime())) {
             if (StringUtils.isBlank(productRecordReportQueryDTO.getProductCardCode())) {
                 throw new BizException(400, "请选择时间范围或者流转卡号");
@@ -49,12 +50,36 @@ public class ProductRecordServiceImpl extends ServiceImpl<ProductRecordMapper, P
         fillSourceAndIsShowExceptionsParam(productRecordReportQueryDTO);
         StopWatch stopWatch = new StopWatch();
         stopWatch.start("t1");
+        /**
+         *  "total": 11274,running time = 1392283100 ns
+         *                                2772405200 3879992300 13245313600 2662355400
+         *  ---------------------------------------------
+         * ns         %     Task name
+         * ---------------------------------------------
+         * 1347328200  097%  t1
+         * 044954900  003%  t2
+         */
         List<ProductRecord> productRecordList = baseMapper.queryAllFinishedProductForReport(productRecordReportQueryDTO);
+        /**
+         * 拆分为两次 先查id集合
+         * "total": 11274,running time = 2002525300 ns
+         * ---------------------------------------------
+         * ns         %     Task name
+         * ---------------------------------------------
+         * 123723800  006%  t1
+         * 1858009000  093%  t2
+         * 020792500  001%  t3
+         */
+        /*List<Long> idList = baseMapper.queryAllFinishedProductIdListForReport(productRecordReportQueryDTO);
+        stopWatch.stop();
+        stopWatch.start("t2");
+        productRecordReportQueryDTO.setIdList(idList);
+        List<ProductRecord> productRecordList = baseMapper.queryAllFinishedProductForReportById(productRecordReportQueryDTO);*/
         if (CollectionUtils.isEmpty(productRecordList)) {
             return Collections.emptyList();
         }
         stopWatch.stop();
-        stopWatch.start("t2");
+        stopWatch.start("t3");
         List<ProductRecordDTO> productRecordDTOList = new ArrayList<>(productRecordList.size());
        /* Class<ProductRecordDTO> productRecordDTOClass = ProductRecordDTO.class;
         Class<ProductRecord> productRecordClass = ProductRecord.class;
@@ -112,6 +137,14 @@ public class ProductRecordServiceImpl extends ServiceImpl<ProductRecordMapper, P
     }
     /**
      * 分页查询已完成记录
+     *  "total": 11274,running time = 458074100 ns
+     *  ---------------------------------------------
+     * ns         %     Task name
+     * ---------------------------------------------
+     * 149942900  033%  t1
+     * 049982000  011%  t2
+     * 253499100  055%  t3
+     * 004650100  001%  t4
      */
     @Override
     public Map<String, Object> pageQueryAllFinishedProduct(ProductRecordReportQueryDTO productRecordReportQueryDTO) {
