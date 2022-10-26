@@ -76,7 +76,8 @@ public class IdeLockAspect {
                 throw new RuntimeException("当前有其他人正在操作,获取锁失败,请稍后重试");
             }
         } else {
-            lock.lock(ide.timeOutSecond(), TimeUnit.SECONDS);
+            // 通过传release参数来设置超时时间，风险是比较大的，你需要清楚的知道，线程执行业务的时间，设置的过小，redis服务器就自动释放
+            lock.lock();
         }
         log.info("[IdeLockAspect][process] lockKey is {},获取锁成功",lockKey.toString());
         try {

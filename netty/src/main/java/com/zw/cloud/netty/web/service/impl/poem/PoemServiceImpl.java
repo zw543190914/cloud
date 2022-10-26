@@ -69,10 +69,12 @@ public class PoemServiceImpl extends ServiceImpl<PoemMapper, Poem> implements IP
 
     @Override
     @Transactional
+    @IdeLock(perFix = "netty_lock",paramIndex = 1,useTryLock = false)
     public Poem testLock(Long id, String title) throws Exception {
+        log.info("[PoemServiceImpl][testLock] title is {},thread is {}", title, Thread.currentThread().getName());
         // 加锁应该放到事务之外,否则无法读取最新数据,锁没有起到作用  ---使用postman测试
-        RLock lock = redissonClient.getLock(String.valueOf(id));
-        lock.lock(2, TimeUnit.SECONDS);
+        /*RLock lock = redissonClient.getLock(title);
+        lock.lock(5,TimeUnit.SECONDS);*/
         log.info("[PoemServiceImpl][testLock] has lock + " + Thread.currentThread().getName());
 
         Poem poem = mapper.queryByTitle(title);
@@ -83,10 +85,8 @@ public class PoemServiceImpl extends ServiceImpl<PoemMapper, Poem> implements IP
             poem.setTitle(title);
             baseMapper.insert(poem);
         }
-        log.info("[PoemServiceImpl][testLock] end");
         TimeUnit.SECONDS.sleep(5);
-
+        log.info("[PoemServiceImpl][testLock] end");
         return poem;
-
     }
 }
