@@ -69,9 +69,8 @@ public class UserInfoController {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("2222","name11");
         jsonObject.put("date",new Date());
-
         user.setOther(Lists.newArrayList(jsonObject));
-        userService.saveOrUpdate(user);
+        userService.updateById(user);
         System.out.println(JSON.toJSONString(user));
     }
 
