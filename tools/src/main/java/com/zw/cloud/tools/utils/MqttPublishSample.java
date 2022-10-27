@@ -66,22 +66,22 @@ public class MqttPublishSample {
         // 建立连接
         sampleClient.connect(connOpts);
         //long second = 1658383250;
-        int stop = 0;
+        int stop = 66;
         Random random = new Random();
         int actValue = 75 ;
         long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
 
         for (int i = 0; i < 120; i++) {
 
-            second = second + 60;
+            second = second + 30;
             String content = null;
             if (i == 0) {
                 content = buildContent(181,actValue ,130.4,180.56,100 ,stop,second);
             } else if (i == 1){
-                stop = 0;
+                stop = 66;
                 content = buildContent(181,actValue ,130.4,180.56,200 ,stop,second);
             } else if (i == 2){
-                stop = 0;
+                stop = 66;
                 content = buildContent(181,actValue ,130.4,180.56,300.1 ,stop,second);
             }else if (i == 3){
                 stop = 66;
@@ -114,7 +114,7 @@ public class MqttPublishSample {
             }
             System.out.println("finish " + second);
             //System.out.println(content);
-            TimeUnit.MINUTES.sleep(1);
+            TimeUnit.SECONDS.sleep(30);
         }
         // 断开连接
         sampleClient.disconnect();
