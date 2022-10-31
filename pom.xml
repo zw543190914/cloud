@@ -73,7 +73,7 @@
         <zing-core.version>3.3.0</zing-core.version>
         <zing-javase.version>3.3.3</zing-javase.version>
         <commons-collections4.version>4.4</commons-collections4.version>
-        <druid.version>1.2.8</druid.version>
+        <druid.version>1.2.6</druid.version>
         <dubbo-serialization-kryo.version>2.7.7</dubbo-serialization-kryo.version>
         <curator.version>5.3.0</curator.version>
         <zookeeper.version>3.8.0</zookeeper.version>
@@ -126,6 +126,7 @@
         <seata-spring-boot-starter.version>1.5.2</seata-spring-boot-starter.version>
         <sentinel-apache-dubbo-adapter.vwesion>1.8.5</sentinel-apache-dubbo-adapter.vwesion>
         <skywalking.toolkit.version>8.9.0</skywalking.toolkit.version>
+        <sharding-jdbc.version>4.1.1</sharding-jdbc.version>
     </properties>
 
     <dependencyManagement>
@@ -222,6 +223,12 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.alibaba/druid -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
                 <version>${druid.version}</version>
             </dependency>
 
@@ -629,6 +636,11 @@
                 <groupId>org.apache.skywalking</groupId>
                 <artifactId>apm-toolkit-logback-1.x</artifactId>
                 <version>${skywalking.toolkit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+                <version>${sharding-jdbc.version}</version>
             </dependency>
 
         </dependencies>

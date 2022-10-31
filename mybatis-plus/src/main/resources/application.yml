@@ -14,27 +14,87 @@ spring:
       data-locations: classpath:data.sql
 
 
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    druid:
-      initial-size: 100
-      min-idle: 50
-      max-active: 200
-      max-wait: 10000
-      test-on-borrow: false
-      test-on-return: false
-      test-while-idle: true
-      validation-query: "select 1"
-      filters: stat,slf4j
-      filter:
-        stat:
-          slow-sql-millis: 2000
-          log-slow-sql: true
-    url: jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
-    username: root
-    password: password
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    druid:
+#      initial-size: 100
+#      min-idle: 50
+#      max-active: 200
+#      max-wait: 10000
+#      test-on-borrow: false
+#      test-on-return: false
+#      test-while-idle: true
+#      validation-query: "select 1"
+#      filters: stat,slf4j
+#      filter:
+#        stat:
+#          slow-sql-millis: 2000
+#          log-slow-sql: true
+#    url: jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+#    username: root
+#    password: password
   main:
     allow-circular-references: true
+
+  #sharding-jdbc
+  shardingsphere:
+    # 打印sql
+    props:
+      sql:
+        show: true
+    # 数据源配置
+    datasource:
+      #数据源，可配置多个
+      names: ds
+      ds:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+        username: root
+        password: password
+        ####数据库连接池的其他配置
+        initial-size: 100
+        max-active: 200
+        min-idle: 50
+        max-wait: 10000
+        pool-prepared-statements: true
+        max-pool-prepared-statement-per-connection-size: 20
+        time-between-eviction-runs-millis: 60000
+        min-evictable-idle-time-millis: 300000
+        validation-query: SELECT 1 FROM DUAL
+        test-while-idle: true
+        test-on-borrow: false
+        test-on-return: false
+        stat-view-servlet:
+          enabled: true
+          url-pattern: /druid/*
+        filter:
+          stat:
+            log-slow-sql: true
+            slow-sql-millis: 1000
+            merge-sql: true
+          wall:
+            config:
+              multi-statement-allow: true
+
+    sharding:
+      # 表策略配置
+      tables:
+        # user_info 是逻辑表
+        user_info:
+          # 分表节点 比如 order_0 ,order_1
+          #数据源名称+表名
+          actualDataNodes: ds.user_info_$->{0..1}
+          tableStrategy:
+            inline:
+              # 根据表些列分表数据
+              shardingColumn: id
+              # 分表算法->如按奇偶数算法：user_info_0保存偶数,user_info_1保存奇数
+              algorithmExpression: user_info_$->{id % 2}
+          # 分表后，sharding-jdbc的全局id生成策略
+          keyGenerator:
+            type: SNOWFLAKE
+            column: id
 
 mybatis-plus:
   #mapper-locations: classpath*:mapper/**/*.xml

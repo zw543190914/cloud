@@ -40,7 +40,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             sqlSession.close();
         }
         // 2000条数据 260
-        // 10000条数据 810
+        // 10000条数据 810  接入 sharding-jdbc 6868 2518
         // 1362 2793 2862
         log.info("[testBatchInsertOneByOne] use time {}", System.currentTimeMillis() - start);
     }
@@ -51,7 +51,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         long start = System.currentTimeMillis();
         userInfoMapper.batchInsertByMapper(userInfoList);
         // 2000条数据 330
-        // 10000条数据 1180
+        // 10000条数据 1180  接入 sharding-jdbc 1953 1596
         // 556 1129 1115
         log.info("[testBatchInsertByMapper] use time {}", System.currentTimeMillis() - start);
     }
@@ -62,7 +62,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         long start = System.currentTimeMillis();
         saveBatch(userInfoList,10000);
         // 2000条数据 320
-        // 10000条数据 1140
+        // 10000条数据 1140 接入 sharding-jdbc 3824 6966
         // 1895 3369 3252
         log.info("[testBatchInsertByMybatisPlus] use time {}", System.currentTimeMillis() - start);
     }
