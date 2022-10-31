@@ -15,21 +15,15 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 
 @Configuration
-@AutoConfigureAfter(RedisAutoConfiguration.class)
 public class RedisConfig {
 
-
-    /**
-     * 自定义 redisTemplate
-     */
     @Bean
-    @SuppressWarnings("all")
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
 
         template.setConnectionFactory(connectionFactory);
         //自定义Jackson序列化配置
-        Jackson2JsonRedisSerializer jsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+        Jackson2JsonRedisSerializer<Object> jsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL);
@@ -38,10 +32,10 @@ public class RedisConfig {
         //key使用String的序列化方式
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
         template.setKeySerializer(stringRedisSerializer);
+        //value使用jackson的序列化方式
+        template.setValueSerializer(jsonRedisSerializer);
         //hash的key也是用String的序列化方式
         template.setHashKeySerializer(stringRedisSerializer);
-        //value的key使用jackson的序列化方式
-        template.setValueSerializer(jsonRedisSerializer);
         //hash的value也是用jackson的序列化方式
         template.setHashValueSerializer(jsonRedisSerializer);
         template.afterPropertiesSet();
