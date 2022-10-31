@@ -40,14 +40,38 @@ public class RocketController {
             rocketMQTemplate.asyncSend(topic, message, new SendCallback() {
                 @Override
                 public void onSuccess(SendResult sendResult) {
-                    //log.info("send success " + sendResult);
+                    log.info("[sendMsg] send success " + sendResult);
                 }
                 @Override
                 public void onException(Throwable throwable) {
-                    //log.info("send error is " + throwable.getMessage());
+                    log.info("[sendMsg] send error is " + throwable.getMessage());
                 }
             });
         }
+
+    }
+
+    /**
+     * 发送延迟消息
+     * 1  2   3   4   5  6  7  8  9 10 11 12 13 14  15  16  17 18
+     * 1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h
+     */
+    @GetMapping("/sendDelayMsg")
+    //http://localhost:10000/rocket/sendDelayMsg?msg=aaa&topic=topicA&tag=tag1
+    public void sendDelayMsg(@RequestParam String msg,@RequestParam String topic,@RequestParam String tag) {
+        topic = topic + ":" + tag;
+        Message<byte[]> message = MessageBuilder.withPayload(msg.getBytes(StandardCharsets.UTF_8)).build();
+        rocketMQTemplate.asyncSend(topic, message, new SendCallback() {
+            @Override
+            public void onSuccess(SendResult sendResult) {
+                log.info("[sendDelayMsg] send success " + sendResult);
+            }
+
+            @Override
+            public void onException(Throwable throwable) {
+                log.info("[sendDelayMsg] send error is " + throwable.getMessage());
+            }
+        },3000,4);
 
     }
 
