@@ -58,7 +58,7 @@ public class UserInfoController {
         jsonObject.put("2222","name11");
         jsonObject.put("date",new Date());
         user.setOther(Lists.newArrayList(jsonObject));
-        mapper.insertByMapper(user);
+        mapper.insert(user);
         System.out.println(JSON.toJSONString(user));
     }
 
@@ -100,7 +100,7 @@ public class UserInfoController {
     }
 
     @GetMapping("/query")
-    //http://localhost:8080/user-info/query?name=test100000
+    //http://localhost:8080/user-info/query?name=test9998
     public Page<UserInfo> pageQuery(String name) {
         UserInfo user = new UserInfo();
         user.setName(name);
@@ -166,6 +166,7 @@ public class UserInfoController {
             jsonObject.put("nickName",user.getName());
             jsonObject.put("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             user.setOther(Lists.newArrayList(jsonObject));
+            user.setBir(LocalDateTime.now());
             userInfoList.add(user);
         }
         return userInfoList;
