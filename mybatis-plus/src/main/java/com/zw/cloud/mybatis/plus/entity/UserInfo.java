@@ -6,6 +6,7 @@ import com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
@@ -20,7 +21,7 @@ public class UserInfo implements Serializable {
 
     private String name;
 
-    private LocalDateTime bir;
+    private LocalDate bir;
 
     private Integer age;
 

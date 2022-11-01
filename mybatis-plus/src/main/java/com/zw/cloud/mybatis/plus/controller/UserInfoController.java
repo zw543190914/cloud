@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -166,7 +167,7 @@ public class UserInfoController {
             jsonObject.put("nickName",user.getName());
             jsonObject.put("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             user.setOther(Lists.newArrayList(jsonObject));
-            user.setBir(LocalDateTime.now());
+            user.setBir(LocalDate.now());
             userInfoList.add(user);
         }
         return userInfoList;
