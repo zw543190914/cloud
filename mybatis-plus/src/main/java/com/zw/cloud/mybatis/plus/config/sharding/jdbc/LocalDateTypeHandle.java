@@ -1,4 +1,4 @@
-package com.zw.cloud.mybatis.plus.db.config;
+package com.zw.cloud.mybatis.plus.config.sharding.jdbc;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.BaseTypeHandler;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * sharding-jdbc LocalDateTime转换问题
+ * sharding-jdbc LocalDate转换问题
  */
 @Component
 //定义转换器支持的JAVA类型

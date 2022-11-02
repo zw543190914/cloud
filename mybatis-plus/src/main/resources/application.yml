@@ -85,12 +85,15 @@ spring:
           # 分表节点 比如 order_0 ,order_1
           #数据源名称+表名
           actualDataNodes: ds.user_info_$->{0..1}
-          tableStrategy:
-            inline:
+          table-strategy:
+            standard:
               # 根据表些列分表数据
               shardingColumn: id
-              # 分表算法->如按奇偶数算法：user_info_0保存偶数,user_info_1保存奇数
-              algorithmExpression: user_info_$->{id % 2}
+              #精确分片算法类名称，用于=和IN。。该类需实现PreciseShardingAlgorithm接口并提供无参数的构造器
+              precise-algorithm-class-name: com.zw.cloud.mybatis.plus.config.sharding.jdbc.MyPreciseShardingAlgorithm
+              #范围分片算法类名称，用于BETWEEN，可选。该类需实现RangeShardingAlgorithm接口并提供无参数的构造器
+              range-algorithm-class-name: com.zw.cloud.mybatis.plus.config.sharding.jdbc.MyRangeShardingAlgorithm
+
           # 分表后，sharding-jdbc的全局id生成策略
           keyGenerator:
             type: SNOWFLAKE

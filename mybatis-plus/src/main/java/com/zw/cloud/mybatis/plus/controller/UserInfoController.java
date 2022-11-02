@@ -12,6 +12,7 @@ import com.zw.cloud.mybatis.plus.service.api.IUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -51,9 +52,11 @@ public class UserInfoController {
     }
 
     @GetMapping("/insertWithJson")
+    @Transactional
     //http://localhost:8080/user-info/insertWithJson
     public void insertWithJson() {
         UserInfo user = new UserInfo();
+        user.setId(1L);
         user.setName("test121");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("2222","name11");
@@ -64,8 +67,9 @@ public class UserInfoController {
     }
 
     @PostMapping
+    @Transactional
     //http://localhost:8080/user-info?name=test100000
-    public void saveOrUpdate(@RequestBody UserInfo user) {
+    public void updateUserInfo(@RequestBody UserInfo user) {
         user.setAge(22);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("2222","name11");
@@ -95,9 +99,21 @@ public class UserInfoController {
     }
 
     @GetMapping("/testMvcc")
-    //http://localhost:8080/user-info/testMvcc?id=1542758664088105011
+    //http://localhost:8080/user-info/testMvcc?id=1
     public void testMvcc(@RequestParam Long id) {
         userService.testMvcc(id);
+    }
+
+    @GetMapping("/testRepeatRead")
+    //http://localhost:8080/user-info/testRepeatRead?id=1542758664088105011
+    public void testRepeatRead(@RequestParam Long id) {
+        userService.testRepeatRead(id);
+    }
+
+    @GetMapping("/testSerializable")
+    //http://localhost:8080/user-info/testSerializable?id=794254126413250560
+    public void testSerializable() {
+        userService.testSerializable();
     }
 
     @GetMapping("/query")
@@ -130,6 +146,14 @@ public class UserInfoController {
     //http://localhost:8080/user-info/queryJsonDataLike?name=挺剂
     public List<UserInfo> queryJsonDataLike(String name) {
         return userService.queryJsonDataLike(name);
+    }
+
+    @GetMapping("/queryRangeDataTest")
+    //http://localhost:8080/user-info/queryRangeDataTest?id=794253004214632449
+    public List<UserInfo> queryRangeDataTest(@RequestParam Long id) {
+        LambdaQueryWrapper<UserInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.ge(UserInfo::getId,id);
+        return mapper.selectList(queryWrapper);
     }
 
     @GetMapping("/queryAllDataTest")

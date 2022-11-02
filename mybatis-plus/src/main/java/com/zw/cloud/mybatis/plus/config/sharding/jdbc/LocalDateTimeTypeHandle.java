@@ -1,4 +1,4 @@
-package com.zw.cloud.mybatis.plus.db.config;
+package com.zw.cloud.mybatis.plus.config.sharding.jdbc;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.BaseTypeHandler;
