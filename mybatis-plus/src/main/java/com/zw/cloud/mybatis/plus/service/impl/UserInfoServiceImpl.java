@@ -99,7 +99,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     /**
      * 无论是否有 @Transactional
      * 数据存在，其他事务此时更新,再次读取任然是当前值
-     * 数据不存在，其他事务插入新数据并提交，此时更新上一个事务提交的数据，可以更新成新值  没有完全禁止幻读
+     * 数据不存在，其他事务插入新数据并提交，此时更新或者删除 上一个事务提交的数据，可以更新成新值或者删除新数据  没有完全禁止幻读
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
