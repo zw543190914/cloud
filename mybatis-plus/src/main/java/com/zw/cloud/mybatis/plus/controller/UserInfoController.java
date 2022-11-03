@@ -119,7 +119,8 @@ public class UserInfoController {
     @GetMapping("/query")
     //http://localhost:8080/user-info/query?name=test9998
     public Page<UserInfo> pageQuery(String name) {
-        UserInfo user = new UserInfo();
+        UserInfo user = UserInfo.builder().name(name).build();
+        //UserInfo user = new UserInfo();
         user.setName(name);
        /* QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id","name")

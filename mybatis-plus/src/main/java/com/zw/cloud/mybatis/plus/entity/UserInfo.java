@@ -3,8 +3,7 @@ package com.zw.cloud.mybatis.plus.entity;
 import com.baomidou.mybatisplus.annotation.*;
 
 import com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,6 +11,9 @@ import java.io.Serializable;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @TableName(value = "user_info", autoResultMap = true)
 public class UserInfo implements Serializable {
     private static final long serialVersionUID = 464505629765578240L;
