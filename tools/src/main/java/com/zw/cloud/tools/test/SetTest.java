@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class SetTest {
     public static void main(String[] args) {
@@ -20,5 +21,7 @@ public class SetTest {
         System.out.println(sum);
         BigDecimal sum2 = Lists.newArrayList(new BigDecimal(1),new BigDecimal(1),new BigDecimal(3)).stream().reduce(new BigDecimal(0),BigDecimal::add);
         System.out.println(sum2);
+        System.out.println(set1.stream().reduce(0, Integer::sum));
+
     }
 }
