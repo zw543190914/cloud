@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -39,7 +40,6 @@ public class SheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
     @Override
     public void cell(String cellReference, String formattedValue, XSSFComment comment) {
         if (user != null) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             switch (cellReference.substring(0, 1)) {
                 case "A":
                     user.setId(Long.valueOf(formattedValue));
@@ -54,12 +54,8 @@ public class SheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
                     user.setDescription(formattedValue);
                     break;*/
                 case "E":
-                    try {
-                        Date date = format.parse(formattedValue);
-                        user.setBir(date);
-                    } catch (ParseException e) {
-                        logger.error("[SheetHandler][cell]format.parse error is {}",e);
-                    }
+                    LocalDateTime date = LocalDateTime.parse(formattedValue);
+                    user.setBir(date);
                     break;
                 default:
                     break;

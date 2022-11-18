@@ -1,7 +1,6 @@
 package com.zw.cloud.tools.excel.listener;
 
 import com.alibaba.excel.context.AnalysisContext;
-import com.alibaba.excel.metadata.Sheet;
 import com.alibaba.excel.read.metadata.ReadSheet;
 import com.alibaba.excel.read.metadata.holder.ReadHolder;
 import com.alibaba.excel.read.metadata.holder.ReadRowHolder;
@@ -72,11 +71,6 @@ public class BaseListenerTest {
             @Override
             public void readSheetList(List<ReadSheet> readSheetList) {
 
-            }
-
-            @Override
-            public Sheet getCurrentSheet() {
-                return null;
             }
 
             @Override

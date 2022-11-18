@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
@@ -23,7 +24,7 @@ public class ReflectUtils {
         User user = new User();
         user.setId(1L);
         user.setName("test");
-        user.setCreateTime(new Date());
+        user.setCreateTime(LocalDateTime.now());
         System.out.println(ReflectUtil.getFieldValue(user,"gmtCreate"));
         System.out.println(ReflectUtil.getFieldValue(user,"name"));
         System.out.println("parent baseId:" + ReflectUtil.getFieldValue(user,"baseId"));
