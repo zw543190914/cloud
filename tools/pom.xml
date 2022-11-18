@@ -232,6 +232,17 @@
             <artifactId>spring-integration-mqtt</artifactId>
         </dependency>
 
+        <!-- skywalking toolkit -->
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-trace</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-logback-1.x</artifactId>
+        </dependency>
+
         <!--图片转pdf-->
         <dependency>
             <groupId>com.lowagie</groupId>

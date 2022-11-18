@@ -1,6 +1,5 @@
 package com.zw.cloud.tools.longpolling;
 
-import com.zw.cloud.tools.annotation.NotNeedResponseAutoWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -24,7 +23,6 @@ public class LongPollingController {
     private ApplicationEventPublisher applicationEventPublisher;
 
     @GetMapping("/queryChangeData")
-    @NotNeedResponseAutoWrapper
     //http://localhost:9040/long-polling/queryChangeData?deviceId=8
     public void queryChangeData(@RequestParam(value = "deviceId") String deviceId, HttpServletRequest req){
         //开启异步支持

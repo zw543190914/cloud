@@ -50,6 +50,8 @@ public abstract class AutoFillHandler implements MetaObjectHandler {
             this.fillStrategy(metaObject, UPDATE_TIME, LocalDateTime.now());
             this.fillStrategy(metaObject, UPDATE_USER, getUserId());
             this.fillStrategy(metaObject, UPDATE_SYSTEM, getClientId());
+            this.fillStrategy(metaObject, ORG_CODE, getOrgCode());
+
         } catch (Exception e) {
             log.error("未获取到公共字段信息,{}", e);
         }

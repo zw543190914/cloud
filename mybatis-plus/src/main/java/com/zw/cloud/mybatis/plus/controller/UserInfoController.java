@@ -12,11 +12,10 @@ import com.zw.cloud.mybatis.plus.service.api.IUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -46,36 +45,37 @@ public class UserInfoController {
     //http://localhost:8080/user-info/testBatchInsertByMybatisPlus
     public void testBatchInsertByMybatisPlus() {
         long start = System.currentTimeMillis();
-        userService.saveBatch(buildUserList(),2000);
+        userService.testBatchInsertByMybatisPlus(buildUserList());
         // 1895 3369 3252
         log.info("[testBatchInsertByMybatisPlus] use time {}", System.currentTimeMillis() - start);
 
     }
 
     @GetMapping("/insertWithJson")
+    @Transactional
     //http://localhost:8080/user-info/insertWithJson
     public void insertWithJson() {
         UserInfo user = new UserInfo();
+        user.setId(1L);
         user.setName("test121");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("2222","name11");
         jsonObject.put("date",new Date());
         user.setOther(Lists.newArrayList(jsonObject));
-        mapper.insertByMapper(user);
+        mapper.insert(user);
         System.out.println(JSON.toJSONString(user));
     }
 
-    @GetMapping
-    //http://localhost:8080/user-info?name=test2
-    public void saveOrUpdate(String name) {
-        UserInfo user = new UserInfo();
-        user.setName(name);
+    @PostMapping
+    @Transactional
+    //http://localhost:8080/user-info?name=test100000
+    public void updateUserInfo(@RequestBody UserInfo user) {
         user.setAge(22);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("2222","name11");
         jsonObject.put("date",new Date());
         user.setOther(Lists.newArrayList(jsonObject));
-        userService.saveOrUpdate(user);
+        userService.updateById(user);
         System.out.println(JSON.toJSONString(user));
     }
 
@@ -99,15 +99,28 @@ public class UserInfoController {
     }
 
     @GetMapping("/testMvcc")
-    //http://localhost:8080/user-info/testMvcc?id=1542758664088105011
+    //http://localhost:8080/user-info/testMvcc?id=1
     public void testMvcc(@RequestParam Long id) {
         userService.testMvcc(id);
     }
 
+    @GetMapping("/testRepeatRead")
+    //http://localhost:8080/user-info/testRepeatRead?id=1542758664088105011
+    public void testRepeatRead(@RequestParam Long id) {
+        userService.testRepeatRead(id);
+    }
+
+    @GetMapping("/testSerializable")
+    //http://localhost:8080/user-info/testSerializable?id=794254126413250560
+    public void testSerializable() {
+        userService.testSerializable();
+    }
+
     @GetMapping("/query")
-    //http://localhost:8080/user-info/query?name=fd2
+    //http://localhost:8080/user-info/query?name=test9998
     public Page<UserInfo> pageQuery(String name) {
-        UserInfo user = new UserInfo();
+        UserInfo user = UserInfo.builder().name(name).build();
+        //UserInfo user = new UserInfo();
         user.setName(name);
        /* QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id","name")
@@ -134,6 +147,14 @@ public class UserInfoController {
     //http://localhost:8080/user-info/queryJsonDataLike?name=挺剂
     public List<UserInfo> queryJsonDataLike(String name) {
         return userService.queryJsonDataLike(name);
+    }
+
+    @GetMapping("/queryRangeDataTest")
+    //http://localhost:8080/user-info/queryRangeDataTest?id=794253004214632449
+    public List<UserInfo> queryRangeDataTest(@RequestParam Long id) {
+        LambdaQueryWrapper<UserInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.ge(UserInfo::getId,id);
+        return mapper.selectList(queryWrapper);
     }
 
     @GetMapping("/queryAllDataTest")
@@ -163,7 +184,7 @@ public class UserInfoController {
     private List<UserInfo> buildUserList(){
         List<UserInfo> userInfoList = new ArrayList<>(30000);
         Random random = new Random();
-        for (int i = 0; i < 2000; i++) {
+        for (int i = 0; i < 10000; i++) {
             UserInfo user = new UserInfo();
             user.setName("test" + i);
             user.setAge(random.nextInt(100));
@@ -171,6 +192,7 @@ public class UserInfoController {
             jsonObject.put("nickName",user.getName());
             jsonObject.put("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             user.setOther(Lists.newArrayList(jsonObject));
+            user.setBir(LocalDate.now());
             userInfoList.add(user);
         }
         return userInfoList;

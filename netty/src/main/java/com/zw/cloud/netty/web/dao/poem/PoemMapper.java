@@ -20,4 +20,7 @@ public interface PoemMapper extends BaseMapper<Poem> {
     @Select("select * from poem \n" +
             "    where match(title,content) against(#{title});")
     List<Poem> queryByTitleOrContent(@Param("title") String title);
+
+    @Select("select * from poem  where title = #{title} limit 1;")
+    Poem queryByTitle(@Param("title") String title);
 }

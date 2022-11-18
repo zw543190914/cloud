@@ -24,6 +24,10 @@ public interface IUserInfoService extends IService<UserInfo> {
 
     void testMvcc(Long id);
 
+    void testRepeatRead(Long id);
+
+    void testSerializable();
+
     List<UserInfo> queryJsonData(String name);
 
     List<UserInfo> queryJsonDataLike(String name);

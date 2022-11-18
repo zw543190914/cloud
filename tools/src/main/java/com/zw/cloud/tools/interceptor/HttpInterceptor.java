@@ -26,7 +26,7 @@ public class HttpInterceptor implements HandlerInterceptor {
         /*if (StringUtils.isBlank(accessToken)) {
             throw new Exception("请先登录");
         }*/
-        String uri = request.getRequestURI();
+        /*String uri = request.getRequestURI();
         String method = request.getMethod();
         String userIp = IpUtils.getUserIp(request);
         String rateLimiterKey = userIp + ":" + uri + ":" + method;
@@ -41,7 +41,7 @@ public class HttpInterceptor implements HandlerInterceptor {
             RateLimiter rateLimiter = RateLimiter.create(100);
             rateLimiterMap.put(rateLimiterKey, rateLimiter);
         }
-
+*/
         return true;
     }
 

@@ -10,8 +10,13 @@ public class CountDownLatchTest {
         //循环计数
         for (int i = 0; i < 7; i++) {
             new Thread(() -> {
-                System.out.println(Thread.currentThread().getName() + " done");
-                countDownLatch.countDown();
+                try {
+                    System.out.println(Thread.currentThread().getName() + " done");
+                    int a = 1/0;
+                } finally {
+                    countDownLatch.countDown();
+                }
+
             },String.valueOf(i)).start();
         }
 

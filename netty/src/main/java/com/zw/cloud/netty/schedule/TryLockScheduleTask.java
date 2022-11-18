@@ -19,13 +19,13 @@ public class TryLockScheduleTask {
     @Autowired
     private RedissonClient redissonClient;
 
-    @Scheduled(cron = "0/5 * * * * ? ")
+    @Scheduled(cron = "0/4 * * * * ? ")
     @Async
     public void task1() {
         RLock lock = redissonClient.getLock("test_lock");
         boolean hasLock;
         try {
-            hasLock = lock.tryLock(0,3, TimeUnit.SECONDS);
+            hasLock = lock.tryLock(3, TimeUnit.SECONDS);
         } catch (Exception e) {
             log.error("[TryLockScheduleTask][task1] error is ", e);
             return;
@@ -36,13 +36,17 @@ public class TryLockScheduleTask {
         }
         log.info("[TryLockScheduleTask][task1] start, {}", Thread.currentThread().getName());
         try {
-            Thread.sleep(6000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
         }
     }
 
-    @Scheduled(cron = "0/5 * * * * ? ")
+    @Scheduled(cron = "0/4 * * * * ? ")
     @Async
     public void task2() {
         RLock lock = redissonClient.getLock("test_lock");
@@ -59,9 +63,13 @@ public class TryLockScheduleTask {
         }
         log.info("[TryLockScheduleTask][task2] start, {}", Thread.currentThread().getName());
         try {
-            Thread.sleep(6000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
         }
     }
 }

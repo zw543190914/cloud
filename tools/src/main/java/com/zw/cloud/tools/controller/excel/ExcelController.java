@@ -35,6 +35,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
@@ -99,7 +100,7 @@ public class ExcelController {
 
         Random random = new Random();
         User u;
-        Date date = new Date();
+        LocalDateTime date = LocalDateTime.now();
         for (int k = 0; k < 100000 ; k ++){
             u = new User();
             u.setId((long)k);

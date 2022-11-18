@@ -73,7 +73,7 @@
         <zing-core.version>3.3.0</zing-core.version>
         <zing-javase.version>3.3.3</zing-javase.version>
         <commons-collections4.version>4.4</commons-collections4.version>
-        <druid.version>1.2.8</druid.version>
+        <druid.version>1.2.6</druid.version>
         <dubbo-serialization-kryo.version>2.7.7</dubbo-serialization-kryo.version>
         <curator.version>5.3.0</curator.version>
         <zookeeper.version>3.8.0</zookeeper.version>
@@ -95,7 +95,7 @@
         <shiro-redis.version>3.0.0</shiro-redis.version>
         <redisson.version>3.17.5</redisson.version>
         <poi.version>4.1.2</poi.version>
-        <easyexcel.version>2.2.8</easyexcel.version>
+        <easyexcel.version>3.0.5</easyexcel.version>
         <easypoi.version>4.1.2</easypoi.version>
         <commons-io.version>2.7</commons-io.version>
         <commons-lang3.version>3.10</commons-lang3.version>
@@ -125,6 +125,8 @@
         <esotericsoftware.version>4.0.2</esotericsoftware.version>
         <seata-spring-boot-starter.version>1.5.2</seata-spring-boot-starter.version>
         <sentinel-apache-dubbo-adapter.vwesion>1.8.5</sentinel-apache-dubbo-adapter.vwesion>
+        <skywalking.toolkit.version>8.9.0</skywalking.toolkit.version>
+        <sharding-jdbc.version>4.1.1</sharding-jdbc.version>
     </properties>
 
     <dependencyManagement>
@@ -221,6 +223,12 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.alibaba/druid -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
                 <version>${druid.version}</version>
             </dependency>
 
@@ -616,6 +624,25 @@
                 <artifactId>seata-spring-boot-starter</artifactId>
                 <version>${seata-spring-boot-starter.version}</version>
             </dependency>
+
+            <!-- skywalking toolkit -->
+            <dependency>
+                <groupId>org.apache.skywalking</groupId>
+                <artifactId>apm-toolkit-trace</artifactId>
+                <version>${skywalking.toolkit.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.skywalking</groupId>
+                <artifactId>apm-toolkit-logback-1.x</artifactId>
+                <version>${skywalking.toolkit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+                <version>${sharding-jdbc.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

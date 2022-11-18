@@ -18,7 +18,7 @@
   16. 整合 shiro 进行权限控制，缓存使用 ehcache(单机) 或者 redis(微服务) 。参考 shiro 模块 </br>
   17. elasticsearch 整合，工具类封装，数据来源为Jsoup获取网页数据。 参考 elasticsearch 模块。 </br>
   18. shop 商品模块，主要添加秒杀相关。
-  19. mybatis-plus整合，mybatis-plus generate 代码生成，参考 mybatis-plus 模块。</br>
+  19. mybatis-plus整合,sharding-jdbc分表,mybatis-plus generate 代码生成，参考 mybatis-plus 模块。</br>
   20. websocket 、 netty(netty-server)、 netty-client, 参考对应模块。</br>
   21. redis 分布式锁，幂等控制，参考 netty(netty-server) 模块。</br>
   22. MQ整合 rocketMq、rabbitMq、kafka. rocketMQ 使用策略模式进行消息消费</br>

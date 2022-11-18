@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zw.cloud.mybatis.plus.mapper.BaseTenderCraftMapper">
+    <resultMap id="BaseResultMap" type="com.zw.cloud.mybatis.plus.entity.BaseTenderCraft">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="customer_no" jdbcType="VARCHAR" property="customerNo" />
+        <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+        <result column="fabric_name" jdbcType="VARCHAR" property="fabricName" />
+        <result column="fabric_no" jdbcType="VARCHAR" property="fabricNo" />
+        <result column="color_no" jdbcType="VARCHAR" property="colorNo" />
+        <result column="color_name" jdbcType="VARCHAR" property="colorName" />
+        <result column="batch_no" jdbcType="VARCHAR" property="batchNo" />
+        <result column="top_feed" jdbcType="DECIMAL" property="topFeed" />
+        <result column="lower_feed" jdbcType="DECIMAL" property="lowerFeed" />
+        <result column="brush_feed" jdbcType="DECIMAL" property="brushFeed" />
+        <result column="speed" jdbcType="DECIMAL" property="speed" />
+        <result column="falling_feed" jdbcType="DECIMAL" property="fallingFeed" />
+        <result column="out_cloth_feed" jdbcType="DECIMAL" property="outClothFeed" />
+        <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+        <result column="gram_weight" jdbcType="DECIMAL" property="gramWeight" />
+        <result column="weft_density" jdbcType="VARCHAR" property="weftDensity" />
+        <result column="total_amplitude" jdbcType="VARCHAR" property="totalAmplitude" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="create_system" jdbcType="VARCHAR" property="createSystem" />
+        <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="update_system" jdbcType="VARCHAR" property="updateSystem" />
+        <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
+        <result column="pt_quantity" jdbcType="DECIMAL" property="ptQuantity" />
+        <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
+        <result column="craft_type" jdbcType="BIGINT" property="craftType" />
+        <result column="specification" jdbcType="VARCHAR" property="specification" />
+        <result column="style" jdbcType="VARCHAR" property="style" />
+        <result column="fan_speed" jdbcType="DECIMAL" property="fanSpeed" />
+        <result column="drying_room_temp" jdbcType="DECIMAL" property="dryingRoomTemp" />
+        <result column="exhaust_speed" jdbcType="DECIMAL" property="exhaustSpeed" />
+        <result column="rolling_pressure" jdbcType="DECIMAL" property="rollingPressure" />
+        <result column="torsion" jdbcType="DECIMAL" property="torsion" />
+        <result column="schedule_gram_heft" jdbcType="VARCHAR" property="scheduleGramHeft" />
+        <result column="schedule_weft_density" jdbcType="VARCHAR" property="scheduleWeftDensity" />
+        <result column="schedule_elasticity" jdbcType="VARCHAR" property="scheduleElasticity" />
+        <result column="craft_mold" jdbcType="BIGINT" property="craftMold" />
+        <result column="device_name" jdbcType="VARCHAR" property="deviceName" />
+        <result column="stereotype_requirement" jdbcType="VARCHAR" property="stereotypeRequirement" />
+        <result column="craft_source" jdbcType="TINYINT" property="craftSource" />
+        <result column="product_record_id" jdbcType="BIGINT" property="productRecordId" />
+        <result column="product_weight" jdbcType="VARCHAR" property="productWeight" />
+        <result column="shrinkage" jdbcType="DECIMAL" property="shrinkage" />
+        <result column="thickness" jdbcType="VARCHAR" property="thickness" />
+        <result column="pre_operator" jdbcType="VARCHAR" property="preOperator" />
+        <result column="brand" jdbcType="VARCHAR" property="brand" />
+
+        <!--        json字段-->
+        <result column="speci_wind_speed"  property="speciWindSpeed" typeHandler="com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler"/>
+        <result column="speci_cycle_wind_speed" property="speciCycleWindSpeed" typeHandler="com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler"/>
+        <result column="drying_room_preset_temp" property="dryingRoomPresetTemp" typeHandler="com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler"/>
+        <result column="assistant"  property="assistant" typeHandler="com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler"/>
+        <result column="dynamic_field"  property="dynamicField" typeHandler="com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler"/>
+        <result column="device_ids" property="deviceIds" typeHandler="com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler"/>
+        <result column="door_width_actual" property="doorWidthActual" typeHandler="com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler" />
+
+    </resultMap>
+</mapper>

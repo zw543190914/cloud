@@ -6,6 +6,7 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.zw.cloud.influxdb.entity.Device;
 import com.zw.cloud.influxdb.entity.DeviceVO;
 import com.zw.cloud.influxdb.util.InfluxdbUtils;
@@ -13,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.BatchPoints;
 import org.influxdb.dto.Point;
+import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,11 +39,49 @@ public class InfluxdbController {
     @Autowired
     private InfluxDB influxDB;
 
+
+    /**
+     * 插入
+     */
+    @GetMapping("/insert")
+    //http://localhost:10010/influxdb/insert
+    public void insert(){
+        Device device = buildDevice(38f, 66);
+        Point point = Point.measurementByPOJO(device.getClass()).addFieldsFromPOJO(device).build();
+        influxDB.write(point);
+    }
+
+    /**
+     * 批量插入
+     */
+    @GetMapping("/batchInsert")
+    //http://localhost:10010/influxdb/batchInsert
+    public void batchInsert(){
+        Device device = buildDevice(33f, 66);
+        BatchPoints.Builder builder = BatchPoints.builder();
+        Lists.newArrayList(device).forEach(m -> builder.point(Point.measurementByPOJO(m.getClass()).addFieldsFromPOJO(m).build()));
+        //写入
+        influxDB.write(builder.build());
+    }
+
+    /**
+     * 删除数据
+     */
+    @GetMapping("/delete")
+    //http://localhost:10010/influxdb/delete
+    public QueryResult delete(){
+        String command = "delete from device_report_data where device='rr' and dataType = 'report' and cycleWindSpeed1 = 75;";
+        /**
+         * fields not supported in WHERE clause during deletion
+         */
+        return influxDB.query(new Query(command, database));
+    }
+
     /**
      * 批量插入第一种方式
      */
     @GetMapping("/batchInsert1")
-    //http://localhost:10010/influxdb/batchInsert1
+    //http://localhost:10010/influxdb/batchInsert1?stop=11
     public void insert(Float stop){
         List<String> lines = new ArrayList<>();
         Long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
@@ -175,6 +216,7 @@ public class InfluxdbController {
                 .addField("windSpeed7", 99f)
                 .addField("windSpeed8", 99f)
                 .addField("windSpeed9", 99f)
+                .addField("dataType","report")
                 .build();
     }
     private Device buildDevice(Float value, Integer stop){
@@ -182,10 +224,10 @@ public class InfluxdbController {
         Long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
         Instant instant = Instant.ofEpochSecond(second);
         device.setTime(instant);
-        device.setRtime(second);
-        device.setCtime(second);
-        device.setMessageType(1);
-        device.setEventCode(8830);
+        device.setRtime(Float.valueOf(String.valueOf(second)));
+        device.setCtime(Float.valueOf(String.valueOf(second)));
+        device.setMessageType(1f);
+        device.setEventCode(8830f);
         device.setSpeedSetting(value);
         device.setSpeed(value);
         device.setInClothTension(value);
@@ -227,8 +269,8 @@ public class InfluxdbController {
         device.setWindSpeed3(value);
         device.setSpeciWindSpeed4(value);
         device.setWindSpeed4(value);
-        device.setSpeciCycleWindSpeed1(value + "d");
-        device.setCycleWindSpeed1(value + "d");
+        device.setSpeciCycleWindSpeed1(value);
+        device.setCycleWindSpeed1(value);
         device.setSpeciCycleWindSpeed2(value);
         device.setCycleWindSpeed2(value);
         device.setSpeciCycleWindSpeed3(value);
@@ -246,7 +288,7 @@ public class InfluxdbController {
         device.setSpeciCycleWindSpeed9(value);
         device.setCycleWindSpeed9(value);
         device.setTroughTemp(value);
-        device.setStopSignal(stop);
+        device.setStopSignal((float)stop);
 
         device.setSpeciWindSpeed5(value);
         device.setWindSpeed5(value);
@@ -256,6 +298,8 @@ public class InfluxdbController {
         device.setDryingRoomActualTemp10(value);
         device.setSpeciCycleWindSpeed10(value);
         device.setCycleWindSpeed10(value);
+        device.setDataType("report");
+        device.setDevice("rr");
         return device ;
     }
 

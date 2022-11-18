@@ -1,7 +1,7 @@
 package com.zw.cloud.tools.base;
 
+import com.zw.cloud.common.annotation.NotNeedResponseAutoWrapper;
 import com.zw.cloud.common.utils.WebResult;
-import com.zw.cloud.tools.annotation.NotNeedResponseAutoWrapper;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
