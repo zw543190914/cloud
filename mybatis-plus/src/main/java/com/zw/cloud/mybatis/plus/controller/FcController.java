@@ -53,16 +53,15 @@ public class FcController {
     @GetMapping("/insertFcList")
     //http://localhost:8080/fc/insertFcList
     public void insertFcList() {
-        String url = "http://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice?name=ssq&issueCount=&issueStart=2022127&issueEnd=2022128&dayStart=&dayEnd=";
+        String url = "http://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice?name=ssq&issueCount=&issueStart=2022133&issueEnd=2022134&dayStart=&dayEnd=";
         HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.add("Host","<calculated when request is sent>");
         requestHeaders.add("Accept-Encoding","gzip, deflate");
         requestHeaders.add("Connection","keep-alive");
         requestHeaders.add("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36");
         // cookie设置
         List<String> cookies = new ArrayList<>();
-        cookies.add("HMF_CI=ff631df18ddf701f100c6efc63f9358ccf4d3d9fa57b6660f64184f7922d35332105cbc20ed489cd8ed79beb7a8481edc599bfb982e33081e691d33da023b84325");
-        cookies.add("21_vq=40");
+        cookies.add("HMF_CI=ff631df18ddf701f100c6efc63f9358c20b6b1a87549cb7d8b29d5b232802936152cd60039aa71113334c365d688875ce5d95f14bbb6a2683086a3a8f6c103e902");
+        cookies.add("21_vq=73");
         requestHeaders.put(HttpHeaders.COOKIE, cookies);
         //此处加编码格式转换
         //restTemplate.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
