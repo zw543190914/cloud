@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/user-info")
@@ -77,6 +78,43 @@ public class UserInfoController {
         user.setOther(Lists.newArrayList(jsonObject));
         userService.updateById(user);
         System.out.println(JSON.toJSONString(user));
+    }
+
+    @GetMapping("/updateTest")
+    //http://localhost:8080/user-info/updateTest
+    @Transactional
+    public void updateTest() throws InterruptedException {
+        UserInfo userPlus = userService.getById(1588093790661382146L);
+        userPlus.setAge(2);
+        userPlus.setName("test01");
+
+        userService.updateById(userPlus);
+        TimeUnit.SECONDS.sleep(5);
+        UserInfo userPlus2 = userService.getById(1588093790661382148L);
+        userPlus2.setAge(3);
+
+        userService.updateById(userPlus2);
+        System.out.println(JSONObject.toJSONString(userPlus2));
+
+    }
+
+    @GetMapping("/updateTest2")
+    //http://localhost:8080/user-info/updateTest2
+    @Transactional
+    public void updateTest2() throws InterruptedException {
+
+        UserInfo userPlus2 = userService.getById(1588093790661382148L);
+        userPlus2.setAge(3);
+        userService.updateById(userPlus2);
+
+
+        TimeUnit.SECONDS.sleep(5);
+        UserInfo userPlus = userService.getById(1588093790661382146L);
+        userPlus.setAge(2);
+        userPlus.setName("test01");
+        userService.updateById(userPlus);
+        System.out.println(JSONObject.toJSONString(userPlus2));
+
     }
 
     @GetMapping("/batchInsertByMapper")
