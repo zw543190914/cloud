@@ -81,6 +81,7 @@
         <jjwt.version>0.9.1</jjwt.version>
         <pinyin4j.version>2.5.1</pinyin4j.version>
         <jsoup.version>1.14.2</jsoup.version>
+        <selenium-java.version>3.141.59</selenium-java.version>
         <JsoupXpath.version>2.3.2</JsoupXpath.version>
         <hanlp.version>portable-1.7.5</hanlp.version>
         <hutool-all.version>5.7.22</hutool-all.version>
@@ -317,6 +318,13 @@
                 <artifactId>jsoup</artifactId>
                 <version>${jsoup.version}</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <version>${selenium-java.version}</version>
+            </dependency>
+
             <!-- https://mvnrepository.com/artifact/cn.wanghaomiao/JsoupXpath -->
             <dependency>
                 <groupId>cn.wanghaomiao</groupId>

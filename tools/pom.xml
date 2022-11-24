@@ -164,6 +164,11 @@
             <groupId>cn.wanghaomiao</groupId>
             <artifactId>JsoupXpath</artifactId>
         </dependency>
+        <!-- 网页延时加载 -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/us.codecraft/webmagic-core -->
         <dependency>
             <groupId>us.codecraft</groupId>

@@ -15,8 +15,13 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -129,6 +134,29 @@ public class FileController {
             e.printStackTrace();
         }
 
+    }
+
+    @GetMapping("/downloadFileFromNet")
+    //http://10.30.2.162:9040/tools/file/downloadFileFromNet?url=
+    public void downloadFileFromNet(@RequestParam String url) throws Exception {
+        int i = url.lastIndexOf(".");
+        String fileType = url.substring(i + 1);
+        HttpURLConnection httpUrl = (HttpURLConnection) new URL(url).openConnection();
+        httpUrl.connect();
+        InputStream inputStream = httpUrl.getInputStream();
+        ReadableByteChannel inChannel = Channels.newChannel(inputStream);
+
+        FileChannel outChannel = new FileOutputStream("d:/test." + fileType).getChannel();
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
+
+        while (inChannel.read(buffer) != -1) {
+            buffer.flip();
+            outChannel.write(buffer);
+            buffer.clear();
+        }
+
+        inChannel.close();
+        outChannel.close();
     }
 
 }
