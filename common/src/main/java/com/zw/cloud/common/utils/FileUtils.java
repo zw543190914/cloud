@@ -1,10 +1,9 @@
 package com.zw.cloud.common.utils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
@@ -99,5 +98,49 @@ public class FileUtils {
 
     }
 
+    /**
+     *
+     * @param url 网络图片地址
+     * @param targetFilePath 下载目录
+     * @param fileName 下载文件名
+     */
+    public static void downloadFileFromNet(String url, String targetFilePath, String fileName) {
+       /* int i = url.lastIndexOf(".");
+        String fileType = url.substring(i + 1);*/
+        ReadableByteChannel inChannel = null;
+        FileChannel outChannel = null;
+        try {
+            HttpURLConnection httpUrl = (HttpURLConnection) new URL(url).openConnection();
+            httpUrl.connect();
+            InputStream inputStream = httpUrl.getInputStream();
+            inChannel = Channels.newChannel(inputStream);
+
+            //FileChannel outChannel = new FileOutputStream("d:/test." + fileType).getChannel();
+            outChannel = new FileOutputStream(targetFilePath + fileName).getChannel();
+            ByteBuffer buffer = ByteBuffer.allocate(8069);
+
+            while (inChannel.read(buffer) != -1) {
+                buffer.flip();
+                outChannel.write(buffer);
+                buffer.clear();
+            }
+
+            inChannel.close();
+            outChannel.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != inChannel) {
+                    inChannel.close();
+                }
+                if (null != outChannel) {
+                    outChannel.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }

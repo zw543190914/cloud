@@ -40,4 +40,11 @@ public class BaiduImgSeleniumHtmlController {
         stopWatch.stop();
         log.info("[BaiduImgSeleniumHtmlController][parseHtml] stopWatch : {}",stopWatch.prettyPrint());
     }
+
+    @GetMapping("/downloadImg")
+    //http://localhost:9040/html/selenium/downloadImg
+    public void downloadImg() {
+        List<ImgAttachment> imgAttachmentList = imgAttachmentService.list();
+        imgAttachmentList.parallelStream().forEach(baiduImgDTO -> FileUtils.downloadFileFromNet(baiduImgDTO.getUrl(),"D:\\img\\",baiduImgDTO.getTitle()));
+    }
 }

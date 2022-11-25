@@ -27,30 +27,6 @@ public class JsoupUtils {
         jsoupHtmlParse(pags1);*/
     }
 
-    public static void downloadFileFromNet(String url, String targetFilePath, String fileName) throws Exception {
-       /* int i = url.lastIndexOf(".");
-        String fileType = url.substring(i + 1);*/
-        HttpURLConnection httpUrl = (HttpURLConnection) new URL(url).openConnection();
-        httpUrl.connect();
-        InputStream inputStream = httpUrl.getInputStream();
-        ReadableByteChannel inChannel = Channels.newChannel(inputStream);
-
-        //FileChannel outChannel = new FileOutputStream("d:/test." + fileType).getChannel();
-        FileChannel outChannel = new FileOutputStream(targetFilePath + "/" + fileName).getChannel();
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
-
-        while (inChannel.read(buffer) != -1) {
-            buffer.flip();
-            outChannel.write(buffer);
-            buffer.clear();
-        }
-
-        inChannel.close();
-        outChannel.close();
-    }
-
-
-
     public static List<ImgAttachment> jsoupParseBaiduImg(String originalUrl) throws IOException, InterruptedException {
         List<ImgAttachment> result = new ArrayList<>(200);
 

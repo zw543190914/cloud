@@ -128,6 +128,7 @@
         <sentinel-apache-dubbo-adapter.vwesion>1.8.5</sentinel-apache-dubbo-adapter.vwesion>
         <skywalking.toolkit.version>8.9.0</skywalking.toolkit.version>
         <sharding-jdbc.version>4.1.1</sharding-jdbc.version>
+        <metadata-extractor.version>2.18.0</metadata-extractor.version>
     </properties>
 
     <dependencyManagement>
@@ -654,6 +655,13 @@
                 <groupId>org.apache.shardingsphere</groupId>
                 <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
                 <version>${sharding-jdbc.version}</version>
+            </dependency>
+
+            <!-- 元数据提取 -->
+            <dependency>
+                <groupId>com.drewnoakes</groupId>
+                <artifactId>metadata-extractor</artifactId>
+                <version>${metadata-extractor.version}</version>
             </dependency>
 
         </dependencies>
