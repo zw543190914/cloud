@@ -1,8 +1,8 @@
-package com.zw.cloud.tools.utils.html;
+package com.zw.cloud.tools.utils.html.webmagic;
 
 import com.alibaba.fastjson.JSON;
-import com.zw.cloud.tools.dao.TcDao;
 import com.zw.cloud.tools.entity.Tc;
+import com.zw.cloud.tools.utils.html.webmagic.pipeline.PipelineData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
@@ -17,18 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class WebmagicTest implements PageProcessor {
-
-    @Autowired
-    private TcDao tcMapper;
+public class TcWebmagicTest implements PageProcessor {
 
     public String url = "https://www.lottery.gov.cn/historykj/history.jspx?_ltype=dlt";
-
 
     @Autowired
     private PipelineData pipelineData;
 
-    private Site site = new Site()
+    private final Site site = new Site()
             .setCharset("utf-8")
             .setTimeOut(10000)
             .setRetrySleepTime(10000)
@@ -81,12 +77,11 @@ public class WebmagicTest implements PageProcessor {
 
     //@PostConstruct
     public void process(){
-        //tcMapper.deleteByExample(new TcExample());
 
-        Spider.create(new WebmagicTest())
+        Spider.create(new TcWebmagicTest())
                 .addUrl(url)
                 .setScheduler(new QueueScheduler().setDuplicateRemover(new BloomFilterDuplicateRemover(100000)))
-                .thread(4)
+                .thread(1)
                 .addPipeline(pipelineData)
                 //.addPipeline(new FilePipeline("E:\\图片"))
                 .run();

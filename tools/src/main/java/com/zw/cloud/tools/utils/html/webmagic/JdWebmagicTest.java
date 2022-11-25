@@ -1,6 +1,7 @@
-package com.zw.cloud.tools.utils.html;
+package com.zw.cloud.tools.utils.html.webmagic;
 
 import com.zw.cloud.tools.entity.User;
+import com.zw.cloud.tools.utils.html.webmagic.pipeline.PipelineData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class WebmagicUtils implements PageProcessor {
+public class JdWebmagicTest implements PageProcessor {
 
     public String url = "https://search.jd.com/Search?keyword=java&enc=utf-8&wq=java&pvid=317e5dd2e1eb413f842e2aff50c95286";
 
@@ -81,7 +82,7 @@ public class WebmagicUtils implements PageProcessor {
 
     //@Scheduled(initialDelay = 1000,fixedDelay = 60000)
     public void process(){
-        Spider.create(new WebmagicUtils())
+        Spider.create(new JdWebmagicTest())
                 .addUrl(url)
                 .setScheduler(new QueueScheduler().setDuplicateRemover(new BloomFilterDuplicateRemover(100000)))
                 .thread(10)

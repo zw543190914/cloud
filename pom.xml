@@ -107,7 +107,7 @@
         <xxl-sso-core.version>1.1.0</xxl-sso-core.version>
         <xxl-job-core.version>2.2.0</xxl-job-core.version>
         <webcam-capture.version>0.3.12</webcam-capture.version>
-        <webmagic.version>0.7.3</webmagic.version>
+        <webmagic.version>0.7.6</webmagic.version>
         <swagger.version>2.10.5</swagger.version>
         <swagger-annotations.version>1.6.2</swagger-annotations.version>
         <easy-captcha.version>1.6.2</easy-captcha.version>
@@ -489,6 +489,11 @@
             <dependency>
                 <groupId>us.codecraft</groupId>
                 <artifactId>webmagic-extension</artifactId>
+                <version>${webmagic.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>us.codecraft</groupId>
+                <artifactId>webmagic-selenium</artifactId>
                 <version>${webmagic.version}</version>
             </dependency>
 
