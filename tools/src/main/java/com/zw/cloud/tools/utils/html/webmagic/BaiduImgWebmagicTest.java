@@ -1,8 +1,9 @@
 package com.zw.cloud.tools.utils.html.webmagic;
 
-import com.zw.cloud.common.entity.dto.jsoup.BaiduImgDTO;
+import com.zw.cloud.tools.entity.img.ImgAttachment;
 import com.zw.cloud.tools.utils.html.jsoup.JsoupUtils;
 import com.zw.cloud.tools.utils.html.webmagic.pipeline.BaiduImgPipelineData;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 public class BaiduImgWebmagicTest implements PageProcessor {
 
@@ -40,11 +42,11 @@ public class BaiduImgWebmagicTest implements PageProcessor {
             page.addTargetRequest(s);
         }*/
         Document document = page.getHtml().getDocument();
-        List<BaiduImgDTO> imgDTOList = new ArrayList<>(200);
+        List<ImgAttachment> imgDTOList = new ArrayList<>(200);
         try {
             JsoupUtils.jsoupParseDocument(document,imgDTOList);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warn("[BaiduImgWebmagicTest][process] error is ",e);
         }
         page.putField("imgDTOList", imgDTOList);
     }
@@ -56,13 +58,14 @@ public class BaiduImgWebmagicTest implements PageProcessor {
         return site;
     }
 
-    @PostConstruct
+    //@PostConstruct
     public void start(){
         //系统配置文件
         System.setProperty("selenuim_config", "D:\\jsoup\\config.ini");
         Spider.create(new BaiduImgWebmagicTest())
                 .addUrl("https://image.baidu.com/search/index?tn=baiduimage&ipn=r&ct=201326592&cl=2&lm=-1&st=-1&fm=result&fr=&sf=1&fmq=1669299978381_R&pv=&ic=0&nc=1&z=&hd=&latest=&copyright=&se=1&showtab=0&fb=0&width=&height=&face=0&istype=2&dyTabStr=MCwzLDYsNCw1LDEsOCwyLDcsOQ%3D%3D&ie=utf-8&sid=&word=%E9%9D%92%E6%98%A5%E6%A0%A1%E5%9B%AD")
-                .thread(2)	//线程
+                //线程
+                .thread(2)
                 /*
                  * 为 SeleniumDownloader 设置休眠时间：
                  * 当动态加载页面时，可能还存在部分数据没有加载完毕，为它设置休眠时间后，可保证有足够的时间，加载完
