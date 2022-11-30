@@ -28,11 +28,13 @@ public class EasyExcelController {
     private final UserMapper userDao;
 
     @PostMapping
+    //http://localhost:9040/easy/excel
     public void upload(MultipartFile file) throws Exception {
         ExcelListener excelListener = new ExcelListener(userDao);
         ExcelReader excelReader = EasyExcelFactory.read(file.getInputStream(), User.class,excelListener).build();
         try {
-            ReadSheet readSheet = EasyExcel.readSheet(0).build();
+            // headRowNumber 读取开始行数
+            ReadSheet readSheet = EasyExcel.readSheet(0).headRowNumber(2).build();
             excelReader.read(readSheet);
 
         } catch (Exception e) {
@@ -53,15 +55,29 @@ public class EasyExcelController {
         // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
         String fileName = URLEncoder.encode(System.currentTimeMillis() + "测试", "UTF-8");
         response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+
         //新建ExcelWriter
-        ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream()).build();
-        WriteSheet sheet1 = EasyExcel.writerSheet(0, "sheet1").head(User.class).build();
-        List<User> users = userDao.queryUserList(1587799493409959938L);
+        ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream(),User.class).build();
+        WriteSheet sheet1 = EasyExcel.writerSheet(0, "sheet1").head(generateHead()).build();
+        List<User> users = userDao.queryUserList(1588093790661382146L);
         excelWriter.write(users, sheet1);
-        WriteSheet sheet2 = EasyExcel.writerSheet(1, "sheet2").head(User.class).build();
+        WriteSheet sheet2 = EasyExcel.writerSheet(1, "sheet2").head(generateHead()).build();
         List<User> userList = userDao.queryUserList(1587799507834171400L);
         excelWriter.write(userList, sheet2);
         //关闭流
         excelWriter.finish();
+    }
+
+    public List<List<String>> generateHead() {
+
+        List<List<String>> headList2D = new ArrayList<>();
+
+        headList2D.add(Arrays.asList("id", "id")); // 一列
+        headList2D.add(Arrays.asList("信息", "姓名"));
+        headList2D.add(Arrays.asList("信息", "年龄"));
+        headList2D.add(Arrays.asList("信息", "生日"));
+        headList2D.add(Arrays.asList("创建时间", "创建时间"));
+
+        return headList2D;
     }
 }
