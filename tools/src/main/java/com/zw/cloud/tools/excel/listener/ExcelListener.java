@@ -23,7 +23,7 @@ public class ExcelListener extends AnalysisEventListener<User> {
     /**
      * 每隔5条存储数据库，实际使用中可以3000条，然后清理list ，方便内存回收
      */
-    private static final int BATCH_COUNT = 199;
+    private static final int BATCH_COUNT = 1000;
     //存储待导入的数据列表
     private final List<User> userList = new LinkedList<>();
 

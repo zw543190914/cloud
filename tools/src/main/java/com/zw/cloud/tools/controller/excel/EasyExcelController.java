@@ -36,8 +36,9 @@ public class EasyExcelController {
         ExcelReader excelReader = EasyExcelFactory.read(file.getInputStream(), User.class,excelListener).build();
         try {
             // headRowNumber 读取开始行数
-            ReadSheet readSheet = EasyExcel.readSheet(0).headRowNumber(2).build();
-            excelReader.read(readSheet);
+            ReadSheet readSheet1 = EasyExcel.readSheet(0).headRowNumber(2).build();
+            ReadSheet readSheet2 = EasyExcel.readSheet(1).headRowNumber(2).build();
+            excelReader.read(readSheet1,readSheet2);
             //log.info("[EasyExcelController][upload] 最后一次剩余数据条数 {}",excelListener.getUserList().size());
         } catch (Exception e) {
             throw  new RuntimeException("excel格式错误，请联系管理员配置相关参数或者使用系统模板导入");
