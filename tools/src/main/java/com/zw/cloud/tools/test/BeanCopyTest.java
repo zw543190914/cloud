@@ -6,9 +6,21 @@ import com.alibaba.fastjson.JSON;
 import com.zw.cloud.tools.entity.User;
 import com.zw.cloud.tools.entity.UserDTO;
 import com.zw.cloud.tools.entity.poem.Poem;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 
 public class BeanCopyTest {
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class Person {
+        private String name;
+    }
+
+
 
     public static void main(String[] args){
         User source = new User();
@@ -28,6 +40,14 @@ public class BeanCopyTest {
         System.out.println(JSON.toJSONString(target1));
 
         testDeepCopy();
+
+        Person xiaoZhang = new Person("小张");
+        Person xiaoLi = new Person("小李");
+        // Java 中只有值传递，是没有引用传递的
+        // person1 和 person2 的互换只是拷贝的两个地址的互换罢了，并不会影响到实参 xiaoZhang 和 xiaoLi
+        swap(xiaoZhang, xiaoLi);
+        System.out.println("xiaoZhang:" + xiaoZhang.getName()); // 小张
+        System.out.println("xiaoLi:" + xiaoLi.getName()); // 小李
     }
 
     public static void testDeepCopy(){
@@ -48,5 +68,14 @@ public class BeanCopyTest {
         System.out.println(JSON.toJSONString(target));
         System.out.println(source == target); // false
         System.out.println(source.getPoem() == target.getPoem()); // true
+    }
+
+
+    public static void swap(Person person1, Person person2) {
+        Person temp = person1;
+        person1 = person2;
+        person2 = temp;
+        System.out.println("person1:" + person1.getName()); // 小李
+        System.out.println("person2:" + person2.getName()); // 小张
     }
 }
