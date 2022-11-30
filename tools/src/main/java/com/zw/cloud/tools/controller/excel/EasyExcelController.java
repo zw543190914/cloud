@@ -11,6 +11,7 @@ import com.zw.cloud.tools.dao.UserMapper;
 import com.zw.cloud.tools.entity.User;
 import com.zw.cloud.tools.excel.listener.ExcelListener;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +24,7 @@ import java.util.*;
 @RequestMapping("/easy/excel")
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Slf4j
 public class EasyExcelController {
 
     private final UserMapper userDao;
@@ -36,7 +38,7 @@ public class EasyExcelController {
             // headRowNumber 读取开始行数
             ReadSheet readSheet = EasyExcel.readSheet(0).headRowNumber(2).build();
             excelReader.read(readSheet);
-
+            //log.info("[EasyExcelController][upload] 最后一次剩余数据条数 {}",excelListener.getUserList().size());
         } catch (Exception e) {
             throw  new RuntimeException("excel格式错误，请联系管理员配置相关参数或者使用系统模板导入");
         } finally {
