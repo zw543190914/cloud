@@ -5,8 +5,8 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class OneToOneMessage implements Serializable {
+public class WebSocketMessage implements Serializable {
     private String msg;
-    private String name;
-    private String userId;
+    private String targetId;
+    private String currentId;
 }

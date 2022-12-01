@@ -13,14 +13,14 @@
 
 <script type="text/javascript">
     var websocket = null;
-
+    var userId = new Date().getTime()
     //判断当前浏览器是否支持WebSocket, 主要此处要更换为自己的地址
     if ('WebSocket' in window) {
         //自己发送给自己
         //websocket = new WebSocket("ws://localhost:18092/test/one");
-
+        console.log("userId:" + userId)
         //自己发送给所有人(不包括自己)
-        websocket = new WebSocket("ws://localhost:18092/test/oneToMany");
+        websocket = new WebSocket("ws://localhost:18092/test/oneToMany/" + userId);
 
     } else {
         alert('Not support websocket')

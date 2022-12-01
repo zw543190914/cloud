@@ -2,7 +2,7 @@ package com.zw.cloud.websocket.server.endpoint;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.zw.cloud.websocket.entity.OneToOneMessage;
+import com.zw.cloud.websocket.entity.WebSocketMessage;
 import com.zw.cloud.websocket.service.OtherService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
@@ -95,9 +95,9 @@ public class OneToOneWebSocket {
         log.info("服务端收到客户端[{}]的消息[{}]", session.getId(), message);
         otherService.test();
         try {
-            OneToOneMessage myMessage = JSON.parseObject(message, OneToOneMessage.class);
+            WebSocketMessage myMessage = JSON.parseObject(message, WebSocketMessage.class);
             if (myMessage != null) {
-                Session toSession = clients.get(myMessage.getName());
+                Session toSession = clients.get(myMessage.getTargetId());
                 if (toSession != null) {
                     this.sendMessage(myMessage.getMsg(), toSession);
                 }
@@ -114,9 +114,9 @@ public class OneToOneWebSocket {
     }
 
     /**
-     * 仅启动一次
+     * 心跳
      */
-    @PostConstruct
+    //@PostConstruct
     public void startCodeOrderHeart() {
         startHeart();
         System.out.println("启动心跳线程");
