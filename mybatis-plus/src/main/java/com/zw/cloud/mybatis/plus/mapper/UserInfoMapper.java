@@ -1,6 +1,7 @@
 package com.zw.cloud.mybatis.plus.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.zw.cloud.mybatis.plus.entity.UserInfo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultType;
@@ -25,8 +26,8 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
     @Select("select * from user_info where id = #{id} for update;")
     UserInfo queryByIdForUpdate(@Param("id") Long id);
 
-    @Select("select * from user_info")
-    List<UserInfo> queryAllDataTest();
+    @Select("select * from user_info order by id desc")
+    IPage<UserInfo> queryAllDataTest(IPage<UserInfo> page);
 
     @Select({"${sql}"})
     @ResultType(Map.class)

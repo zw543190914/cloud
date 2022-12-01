@@ -1,5 +1,6 @@
 package com.zw.cloud.mybatis.plus.service.api;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zw.cloud.mybatis.plus.entity.UserInfo;
 
@@ -32,7 +33,7 @@ public interface IUserInfoService extends IService<UserInfo> {
 
     List<UserInfo> queryJsonDataLike(String name);
 
-    List<UserInfo> queryAllDataTest();
+    IPage<UserInfo> queryAllDataTest(Integer pageNo, Integer pageSize);
 
     Map<String, Object> queryUserData();
 }

@@ -3,6 +3,7 @@ package com.zw.cloud.mybatis.plus.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
@@ -195,10 +196,10 @@ public class UserInfoController {
         return mapper.selectList(queryWrapper);
     }
 
-    @GetMapping("/queryAllDataTest")
-    //http://localhost:8080/user-info/queryAllDataTest
-    public List<UserInfo> queryAllDataTest() {
-        return userService.queryAllDataTest();
+    @GetMapping("/queryAllDataTest/{pageNo}/{pageSize}")
+    //http://localhost:8080/user-info/queryAllDataTest/1/10
+    public IPage<UserInfo> queryAllDataTest(@PathVariable Integer pageNo, @PathVariable Integer pageSize) {
+        return userService.queryAllDataTest(pageNo,pageSize);
     }
 
     private List<UserInfo> buildData() {

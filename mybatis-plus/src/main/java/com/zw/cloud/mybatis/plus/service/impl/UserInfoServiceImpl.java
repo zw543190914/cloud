@@ -2,6 +2,8 @@ package com.zw.cloud.mybatis.plus.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import com.zw.cloud.mybatis.plus.entity.UserInfo;
@@ -180,8 +182,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     @Override
-    public List<UserInfo> queryAllDataTest(){
-        return userInfoMapper.queryAllDataTest();
+    public IPage<UserInfo> queryAllDataTest(Integer pageNo,Integer pageSize){
+        IPage<UserInfo> page = new Page<>(pageNo,pageSize);
+        return userInfoMapper.queryAllDataTest(page);
     }
 
     @Override
