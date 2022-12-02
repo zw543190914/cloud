@@ -1,4 +1,4 @@
-package com.zw.cloud.websocket.config;
+package com.zw.cloud.websocket.client.config;
 
 import com.zw.cloud.websocket.client.endpoint.MyWebSocketClient;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @Slf4j
 public class WebSocketClientConfig {
 
-    @Value("ws.client.accessId")
+    @Value("${ws.client.accessId}")
     public String userId;
 
     @Lazy
