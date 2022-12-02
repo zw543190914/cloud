@@ -82,19 +82,27 @@ public class OneToManyWebSocket {
 
     /**
      * 收到客户端消息后调用的方法
-     * {"currentId":"001","targetId":"002","msg":"test2"}
+     * {"currentId":"001","targetId":"002","msgContent":"test2"}
      */
     @OnMessage
-    public void onMessage(String message, Session session) {
-        log.info("[OneToManyWebSocket][onMessage] 服务端收到客户端[{}]的消息:{}", session.getId(), message);
+    public void onMessage(String message, Session session,@PathParam("userId") String userId) {
+        log.info("[OneToManyWebSocket][onMessage] 文本消息 服务端收到客户端[{}][{}]的消息:{}", session.getId(),userId, message);
+        WebSocketMessage myMessage = JSON.parseObject(message, WebSocketMessage.class);
+        myMessage.setCurrentId(userId);
+        this.sendMessage(myMessage, session);
+    }
+
+    @OnMessage
+    public void onMessage(byte[] message, Session session,@PathParam("userId") String userId) {
+        log.info("[OneToManyWebSocket][onMessage] 二进制消息 服务端收到客户端[{}][{}]的消息", session.getId(),userId);
         WebSocketMessage myMessage = JSON.parseObject(message, WebSocketMessage.class);
         this.sendMessage(myMessage, session);
     }
 
     @OnError
     public void onError(Session session, Throwable error) {
-        log.error("[OneToManyWebSocket][onError] 发生错误");
-        error.printStackTrace();
+        String userId = sessionIdToUserIdMap.get(session.getId());
+        log.error("[OneToManyWebSocket][onError] 发生错误,session.id is {},userId is {},error is ",session.getId(),userId,error);
     }
 
     /**

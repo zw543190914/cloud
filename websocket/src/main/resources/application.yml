@@ -12,4 +12,8 @@ spring:
 server:
   port: 18092
 
+ws:
+  client:
+    accessId: client_zw
+
 

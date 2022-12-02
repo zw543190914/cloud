@@ -99,7 +99,7 @@ public class OneToOneWebSocket {
             if (myMessage != null) {
                 Session toSession = clients.get(myMessage.getTargetId());
                 if (toSession != null) {
-                    this.sendMessage(myMessage.getMsg(), toSession);
+                    this.sendMessage(myMessage.getMsgContent(), toSession);
                 }
             }
         } catch (Exception e) {

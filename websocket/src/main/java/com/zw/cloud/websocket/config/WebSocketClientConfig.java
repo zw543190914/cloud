@@ -3,6 +3,7 @@ package com.zw.cloud.websocket.config;
 import com.zw.cloud.websocket.client.endpoint.MyWebSocketClient;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -15,7 +16,8 @@ import java.util.UUID;
 @Slf4j
 public class WebSocketClientConfig {
 
-    public static final String userId = UUID.randomUUID().toString();
+    @Value("ws.client.accessId")
+    public String userId;
 
     @Lazy
     @Bean

@@ -15,7 +15,7 @@ public class WebSocketClientController {
     private MsgSendService msgSendService;
 
     /**
-     * {"targetId":"002","msg":"test1"}
+     * {"targetId":"002","msgContent":"test1"}
      */
     @PostMapping("/sendMsg")
     //http://127.0.0.1:18092/ws/client/sendMsg
