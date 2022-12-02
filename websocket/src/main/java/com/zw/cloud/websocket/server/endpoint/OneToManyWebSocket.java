@@ -64,20 +64,27 @@ public class OneToManyWebSocket {
         clients.put(userId, session);
         sessionIdToUserIdMap.put(session.getId(),userId);
         log.info("[OneToManyWebSocket][onOpen] 有新连接加入：{},当前在线人数为：{},clients size is {}", session.getId(), onlineCount.get(),clients.size());
+        WebSocketMessage message = new WebSocketMessage();
+        message.setMsgContent("【" + userId + "】 上线");
+        message.setCurrentId(userId);
+        message.setMsgType(0);
+        sendMessage(message,session);
     }
 
     /**
      * 连接关闭调用的方法
      */
     @OnClose
-    public void onClose(Session session) {
-        String sessionId = sessionIdToUserIdMap.remove(session.getId());
-        if (StringUtils.isNotBlank(sessionId)) {
-            Session removeSession = clients.remove(sessionId);
-            onlineCount.decrementAndGet(); // 在线数减1
-            log.info("[OneToManyWebSocket][onClose] 有一连接关闭：{}，当前在线人数为：{}", removeSession.getId(), onlineCount.get());
-        }
-
+    public void onClose(@PathParam("userId") String userId,Session session) {
+        sessionIdToUserIdMap.remove(session.getId());
+        Session removeSession = clients.remove(userId);
+        onlineCount.decrementAndGet(); // 在线数减1
+        log.info("[OneToManyWebSocket][onClose] 有一连接关闭：{}，当前在线人数为：{}", removeSession.getId(), onlineCount.get());
+        WebSocketMessage message = new WebSocketMessage();
+        message.setMsgContent("【" + userId + "】 下线");
+        message.setCurrentId(userId);
+        message.setMsgType(0);
+        sendMessage(message,session);
     }
 
     /**
@@ -114,11 +121,13 @@ public class OneToManyWebSocket {
             toSession.getAsyncRemote().sendText(JSON.toJSONString(message));
             return;
         }
+        String fromSessionId = fromSession.getId();
+        int hasSendCount = 1;
         for (Map.Entry<String, Session> sessionEntry : clients.entrySet()) {
             Session toSession = sessionEntry.getValue();
             // 排除掉自己
-            if (!fromSession.getId().equals(toSession.getId())) {
-                log.info("[OneToManyWebSocket][sendMessage] 服务端给客户端[{}]发送消息{}", toSession.getId(), message);
+            if (!fromSessionId.equals(toSession.getId())) {
+                log.info("[OneToManyWebSocket][sendMessage] 服务端给客户端[{}]发送消息{},total clients is {},has send {}", toSession.getId(), message,clients.size(),hasSendCount++);
                 toSession.getAsyncRemote().sendText(JSON.toJSONString(message));
             }
         }

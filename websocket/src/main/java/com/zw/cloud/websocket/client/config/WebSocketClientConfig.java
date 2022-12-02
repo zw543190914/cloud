@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Lazy;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 @Slf4j
@@ -19,6 +20,10 @@ public class WebSocketClientConfig {
     @Value("${ws.client.accessId}")
     public String userId;
 
+    /**
+     * 使用 tomcat 时，消息大小配置
+     * https://www.cnblogs.com/yunnick/p/14545252.html
+     */
     @Lazy
     @Bean
     public WebSocketClient webSocketClient() throws URISyntaxException{
@@ -34,5 +39,19 @@ public class WebSocketClientConfig {
     }
 
 
+    public static void main(String[] args) {
+        for (int i = 1; i <= 1000; i++) {
+            String ws="ws://localhost:18092/test/oneToMany/" + System.currentTimeMillis();
+            try {
+                WebSocketClient webSocketClient = new MyWebSocketClient(new URI(ws));
+                webSocketClient.connect();
+                TimeUnit.MILLISECONDS.sleep(100);
+                log.info("[WebSocketClientConfig][test] connect count is {}",i);
+            } catch (URISyntaxException | InterruptedException e) {
+                log.error("[WebSocketClientConfig][test] error is ",e);
+            }
+        }
+
+    }
 
 }
