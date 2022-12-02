@@ -72,8 +72,10 @@ public class CompressUtils {
 
     public static void main(String[] args) throws IOException {
         String str = testData();
+        // 4958 5KB
         System.out.println(str.getBytes(StandardCharsets.UTF_8).length);
         String compressString = compressString(str);
+        // 648 1KB
         System.out.println(compressString.getBytes(StandardCharsets.UTF_8).length);
         System.out.println(compressString);
         System.out.println(uncompressString(compressString));
