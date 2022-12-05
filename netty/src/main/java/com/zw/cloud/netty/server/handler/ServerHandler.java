@@ -1,18 +1,13 @@
 package com.zw.cloud.netty.server.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.zw.cloud.netty.entity.dto.NettyMsgDTO;
 import com.zw.cloud.netty.enums.EnumNettyMsgTag;
-import com.zw.cloud.netty.enums.MsgActionEnum;
 import com.zw.cloud.netty.enums.MsgSignFlagEnum;
 import com.zw.cloud.netty.server.NettyFullHttpRequestHandlerService;
 import com.zw.cloud.netty.utils.SpringUtil;
 import com.zw.cloud.netty.web.entity.chat.ChatMsg;
-import com.zw.cloud.netty.web.entity.vo.DataContent;
 import com.zw.cloud.netty.web.service.api.chat.IChatMsgService;
-import com.zw.cloud.netty.web.service.api.chat.IUserInfoService;
-import com.zw.cloud.netty.web.service.impl.chat.UserInfoServiceImpl;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
@@ -29,14 +24,11 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;

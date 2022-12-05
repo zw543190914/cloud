@@ -10,7 +10,6 @@ import com.zw.cloud.netty.web.entity.chat.FriendsRequest;
 import com.zw.cloud.netty.web.entity.chat.MyFriend;
 import com.zw.cloud.netty.web.entity.chat.UserInfo;
 import com.zw.cloud.netty.web.dao.chat.UserInfoMapper;
-import com.zw.cloud.netty.web.entity.vo.DataContent;
 import com.zw.cloud.netty.web.entity.vo.FriendsRequestVO;
 import com.zw.cloud.netty.web.entity.vo.MyFriendsVO;
 import com.zw.cloud.netty.web.service.api.chat.IFriendsRequestService;
@@ -23,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
