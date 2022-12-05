@@ -33,6 +33,7 @@ public class BaiduImgSeleniumHtmlController {
         if (CollectionUtils.isEmpty(imgDTOList)) {
             return;
         }
+        imgDTOList.forEach(imgAttachment -> imgAttachment.setType(key));
         imgAttachmentService.saveBatch(imgDTOList);
         stopWatch.stop();
         stopWatch.start("t3");

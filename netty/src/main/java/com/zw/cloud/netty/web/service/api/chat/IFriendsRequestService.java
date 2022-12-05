@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IFriendsRequestService extends IService<FriendsRequest> {
 
+    void deleteByFriendRequest(FriendsRequest friendsRequest);
 }

@@ -4,7 +4,15 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zw.cloud.netty.entity.dto.NettyMsgDTO;
 import com.zw.cloud.netty.enums.EnumNettyMsgTag;
+import com.zw.cloud.netty.enums.MsgActionEnum;
+import com.zw.cloud.netty.enums.MsgSignFlagEnum;
 import com.zw.cloud.netty.server.NettyFullHttpRequestHandlerService;
+import com.zw.cloud.netty.utils.SpringUtil;
+import com.zw.cloud.netty.web.entity.chat.ChatMsg;
+import com.zw.cloud.netty.web.entity.vo.DataContent;
+import com.zw.cloud.netty.web.service.api.chat.IChatMsgService;
+import com.zw.cloud.netty.web.service.api.chat.IUserInfoService;
+import com.zw.cloud.netty.web.service.impl.chat.UserInfoServiceImpl;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
@@ -17,6 +25,7 @@ import io.netty.util.Attribute;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -26,7 +35,9 @@ import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -90,18 +101,81 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
         String userId = nettyMsgDTO.getUserId();
         String targetUserId = nettyMsgDTO.getTargetUserId();
-        if (EnumNettyMsgTag.HEART.getKey().equals(nettyMsgDTO.getTag())) {
-            log.info("[ServerHandler][channelRead][sendAllMessage] heart msg,userId is {},nettyMsgDTO is {}", userId, JSON.toJSONString(nettyMsgDTO));
-        } else if (StringUtils.isNotBlank(targetUserId)) {
-            Channel channel = userManage.get(targetUserId);
-            if (channel.isActive()){
-                channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
-            } else {
-                log.warn("[ServerHandler][channelRead][sendAllMessage]userId is {}, targetUserId is {},用户离线", userId, targetUserId);
-            }
-        } else {
-            clients.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
+        String targetGroupId = nettyMsgDTO.getTargetGroupId();
+
+        Integer tag = nettyMsgDTO.getTag();
+        // 心跳消息
+        if (Objects.equals(EnumNettyMsgTag.HEART.getKey(),tag)) {
+            log.info("[ServerHandler][channelRead][sendTextMessage] heart msg,userId is {},nettyMsgDTO is {}", userId, JSON.toJSONString(nettyMsgDTO));
+            return;
         }
+
+        if (Objects.equals(EnumNettyMsgTag.CONNECT.getKey(),tag)) {
+            //2.1 当websocket 第一次open的时候，初始化channel，把用的channel 和 userid 关联起来
+            // 握手时已处理
+            log.info("[ServerHandler][channelRead][sendTextMessage] 第一次(或重连)初始化连接,userId is {},nettyMsgDTO is {}", userId, JSON.toJSONString(nettyMsgDTO));
+            return;
+        }
+        // 聊天消息
+        if (Objects.equals(EnumNettyMsgTag.CHAT.getKey(),tag)) {
+            //2.2 聊天类型的消息，把聊天记录保存到数据库，同时标记消息的签收状态[未签收]
+            ChatMsg chatMsg = new ChatMsg();
+            chatMsg.setSendUserId(userId);
+            chatMsg.setAcceptUserId(targetUserId);
+            chatMsg.setMsg(nettyMsgDTO.getData());
+            chatMsg.setAcceptGroupId(targetGroupId);
+
+            IChatMsgService chatMsgService = (IChatMsgService) SpringUtil.getBean("chatMsgServiceImpl");
+            chatMsg.setSignFlag(MsgSignFlagEnum.unsign.getType());
+            chatMsgService.save(chatMsg);
+
+            //发送消息
+            sendMsg(nettyMsgDTO);
+
+        }
+        //  消息签收
+        if (Objects.equals(EnumNettyMsgTag.SIGNED.getKey(),tag)) {
+            //2.3 签收消息类型，针对具体的消息进行签收，修改数据库中对应消息的签收状态[已签收]
+            //扩展字段在signed 类型消息中 ，代表需要去签收的消息id，逗号间隔
+            String msgIdsStr = nettyMsgDTO.getData();
+            String[] msgId = msgIdsStr.split(",");
+
+            List<Long> msgIdList = new ArrayList<>();
+            for (String mid: msgId) {
+                if(StringUtils.isNotBlank(mid)){
+                    msgIdList.add(Long.parseLong(mid));
+                }
+            }
+            if(CollectionUtils.isNotEmpty(msgIdList)){
+                IChatMsgService chatMsgService = (IChatMsgService) SpringUtil.getBean("chatMsgServiceImpl");
+                //批量签收
+                chatMsgService.batchUpdateMsgSigned(msgIdList);
+            }
+
+        }
+    }
+
+    private static void sendMsg(NettyMsgDTO nettyMsgDTO) {
+        String receiverId = nettyMsgDTO.getTargetUserId();
+        String targetGroupId = nettyMsgDTO.getTargetGroupId();
+        //发送消息
+        // 私聊
+        if (StringUtils.isNotBlank(receiverId)) {
+            Channel receiverChannel = userManage.get(receiverId);
+            if(Objects.nonNull(receiverChannel) && receiverChannel.isActive()){
+                //用户在线
+                receiverChannel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
+            } else {
+                log.info("[ServerHandler][channelRead][sendTextMessage]userId is {}, receiverId is {},用户离线", nettyMsgDTO.getUserId(), receiverId);
+            }
+            return;
+        }
+        if (StringUtils.isNotBlank(targetGroupId)) {
+            // TODO 群消息
+            return;
+        }
+        // 全部发送
+        clients.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
     }
 
     private void handlerWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame) {
@@ -124,8 +198,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             return;
         }
         // 文本消息
-        Integer tag = null;
-        String userId = null;
         if (frame instanceof TextWebSocketFrame) {
             //正常的TEXT消息类型
             TextWebSocketFrame msg = (TextWebSocketFrame) frame;
@@ -135,16 +207,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 return;
             }
             NettyMsgDTO nettyMsgDTO = JSON.parseObject(msg.text(), NettyMsgDTO.class);
-            tag = nettyMsgDTO.getTag();
-            userId = nettyMsgDTO.getUserId();
-            if (Objects.isNull(tag)) {
-                nettyMsgDTO.setData("msg tag is null");
-                nettyMsgDTO.setTargetUserId(userId);
-                sendTextMessage(nettyMsgDTO);
-                return;
-            } else {
-                sendTextMessage(nettyMsgDTO);
-            }
+            sendTextMessage(nettyMsgDTO);
         }
         if (frame instanceof BinaryWebSocketFrame) {
             /* ByteBuf content = frame.content();

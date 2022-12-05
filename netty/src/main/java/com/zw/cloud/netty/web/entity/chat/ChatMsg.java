@@ -25,12 +25,23 @@ public class ChatMsg implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private String id;
+    private Long id;
 
+    /**
+     * 消息发送人
+     */
     private String sendUserId;
-
+    /**
+     * 消息接收人
+     */
     private String acceptUserId;
-
+    /**
+     * 消息群组
+     */
+    private String acceptGroupId;
+    /**
+     * 消息内容
+     */
     private String msg;
 
     /**

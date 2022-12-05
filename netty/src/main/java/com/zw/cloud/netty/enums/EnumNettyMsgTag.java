@@ -9,7 +9,8 @@ public enum EnumNettyMsgTag {
     CHAT(2, "聊天消息"),
     SIGNED(3, "消息签收"),
     HEART(4, "客户端保持心跳"),
-    PULL_FRIEND(5, "拉取好友");
+    PULL_FRIEND(5, "拉取好友"),
+    PUSH(6, "广播消息");
     private Integer key;
     private String desc;
 

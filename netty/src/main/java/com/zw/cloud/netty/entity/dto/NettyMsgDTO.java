@@ -1,5 +1,6 @@
 package com.zw.cloud.netty.entity.dto;
 
+import com.zw.cloud.netty.enums.EnumNettyMsgTag;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,8 +13,9 @@ public class NettyMsgDTO implements Serializable {
 
     /**
      * 消息标签
+     * EnumNettyMsgTag
      */
-    private Integer tag;
+    private Integer tag = EnumNettyMsgTag.PUSH.getKey();
     /**
      * 消息内容
      */
@@ -34,8 +36,4 @@ public class NettyMsgDTO implements Serializable {
      */
     private String targetUserId;
 
-    /**
-     * 该消息的回复是否只有发送者自身接收
-     */
-    private Boolean onlySenderReceive;
 }

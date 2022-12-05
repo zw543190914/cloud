@@ -15,4 +15,8 @@ public interface IMyFriendService extends IService<MyFriend> {
 
     MyFriend queryMyFriendById(String myUserId,String myFriendUserId);
 
+    /**
+     * 处理好友请求——通过好友请求
+     */
+    void saveFriends(String sendUserId, String acceptUserId);
 }

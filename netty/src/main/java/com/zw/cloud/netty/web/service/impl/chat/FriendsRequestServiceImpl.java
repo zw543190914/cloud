@@ -17,4 +17,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class FriendsRequestServiceImpl extends ServiceImpl<FriendsRequestMapper, FriendsRequest> implements IFriendsRequestService {
 
+
+    @Override
+    public void deleteByFriendRequest(FriendsRequest friendsRequest) {
+        baseMapper.deleteByFriendRequest(friendsRequest);
+    }
 }

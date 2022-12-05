@@ -5,15 +5,16 @@ CREATE DATABASE `chat` CHARACTER SET 'utf8mb4';
 -- ----------------------------
 DROP TABLE IF EXISTS `chat_msg`;
 CREATE TABLE `chat_msg` (
-                            `id` varchar(64) NOT NULL,
-                            `send_user_id` varchar(64) NOT NULL,
-                            `accept_user_id` varchar(64) NOT NULL,
-                            `msg` varchar(255) NOT NULL,
-                            `sign_flag` int(1) NOT NULL COMMENT '消息是否签收(未签收:0,签收:1)',
+                            `id` bigint NOT NULL,
+                            `send_user_id` varchar(64) NOT NULL COMMENT '消息发送人',
+                            `accept_user_id` varchar(64) DEFAULT NULL COMMENT '消息接收人',
+                            `msg` varchar(255) NOT NULL COMMENT '消息内容',
+                            `accept_group_id` varchar(64) DEFAULT NULL COMMENT '消息群组',
+                            `sign_flag` int NOT NULL COMMENT '消息是否签收(未签收:0,签收:1)',
                             `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                             PRIMARY KEY (`id`),
                             KEY `idx_` (`accept_user_id`,`sign_flag`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of chat_msg
@@ -28,7 +29,8 @@ CREATE TABLE `friends_request` (
                                    `send_user_id` varchar(64) NOT NULL,
                                    `accept_user_id` varchar(64) NOT NULL,
                                    `request_date_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                                   PRIMARY KEY (`id`)
+                                   PRIMARY KEY (`id`),
+                                   KEY `idx_accept_user_id` (`accept_user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
