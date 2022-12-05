@@ -17,7 +17,7 @@ public class WebSocketController {
     @GetMapping("/sendMsg")
     //http://localhost:18092/socket/sendMsg?msg=test&targetUserId=
     public void sendMsg(String msg,String targetUserId){
-        NettyMsgDTO<String> nettyMsgDTO = new NettyMsgDTO<>();
+        NettyMsgDTO nettyMsgDTO = new NettyMsgDTO();
         nettyMsgDTO.setUserId("netty-server");
         nettyMsgDTO.setData(msg);
         nettyMsgDTO.setTargetUserId(targetUserId);

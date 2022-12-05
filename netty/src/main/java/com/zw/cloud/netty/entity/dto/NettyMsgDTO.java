@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Setter
 @Getter
-public class NettyMsgDTO<T> implements Serializable {
+public class NettyMsgDTO implements Serializable {
 
     /**
      * 消息标签
@@ -17,7 +17,7 @@ public class NettyMsgDTO<T> implements Serializable {
     /**
      * 消息内容
      */
-    private T data;
+    private String data;
 
     /**
      * 消息发送者身份标识

@@ -132,7 +132,6 @@ public class NettyFullHttpRequestHandlerService {
                             throw new RuntimeException("userId is error");
                         }
                         userManage.put(userId,ctx.channel());
-                        syncOnlineUserId();
                     } catch (Exception e) {
                         log.error("[ServerHandler][channelRead]handleShake failed");
                         responseHttp(ctx,"error");

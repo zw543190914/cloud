@@ -42,6 +42,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     // 用于记录和管理所有客户端的channle
     public static ChannelGroup clients = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
+    /**
+     * userId -> Channel
+     */
     public static ConcurrentHashMap<String, Channel> userManage = new ConcurrentHashMap<>();
 
     @Override
@@ -58,7 +61,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             userManage.remove(channelAttr.get());
         }
         clients.remove(ctx.channel());
-        syncOnlineUserId();
         log.info("[ServerHandler][channelInactive] 与客户端 {} 断开连接，userId is {},通道关闭！现有连接数：{}", ctx.channel().id(),channelAttr.get(), clients.size());
     }
 
@@ -81,9 +83,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         cause.printStackTrace();
         //发生了异常后关闭连接，同时从channelgroup移除
         ctx.channel().close();
+        clients.remove(ctx.channel());
     }
 
-    public static void sendTextMessage(NettyMsgDTO<String> nettyMsgDTO) {
+    public static void sendTextMessage(NettyMsgDTO nettyMsgDTO) {
 
         String userId = nettyMsgDTO.getUserId();
         String targetUserId = nettyMsgDTO.getTargetUserId();
@@ -99,15 +102,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         } else {
             clients.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
         }
-    }
-
-    public static void syncOnlineUserId() {
-        NettyMsgDTO<Enumeration<String>> nettyMsgDTO = new NettyMsgDTO<>();
-        nettyMsgDTO.setUserId("netty-server");
-        nettyMsgDTO.setTag(5);
-
-        nettyMsgDTO.setData(userManage.keys());
-        clients.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
     }
 
     private void handlerWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame) {
@@ -140,7 +134,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("[ServerHandler][channelRead]TextWebSocketFrame message is null");
                 return;
             }
-            NettyMsgDTO<String> nettyMsgDTO = JSON.parseObject(msg.text(), NettyMsgDTO.class);
+            NettyMsgDTO nettyMsgDTO = JSON.parseObject(msg.text(), NettyMsgDTO.class);
             tag = nettyMsgDTO.getTag();
             userId = nettyMsgDTO.getUserId();
             if (Objects.isNull(tag)) {
