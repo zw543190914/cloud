@@ -23,7 +23,7 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
     List<FriendsRequestVO> queryFriendRequestList(String acceptUserId);
 
     @Select("select u.id as friendUserId, u.username as friendUsername,u.face_image as friendFaceImage,u.nickname as friendNickname\n" +
-            "from my_friends mf left join user_info u on u.id = mf.my_friend_user_id\n" +
+            "from my_friend mf left join user_info u on u.id = mf.my_friend_user_id\n" +
             "where mf.my_user_id = #{userId}")
     List<MyFriendsVO> queryMyFriends(String userId);
 
