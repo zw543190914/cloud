@@ -1,9 +1,10 @@
 package com.zw.cloud.netty.web.controller.chat;
 
 
+import com.alibaba.fastjson.JSON;
 import com.zw.cloud.common.exception.BizException;
-import com.zw.cloud.common.utils.EncryptUtils;
 import com.zw.cloud.netty.enums.SearchFriendsStatusEnum;
+import com.zw.cloud.netty.web.entity.bo.UserBO;
 import com.zw.cloud.netty.web.entity.chat.ChatMsg;
 import com.zw.cloud.netty.web.entity.chat.UserInfo;
 import com.zw.cloud.netty.web.entity.vo.FriendsRequestVO;
@@ -11,14 +12,15 @@ import com.zw.cloud.netty.web.entity.vo.MyFriendsVO;
 import com.zw.cloud.netty.web.entity.vo.UserVo;
 import com.zw.cloud.netty.web.service.api.chat.IChatMsgService;
 import com.zw.cloud.netty.web.service.api.chat.IUserInfoService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * <p>
@@ -29,7 +31,8 @@ import java.util.Objects;
  * @since 2022-12-05
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/chat/user")
+@Slf4j
 public class UserInfoController {
 
     @Autowired
@@ -42,26 +45,25 @@ public class UserInfoController {
      */
     @RequestMapping("/registerOrLogin")
     public UserVo registerOrLogin(UserInfo user) {
-        UserInfo userResult = userServices.checkUserNameIsExit(user.getUsername());
-        if (Objects.nonNull(userResult)) {
-            if (userResult.getStatus() == 0) {
-                throw new BizException("账号已经被锁定");
-            }
-            //此用户存在，可登录
-            if (!StringUtils.equals(userResult.getPassword(), EncryptUtils.decrypted(user.getPassword()))) {
-                throw new BizException("密码错误");
-            }
-        } else {
-            //注册
-            user.setNickname(user.getUsername());
-            user.setQrcode("");
-            user.setPassword(EncryptUtils.encrypted(user.getPassword()));
-            user.setFaceImage("");
-            user.setFaceImageBig("");
-            userServices.save(user);
-        }
+        return userServices.registerOrLogin(user);
+    }
+
+    /**
+     * 用户头像上传访问方法
+     */
+    @RequestMapping("/uploadFaceBase64")
+    public UserVo uploadFaceBase64(@RequestBody UserBO userBO) throws Exception {
+        //获取前端传过来的base64的字符串，然后转为文件对象在进行上传
+        String base64Data = userBO.getFaceData();
+        log.info("[UserInfoController][uploadFaceBase64]userBO is {}", JSON.toJSONString(userBO));
+        //更新用户头像
+        UserInfo user = new UserInfo();
+        user.setId(userBO.getUserId());
+        user.setFaceImage(base64Data);
+        user.setFaceImageBig(base64Data);
+        userServices.updateById(user);
         UserVo userVo = new UserVo();
-        BeanUtils.copyProperties(userResult, userVo);
+        BeanUtils.copyProperties(user,userVo);
         return userVo;
     }
 

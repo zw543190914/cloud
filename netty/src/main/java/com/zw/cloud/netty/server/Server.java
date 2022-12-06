@@ -57,7 +57,7 @@ public class Server {
             //等待服务监听端口关闭
             future.channel().closeFuture().sync();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("[Netty Server] Server start error ",e);
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();

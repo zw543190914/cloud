@@ -16,14 +16,13 @@ public class HttpInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String uri = request.getRequestURI();
+        String method = request.getMethod();
+        log.info("[HttpInterceptor][preHandle]uri is {},method is {}",uri,method);
         String accessToken = request.getHeader("accessToken");
         if (StringUtils.isBlank(accessToken)) {
             throw new Exception("请先登录");
         }
-        String uri = request.getRequestURI();
-        String method = request.getMethod();
-        log.info("[HttpInterceptor][preHandle]uri is {},method is {}",uri,method);
-
         /*
         String rateLimiterKey = userIp + ":" + uri + ":" + method;
 

@@ -54,6 +54,9 @@ public class UserInfo implements Serializable {
      */
     private String qrcode;
 
+    /**
+     * 设备cid
+     */
     private String cid;
 
     /**

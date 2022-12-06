@@ -6,6 +6,7 @@ import com.zw.cloud.netty.web.entity.chat.UserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zw.cloud.netty.web.entity.vo.FriendsRequestVO;
 import com.zw.cloud.netty.web.entity.vo.MyFriendsVO;
+import com.zw.cloud.netty.web.entity.vo.UserVo;
 
 import java.util.List;
 
@@ -18,6 +19,8 @@ import java.util.List;
  * @since 2022-12-05
  */
 public interface IUserInfoService extends IService<UserInfo> {
+
+    UserVo registerOrLogin(UserInfo user);
 
     UserInfo checkUserNameIsExit(String username);
 

@@ -21,7 +21,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
-    public WebResult handlerException(Exception exception, HttpServletRequest request){
+    public WebResult<Object> handlerException(Exception exception, HttpServletRequest request){
         if (Objects.nonNull(request)) {
             log.error("[GlobalExceptionHandler][handlerException]uri is {},error is ",request.getRequestURI(),exception);
         } else {
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
-    public WebResult bindException(BindException e,HttpServletRequest request) {
+    public WebResult<Object> bindException(BindException e,HttpServletRequest request) {
         if (Objects.nonNull(request)) {
             log.error("[GlobalExceptionHandler][bindException]uri is {},error is ",request.getRequestURI(),e);
         } else {

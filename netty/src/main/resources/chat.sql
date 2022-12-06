@@ -40,8 +40,8 @@ CREATE TABLE `friends_request` (
 -- ----------------------------
 -- Table structure for my_friends
 -- ----------------------------
-DROP TABLE IF EXISTS `my_friends`;
-CREATE TABLE `my_friends` (
+DROP TABLE IF EXISTS `my_friend`;
+CREATE TABLE `my_friend` (
                               `id` varchar(64) NOT NULL,
                               `my_user_id` varchar(64) NOT NULL COMMENT '用户id',
                               `my_friend_user_id` varchar(64) NOT NULL COMMENT '用户的好友id',
@@ -66,7 +66,7 @@ CREATE TABLE `user_info` (
                              `face_image_big` varchar(255) NOT NULL,
                              `nickname` varchar(20) NOT NULL COMMENT '昵称',
                              `qrcode` varchar(255) NOT NULL COMMENT '新用户注册后默认后台生成二维码，并且上传到fastdfs',
-                             `cid` varchar(64) DEFAULT NULL,
+                             `cid` varchar(64) DEFAULT NULL COMMENT '设备cid',
                              `status` int(1) NOT NULL DEFAULT 1 COMMENT '用户状态(锁定:0,激活:1)',
                              `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                              `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',

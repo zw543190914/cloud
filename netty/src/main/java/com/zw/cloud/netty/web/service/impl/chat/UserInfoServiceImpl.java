@@ -2,6 +2,8 @@ package com.zw.cloud.netty.web.service.impl.chat;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.zw.cloud.common.exception.BizException;
+import com.zw.cloud.common.utils.EncryptUtils;
 import com.zw.cloud.netty.entity.dto.NettyMsgDTO;
 import com.zw.cloud.netty.enums.MsgActionEnum;
 import com.zw.cloud.netty.enums.OperatorFriendRequestTypeEnum;
@@ -12,12 +14,15 @@ import com.zw.cloud.netty.web.entity.chat.UserInfo;
 import com.zw.cloud.netty.web.dao.chat.UserInfoMapper;
 import com.zw.cloud.netty.web.entity.vo.FriendsRequestVO;
 import com.zw.cloud.netty.web.entity.vo.MyFriendsVO;
+import com.zw.cloud.netty.web.entity.vo.UserVo;
 import com.zw.cloud.netty.web.service.api.chat.IFriendsRequestService;
 import com.zw.cloud.netty.web.service.api.chat.IMyFriendService;
 import com.zw.cloud.netty.web.service.api.chat.IUserInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +47,35 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     private IMyFriendService myFriendService;
     @Autowired
     private IFriendsRequestService friendsRequestService;
+
+    @Override
+    @Transactional
+    public UserVo registerOrLogin(UserInfo user) {
+        UserInfo userResult = checkUserNameIsExit(user.getUsername());
+        UserVo userVo = new UserVo();
+        if (Objects.nonNull(userResult)) {
+            // 登录
+            if (userResult.getStatus() == 0) {
+                throw new BizException("账号已经被锁定");
+            }
+            //此用户存在，可登录
+            if (!StringUtils.equals(userResult.getPassword(), EncryptUtils.decrypted(user.getPassword()))) {
+                throw new BizException("密码错误");
+            }
+            BeanUtils.copyProperties(userResult, userVo);
+            return userVo;
+        }
+
+        //注册
+        user.setNickname(user.getUsername());
+        user.setQrcode("");
+        user.setPassword(EncryptUtils.encrypted(user.getPassword()));
+        user.setFaceImage("");
+        user.setFaceImageBig("");
+        save(user);
+        BeanUtils.copyProperties(user, userVo);
+        return userVo;
+    }
 
     @Override
     public UserInfo checkUserNameIsExit(String username) {
