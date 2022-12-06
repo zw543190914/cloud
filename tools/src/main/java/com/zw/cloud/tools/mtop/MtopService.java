@@ -129,9 +129,9 @@ public class MtopService {
         if (value instanceof WebResult) {
             WebResult webResult = (WebResult) value;
             logger.info("[MtopService][mtopAdaptor] return webResult is {}", JSON.toJSONString(webResult));
-            if (StringUtils.isNotBlank(webResult.getErrorMsg())) {
+            if (StringUtils.isNotBlank(webResult.getMsg())) {
                 resultMap.put("success", false);
-                resultMap.put("errorMsg", webResult.getErrorMsg());
+                resultMap.put("errorMsg", webResult.getMsg());
                 return resultMap;
             }
             if (null == webResult.getData()) {

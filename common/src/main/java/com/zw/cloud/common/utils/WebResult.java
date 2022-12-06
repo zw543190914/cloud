@@ -11,8 +11,8 @@ import java.io.Serializable;
 public class WebResult<T> implements Serializable {
     private boolean success;
     private T data;
-    private Integer errorCode;
-    private String errorMsg;
+    private Integer code;
+    private String msg;
 
     public WebResult() {
     }
@@ -20,8 +20,8 @@ public class WebResult<T> implements Serializable {
     public WebResult(boolean success, T data, Integer errorCode, String errorMsg) {
         this.success = success;
         this.data = data;
-        this.errorCode = errorCode;
-        this.errorMsg = errorMsg;
+        this.code = errorCode;
+        this.msg = errorMsg;
     }
 
     private WebResult(boolean success) {
@@ -32,9 +32,9 @@ public class WebResult<T> implements Serializable {
         return new WebResult<>(true);
     }
 
-    public static <T>WebResult<T> failed() {
-        WebResult<T> failed = new WebResult<>(false);
-        failed.errorCode = HttpStatus.HTTP_BAD_REQUEST;
+    public static WebResult<Object> failed() {
+        WebResult<Object> failed = new WebResult<>(false);
+        failed.code = HttpStatus.HTTP_BAD_REQUEST;
         return failed;
     }
 
@@ -46,18 +46,18 @@ public class WebResult<T> implements Serializable {
     }
 
     public WebResult<T> withErrorCodeAndMsg(Integer errorCode,String errorMsg) {
-        this.errorCode = errorCode;
-        this.errorMsg = errorMsg;
+        this.code = errorCode;
+        this.msg = errorMsg;
         return this;
     }
 
     public WebResult<T> withErrorCode(Integer errorCode) {
-        this.errorCode = errorCode;
+        this.code = errorCode;
         return this;
     }
 
     public WebResult<T> withErrorMsg(String errorMsg) {
-        this.errorMsg = errorMsg;
+        this.msg = errorMsg;
         return this;
     }
 
@@ -74,12 +74,20 @@ public class WebResult<T> implements Serializable {
         return this.data;
     }
 
-    public Integer getErrorCode() {
-        return this.errorCode;
+    public Integer getCode() {
+        return code;
     }
 
-    public String getErrorMsg() {
-        return this.errorMsg;
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     @Override
