@@ -2,7 +2,9 @@ package com.zw.cloud.netty.server;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.zw.cloud.common.utils.JjwtUtils;
 import com.zw.cloud.netty.entity.dto.MultipartRequestDTO;
+import io.jsonwebtoken.Claims;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.*;
@@ -116,7 +118,9 @@ public class NettyFullHttpRequestHandlerService {
         } else {
             ChannelFuture handshake = handshaker.handshake(ctx.channel(), request);
             Map<String, String> params = getUrlParams(request.uri());
-            final String userId = params.get("userId");
+            final String accessToken = params.get("accessToken");
+            Claims claims = JjwtUtils.parseJwt(accessToken);
+            final String userId = claims.getId();
             handshake.addListener(new ChannelFutureListener() {
                 @Override
                 public void operationComplete(ChannelFuture future) throws Exception {
@@ -125,7 +129,7 @@ public class NettyFullHttpRequestHandlerService {
                         if (Objects.nonNull(channelAttr.get())) {
                             log.warn("[ServerHandler][channelRead]handleShake channelAttr not null");
                         } else {
-                            log.info("[ServerHandler][channelRead]handleShake channelAttr set userId is {}",userId);
+                            log.info("[ServerHandler][channelRead]handleShake channelAttr set accessToken is {}",accessToken);
                             channelAttr.set(userId);
                         }
                         if (Objects.nonNull(userManage.get(userId))){

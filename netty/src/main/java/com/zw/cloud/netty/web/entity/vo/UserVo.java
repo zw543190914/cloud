@@ -20,5 +20,6 @@ public class UserVo implements Serializable {
 
     private String qrcode;
 
+    private String accessToken;
 
 }

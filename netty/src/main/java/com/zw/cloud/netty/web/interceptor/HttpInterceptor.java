@@ -1,5 +1,9 @@
-package com.zw.cloud.netty.interceptor;
+package com.zw.cloud.netty.web.interceptor;
 
+import com.zw.cloud.common.exception.BizException;
+import com.zw.cloud.common.utils.JjwtUtils;
+import com.zw.cloud.netty.utils.UrlParamsUtils;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -8,6 +12,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -21,7 +27,16 @@ public class HttpInterceptor implements HandlerInterceptor {
         log.info("[HttpInterceptor][preHandle]uri is {},method is {}",uri,method);
         String accessToken = request.getHeader("accessToken");
         if (StringUtils.isBlank(accessToken)) {
-            throw new Exception("请先登录");
+            Map<String, String> urlParams = UrlParamsUtils.getUrlParams(uri);
+            accessToken = urlParams.get("accessToken");
+            if (StringUtils.isBlank(accessToken)) {
+                throw new BizException("请先登录");
+            }
+        }
+        Claims claims = JjwtUtils.parseJwt(accessToken);
+        Date expiration = claims.getExpiration();
+        if (expiration.before(new Date())) {
+            throw new BizException("token已过期,请重新登录");
         }
         /*
         String rateLimiterKey = userIp + ":" + uri + ":" + method;

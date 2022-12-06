@@ -125,15 +125,6 @@
             <artifactId>qiniu-java-sdk</artifactId>
         </dependency>
 
-        <!--二维码-->
-        <dependency>
-            <groupId>com.google.zxing</groupId>
-            <artifactId>core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.zxing</groupId>
-            <artifactId>javase</artifactId>
-        </dependency>
         <!--百度人脸识别-->
         <dependency>
             <groupId>com.baidu.aip</groupId>

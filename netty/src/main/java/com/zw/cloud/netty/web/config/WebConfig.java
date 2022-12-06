@@ -1,11 +1,11 @@
-package com.zw.cloud.netty.config;
+package com.zw.cloud.netty.web.config;
 
-import com.zw.cloud.netty.interceptor.HttpInterceptor;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import com.zw.cloud.netty.web.interceptor.HttpInterceptor;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {

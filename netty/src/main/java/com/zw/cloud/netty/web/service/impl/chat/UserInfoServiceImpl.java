@@ -2,8 +2,11 @@ package com.zw.cloud.netty.web.service.impl.chat;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.google.common.collect.Lists;
 import com.zw.cloud.common.exception.BizException;
 import com.zw.cloud.common.utils.EncryptUtils;
+import com.zw.cloud.common.utils.JjwtUtils;
+import com.zw.cloud.common.utils.ZXingCodeSimpleUtils;
 import com.zw.cloud.netty.entity.dto.NettyMsgDTO;
 import com.zw.cloud.netty.enums.MsgActionEnum;
 import com.zw.cloud.netty.enums.OperatorFriendRequestTypeEnum;
@@ -21,6 +24,7 @@ import com.zw.cloud.netty.web.service.api.chat.IUserInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +44,7 @@ import static com.zw.cloud.netty.server.handler.ServerHandler.userManage;
  * @author zw
  * @since 2022-12-05
  */
+@Slf4j
 @Service
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> implements IUserInfoService {
 
@@ -51,6 +56,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     @Transactional
     public UserVo registerOrLogin(UserInfo user) {
+        log.info("[UserInfoServiceImpl][registerOrLogin]user is {}", JSON.toJSONString(user));
+
         UserInfo userResult = checkUserNameIsExit(user.getUsername());
         UserVo userVo = new UserVo();
         if (Objects.nonNull(userResult)) {
@@ -59,21 +66,31 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 throw new BizException("账号已经被锁定");
             }
             //此用户存在，可登录
-            if (!StringUtils.equals(userResult.getPassword(), EncryptUtils.decrypted(user.getPassword()))) {
+            if (!StringUtils.equals(userResult.getPassword(), EncryptUtils.encrypted(user.getPassword()))) {
                 throw new BizException("密码错误");
             }
             BeanUtils.copyProperties(userResult, userVo);
+            String jwt = JjwtUtils.createJwt(userVo.getId(), userVo.getUsername(), Lists.newArrayList(""));
+            userVo.setAccessToken(jwt);
             return userVo;
         }
 
         //注册
         user.setNickname(user.getUsername());
-        user.setQrcode("");
         user.setPassword(EncryptUtils.encrypted(user.getPassword()));
         user.setFaceImage("");
         user.setFaceImageBig("");
+        String qrCode = null;
+        try {
+            qrCode = ZXingCodeSimpleUtils.crateQRCode("bird_qrcode:" + user.getUsername());
+        } catch (Exception e) {
+            log.error("[UserInfoServiceImpl][registerOrLogin]crateQRCode error is ", e);
+        }
+        user.setQrcode(qrCode);
         save(user);
         BeanUtils.copyProperties(user, userVo);
+        String jwt = JjwtUtils.createJwt(userVo.getId(), userVo.getUsername(), Lists.newArrayList(""));
+        userVo.setAccessToken(jwt);
         return userVo;
     }
 

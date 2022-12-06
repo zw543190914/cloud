@@ -41,6 +41,7 @@ public class WebResult<T> implements Serializable {
     public static <T> WebResult<T> build(T data) {
         WebResult<T> webResult = new WebResult<>();
         webResult.success = true;
+        webResult.code = HttpStatus.HTTP_OK;
         webResult.data = data;
         return webResult;
     }
