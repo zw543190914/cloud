@@ -1,6 +1,5 @@
 package com.zw.cloud.netty.server.handler;
 
-import com.zw.cloud.netty.server.handler.ServerHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

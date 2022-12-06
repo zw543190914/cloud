@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserBO {
-    private  String userId;
+    private  Long userId;
     private  String faceData;
 
 }

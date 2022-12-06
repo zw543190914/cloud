@@ -9,8 +9,8 @@ import java.io.Serializable;
 @Setter
 public class FriendsRequestVO implements Serializable {
 
-    private String sendUserId;
-    private String sendUsername;
+    private Long sendUserId;
+    private Long sendUsername;
     private String sendFaceImage;
     private String sendNickname;
 

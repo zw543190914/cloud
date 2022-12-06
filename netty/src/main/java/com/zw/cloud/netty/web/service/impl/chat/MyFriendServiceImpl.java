@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MyFriendServiceImpl extends ServiceImpl<MyFriendMapper, MyFriend> implements IMyFriendService {
 
     @Override
-    public MyFriend queryMyFriendById(String myUserId, String myFriendUserId) {
+    public MyFriend queryMyFriendById(Long myUserId, Long myFriendUserId) {
         return baseMapper.selectOne(new LambdaQueryWrapper<MyFriend>()
                 .eq(MyFriend::getMyUserId,myUserId)
                 .eq(MyFriend::getMyFriendUserId,myFriendUserId));
@@ -34,7 +34,7 @@ public class MyFriendServiceImpl extends ServiceImpl<MyFriendMapper, MyFriend> i
      * 通过好友请求并保存数据到my_friend
      */
     @Override
-    public void saveFriends(String sendUserId, String acceptUserId){
+    public void saveFriends(Long sendUserId, Long acceptUserId){
         MyFriend myFriends = new MyFriend();
         myFriends.setMyUserId(sendUserId);
         myFriends.setMyFriendUserId(acceptUserId);

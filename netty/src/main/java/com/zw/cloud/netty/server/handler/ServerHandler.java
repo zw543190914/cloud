@@ -97,25 +97,25 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
         Integer tag = nettyMsgDTO.getTag();
         // 心跳消息
-        if (Objects.equals(EnumNettyMsgTag.HEART.getKey(),tag)) {
+        if (Objects.equals(EnumNettyMsgTag.HEART.getType(),tag)) {
             log.info("[ServerHandler][channelRead][sendTextMessage] heart msg,userId is {},nettyMsgDTO is {}", userId, JSON.toJSONString(nettyMsgDTO));
             return;
         }
 
-        if (Objects.equals(EnumNettyMsgTag.CONNECT.getKey(),tag)) {
+        if (Objects.equals(EnumNettyMsgTag.CONNECT.getType(),tag)) {
             //2.1 当websocket 第一次open的时候，初始化channel，把用的channel 和 userid 关联起来
             // 握手时已处理
             log.info("[ServerHandler][channelRead][sendTextMessage] 第一次(或重连)初始化连接,userId is {},nettyMsgDTO is {}", userId, JSON.toJSONString(nettyMsgDTO));
             return;
         }
         // 聊天消息
-        if (Objects.equals(EnumNettyMsgTag.CHAT.getKey(),tag)) {
+        if (Objects.equals(EnumNettyMsgTag.CHAT.getType(),tag)) {
             //2.2 聊天类型的消息，把聊天记录保存到数据库，同时标记消息的签收状态[未签收]
             ChatMsg chatMsg = new ChatMsg();
-            chatMsg.setSendUserId(userId);
-            chatMsg.setAcceptUserId(targetUserId);
+            chatMsg.setSendUserId(Long.parseLong(userId));
+            chatMsg.setAcceptUserId(Long.parseLong(targetUserId));
             chatMsg.setMsg(nettyMsgDTO.getData());
-            chatMsg.setAcceptGroupId(targetGroupId);
+            chatMsg.setAcceptGroupId(Long.parseLong(targetGroupId));
 
             IChatMsgService chatMsgService = (IChatMsgService) SpringUtil.getBean("chatMsgServiceImpl");
             chatMsg.setSignFlag(MsgSignFlagEnum.unsign.getType());
@@ -126,7 +126,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
         }
         //  消息签收
-        if (Objects.equals(EnumNettyMsgTag.SIGNED.getKey(),tag)) {
+        if (Objects.equals(EnumNettyMsgTag.SIGNED.getType(),tag)) {
             //2.3 签收消息类型，针对具体的消息进行签收，修改数据库中对应消息的签收状态[已签收]
             //扩展字段在signed 类型消息中 ，代表需要去签收的消息id，逗号间隔
             String msgIdsStr = nettyMsgDTO.getData();
@@ -247,7 +247,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
 
         }
-        /*if (Objects.equals(tag,EnumNettyMsgTag.CONNECT.getKey()) && StringUtils.isNotBlank(userId)) {
+        /*if (Objects.equals(tag,EnumNettyMsgTag.CONNECT.getType()) && StringUtils.isNotBlank(userId)) {
             userManage.put(userId,ctx.channel());
         }*/
     }

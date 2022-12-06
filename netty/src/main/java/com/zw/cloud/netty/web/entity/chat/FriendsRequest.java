@@ -25,9 +25,9 @@ public class FriendsRequest implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private String id;
 
-    private String sendUserId;
+    private Long sendUserId;
 
-    private String acceptUserId;
+    private Long acceptUserId;
 
     /**
      * 创建时间

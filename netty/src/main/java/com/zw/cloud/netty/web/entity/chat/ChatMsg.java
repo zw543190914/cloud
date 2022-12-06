@@ -30,15 +30,15 @@ public class ChatMsg implements Serializable {
     /**
      * 消息发送人
      */
-    private String sendUserId;
+    private Long sendUserId;
     /**
      * 消息接收人
      */
-    private String acceptUserId;
+    private Long acceptUserId;
     /**
      * 消息群组
      */
-    private String acceptGroupId;
+    private Long acceptGroupId;
     /**
      * 消息内容
      */

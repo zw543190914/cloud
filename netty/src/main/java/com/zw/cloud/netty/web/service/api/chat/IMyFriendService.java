@@ -13,10 +13,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IMyFriendService extends IService<MyFriend> {
 
-    MyFriend queryMyFriendById(String myUserId,String myFriendUserId);
+    MyFriend queryMyFriendById(Long myUserId,Long myFriendUserId);
 
     /**
      * 处理好友请求——通过好友请求
      */
-    void saveFriends(String sendUserId, String acceptUserId);
+    void saveFriends(Long sendUserId, Long acceptUserId);
 }

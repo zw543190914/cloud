@@ -20,11 +20,11 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
 
     @Select("select u.id as sendUserId, u.username as sendUsername, u.face_image as sendFaceImage, u.nickname as sendNickname from friends_request fr\n" +
             " left join user_info u on fr.send_user_id = u.id where fr.accept_user_id = #{acceptUserId};")
-    List<FriendsRequestVO> queryFriendRequestList(String acceptUserId);
+    List<FriendsRequestVO> queryFriendRequestList(Long acceptUserId);
 
     @Select("select u.id as friendUserId, u.username as friendUsername,u.face_image as friendFaceImage,u.nickname as friendNickname\n" +
             "from my_friend mf left join user_info u on u.id = mf.my_friend_user_id\n" +
             "where mf.my_user_id = #{userId}")
-    List<MyFriendsVO> queryMyFriends(String userId);
+    List<MyFriendsVO> queryMyFriends(Long userId);
 
 }

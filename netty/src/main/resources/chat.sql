@@ -6,10 +6,10 @@ CREATE DATABASE `chat` CHARACTER SET 'utf8mb4';
 DROP TABLE IF EXISTS `chat_msg`;
 CREATE TABLE `chat_msg` (
                             `id` bigint NOT NULL,
-                            `send_user_id` varchar(64) NOT NULL COMMENT '消息发送人',
-                            `accept_user_id` varchar(64) DEFAULT NULL COMMENT '消息接收人',
+                            `send_user_id` bigint NOT NULL COMMENT '消息发送人',
+                            `accept_user_id` bigint DEFAULT NULL COMMENT '消息接收人',
                             `msg` varchar(255) NOT NULL COMMENT '消息内容',
-                            `accept_group_id` varchar(64) DEFAULT NULL COMMENT '消息群组',
+                            `accept_group_id` bigint DEFAULT NULL COMMENT '消息群组',
                             `sign_flag` int NOT NULL COMMENT '消息是否签收(未签收:0,签收:1)',
                             `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                             PRIMARY KEY (`id`),
@@ -26,8 +26,8 @@ CREATE TABLE `chat_msg` (
 DROP TABLE IF EXISTS `friends_request`;
 CREATE TABLE `friends_request` (
                                    `id` varchar(64) NOT NULL,
-                                   `send_user_id` varchar(64) NOT NULL,
-                                   `accept_user_id` varchar(64) NOT NULL,
+                                   `send_user_id` bigint NOT NULL,
+                                   `accept_user_id` bigint NOT NULL,
                                    `request_date_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                    PRIMARY KEY (`id`),
                                    KEY `idx_accept_user_id` (`accept_user_id`) USING BTREE
@@ -43,8 +43,8 @@ CREATE TABLE `friends_request` (
 DROP TABLE IF EXISTS `my_friend`;
 CREATE TABLE `my_friend` (
                               `id` varchar(64) NOT NULL,
-                              `my_user_id` varchar(64) NOT NULL COMMENT '用户id',
-                              `my_friend_user_id` varchar(64) NOT NULL COMMENT '用户的好友id',
+                              `my_user_id` bigint NOT NULL COMMENT '用户id',
+                              `my_friend_user_id` bigint NOT NULL COMMENT '用户的好友id',
                               `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                               PRIMARY KEY (`id`),
                               UNIQUE KEY `my_user_id` (`my_user_id`,`my_friend_user_id`)
@@ -62,8 +62,8 @@ CREATE TABLE `user_info` (
                              `id` varchar(64) NOT NULL,
                              `username` varchar(20) NOT NULL COMMENT '用户名，账号',
                              `password` varchar(64) NOT NULL COMMENT '密码',
-                             `face_image` varchar(255) NOT NULL COMMENT '我的头像，如果没有默认给一张',
-                             `face_image_big` varchar(255) NOT NULL,
+                             `face_image` text NOT NULL COMMENT '我的头像，如果没有默认给一张',
+                             `face_image_big` text NOT NULL,
                              `nickname` varchar(20) NOT NULL COMMENT '昵称',
                              `qrcode` text COMMENT '新用户注册后默认后台生成二维码，并且上传到fastdfs',
                              `cid` varchar(64) DEFAULT NULL COMMENT '设备cid',

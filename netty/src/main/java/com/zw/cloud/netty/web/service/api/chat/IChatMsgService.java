@@ -18,7 +18,7 @@ public interface IChatMsgService extends IService<ChatMsg> {
     /**
      * 未读消息查询
      */
-    List<ChatMsg> getUnReadMsgList(String acceptUserId);
+    List<ChatMsg> getUnReadMsgList(Long acceptUserId);
 
     /**
      * 批处理更新消息为已签收

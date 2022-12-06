@@ -11,15 +11,15 @@ public enum EnumNettyMsgTag {
     HEART(4, "客户端保持心跳"),
     PULL_FRIEND(5, "拉取好友"),
     PUSH(6, "广播消息");
-    private Integer key;
+    private Integer type;
     private String desc;
 
-    EnumNettyMsgTag(Integer key, String desc) {
-        this.key = key;
+    EnumNettyMsgTag(Integer type, String desc) {
+        this.type = type;
         this.desc = desc;
     }
 
-    public Integer getKey() {
-        return key;
+    public Integer getType() {
+        return type;
     }
 }

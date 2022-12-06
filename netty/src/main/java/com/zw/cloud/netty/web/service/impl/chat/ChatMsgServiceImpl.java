@@ -23,7 +23,7 @@ public class ChatMsgServiceImpl extends ServiceImpl<ChatMsgMapper, ChatMsg> impl
 
 
     @Override
-    public List<ChatMsg> getUnReadMsgList(String acceptUserId) {
+    public List<ChatMsg> getUnReadMsgList(Long acceptUserId) {
         return baseMapper.selectList(new LambdaQueryWrapper<ChatMsg>().eq(ChatMsg::getAcceptUserId,acceptUserId)
                 .eq(ChatMsg::getSignFlag, MsgSignFlagEnum.unsign.getType()));
     }

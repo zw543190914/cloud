@@ -30,12 +30,12 @@ public class MyFriend implements Serializable {
     /**
      * 用户id
      */
-    private String myUserId;
+    private Long myUserId;
 
     /**
      * 用户的好友id
      */
-    private String myFriendUserId;
+    private Long myFriendUserId;
 
     /**
      * 创建时间

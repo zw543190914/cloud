@@ -8,7 +8,7 @@ import com.zw.cloud.common.utils.EncryptUtils;
 import com.zw.cloud.common.utils.JjwtUtils;
 import com.zw.cloud.common.utils.ZXingCodeSimpleUtils;
 import com.zw.cloud.netty.entity.dto.NettyMsgDTO;
-import com.zw.cloud.netty.enums.MsgActionEnum;
+import com.zw.cloud.netty.enums.EnumNettyMsgTag;
 import com.zw.cloud.netty.enums.OperatorFriendRequestTypeEnum;
 import com.zw.cloud.netty.enums.SearchFriendsStatusEnum;
 import com.zw.cloud.netty.web.entity.chat.FriendsRequest;
@@ -70,7 +70,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 throw new BizException("密码错误");
             }
             BeanUtils.copyProperties(userResult, userVo);
-            String jwt = JjwtUtils.createJwt(userVo.getId(), userVo.getUsername(), Lists.newArrayList(""));
+            String jwt = JjwtUtils.createJwt(String.valueOf(userVo.getId()), userVo.getUsername(), Lists.newArrayList(""));
             userVo.setAccessToken(jwt);
             return userVo;
         }
@@ -89,7 +89,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         user.setQrcode(qrCode);
         save(user);
         BeanUtils.copyProperties(user, userVo);
-        String jwt = JjwtUtils.createJwt(userVo.getId(), userVo.getUsername(), Lists.newArrayList(""));
+        String jwt = JjwtUtils.createJwt(String.valueOf(userVo.getId()), userVo.getUsername(), Lists.newArrayList(""));
         userVo.setAccessToken(jwt);
         return userVo;
     }
@@ -100,7 +100,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     @Override
-    public SearchFriendsStatusEnum preconditionSearchFriends(String myUserId, String friendUserName) {
+    public SearchFriendsStatusEnum preconditionSearchFriends(Long myUserId, String friendUserName) {
         UserInfo user = checkUserNameIsExit(friendUserName);
         //1.搜索的用户如果不存在，则返回【无此用户】
         if(Objects.isNull(user)){
@@ -122,7 +122,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     @Override
-    public void sendFriendRequest(String myUserId, String friendUserName) {
+    public void sendFriendRequest(Long myUserId, String friendUserName) {
         UserInfo user = checkUserNameIsExit(friendUserName);
         MyFriend myF = myFriendService.queryMyFriendById(myUserId,user.getId());
         if (Objects.nonNull(myF)) {
@@ -134,18 +134,18 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     @Override
-    public List<FriendsRequestVO> queryFriendRequestList(String acceptUserId) {
+    public List<FriendsRequestVO> queryFriendRequestList(Long acceptUserId) {
         return baseMapper.queryFriendRequestList(acceptUserId);
     }
 
     @Override
-    public List<MyFriendsVO> queryMyFriends(String userId){
+    public List<MyFriendsVO> queryMyFriends(Long userId){
         return baseMapper.queryMyFriends(userId);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public List<MyFriendsVO> operFriendRequest(String acceptUserId, String sendUserId, Integer operType) {
+    public List<MyFriendsVO> operFriendRequest(Long acceptUserId, Long sendUserId, Integer operType) {
         FriendsRequest friendsRequest = new FriendsRequest();
         friendsRequest.setAcceptUserId(acceptUserId);
         friendsRequest.setSendUserId(sendUserId);
@@ -161,9 +161,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                //使用websocket 主动推送消息到请求发起者，更新他的通讯录列表为最新
                //消息的推送
                NettyMsgDTO nettyMsgDTO = new NettyMsgDTO();
-               nettyMsgDTO.setTag(MsgActionEnum.PULL_FRIEND.type);
-               nettyMsgDTO.setUserId(acceptUserId);
-               nettyMsgDTO.setTargetUserId(sendUserId);
+               nettyMsgDTO.setTag(EnumNettyMsgTag.PULL_FRIEND.getType());
+               nettyMsgDTO.setUserId(String.valueOf(acceptUserId));
+               nettyMsgDTO.setTargetUserId(String.valueOf(sendUserId));
                nettyMsgDTO.setData("添加好友申请已通过");
                sendChannel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
            }

@@ -28,22 +28,22 @@ public interface IUserInfoService extends IService<UserInfo> {
     /**
      * 搜索好友的前置条件
      */
-    SearchFriendsStatusEnum preconditionSearchFriends(String myUserId, String friendUserName);
+    SearchFriendsStatusEnum preconditionSearchFriends(Long myUserId, String friendUserName);
 
     /**
      * 发送好友请求
      */
-    void sendFriendRequest(String myUserId,String friendUserName);
+    void sendFriendRequest(Long myUserId,String friendUserName);
 
     /**
      * 好友请求列表查询
      */
-    List<FriendsRequestVO> queryFriendRequestList(String acceptUserId);
+    List<FriendsRequestVO> queryFriendRequestList(Long acceptUserId);
 
     /**
      * 添加好友处理
      */
-    List<MyFriendsVO> operFriendRequest(String acceptUserId, String sendUserId, Integer operType);
+    List<MyFriendsVO> operFriendRequest(Long acceptUserId, Long sendUserId, Integer operType);
 
-    List<MyFriendsVO> queryMyFriends(String userId);
+    List<MyFriendsVO> queryMyFriends(Long userId);
 }

@@ -1,6 +1,8 @@
 package com.zw.cloud.netty.web.controller.chat;
 
 
+import cn.hutool.http.server.HttpServerRequest;
+import cn.hutool.http.server.HttpServerResponse;
 import com.alibaba.fastjson.JSON;
 import com.zw.cloud.common.exception.BizException;
 import com.zw.cloud.netty.enums.SearchFriendsStatusEnum;
@@ -13,14 +15,20 @@ import com.zw.cloud.netty.web.entity.vo.UserVo;
 import com.zw.cloud.netty.web.service.api.chat.IChatMsgService;
 import com.zw.cloud.netty.web.service.api.chat.IUserInfoService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * <p>
@@ -52,13 +60,32 @@ public class UserInfoController {
      * 用户头像上传访问方法
      */
     @RequestMapping("/uploadFaceBase64")
-    public UserVo uploadFaceBase64(@RequestBody UserBO userBO) throws Exception {
+    public UserVo uploadFaceBase64(@RequestBody UserBO userBO) {
         //获取前端传过来的base64的字符串，然后转为文件对象在进行上传
         String base64Data = userBO.getFaceData();
         log.info("[UserInfoController][uploadFaceBase64]userBO is {}", JSON.toJSONString(userBO));
         //更新用户头像
         UserInfo user = new UserInfo();
         user.setId(userBO.getUserId());
+        user.setFaceImage(base64Data);
+        user.setFaceImageBig(base64Data);
+        userServices.updateById(user);
+        UserVo userVo = new UserVo();
+        BeanUtils.copyProperties(user,userVo);
+        return userVo;
+    }
+
+    /**
+     * 用户头像上传访问方法
+     */
+    @RequestMapping("/uploadFace")
+    public UserVo uploadFace(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request) throws Exception {
+        String base64Data = Base64.encodeBase64String(file.getBytes());
+        String userId = request.getParameter("userId");
+        log.info("[UserInfoController][uploadFaceBase64]base64Data is {}", base64Data);
+        //更新用户头像
+        UserInfo user = new UserInfo();
+        user.setId(Long.parseLong(userId));
         user.setFaceImage(base64Data);
         user.setFaceImageBig(base64Data);
         userServices.updateById(user);
@@ -79,8 +106,8 @@ public class UserInfoController {
     }
 
     @RequestMapping("/searchFriend")
-    public UserVo searchFriend(String myUserId,String friendUserName){
-        if(StringUtils.isBlank(myUserId)|| StringUtils.isBlank(friendUserName)){
+    public UserVo searchFriend(Long myUserId,String friendUserName){
+        if(Objects.isNull(myUserId) || StringUtils.isBlank(friendUserName)){
             throw new BizException("好友信息为空");
         }
         /**
@@ -104,8 +131,8 @@ public class UserInfoController {
      * 发送添加好友请求的方法
      */
     @RequestMapping("/addFriendRequest")
-    public void addFriendRequest(String myUserId,String friendUserName){
-        if(StringUtils.isBlank(myUserId)|| StringUtils.isBlank(friendUserName)){
+    public void addFriendRequest(Long myUserId,String friendUserName){
+        if(Objects.isNull(myUserId) || StringUtils.isBlank(friendUserName)){
             throw new BizException("好友信息为空");
         }
 
@@ -122,7 +149,7 @@ public class UserInfoController {
      * 好友请求列表查询
      */
     @RequestMapping("/queryFriendRequest")
-    public List<FriendsRequestVO> queryFriendRequest(String userId){
+    public List<FriendsRequestVO> queryFriendRequest(Long userId){
         return userServices.queryFriendRequestList(userId);
     }
 
@@ -130,7 +157,7 @@ public class UserInfoController {
      * 好友请求处理
      */
     @RequestMapping("/operFriendRequest")
-    public List<MyFriendsVO> operFriendRequest(String acceptUserId,String sendUserId,Integer operType){
+    public List<MyFriendsVO> operFriendRequest(Long acceptUserId,Long sendUserId,Integer operType){
         return userServices.operFriendRequest(acceptUserId, sendUserId, operType);
     }
 
@@ -140,8 +167,8 @@ public class UserInfoController {
      * @return
      */
     @RequestMapping("/myFriends")
-    public List<MyFriendsVO> myFriends(String userId){
-        if (StringUtils.isBlank(userId)){
+    public List<MyFriendsVO> myFriends(Long userId){
+        if (Objects.isNull(userId)){
             throw new BizException("用户id为空");
         }
         //数据库查询好友列表
@@ -152,8 +179,8 @@ public class UserInfoController {
      * 用户手机端获取未签收的消息列表
      */
     @RequestMapping("/getUnReadMsgList")
-    public List<ChatMsg> getUnReadMsgList(String acceptUserId){
-        if(StringUtils.isBlank(acceptUserId)){
+    public List<ChatMsg> getUnReadMsgList(Long acceptUserId){
+        if(Objects.isNull(acceptUserId)){
             throw new BizException("接收者ID不能为空");
         }
         //根据接收ID查找未签收的消息列表

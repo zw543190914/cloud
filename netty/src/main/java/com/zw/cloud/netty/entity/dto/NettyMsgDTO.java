@@ -15,7 +15,7 @@ public class NettyMsgDTO implements Serializable {
      * 消息标签
      * EnumNettyMsgTag
      */
-    private Integer tag = EnumNettyMsgTag.PUSH.getKey();
+    private Integer tag;
     /**
      * 消息内容
      */

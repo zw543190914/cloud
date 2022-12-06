@@ -8,7 +8,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class UserVo implements Serializable {
-    private String id;
+    private Long id;
 
     private String username;
 
