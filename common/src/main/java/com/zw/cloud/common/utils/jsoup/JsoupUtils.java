@@ -48,14 +48,15 @@ public class JsoupUtils {
             Elements ul = doc.getElementsByClass("imglist clearfix pageNum" + i);
             Elements li = ul.select("li");
             for (Element l : li) {
-                Elements a = l.select("a");
-                Element e = a.get(1);
-
-
-                String href = e.attr("href");
-                String title = e.ownText();
-                log.info("[jsoupParseBaiduImg] href:{},title:{}", href, title);
                 try {
+                    Elements a = l.select("a");
+                    Element e = a.get(1);
+
+
+                    String href = e.attr("href");
+                    String title = e.ownText();
+                    log.info("[jsoupParseBaiduImg] href:{},title:{}", href, title);
+
                     Document imgDoc = Jsoup.connect("https://image.baidu.com" + href)
                             .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36")
                             .timeout(10000).get();
@@ -78,9 +79,10 @@ public class JsoupUtils {
                     ImgAttachmentVO imgDTO = new ImgAttachmentVO();
                     imgDTO.setTitle(title + "." + type).setUrl(src);
                     result.add(imgDTO);
-                } catch (IOException ioException) {
-                    log.warn("[jsoupParseBaiduImg] href:{},error is ", href, ioException);
+                } catch (Exception ioException) {
+                    log.warn("[jsoupParseDocument]error is ",ioException);
                 }
+
             }
         }
     }
