@@ -42,7 +42,7 @@ public class BaiduImgSeleniumHtmlController {
         List<ImgAttachment> attachmentList = imgDTOList.stream().map(imgAttachment -> {
             ImgAttachment attachment = new ImgAttachment();
             BeanUtils.copyIgnoreNullValue(imgAttachment, attachment);
-            imgAttachment.setType(key);
+            attachment.setType(key);
             return attachment;
         }).collect(Collectors.toList());
         imgAttachmentService.saveBatch(attachmentList);
