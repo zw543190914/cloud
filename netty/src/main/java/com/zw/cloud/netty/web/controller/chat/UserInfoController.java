@@ -19,10 +19,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -78,7 +75,7 @@ public class UserInfoController {
     /**
      * 用户头像上传访问方法
      */
-    @RequestMapping("/uploadFace")
+    @PostMapping("/uploadFace")
     public UserVo uploadFace(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request) throws Exception {
         String base64Data = Base64.encodeBase64String(file.getBytes());
         String userId = request.getParameter("userId");
@@ -97,16 +94,18 @@ public class UserInfoController {
     /**
      * 修改昵称
      */
-    @RequestMapping("/setNickname")
+    @PostMapping("/setNickname")
     public UserVo setNickName(UserInfo user){
+        log.info("[UserInfoController][setNickName]user is {}", JSON.toJSONString(user));
         userServices.updateById(user);
         UserVo userVo = new UserVo();
         BeanUtils.copyProperties(user,userVo);
         return userVo;
     }
 
-    @RequestMapping("/searchFriend")
+    @PostMapping("/searchFriend")
     public UserVo searchFriend(Long myUserId,String friendUserName){
+        log.info("[UserInfoController][searchFriend]myUserId is {},friendUserName is {}", myUserId,friendUserName);
         if(Objects.isNull(myUserId) || StringUtils.isBlank(friendUserName)){
             throw new BizException("好友信息为空");
         }
@@ -130,8 +129,10 @@ public class UserInfoController {
     /**
      * 发送添加好友请求的方法
      */
-    @RequestMapping("/addFriendRequest")
+    @PostMapping("/addFriendRequest")
     public void addFriendRequest(Long myUserId,String friendUserName){
+        log.info("[UserInfoController][addFriendRequest]myUserId is {},friendUserName is {}", myUserId,friendUserName);
+
         if(Objects.isNull(myUserId) || StringUtils.isBlank(friendUserName)){
             throw new BizException("好友信息为空");
         }
@@ -148,16 +149,18 @@ public class UserInfoController {
     /**
      * 好友请求列表查询
      */
-    @RequestMapping("/queryFriendRequest")
+    @PostMapping("/queryFriendRequest")
     public List<FriendsRequestVO> queryFriendRequest(Long userId){
+        log.info("[UserInfoController][queryFriendRequest]userId is {}", userId);
         return userServices.queryFriendRequestList(userId);
     }
 
     /**
      * 好友请求处理
      */
-    @RequestMapping("/operFriendRequest")
+    @PostMapping("/operFriendRequest")
     public List<MyFriendsVO> operFriendRequest(Long acceptUserId,Long sendUserId,Integer operType){
+        log.info("[UserInfoController][operFriendRequest]acceptUserId is {},sendUserId is {},operType is {}", acceptUserId,operType);
         return userServices.operFriendRequest(acceptUserId, sendUserId, operType);
     }
 
@@ -166,8 +169,9 @@ public class UserInfoController {
      * @param userId
      * @return
      */
-    @RequestMapping("/myFriends")
+    @PostMapping("/myFriends")
     public List<MyFriendsVO> myFriends(Long userId){
+        log.info("[UserInfoController][myFriends]userId is {}", userId);
         if (Objects.isNull(userId)){
             throw new BizException("用户id为空");
         }
@@ -178,8 +182,9 @@ public class UserInfoController {
     /**
      * 用户手机端获取未签收的消息列表
      */
-    @RequestMapping("/getUnReadMsgList")
+    @PostMapping("/getUnReadMsgList")
     public List<ChatMsg> getUnReadMsgList(Long acceptUserId){
+        log.info("[UserInfoController][getUnReadMsgList]acceptUserId is {}", acceptUserId);
         if(Objects.isNull(acceptUserId)){
             throw new BizException("接收者ID不能为空");
         }

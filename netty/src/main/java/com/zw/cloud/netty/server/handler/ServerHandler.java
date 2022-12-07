@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.zw.cloud.netty.entity.dto.NettyMsgDTO;
 import com.zw.cloud.netty.enums.EnumNettyMsgTag;
 import com.zw.cloud.netty.enums.MsgSignFlagEnum;
+import com.zw.cloud.netty.server.CustomerExecutorService;
 import com.zw.cloud.netty.server.NettyFullHttpRequestHandlerService;
 import com.zw.cloud.netty.utils.SpringUtil;
 import com.zw.cloud.netty.web.entity.chat.ChatMsg;
@@ -119,7 +120,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
             IChatMsgService chatMsgService = (IChatMsgService) SpringUtil.getBean("chatMsgServiceImpl");
             chatMsg.setSignFlag(MsgSignFlagEnum.unsign.getType());
-            chatMsgService.save(chatMsg);
+            // 异步保存消息
+            CustomerExecutorService.pool.submit(() -> chatMsgService.save(chatMsg));
 
             //发送消息
             sendMsg(nettyMsgDTO);

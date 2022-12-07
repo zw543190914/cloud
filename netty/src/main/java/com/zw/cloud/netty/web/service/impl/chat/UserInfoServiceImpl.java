@@ -1,5 +1,6 @@
 package com.zw.cloud.netty.web.service.impl.chat;
 
+import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Lists;
@@ -12,6 +13,7 @@ import com.zw.cloud.netty.enums.EnumNettyMsgTag;
 import com.zw.cloud.netty.enums.OperatorFriendRequestTypeEnum;
 import com.zw.cloud.netty.enums.SearchFriendsStatusEnum;
 import com.zw.cloud.netty.web.entity.chat.FriendsRequest;
+import com.zw.cloud.netty.web.entity.chat.ImgAttachment;
 import com.zw.cloud.netty.web.entity.chat.MyFriend;
 import com.zw.cloud.netty.web.entity.chat.UserInfo;
 import com.zw.cloud.netty.web.dao.chat.UserInfoMapper;
@@ -19,6 +21,7 @@ import com.zw.cloud.netty.web.entity.vo.FriendsRequestVO;
 import com.zw.cloud.netty.web.entity.vo.MyFriendsVO;
 import com.zw.cloud.netty.web.entity.vo.UserVo;
 import com.zw.cloud.netty.web.service.api.chat.IFriendsRequestService;
+import com.zw.cloud.netty.web.service.api.chat.IImgAttachmentService;
 import com.zw.cloud.netty.web.service.api.chat.IMyFriendService;
 import com.zw.cloud.netty.web.service.api.chat.IUserInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -52,6 +55,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     private IMyFriendService myFriendService;
     @Autowired
     private IFriendsRequestService friendsRequestService;
+    @Autowired
+    IImgAttachmentService imgAttachmentService;
 
     @Override
     @Transactional
@@ -76,10 +81,16 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         }
 
         //注册
+        int count = imgAttachmentService.count();
+        int id = RandomUtil.randomInt(1, count);
+        ImgAttachment imgAttachment = imgAttachmentService.getById((long) id);
+        if (Objects.nonNull(imgAttachment)) {
+            user.setFaceImage(imgAttachment.getUrl());
+            user.setFaceImageBig(imgAttachment.getUrl());
+        }
         user.setNickname(user.getUsername());
         user.setPassword(EncryptUtils.encrypted(user.getPassword()));
-        user.setFaceImage("");
-        user.setFaceImageBig("");
+
         String qrCode = null;
         try {
             qrCode = ZXingCodeSimpleUtils.crateQRCode("bird_qrcode:" + user.getUsername());
@@ -125,7 +136,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     public void sendFriendRequest(Long myUserId, String friendUserName) {
         UserInfo user = checkUserNameIsExit(friendUserName);
         MyFriend myF = myFriendService.queryMyFriendById(myUserId,user.getId());
-        if (Objects.nonNull(myF)) {
+        if (Objects.isNull(myF)) {
+            log.info("[UserInfoServiceImpl][sendFriendRequest]");
             FriendsRequest friendsRequest = new FriendsRequest();
             friendsRequest.setSendUserId(myUserId);
             friendsRequest.setAcceptUserId(user.getId());
@@ -153,10 +165,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         friendsRequestService.deleteByFriendRequest(friendsRequest);
        if(operType.equals(OperatorFriendRequestTypeEnum.PASS.type)){
             //进行双向好友数据保存
-            myFriendService.saveFriends(sendUserId,acceptUserId);
+           log.info("[UserInfoServiceImpl][operFriendRequest] 进行双向好友数据保存");
+           myFriendService.saveFriends(sendUserId,acceptUserId);
             myFriendService.saveFriends(acceptUserId,sendUserId);
 
-           Channel sendChannel  = userManage.get(sendUserId);
+           Channel sendChannel  = userManage.get(String.valueOf(sendUserId));
            if(Objects.nonNull(sendChannel)){
                //使用websocket 主动推送消息到请求发起者，更新他的通讯录列表为最新
                //消息的推送
@@ -166,6 +179,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                nettyMsgDTO.setTargetUserId(String.valueOf(sendUserId));
                nettyMsgDTO.setData("添加好友申请已通过");
                sendChannel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
+               log.info("[UserInfoServiceImpl][operFriendRequest] 添加好友申请已通过");
            }
 
         }
