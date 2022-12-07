@@ -1,8 +1,8 @@
-package com.zw.cloud.tools.utils.html.selenium;
+package com.zw.cloud.common.utils.selenium;
 
 import com.alibaba.fastjson.JSON;
-import com.zw.cloud.tools.entity.img.ImgAttachment;
-import com.zw.cloud.tools.utils.html.jsoup.JsoupUtils;
+import com.zw.cloud.common.entity.vo.ImgAttachmentVO;
+import com.zw.cloud.common.utils.jsoup.JsoupUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -14,13 +14,13 @@ import java.util.Collections;
 import java.util.List;
 
 @Slf4j
-public class BaiduImgSeleniumHtmlTest {
+public class BaiduImgSeleniumHtmlUtils {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         parseHtml("https://image.baidu.com/search/index?tn=baiduimage&ipn=r&ct=201326592&cl=2&lm=-1&st=-1&fm=result&fr=&sf=1&fmq=1669299978381_R&pv=&ic=0&nc=1&z=&hd=&latest=&copyright=&se=1&showtab=0&fb=0&width=&height=&face=0&istype=2&dyTabStr=MCwzLDYsNCw1LDEsOCwyLDcsOQ%3D%3D&ie=utf-8&sid=&word=%E9%9D%92%E6%98%A5%E6%A0%A1%E5%9B%AD");
 
     }
-    public static List<ImgAttachment> parseHtml(String url) throws IOException, InterruptedException {
+    public static List<ImgAttachmentVO> parseHtml(String url) throws IOException, InterruptedException {
 
         //参数配置
         //安装 https://blog.csdn.net/weixin_53782558/article/details/126594094
@@ -63,9 +63,9 @@ public class BaiduImgSeleniumHtmlTest {
 
         String html = driver.getPageSource();
         //log.info("[BaiduImgSeleniumHtmlTest][getHtml] html:{}", html);
-        List<ImgAttachment> result = new ArrayList<>(250);
-        List<ImgAttachment> baiduImgDTOS = JsoupUtils.jsoupParseHtml(html,result);
-        log.info("[BaiduImgSeleniumHtmlTest][getHtml] baiduImgDTOS.size = {},baiduImgDTOS is {}", baiduImgDTOS.size(), JSON.toJSONString(baiduImgDTOS));
+        List<ImgAttachmentVO> result = new ArrayList<>(250);
+        List<ImgAttachmentVO> baiduImgDTOS = JsoupUtils.jsoupParseHtml(html,result);
+        log.info("[BaiduImgSeleniumHtmlUtils][getHtml] baiduImgDTOS.size = {},baiduImgDTOS is {}", baiduImgDTOS.size(), JSON.toJSONString(baiduImgDTOS));
         driver.close();
         return baiduImgDTOS;
     }

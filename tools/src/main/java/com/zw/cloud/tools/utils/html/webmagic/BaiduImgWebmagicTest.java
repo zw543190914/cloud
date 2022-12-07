@@ -1,7 +1,7 @@
 package com.zw.cloud.tools.utils.html.webmagic;
 
-import com.zw.cloud.tools.entity.img.ImgAttachment;
-import com.zw.cloud.tools.utils.html.jsoup.JsoupUtils;
+import com.zw.cloud.common.entity.vo.ImgAttachmentVO;
+import com.zw.cloud.common.utils.jsoup.JsoupUtils;
 import com.zw.cloud.tools.utils.html.webmagic.pipeline.BaiduImgPipelineData;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
@@ -15,7 +15,6 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.scheduler.BloomFilterDuplicateRemover;
 import us.codecraft.webmagic.scheduler.QueueScheduler;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,7 @@ public class BaiduImgWebmagicTest implements PageProcessor {
             page.addTargetRequest(s);
         }*/
         Document document = page.getHtml().getDocument();
-        List<ImgAttachment> imgDTOList = new ArrayList<>(200);
+        List<ImgAttachmentVO> imgDTOList = new ArrayList<>(200);
         try {
             JsoupUtils.jsoupParseDocument(document,imgDTOList);
         } catch (IOException e) {

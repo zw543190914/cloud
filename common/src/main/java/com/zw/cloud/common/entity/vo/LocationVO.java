@@ -1,4 +1,4 @@
-package com.zw.cloud.common.entity.dto;
+package com.zw.cloud.common.entity.vo;
 
 import lombok.Getter;
 import lombok.Setter;

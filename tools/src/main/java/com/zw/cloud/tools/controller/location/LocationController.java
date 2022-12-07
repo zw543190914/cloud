@@ -3,7 +3,7 @@ package com.zw.cloud.tools.controller.location;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.zw.cloud.common.entity.dto.LocationVO;
+import com.zw.cloud.common.entity.vo.LocationVO;
 import com.zw.cloud.common.exception.BizException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

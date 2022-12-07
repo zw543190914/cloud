@@ -1,9 +1,11 @@
 package com.zw.cloud.tools.controller.html;
 
+import com.zw.cloud.common.entity.vo.ImgAttachmentVO;
 import com.zw.cloud.common.utils.FileUtils;
+import com.zw.cloud.common.utils.bean.BeanUtils;
+import com.zw.cloud.common.utils.selenium.BaiduImgSeleniumHtmlUtils;
 import com.zw.cloud.tools.entity.img.ImgAttachment;
 import com.zw.cloud.tools.service.api.img.IImgAttachmentService;
-import com.zw.cloud.tools.utils.html.selenium.BaiduImgSeleniumHtmlTest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -27,14 +30,19 @@ public class BaiduImgSeleniumHtmlController {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start("t1");
         String url = "https://image.baidu.com/search/index?tn=baiduimage&ipn=r&ct=201326592&cl=2&lm=-1&st=-1&fm=result&fr=&sf=1&fmq=1669299978381_R&pv=&ic=0&nc=1&z=&hd=&latest=&copyright=&se=1&showtab=0&fb=0&width=&height=&face=0&istype=2&dyTabStr=MCwzLDYsNCw1LDEsOCwyLDcsOQ%3D%3D&ie=utf-8&sid=&word=" + key;
-        List<ImgAttachment> imgDTOList = BaiduImgSeleniumHtmlTest.parseHtml(url);
+        List<ImgAttachmentVO> imgDTOList = BaiduImgSeleniumHtmlUtils.parseHtml(url);
         stopWatch.stop();
         stopWatch.start("t2");
         if (CollectionUtils.isEmpty(imgDTOList)) {
             return;
         }
-        imgDTOList.forEach(imgAttachment -> imgAttachment.setType(key));
-        imgAttachmentService.saveBatch(imgDTOList);
+        List<ImgAttachment> attachmentList = imgDTOList.stream().map(imgAttachment -> {
+            ImgAttachment attachment = new ImgAttachment();
+            BeanUtils.copyIgnoreNullValue(imgAttachment, attachment);
+            imgAttachment.setType(key);
+            return attachment;
+        }).collect(Collectors.toList());
+        imgAttachmentService.saveBatch(attachmentList);
         stopWatch.stop();
         stopWatch.start("t3");
         imgDTOList.parallelStream().forEach(baiduImgDTO -> FileUtils.downLoadImage(baiduImgDTO.getUrl(),"D:\\img\\",baiduImgDTO.getTitle()));
