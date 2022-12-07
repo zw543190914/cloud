@@ -58,7 +58,7 @@ public class GeneratorCodeUtils {
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         //表名，多个英文逗号分割
-        strategy.setInclude("chat_msg","friends_request","my_friend","user_info");
+        strategy.setInclude("img_attachment");
         // 逻辑删除
         strategy.setLogicDeleteFieldName("deleted");
         //strategy.setSuperEntityClass("你自己的父类实体,没有就不用设置!");

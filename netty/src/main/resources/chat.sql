@@ -62,8 +62,8 @@ CREATE TABLE `user_info` (
                              `id` varchar(64) NOT NULL,
                              `username` varchar(20) NOT NULL COMMENT '用户名，账号',
                              `password` varchar(64) NOT NULL COMMENT '密码',
-                             `face_image` text NOT NULL COMMENT '我的头像，如果没有默认给一张',
-                             `face_image_big` text NOT NULL,
+                             `face_image` varchar(255) NOT NULL COMMENT '我的头像，如果没有默认给一张',
+                             `face_image_big` varchar(255) NOT NULL,
                              `nickname` varchar(20) NOT NULL COMMENT '昵称',
                              `qrcode` text COMMENT '新用户注册后默认后台生成二维码，并且上传到fastdfs',
                              `cid` varchar(64) DEFAULT NULL COMMENT '设备cid',
@@ -74,6 +74,14 @@ CREATE TABLE `user_info` (
                              UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ----------------------------
--- Records of users
--- ----------------------------
+CREATE TABLE `img_attachment` (
+                                  `id` bigint NOT NULL AUTO_INCREMENT,
+                                  `url` varchar(255) NOT NULL DEFAULT '' COMMENT '下载地址',
+                                  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
+                                  `type` varchar(32) NOT NULL DEFAULT '' COMMENT '类型',
+                                  `remark` varchar(255)NOT NULL DEFAULT '' COMMENT '备注',
+                                  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否删除',
+                                  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+                                  PRIMARY KEY (`id`)
+) ENGINE=InnoDB COMMENT='图片表';
