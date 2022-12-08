@@ -69,6 +69,7 @@ spring:
 server:
   port: 18092
 
+# ws://192.168.0.112:18888/ws
 netty:
   server:
     port: 18888

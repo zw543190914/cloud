@@ -13,6 +13,7 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshakerFactory;
 import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.net.URLEncoder;
@@ -119,6 +120,11 @@ public class NettyFullHttpRequestHandlerService {
             ChannelFuture handshake = handshaker.handshake(ctx.channel(), request);
             Map<String, String> params = getUrlParams(request.uri());
             final String accessToken = params.get("accessToken");
+            if (StringUtils.isBlank(accessToken)) {
+                log.warn("[ServerHandler][channelRead] accessToken is null");
+                ctx.channel().close();
+                return;
+            }
             Claims claims = JjwtUtils.parseJwt(accessToken);
             final String userId = claims.getId();
             handshake.addListener(new ChannelFutureListener() {

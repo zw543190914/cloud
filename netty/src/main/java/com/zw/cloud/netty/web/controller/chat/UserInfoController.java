@@ -1,8 +1,6 @@
 package com.zw.cloud.netty.web.controller.chat;
 
 
-import cn.hutool.http.server.HttpServerRequest;
-import cn.hutool.http.server.HttpServerResponse;
 import com.alibaba.fastjson.JSON;
 import com.zw.cloud.common.exception.BizException;
 import com.zw.cloud.netty.enums.SearchFriendsStatusEnum;
@@ -24,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -48,7 +45,8 @@ public class UserInfoController {
     /**
      * 用户登录与注册
      */
-    @RequestMapping("/registerOrLogin")
+    @PostMapping("/registerOrLogin")
+    //http://localhost:18092/chat/user/registerOrLogin
     public UserVo registerOrLogin(UserInfo user) {
         return userServices.registerOrLogin(user);
     }
@@ -56,7 +54,7 @@ public class UserInfoController {
     /**
      * 用户头像上传访问方法
      */
-    @RequestMapping("/uploadFaceBase64")
+    @PostMapping("/uploadFaceBase64")
     public UserVo uploadFaceBase64(@RequestBody UserBO userBO) {
         //获取前端传过来的base64的字符串，然后转为文件对象在进行上传
         String base64Data = userBO.getFaceData();
@@ -104,6 +102,7 @@ public class UserInfoController {
     }
 
     @PostMapping("/searchFriend")
+    //http://localhost:18092/chat/user/searchFriend?myUserId=&friendUserName=
     public UserVo searchFriend(Long myUserId,String friendUserName){
         log.info("[UserInfoController][searchFriend]myUserId is {},friendUserName is {}", myUserId,friendUserName);
         if(Objects.isNull(myUserId) || StringUtils.isBlank(friendUserName)){
@@ -160,7 +159,7 @@ public class UserInfoController {
      */
     @PostMapping("/operFriendRequest")
     public List<MyFriendsVO> operFriendRequest(Long acceptUserId,Long sendUserId,Integer operType){
-        log.info("[UserInfoController][operFriendRequest]acceptUserId is {},sendUserId is {},operType is {}", acceptUserId,operType);
+        log.info("[UserInfoController][operFriendRequest]acceptUserId is {},sendUserId is {},operType is {}", acceptUserId,sendUserId,operType);
         return userServices.operFriendRequest(acceptUserId, sendUserId, operType);
     }
 
