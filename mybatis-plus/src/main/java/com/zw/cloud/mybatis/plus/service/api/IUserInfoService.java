@@ -29,6 +29,17 @@ public interface IUserInfoService extends IService<UserInfo> {
 
     void testSerializable();
 
+    /**
+     * 传播属性测试
+     */
+    void testPropagationRequiresNew(UserInfo userInfo);
+
+    void testPropagationRequires(UserInfo userInfo);
+
+    void testPropagationNested(UserInfo userInfo);
+
+    void testPropagationDefault(UserInfo userInfo);
+
     List<UserInfo> queryJsonData(String name);
 
     List<UserInfo> queryJsonDataLike(String name);

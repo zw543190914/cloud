@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
+import com.zw.cloud.common.exception.BizException;
 import com.zw.cloud.mybatis.plus.entity.UserInfo;
 import com.zw.cloud.mybatis.plus.mapper.UserInfoMapper;
 import com.zw.cloud.mybatis.plus.service.api.IUserInfoService;
@@ -153,6 +154,42 @@ public class UserInfoController {
     //http://localhost:8080/user-info/testSerializable?id=794254126413250560
     public void testSerializable() {
         userService.testSerializable();
+    }
+
+    @GetMapping("/testPropagationRequiresNew/{id}")
+    //http://localhost:8080/user-info/testPropagationRequiresNew/1588093790661382146
+    public void testPropagationRequiresNew(@PathVariable Long id) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(id);
+        userInfo.setName("testSerializable");
+        userService.testPropagationRequiresNew(userInfo);
+    }
+
+    @GetMapping("/testPropagationRequires/{id}")
+    //http://localhost:8080/user-info/testPropagationRequires/1588093790661382146
+    public void testPropagationRequires(@PathVariable Long id) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(id);
+        userInfo.setName("testPropagationRequires");
+        userService.testPropagationRequires(userInfo);
+    }
+
+    @GetMapping("/testPropagationNested/{id}")
+    //http://localhost:8080/user-info/testPropagationNested/1588093790661382146
+    public void testPropagationNested(@PathVariable Long id) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(id);
+        userInfo.setName("testPropagationNested");
+        userService.testPropagationNested(userInfo);
+    }
+
+    @GetMapping("/testPropagationDefault/{id}")
+    //http://localhost:8080/user-info/testPropagationDefault/1588093790661382146
+    public void testPropagationDefault(@PathVariable Long id) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(id);
+        userInfo.setName("testPropagationDefault");
+        userService.testPropagationDefault(userInfo);
     }
 
     @GetMapping("/query")

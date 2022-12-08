@@ -1,4 +1,5 @@
 package com.zw.cloud.mybatis.plus.service.impl;
+import java.util.Date;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -6,9 +7,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
+import com.zw.cloud.common.exception.BizException;
 import com.zw.cloud.mybatis.plus.entity.UserInfo;
+import com.zw.cloud.mybatis.plus.entity.UserRole;
 import com.zw.cloud.mybatis.plus.mapper.UserInfoMapper;
 import com.zw.cloud.mybatis.plus.service.api.IUserInfoService;
+import com.zw.cloud.mybatis.plus.service.api.IUserRoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -26,9 +30,9 @@ import java.util.Map;
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> implements IUserInfoService {
 
     @Autowired
-    private UserInfoMapper userInfoMapper;
-    @Autowired
     private SqlSessionFactory sqlSessionFactory;
+    @Autowired
+    private IUserRoleService userRoleService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -54,7 +58,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Transactional(rollbackFor = Exception.class)
     public void testBatchInsertByMapper(List<UserInfo> userInfoList) {
         long start = System.currentTimeMillis();
-        userInfoMapper.batchInsertByMapper(userInfoList);
+        baseMapper.batchInsertByMapper(userInfoList);
         // 2000条数据 330
         // 10000条数据 1180  接入 sharding-jdbc 1953 1596
         // 556 1129 1115
@@ -74,12 +78,12 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Override
     public void batchInsertByMapper(List<UserInfo> userInfoList) {
-        userInfoMapper.batchInsertByMapper(userInfoList);
+        baseMapper.batchInsertByMapper(userInfoList);
     }
 
     @Override
     public void batchUpdateUserListByMapper(List<UserInfo> userInfoList) {
-        userInfoMapper.batchUpdate(userInfoList);
+        baseMapper.batchUpdate(userInfoList);
     }
 
     @Override
@@ -107,8 +111,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void testMvcc(Long id) {
-        UserInfo userInfo = userInfoMapper.selectById(id);
-        //UserInfo userInfo = userInfoMapper.queryByIdForUpdate(id);
+        UserInfo userInfo = baseMapper.selectById(id);
+        //UserInfo userInfo = baseMapper.queryByIdForUpdate(id);
         // 此时数据为空
         log.info("[testMvcc] userInfo is {}", JSON.toJSONString(userInfo));
 
@@ -118,7 +122,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             updateUserInfo.setId(id);
             updateUserInfo.setAge(66);
             // 此时其他事务提交，该id 有数据，可以修改成功
-            int i = userInfoMapper.updateById(updateUserInfo);
+            int i = baseMapper.updateById(updateUserInfo);
             log.info("[testMvcc] update is {}", i);
         } catch (Exception e) {
             log.error("[testMvcc] error is ", e);
@@ -134,11 +138,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     @Transactional
     public void testRepeatRead(Long id) {
-        UserInfo userInfo = userInfoMapper.selectById(id);
+        UserInfo userInfo = baseMapper.selectById(id);
         log.info("[testRepeatRead] userInfo is {}", JSON.toJSONString(userInfo));
         try {
             Thread.sleep(3000);
-            UserInfo userInfo2 = userInfoMapper.selectById(id);
+            UserInfo userInfo2 = baseMapper.selectById(id);
             log.info("[testRepeatRead] userInfo2 is {}", JSON.toJSONString(userInfo2));
         } catch (Exception e) {
             log.error("[testRepeatRead] error is ", e);
@@ -156,11 +160,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     public void testSerializable() {
         LambdaQueryWrapper<UserInfo> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(UserInfo::getId, Lists.newArrayList(1L,2L));
-        Integer count = userInfoMapper.selectCount(queryWrapper);
+        Integer count = baseMapper.selectCount(queryWrapper);
         log.info("[testSerializable] count is {}",count);
         try {
             Thread.sleep(3000);
-            Integer count2 = userInfoMapper.selectCount(queryWrapper);
+            Integer count2 = baseMapper.selectCount(queryWrapper);
             log.info("[testSerializable] count2 is {}",count2);
         } catch (Exception e) {
             log.error("[testSerializable] error is ", e);
@@ -168,23 +172,80 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void testPropagationRequiresNew(UserInfo userInfo) {
+        baseMapper.updateById(userInfo);
+        UserRole userRole = new UserRole();
+        userRole.setUserId(0);
+        userRole.setRoleId(0);
+        userRoleService.testPropagationRequiresNew(userRole);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void testPropagationRequires(UserInfo userInfo) {
+        baseMapper.updateById(userInfo);
+        UserRole userRole = new UserRole();
+        userRole.setUserId(0);
+        userRole.setRoleId(0);
+        // 使用 REQUIRED 异常被捕获，userInfo 任然没有更新
+        // Transaction rolled back because it has been marked as rollback-only -- 应该使用 NESTED
+        try {
+            userRoleService.testPropagationRequires(userRole);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void testPropagationNested(UserInfo userInfo) {
+        baseMapper.updateById(userInfo);
+        UserRole userRole = new UserRole();
+        userRole.setUserId(0);
+        userRole.setRoleId(0);
+        // 使用 NESTED,子事务抛出异常，区别于REQUIRED userRole 可以正常 更新
+        try {
+            userRoleService.testPropagationNested(userRole);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void testPropagationDefault(UserInfo userInfo) {
+        baseMapper.updateById(userInfo);
+        UserRole userRole = new UserRole();
+        userRole.setUserId(0);
+        userRole.setRoleId(0);
+        // Transaction rolled back because it has been marked as rollback-only
+        try {
+            userRoleService.testPropagationDefault(userRole);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public List<UserInfo> queryJsonData(String name){
         UserInfo userInfo = new UserInfo();
         userInfo.setName(name);
-        return userInfoMapper.queryJsonData(userInfo);
+        return baseMapper.queryJsonData(userInfo);
     }
 
     @Override
     public List<UserInfo> queryJsonDataLike(String name){
         UserInfo userInfo = new UserInfo();
         userInfo.setName(name);
-        return userInfoMapper.queryJsonDataLike(userInfo);
+        return baseMapper.queryJsonDataLike(userInfo);
     }
 
     @Override
     public IPage<UserInfo> queryAllDataTest(Integer pageNo,Integer pageSize){
         IPage<UserInfo> page = new Page<>(pageNo,pageSize);
-        return userInfoMapper.queryAllDataTest(page);
+        return baseMapper.queryAllDataTest(page);
     }
 
     @Override
@@ -211,6 +272,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         where org_code = 'devController' and workshop_id = 1
         and calc_day = '2021-11-10'
         GROUP BY device_id,device_name*/
-        return userInfoMapper.queryUserData(sql.toString());
+        return baseMapper.queryUserData(sql.toString());
     }
 }

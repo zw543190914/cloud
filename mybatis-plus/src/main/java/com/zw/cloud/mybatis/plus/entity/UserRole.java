@@ -2,6 +2,7 @@ package com.zw.cloud.mybatis.plus.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.io.Serializable;
 import lombok.Data;
@@ -22,9 +23,6 @@ public class UserRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
-
     private Integer userId;
 
     private Integer roleId;
@@ -32,20 +30,10 @@ public class UserRole implements Serializable {
     private String remark;
 
     @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
+    private LocalDateTime createTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date updateTime;
-
-    /**
-     * 创建用户
-     */
-    private String createUser;
-
-    /**
-     * 修改用户
-     */
-    private String updateUser;
+    private LocalDateTime updateTime;
 
 
 }
