@@ -116,7 +116,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             chatMsg.setSendUserId(Long.parseLong(userId));
             chatMsg.setAcceptUserId(Long.parseLong(targetUserId));
             chatMsg.setMsg(nettyMsgDTO.getData());
-            chatMsg.setAcceptGroupId(Long.parseLong(targetGroupId));
+            if (StringUtils.isNotBlank(targetGroupId)) {
+                chatMsg.setAcceptGroupId(Long.parseLong(targetGroupId));
+            }
 
             IChatMsgService chatMsgService = (IChatMsgService) SpringUtil.getBean("chatMsgServiceImpl");
             chatMsg.setSignFlag(MsgSignFlagEnum.unsign.getType());

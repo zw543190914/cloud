@@ -25,12 +25,12 @@ CREATE TABLE `chat_msg` (
 -- ----------------------------
 DROP TABLE IF EXISTS `friends_request`;
 CREATE TABLE `friends_request` (
-                                   `id` varchar(64) NOT NULL,
+                                   `id` bigint NOT NULL,
                                    `send_user_id` bigint NOT NULL,
                                    `accept_user_id` bigint NOT NULL,
                                    `request_date_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                    PRIMARY KEY (`id`),
-                                   KEY `idx_accept_user_id` (`accept_user_id`) USING BTREE
+                                   UNIQUE KEY `uk_accept_send_user_id` (`accept_user_id`,`send_user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
@@ -42,7 +42,7 @@ CREATE TABLE `friends_request` (
 -- ----------------------------
 DROP TABLE IF EXISTS `my_friend`;
 CREATE TABLE `my_friend` (
-                              `id` varchar(64) NOT NULL,
+                              `id` bigint NOT NULL,
                               `my_user_id` bigint NOT NULL COMMENT '用户id',
                               `my_friend_user_id` bigint NOT NULL COMMENT '用户的好友id',
                               `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -59,7 +59,7 @@ CREATE TABLE `my_friend` (
 -- ----------------------------
 DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE `user_info` (
-                             `id` varchar(64) NOT NULL,
+                             `id` bigint NOT NULL,
                              `username` varchar(20) NOT NULL COMMENT '用户名，账号',
                              `password` varchar(64) NOT NULL COMMENT '密码',
                              `face_image` varchar(255) NOT NULL COMMENT '我的头像，如果没有默认给一张',

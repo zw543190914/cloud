@@ -36,12 +36,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.zw.cloud.netty.server.handler.ServerHandler.userManage;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author zw
@@ -72,11 +73,12 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             }
             //此用户存在，可登录
             if (!StringUtils.equals(userResult.getPassword(), EncryptUtils.encrypted(user.getPassword()))) {
-                throw new BizException("密码错误");
+                throw new BizException("密码错误 或者 用户名已经被注册");
             }
             BeanUtils.copyProperties(userResult, userVo);
             String jwt = JjwtUtils.createJwt(String.valueOf(userVo.getId()), userVo.getUsername(), Lists.newArrayList(""));
             userVo.setAccessToken(jwt);
+            log.info("[UserInfoServiceImpl][registerOrLogin]userVo is {}", JSON.toJSONString(userVo));
             return userVo;
         }
 
@@ -102,31 +104,32 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         BeanUtils.copyProperties(user, userVo);
         String jwt = JjwtUtils.createJwt(String.valueOf(userVo.getId()), userVo.getUsername(), Lists.newArrayList(""));
         userVo.setAccessToken(jwt);
+        log.info("[UserInfoServiceImpl][registerOrLogin]userVo is {}", JSON.toJSONString(userVo));
         return userVo;
     }
 
     @Override
     public UserInfo checkUserNameIsExit(String username) {
-        return baseMapper.selectOne(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getUsername,username));
+        return baseMapper.selectOne(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getUsername, username));
     }
 
     @Override
     public SearchFriendsStatusEnum preconditionSearchFriends(Long myUserId, String friendUserName) {
         UserInfo user = checkUserNameIsExit(friendUserName);
         //1.搜索的用户如果不存在，则返回【无此用户】
-        if(Objects.isNull(user)){
+        if (Objects.isNull(user)) {
             return SearchFriendsStatusEnum.USER_NOT_EXIST;
         }
         //2.搜索的账号如果是你自己，则返回【不能添加自己】
-        if(myUserId.equals(user.getId())){
+        if (myUserId.equals(user.getId())) {
             return SearchFriendsStatusEnum.NOT_YOURSELF;
         }
         //3.搜索的朋友已经是你好友，返回【该用户已经是你的好友】
         MyFriend myfriend = new MyFriend();
         myfriend.setMyUserId(myUserId);
         myfriend.setMyFriendUserId(user.getId());
-        MyFriend myF = myFriendService.queryMyFriendById(myUserId,user.getId());
-        if(Objects.nonNull(myF)){
+        MyFriend myF = myFriendService.queryMyFriendById(myUserId, user.getId());
+        if (Objects.nonNull(myF)) {
             return SearchFriendsStatusEnum.ALREADY_FRIENDS;
         }
         return SearchFriendsStatusEnum.SUCCESS;
@@ -135,7 +138,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     public void sendFriendRequest(Long myUserId, String friendUserName) {
         UserInfo user = checkUserNameIsExit(friendUserName);
-        MyFriend myF = myFriendService.queryMyFriendById(myUserId,user.getId());
+        MyFriend myF = myFriendService.queryMyFriendById(myUserId, user.getId());
         if (Objects.isNull(myF)) {
             log.info("[UserInfoServiceImpl][sendFriendRequest]");
             FriendsRequest friendsRequest = new FriendsRequest();
@@ -147,11 +150,16 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Override
     public List<FriendsRequestVO> queryFriendRequestList(Long acceptUserId) {
-        return baseMapper.queryFriendRequestList(acceptUserId);
+        log.info("[UserInfoServiceImpl][queryFriendRequestList]acceptUserId is {}", acceptUserId);
+
+        List<FriendsRequestVO> friendRequestList = baseMapper.queryFriendRequestList(acceptUserId);
+        List<Long> sendUserIdList = friendRequestList.stream().map(FriendsRequestVO::getSendUserId).collect(Collectors.toList());
+        log.info("[UserInfoServiceImpl][queryFriendRequestList]friendRequestList is {}", JSON.toJSONString(sendUserIdList));
+        return friendRequestList;
     }
 
     @Override
-    public List<MyFriendsVO> queryMyFriends(Long userId){
+    public List<MyFriendsVO> queryMyFriends(Long userId) {
         return baseMapper.queryMyFriends(userId);
     }
 
@@ -163,24 +171,24 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         friendsRequest.setSendUserId(sendUserId);
         //删除好友请求表中的数据
         friendsRequestService.deleteByFriendRequest(friendsRequest);
-       if(operType.equals(OperatorFriendRequestTypeEnum.PASS.type)){
+        if (operType.equals(OperatorFriendRequestTypeEnum.PASS.type)) {
             //进行双向好友数据保存
-           log.info("[UserInfoServiceImpl][operFriendRequest] 进行双向好友数据保存");
-           myFriendService.saveFriends(sendUserId,acceptUserId);
-            myFriendService.saveFriends(acceptUserId,sendUserId);
+            log.info("[UserInfoServiceImpl][operFriendRequest] 进行双向好友数据保存");
+            myFriendService.saveFriends(sendUserId, acceptUserId);
+            myFriendService.saveFriends(acceptUserId, sendUserId);
 
-           Channel sendChannel  = userManage.get(String.valueOf(sendUserId));
-           if(Objects.nonNull(sendChannel)){
-               //使用websocket 主动推送消息到请求发起者，更新他的通讯录列表为最新
-               //消息的推送
-               NettyMsgDTO nettyMsgDTO = new NettyMsgDTO();
-               nettyMsgDTO.setTag(EnumNettyMsgTag.PULL_FRIEND.getType());
-               nettyMsgDTO.setUserId(String.valueOf(acceptUserId));
-               nettyMsgDTO.setTargetUserId(String.valueOf(sendUserId));
-               nettyMsgDTO.setData("添加好友申请已通过");
-               sendChannel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
-               log.info("[UserInfoServiceImpl][operFriendRequest] 添加好友申请已通过");
-           }
+            Channel sendChannel = userManage.get(String.valueOf(sendUserId));
+            if (Objects.nonNull(sendChannel)) {
+                //使用websocket 主动推送消息到请求发起者，更新他的通讯录列表为最新
+                //消息的推送
+                NettyMsgDTO nettyMsgDTO = new NettyMsgDTO();
+                nettyMsgDTO.setTag(EnumNettyMsgTag.PULL_FRIEND.getType());
+                nettyMsgDTO.setUserId(String.valueOf(acceptUserId));
+                nettyMsgDTO.setTargetUserId(String.valueOf(sendUserId));
+                nettyMsgDTO.setData("添加好友申请已通过");
+                sendChannel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
+                log.info("[UserInfoServiceImpl][operFriendRequest] 添加好友申请已通过");
+            }
 
         }
         //查询好友表中的列表数据

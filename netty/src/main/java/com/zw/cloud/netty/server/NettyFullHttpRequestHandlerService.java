@@ -33,13 +33,13 @@ public class NettyFullHttpRequestHandlerService {
         //下载任务处理
         // http://localhost:18888/downFile?path=C:\zj\application-qa.yml
         if (request.uri().contains("/downFile")) {
-            log.info("[ServerHandler][channelRead]FullHttpRequest uri is {},downFile", uri);
+            log.info("[ServerHandler][channelRead]FullHttpRequest downFile uri is {},downFile", uri);
             Map<String, String> paramMap = getUrlParams(uri);
             responseExportFile(ctx, paramMap.get("path"));
         }
         //文件上传
         if (isFileUpload(request)) {
-            log.info("[ServerHandler][channelRead]FullHttpRequest uri is {},isFileUpload ", uri);
+            log.info("[ServerHandler][channelRead]FullHttpRequest FileUpload uri is {},isFileUpload ", uri);
             try {
                 MultipartRequestDTO MultipartBody = getMultipartBody(request);
                 if (Objects.nonNull(MultipartBody)) {
@@ -69,7 +69,7 @@ public class NettyFullHttpRequestHandlerService {
             }
 
         } else if (isWebSocketHandShake(request)) { //判断是否为websocket握手请求
-            log.info("[ServerHandler][channelRead]FullHttpRequest uri is {},isWebSocketHandShake ", uri);
+            log.info("[ServerHandler][channelRead]FullHttpRequest WebSocketHandShake uri is {},isWebSocketHandShake ", uri);
             handleShake(ctx, request);
         } else {
             Map<String, String> paramMap = getUrlParams(uri);
@@ -121,7 +121,7 @@ public class NettyFullHttpRequestHandlerService {
             Map<String, String> params = getUrlParams(request.uri());
             final String accessToken = params.get("accessToken");
             if (StringUtils.isBlank(accessToken)) {
-                log.warn("[ServerHandler][channelRead] accessToken is null");
+                log.warn("[ServerHandler][channelRead]FullHttpRequest WebSocketHandShake accessToken is null");
                 ctx.channel().close();
                 return;
             }
@@ -131,6 +131,10 @@ public class NettyFullHttpRequestHandlerService {
                 @Override
                 public void operationComplete(ChannelFuture future) throws Exception {
                     try {
+                        if (Objects.nonNull(userManage.get(userId))){
+                            ctx.channel().close();
+                            throw new RuntimeException("userId is error");
+                        }
                         io.netty.util.Attribute<String> channelAttr = ctx.channel().attr(USER_ID);
                         if (Objects.nonNull(channelAttr.get())) {
                             log.warn("[ServerHandler][channelRead]handleShake channelAttr not null");
@@ -138,13 +142,11 @@ public class NettyFullHttpRequestHandlerService {
                             log.info("[ServerHandler][channelRead]handleShake channelAttr set accessToken is {}",accessToken);
                             channelAttr.set(userId);
                         }
-                        if (Objects.nonNull(userManage.get(userId))){
-                            throw new RuntimeException("userId is error");
-                        }
                         userManage.put(userId,ctx.channel());
                     } catch (Exception e) {
                         log.error("[ServerHandler][channelRead]handleShake failed");
                         responseHttp(ctx,"error");
+                        ctx.channel().close();
                     }
                 }
             });

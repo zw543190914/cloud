@@ -20,7 +20,8 @@ public class WebConfig implements WebMvcConfigurer {
         // 指定拦截匹配模式，限制拦截器拦截请求
         regist.addPathPatterns("/**");
         // 不拦截的路径
-        regist.excludePathPatterns("/chat/user/registerOrLogin","/chat/user/uploadFace",
+        regist.excludePathPatterns(
+                "/chat/user/registerOrLogin","/chat/user/uploadFace","/chat/user/mockUser",
                 "/html/selenium/**",
                 "/exclude/*","/images/*","/error","/favicon.ico");
     }

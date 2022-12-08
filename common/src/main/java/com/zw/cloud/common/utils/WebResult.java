@@ -26,6 +26,7 @@ public class WebResult<T> implements Serializable {
 
     private WebResult(boolean success) {
         this.success = success;
+        this.code = HttpStatus.HTTP_OK;
     }
 
     public static <T>WebResult<T> success() {
