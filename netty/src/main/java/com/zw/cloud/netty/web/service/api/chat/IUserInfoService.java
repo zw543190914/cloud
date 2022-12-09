@@ -22,6 +22,8 @@ public interface IUserInfoService extends IService<UserInfo> {
 
     UserVo registerOrLogin(UserInfo user);
 
+    UserVo refreshAccessToken(Long userId);
+
     UserInfo checkUserNameIsExit(String username);
 
 

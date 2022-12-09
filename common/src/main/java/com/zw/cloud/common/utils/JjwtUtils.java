@@ -25,7 +25,7 @@ public class JjwtUtils {
 
     public static String createJwt(String userId, String username, List<String> roleList) {
         long now = System.currentTimeMillis();//当前时间
-        long exp = now + 1000 * 60 * 10;//过期时间为30分钟
+        long exp = now + 1000 * 60 * 5;//过期时间为30分钟
         JwtBuilder builder = Jwts.builder().setId(userId)
                 .setSubject(username)
                 .setIssuedAt(new Date())

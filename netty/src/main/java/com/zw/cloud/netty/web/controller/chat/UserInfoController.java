@@ -57,6 +57,14 @@ public class UserInfoController {
     }
 
     /**
+     * 用户登录与注册
+     */
+    @PostMapping("/refreshAccessToken")
+    //http://localhost:18092/chat/user/refreshAccessToken
+    public UserVo refreshAccessToken(Long userId) {
+        return userServices.refreshAccessToken(userId);
+    }
+    /**
      * 用户头像上传访问方法
      */
     @PostMapping("/uploadFaceBase64")

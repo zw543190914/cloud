@@ -109,6 +109,21 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     @Override
+    public UserVo refreshAccessToken(Long userId) {
+        log.info("[UserInfoServiceImpl][refreshAccessToken]userId is {}", userId);
+        UserInfo userInfo = baseMapper.selectById(userId);
+        UserVo userVo = new UserVo();
+        if (Objects.isNull(userInfo)) {
+            return userVo;
+        }
+        BeanUtils.copyProperties(userInfo, userVo);
+        String jwt = JjwtUtils.createJwt(String.valueOf(userVo.getId()), userVo.getUsername(), Lists.newArrayList(""));
+        userVo.setAccessToken(jwt);
+        log.info("[UserInfoServiceImpl][refreshAccessToken]userVo is {}", JSON.toJSONString(userVo));
+        return userVo;
+    }
+
+    @Override
     public UserInfo checkUserNameIsExit(String username) {
         return baseMapper.selectOne(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getUsername, username));
     }
