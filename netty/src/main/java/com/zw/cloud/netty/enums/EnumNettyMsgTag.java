@@ -10,7 +10,7 @@ public enum EnumNettyMsgTag {
     SIGNED(3, "消息签收"),
     HEART(4, "客户端保持心跳"),
     PULL_FRIEND(5, "拉取好友"),
-    PUSH(6, "广播消息");
+    CLOSE_WS(6, "客户端主动关闭连接");
     private Integer type;
     private String desc;
 

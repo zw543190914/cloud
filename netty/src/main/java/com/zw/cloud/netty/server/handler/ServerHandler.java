@@ -125,6 +125,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 return;
             }
             NettyMsgDTO nettyMsgDTO = JSON.parseObject(msg.text(), NettyMsgDTO.class);
+            //  客户端主动关闭连接
+            if (Objects.equals(EnumNettyMsgTag.CLOSE_WS.getType(),nettyMsgDTO.getTag())) {
+                ctx.channel().close();
+            }
             sendTextMessage(nettyMsgDTO);
         }
         if (frame instanceof BinaryWebSocketFrame) {
@@ -240,7 +244,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 //批量签收
                 chatMsgService.batchUpdateMsgSigned(msgIdList);
             }
-
         }
     }
 
