@@ -1,7 +1,6 @@
 package com.zw.cloud.netty.server.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.zw.cloud.common.utils.JjwtUtils;
 import com.zw.cloud.netty.entity.dto.NettyMsgDTO;
 import com.zw.cloud.netty.enums.EnumNettyMsgTag;
 import com.zw.cloud.netty.enums.MsgSignFlagEnum;
@@ -10,7 +9,6 @@ import com.zw.cloud.netty.server.NettyFullHttpRequestHandlerService;
 import com.zw.cloud.netty.utils.SpringUtil;
 import com.zw.cloud.netty.web.entity.chat.ChatMsg;
 import com.zw.cloud.netty.web.service.api.chat.IChatMsgService;
-import io.jsonwebtoken.Claims;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
@@ -34,8 +32,6 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static com.zw.cloud.netty.utils.UrlParamsUtils.getUrlParams;
 
 
 @Slf4j
@@ -64,12 +60,15 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
         Attribute<String> channelAttr = ctx.channel().attr(USER_ID);
-        if (Objects.nonNull(channelAttr.get())) {
-            Channel remove = userManage.remove(channelAttr.get());
-            remove.close();
+        String userId = channelAttr.get();
+        if (Objects.nonNull(userId)) {
+            Channel remove = userManage.remove(userId);
+            if (Objects.nonNull(remove)) {
+                remove.close();
+            }
         }
         clients.remove(ctx.channel());
-        log.info("[ServerHandler][channelInactive] 与客户端 {} 断开连接，userId is {},通道关闭！现有连接数：{}", ctx.channel().id(),channelAttr.get(), clients.size());
+        log.info("[ServerHandler][channelInactive] 与客户端 {} 断开连接，userId is {},通道关闭！现有连接数：{}", ctx.channel().id(), userId, clients.size());
     }
 
     @Override
@@ -83,7 +82,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 return;
             }
             if (msg instanceof WebSocketFrame) {
-                log.info("[ServerHandler][channelRead] WebSocketFrame 接收到客户端：{} ", ctx.channel().id());
                 //处理websocket客户端的消息
                 handlerWebSocketFrame(ctx, (WebSocketFrame) msg);
             }
@@ -228,6 +226,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             //2.3 签收消息类型，针对具体的消息进行签收，修改数据库中对应消息的签收状态[已签收]
             //扩展字段在signed 类型消息中 ，代表需要去签收的消息id，逗号间隔
             String msgIdsStr = nettyMsgDTO.getData();
+
             String[] msgId = msgIdsStr.split(",");
 
             List<Long> msgIdList = new ArrayList<>();
@@ -243,20 +242,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             }
 
         }
-    }
-
-    private String parseUserIdFromParam(FullHttpRequest request) {
-        Map<String, String> params = getUrlParams(request.uri());
-        final String accessToken = params.get("accessToken");
-        if (StringUtils.isBlank(accessToken)) {
-            log.warn("[ServerHandler][channelRead]FullHttpRequest accessToken is null");
-            return null;
-        }
-        Claims claims = JjwtUtils.parseJwt(accessToken);
-        if (claims.getExpiration().before(new Date())) {
-            return null;
-        }
-        return claims.getId();
     }
 
     public static void sendChatMsg(NettyMsgDTO nettyMsgDTO) {
