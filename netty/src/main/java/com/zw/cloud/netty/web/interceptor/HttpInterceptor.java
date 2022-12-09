@@ -33,9 +33,10 @@ public class HttpInterceptor implements HandlerInterceptor {
                 throw new BizException("请先登录");
             }
         }
-        Claims claims = JjwtUtils.parseJwt(accessToken);
-        Date expiration = claims.getExpiration();
-        if (expiration.before(new Date())) {
+        try {
+            // 过期会抛出异常 ExpiredJwtException
+            JjwtUtils.parseJwt(accessToken);
+        } catch (Exception e) {
             throw new BizException("token已过期,请重新登录");
         }
         /*

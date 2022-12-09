@@ -3,6 +3,8 @@ package com.zw.cloud.netty.server;
 import com.alibaba.fastjson.JSONObject;
 import com.zw.cloud.common.utils.JjwtUtils;
 import com.zw.cloud.netty.entity.dto.MultipartRequestDTO;
+import com.zw.cloud.netty.entity.dto.NettyMsgDTO;
+import com.zw.cloud.netty.enums.EnumNettyMsgTag;
 import io.jsonwebtoken.Claims;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
@@ -16,7 +18,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.net.URLEncoder;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -59,20 +60,27 @@ public class NettyFullHttpRequestHandlerService {
             final String accessToken = params.get("accessToken");
             if (StringUtils.isBlank(accessToken)) {
                 log.warn("[ServerHandler][channelRead]FullHttpRequest WebSocketHandShake accessToken is null");
+                NettyMsgDTO nettyMsgDTO = buildCloseNettyMsgDTO();
+                ctx.channel().writeAndFlush(nettyMsgDTO);
                 ctx.channel().close();
                 return;
             }
-            Claims claims = JjwtUtils.parseJwt(accessToken);
+            Claims claims;
+            try {
+                // 过期会抛出异常 ExpiredJwtException
+                claims = JjwtUtils.parseJwt(accessToken);
+            } catch (Exception e) {
+                log.warn("[ServerHandler][channelRead]FullHttpRequest WebSocketHandShake accessToken is expiration");
+                NettyMsgDTO nettyMsgDTO = buildCloseNettyMsgDTO();
+                ctx.channel().writeAndFlush(nettyMsgDTO);
+                return;
+            }
             final String userId = claims.getId();
             if (Objects.nonNull(userManage.get(userId))) {
                 userManage.get(userId).close();
                 userManage.remove(userId);
             }
-            if (claims.getExpiration().before(new Date())) {
-                log.warn("[ServerHandler][channelRead]FullHttpRequest WebSocketHandShake accessToken is expiration");
-                ctx.channel().close();
-                return;
-            }
+
             handshake.addListener(new ChannelFutureListener() {
                 @Override
                 public void operationComplete(ChannelFuture future) throws Exception {
@@ -81,7 +89,7 @@ public class NettyFullHttpRequestHandlerService {
                         if (Objects.nonNull(channelAttr.get())) {
                             log.warn("[ServerHandler][channelRead]handleShake channelAttr not null");
                         } else {
-                            log.info("[ServerHandler][channelRead]handleShake channelAttr set accessToken is {}", accessToken);
+                            log.info("[ServerHandler][channelRead]handleShake channelAttr accessToken is {}", accessToken);
                             channelAttr.set(userId);
                         }
                         userManage.put(userId, ctx.channel());
@@ -89,7 +97,9 @@ public class NettyFullHttpRequestHandlerService {
                     } catch (Exception e) {
                         log.error("[ServerHandler][channelRead]handleShake failed");
                         responseHttp(ctx, "error");
-                        ctx.channel().close();
+                        NettyMsgDTO nettyMsgDTO = buildCloseNettyMsgDTO();
+                        ctx.channel().writeAndFlush(nettyMsgDTO);
+
                     }
                 }
             });
@@ -103,6 +113,11 @@ public class NettyFullHttpRequestHandlerService {
         }
     }
 
+    private static NettyMsgDTO buildCloseNettyMsgDTO() {
+        NettyMsgDTO nettyMsgDTO = new NettyMsgDTO();
+        nettyMsgDTO.setTag(EnumNettyMsgTag.LOGIN.getType());
+        return nettyMsgDTO;
+    }
     /**
      * 判断是否为文件上传
      */

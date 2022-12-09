@@ -4,6 +4,7 @@ package com.zw.cloud.netty.web.controller.chat;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.zw.cloud.common.exception.BizException;
+import com.zw.cloud.common.utils.JjwtUtils;
 import com.zw.cloud.netty.enums.SearchFriendsStatusEnum;
 import com.zw.cloud.netty.web.entity.bo.UserBO;
 import com.zw.cloud.netty.web.entity.chat.ChatMsg;
@@ -13,6 +14,7 @@ import com.zw.cloud.netty.web.entity.vo.MyFriendsVO;
 import com.zw.cloud.netty.web.entity.vo.UserVo;
 import com.zw.cloud.netty.web.service.api.chat.IChatMsgService;
 import com.zw.cloud.netty.web.service.api.chat.IUserInfoService;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
@@ -196,6 +198,22 @@ public class UserInfoController {
         }
         //根据接收ID查找未签收的消息列表
         return chatMsgService.getUnReadMsgList(acceptUserId);
+    }
+
+    /**
+     * 校验 token 是否过期
+     */
+    @PostMapping("/checkAccessTokenExpiration")
+    public Boolean checkAccessTokenExpiration(String accessToken){
+        // 过期会抛出异常 ExpiredJwtException
+        Claims claims;
+        try {
+            claims = JjwtUtils.parseJwt(accessToken);
+        } catch (Exception e) {
+            return true;
+        }
+        String userId = claims.getId();
+        return StringUtils.isBlank(userId);
     }
 
     /**

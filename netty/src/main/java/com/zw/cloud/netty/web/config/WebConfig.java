@@ -21,7 +21,8 @@ public class WebConfig implements WebMvcConfigurer {
         regist.addPathPatterns("/**");
         // 不拦截的路径
         regist.excludePathPatterns(
-                "/chat/user/registerOrLogin","/chat/user/uploadFace","/chat/user/mockUser",
+                "/chat/user/registerOrLogin","/chat/user/uploadFace",
+                "/chat/user/mockUser","/chat/user/checkAccessTokenExpiration",
                 "/html/selenium/**",
                 "/exclude/*","/images/*","/error","/favicon.ico");
     }
