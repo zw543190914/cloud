@@ -1,6 +1,7 @@
 package com.zw.cloud.netty.web.controller;
 
 import com.zw.cloud.netty.entity.dto.NettyMsgDTO;
+import com.zw.cloud.netty.enums.EnumNettyMsgTag;
 import com.zw.cloud.netty.server.handler.ServerHandler;
 import io.netty.channel.Channel;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,8 @@ public class WebSocketController {
         nettyMsgDTO.setUserId("netty-server");
         nettyMsgDTO.setData(msg);
         nettyMsgDTO.setTargetUserId(targetUserId);
-        ServerHandler.sendTextMessage(nettyMsgDTO);
+        nettyMsgDTO.setTag(EnumNettyMsgTag.CHAT.getType());
+        ServerHandler.sendChatMsg(nettyMsgDTO);
     }
 
     @GetMapping("/onlineUserList")

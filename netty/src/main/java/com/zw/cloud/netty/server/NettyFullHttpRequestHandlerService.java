@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,64 +29,11 @@ import static com.zw.cloud.netty.utils.UrlParamsUtils.getUrlParams;
 @Slf4j
 public class NettyFullHttpRequestHandlerService {
 
-    public static void handlerFullHttpRequest(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception{
+    public static void handlerFullHttpRequest(ChannelHandlerContext ctx, FullHttpRequest request) {
         String uri = request.uri();
-        //下载任务处理
-        // http://localhost:18888/downFile?path=C:\zj\application-qa.yml
-        if (request.uri().contains("/downFile")) {
-            log.info("[ServerHandler][channelRead]FullHttpRequest downFile uri is {},downFile", uri);
-            Map<String, String> paramMap = getUrlParams(uri);
-            responseExportFile(ctx, paramMap.get("path"));
-        }
-        //文件上传
-        if (isFileUpload(request)) {
-            log.info("[ServerHandler][channelRead]FullHttpRequest FileUpload uri is {},isFileUpload ", uri);
-            try {
-                MultipartRequestDTO MultipartBody = getMultipartBody(request);
-                if (Objects.nonNull(MultipartBody)) {
-                    Map<String, FileUpload> fileUploads = MultipartBody.getFileUploads();
-                    //输出文件信息
-                    for (String key : fileUploads.keySet()) {
-                        //获取文件对象
-                        FileUpload file = fileUploads.get(key);
-                        log.info("[ServerHandler][channelRead]FullHttpRequest FileUpload fileName is {} ", file.getFile().getPath());
-                        //获取文件流
-                        InputStream in = new FileInputStream(file.getFile());
-                        BufferedReader bf = new BufferedReader(new InputStreamReader(in));
-                        String content = bf.lines().collect(Collectors.joining("\n"));
-                        //打印文件
-                        log.info("[ServerHandler][channelRead]FullHttpRequest FileUpload content is {}  \n", content);
-                            /*ChunkedStream chunkedStream = new ChunkedStream(in);
-                            clients.writeAndFlush(chunkedStream);*/
-                    }
-                    //输出参数信息
-                    JSONObject params = MultipartBody.getParams();
-                    log.info("[ServerHandler][channelRead]FullHttpRequest FileUpload params is {}", JSONObject.toJSONString(params));
-
-                    responseHttp(ctx, "success");
-                }
-            } finally {
-                request.release();
-            }
-
-        } else if (isWebSocketHandShake(request)) { //判断是否为websocket握手请求
+        if (isWebSocketHandShake(request)) { //判断是否为websocket握手请求
             log.info("[ServerHandler][channelRead]FullHttpRequest WebSocketHandShake uri is {},isWebSocketHandShake ", uri);
             handleShake(ctx, request);
-        } else {
-            Map<String, String> paramMap = getUrlParams(uri);
-            log.info("[ServerHandler][channelRead] 接收到客户端：{} 参数是：{}", ctx.channel().id(), JSON.toJSONString(paramMap));
-            //如果url包含参数，需要处理
-            if (uri.contains("?")) {
-                String newUri = uri.substring(0, uri.indexOf("?"));
-                log.info("[ServerHandler][channelRead] 接收到客户端：{} newUri：{}", ctx.channel().id(), newUri);
-            }
-               /* if (uri.contains("/ws")) {
-                    //接着建立请求--http一直保持
-                    super.channelRead(ctx, msg);
-                } else {
-                    ctx.close();
-                }*/
-            ctx.close();
         }
     }
 
@@ -127,25 +75,31 @@ public class NettyFullHttpRequestHandlerService {
             }
             Claims claims = JjwtUtils.parseJwt(accessToken);
             final String userId = claims.getId();
+            if (Objects.nonNull(userManage.get(userId))) {
+                userManage.get(userId).close();
+                userManage.remove(userId);
+            }
+            if (claims.getExpiration().before(new Date())) {
+                log.warn("[ServerHandler][channelRead]FullHttpRequest WebSocketHandShake accessToken is expiration");
+                ctx.channel().close();
+                return;
+            }
             handshake.addListener(new ChannelFutureListener() {
                 @Override
                 public void operationComplete(ChannelFuture future) throws Exception {
                     try {
-                        if (Objects.nonNull(userManage.get(userId))){
-                            ctx.channel().close();
-                            throw new RuntimeException("userId is error");
-                        }
                         io.netty.util.Attribute<String> channelAttr = ctx.channel().attr(USER_ID);
                         if (Objects.nonNull(channelAttr.get())) {
                             log.warn("[ServerHandler][channelRead]handleShake channelAttr not null");
                         } else {
-                            log.info("[ServerHandler][channelRead]handleShake channelAttr set accessToken is {}",accessToken);
+                            log.info("[ServerHandler][channelRead]handleShake channelAttr set accessToken is {}", accessToken);
                             channelAttr.set(userId);
                         }
-                        userManage.put(userId,ctx.channel());
+                        userManage.put(userId, ctx.channel());
+                        log.info("[ServerHandler][channelRead]handleShake success,现有连接数: {} ,userManage.size is {}",clients.size(),userManage.size());
                     } catch (Exception e) {
                         log.error("[ServerHandler][channelRead]handleShake failed");
-                        responseHttp(ctx,"error");
+                        responseHttp(ctx, "error");
                         ctx.channel().close();
                     }
                 }
