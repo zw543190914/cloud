@@ -1,16 +1,13 @@
 package com.zw.cloud.netty.web.service.impl.chat;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
-import com.zw.cloud.netty.web.entity.chat.FriendsRequest;
 import com.zw.cloud.netty.web.entity.chat.MyFriend;
 import com.zw.cloud.netty.web.dao.chat.MyFriendMapper;
 import com.zw.cloud.netty.web.service.api.chat.IMyFriendService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.netty.channel.Channel;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -21,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 2022-12-05
  */
 @Service
+@Slf4j
 public class MyFriendServiceImpl extends ServiceImpl<MyFriendMapper, MyFriend> implements IMyFriendService {
 
     @Override
@@ -38,6 +36,10 @@ public class MyFriendServiceImpl extends ServiceImpl<MyFriendMapper, MyFriend> i
         MyFriend myFriends = new MyFriend();
         myFriends.setMyUserId(sendUserId);
         myFriends.setMyFriendUserId(acceptUserId);
-        baseMapper.insert(myFriends);
+        try {
+            baseMapper.insert(myFriends);
+        } catch (DuplicateKeyException e) {
+            log.warn("[MyFriendServiceImpl][saveFriends] 好友申请已通过");
+        }
     }
 }
