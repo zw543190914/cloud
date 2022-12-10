@@ -152,14 +152,28 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Override
     public void sendFriendRequest(Long myUserId, String friendUserName) {
-        UserInfo user = checkUserNameIsExit(friendUserName);
-        MyFriend myF = myFriendService.queryMyFriendById(myUserId, user.getId());
+        UserInfo friendUser = checkUserNameIsExit(friendUserName);
+        MyFriend myF = myFriendService.queryMyFriendById(myUserId, friendUser.getId());
         if (Objects.isNull(myF)) {
             log.info("[UserInfoServiceImpl][sendFriendRequest]");
             FriendsRequest friendsRequest = new FriendsRequest();
             friendsRequest.setSendUserId(myUserId);
-            friendsRequest.setAcceptUserId(user.getId());
+            friendsRequest.setAcceptUserId(friendUser.getId());
             friendsRequestService.save(friendsRequest);
+            // 发送ws通知对方
+            Channel sendChannel = userManage.get(String.valueOf(friendUser.getId()));
+            if (Objects.nonNull(sendChannel)) {
+                //使用websocket 主动推送消息到请求发起者，更新他的通讯录列表为最新
+                //消息的推送
+                NettyMsgDTO nettyMsgDTO = new NettyMsgDTO();
+                nettyMsgDTO.setTag(EnumNettyMsgTag.ADD_FRIEND.getType());
+                nettyMsgDTO.setUserId(String.valueOf(myUserId));
+                nettyMsgDTO.setTargetUserId(String.valueOf(friendUser.getId()));
+                nettyMsgDTO.setData("添加好友申请");
+                sendChannel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
+                log.info("[UserInfoServiceImpl][sendFriendRequest] 添加好友申请");
+            }
+
         }
     }
 

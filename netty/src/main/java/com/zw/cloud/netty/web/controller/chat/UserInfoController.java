@@ -193,7 +193,9 @@ public class UserInfoController {
             throw new BizException("用户id为空");
         }
         //数据库查询好友列表
-        return userServices.queryMyFriends(userId);
+        List<MyFriendsVO> myFriendsVOS = userServices.queryMyFriends(userId);
+        log.info("[UserInfoController][myFriends]myFriendsVOS is {}", JSON.toJSONString(myFriendsVOS));
+        return myFriendsVOS;
     }
 
     /**
@@ -213,10 +215,12 @@ public class UserInfoController {
      */
     @PostMapping("/checkAccessTokenExpiration")
     public Boolean checkAccessTokenExpiration(String accessToken){
+        log.info("[UserInfoController][checkAccessTokenExpiration]accessToken is {}", accessToken);
         // 过期会抛出异常 ExpiredJwtException
         Claims claims;
         try {
             claims = JjwtUtils.parseJwt(accessToken);
+            log.info("[UserInfoController][checkAccessTokenExpiration]username is {}", claims.getSubject());
         } catch (Exception e) {
             return true;
         }
