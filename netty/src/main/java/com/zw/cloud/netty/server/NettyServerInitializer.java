@@ -32,8 +32,8 @@ public class NettyServerInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new WebSocketServerCompressionHandler());
         // ====================== 增加心跳支持 start    ======================
         // 针对客户端，如果在30秒没有向服务端发送读写心跳(ALL)，则主动断开
-        // 如果是写空闲，不处理,读写空闲超过10分钟，则断开连接
-        pipeline.addLast(new IdleStateHandler(5, 0, 10, TimeUnit.MINUTES));
+        // 读或者写空闲以及读写空闲
+        pipeline.addLast(new IdleStateHandler(5, 8, 10, TimeUnit.MINUTES));
         // 自定义的空闲状态检测
         pipeline.addLast(new HeartBeatHandler());
         // ====================== 增加心跳支持 end    ======================

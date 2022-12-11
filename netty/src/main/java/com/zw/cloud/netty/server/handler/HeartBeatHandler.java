@@ -21,17 +21,16 @@ public class HeartBeatHandler extends ChannelInboundHandlerAdapter {
 
             if (event.state() == IdleState.READER_IDLE) {
                 log.info("[HeartBeatHandler][userEventTriggered]进入读空闲...");
-                sendReConnectMsgToClient(ctx.channel());
             } else if (event.state() == IdleState.WRITER_IDLE) {
                 log.info("[HeartBeatHandler][userEventTriggered]进入写空闲...");
-                sendReConnectMsgToClient(ctx.channel());
             } else if (event.state() == IdleState.ALL_IDLE) {
                 log.info("[HeartBeatHandler][userEventTriggered]读写空闲，channel关闭前，clients的数量为：{}", ServerHandler.clients.size());
                 // 关闭无用的channel，以防资源浪费
-                ctx.channel().close();
-                log.info("[HeartBeatHandler][userEventTriggered]channel关闭后，clients的数量为：{}",ServerHandler.clients.size());
-
+                //ctx.channel().close();
+                //log.info("[HeartBeatHandler][userEventTriggered]channel关闭后，clients的数量为：{}",ServerHandler.clients.size());
             }
+
+            sendReConnectMsgToClient(ctx.channel());
         }
 
     }
