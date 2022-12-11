@@ -1,12 +1,12 @@
 package com.zw.cloud.websocket.server.endpoint.config;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 @Configuration
-@EnableAutoConfiguration
+@EnableWebSocket
 public class WebSocketConfig {
 
     /**

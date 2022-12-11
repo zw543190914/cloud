@@ -1,14 +1,15 @@
 package com.zw.cloud.netty.server.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.zw.cloud.common.utils.JjwtUtils;
 import com.zw.cloud.netty.entity.dto.NettyMsgDTO;
 import com.zw.cloud.netty.enums.EnumNettyMsgTag;
 import com.zw.cloud.netty.enums.MsgSignFlagEnum;
-import com.zw.cloud.netty.server.CustomerExecutorService;
-import com.zw.cloud.netty.server.NettyFullHttpRequestHandlerService;
+import com.zw.cloud.netty.utils.CustomerExecutorService;
 import com.zw.cloud.netty.utils.SpringUtil;
 import com.zw.cloud.netty.web.entity.chat.ChatMsg;
 import com.zw.cloud.netty.web.service.api.chat.IChatMsgService;
+import io.jsonwebtoken.Claims;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
@@ -129,7 +130,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             if (Objects.equals(EnumNettyMsgTag.CLOSE_WS.getType(),nettyMsgDTO.getTag())) {
                 ctx.channel().close();
             }
-            sendTextMessage(nettyMsgDTO);
+            sendTextMessage(nettyMsgDTO,ctx.channel());
         }
         if (frame instanceof BinaryWebSocketFrame) {
             /* ByteBuf content = frame.content();
@@ -182,7 +183,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         }*/
     }
 
-    private void sendTextMessage(NettyMsgDTO nettyMsgDTO) {
+    private void sendTextMessage(NettyMsgDTO nettyMsgDTO,Channel channel) {
 
         String userId = nettyMsgDTO.getUserId();
         if (StringUtils.isBlank(userId)) {
@@ -195,6 +196,20 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         // 心跳消息
         if (Objects.equals(EnumNettyMsgTag.HEART.getType(),tag)) {
             log.info("[ServerHandler][channelRead][sendTextMessage] heart msg,userId is {},nettyMsgDTO is {}", userId, JSON.toJSONString(nettyMsgDTO));
+            // 校验token 是否过期
+            String token = nettyMsgDTO.getData();
+            try {
+                Claims claims = JjwtUtils.parseJwt(token);
+                Date expiration = claims.getExpiration();
+                long fiveMin = System.currentTimeMillis() + 300000;
+                if (expiration.getTime() < fiveMin) {
+                    nettyMsgDTO.setTag(EnumNettyMsgTag.REFRESH_TOKEN.getType());
+                    channel.writeAndFlush(nettyMsgDTO);
+                }
+            } catch (Exception e) {
+                nettyMsgDTO.setTag(EnumNettyMsgTag.LOGIN.getType());
+                channel.writeAndFlush(nettyMsgDTO);
+            }
             return;
         }
 

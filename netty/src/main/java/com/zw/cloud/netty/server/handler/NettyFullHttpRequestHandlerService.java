@@ -1,4 +1,4 @@
-package com.zw.cloud.netty.server;
+package com.zw.cloud.netty.server.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zw.cloud.common.utils.JjwtUtils;
