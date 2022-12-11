@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class NettyServerInitializer extends ChannelInitializer<SocketChannel> {
     @Override
-    protected void initChannel(SocketChannel socketChannel) throws Exception {
+    protected void initChannel(SocketChannel socketChannel) {
         log.info("[NettyServerInitializer][initChannel] 收到新连接");
         ChannelPipeline pipeline= socketChannel.pipeline();
         //以下三个是Http的支持
@@ -33,7 +33,7 @@ public class NettyServerInitializer extends ChannelInitializer<SocketChannel> {
         // ====================== 增加心跳支持 start    ======================
         // 针对客户端，如果在30秒没有向服务端发送读写心跳(ALL)，则主动断开
         // 如果是读空闲或者写空闲，不处理,读写空闲超过300秒，则断开连接
-        pipeline.addLast(new IdleStateHandler(0, 0, 300, TimeUnit.SECONDS));
+        pipeline.addLast(new IdleStateHandler(5, 8, 10, TimeUnit.MINUTES));
         // 自定义的空闲状态检测
         pipeline.addLast(new HeartBeatHandler());
         // ====================== 增加心跳支持 end    ======================

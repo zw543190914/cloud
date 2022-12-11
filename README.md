@@ -37,7 +37,8 @@
       BigDecimalUtils 对数字计算和统计  </br>
       DateTimeUtils 日期工具  </br>
       使用 Pinyin4jUtils 进行 中文转拼音的相关处理， 参考 common 模块。 </br>
-  25. [常用插件](https://blog.csdn.net/weixin_41846320/article/details/82697818)
+  25. IM即时通讯 后端代码 netty 模块，[uni-app 代码](https://gitee.com/moon-in-the-mirror/chat)   
+  26. [常用插件](https://blog.csdn.net/weixin_41846320/article/details/82697818)
   
   父POM中配置了自己nexus私服，已注释，settings-nexus.xml 为自己私服对应配置文件，方便后期查找使用。</br> 
   

@@ -62,7 +62,7 @@ public class NettyFullHttpRequestHandlerService {
                 log.warn("[ServerHandler][channelRead]FullHttpRequest WebSocketHandShake accessToken is null");
                 NettyMsgDTO nettyMsgDTO = buildCloseNettyMsgDTO();
                 ctx.channel().writeAndFlush(nettyMsgDTO);
-                ctx.channel().close();
+
                 return;
             }
             Claims claims;
