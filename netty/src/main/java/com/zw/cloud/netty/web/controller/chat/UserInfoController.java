@@ -4,7 +4,9 @@ package com.zw.cloud.netty.web.controller.chat;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.zw.cloud.common.exception.BizException;
+import com.zw.cloud.common.utils.DingTalkUtils;
 import com.zw.cloud.common.utils.JjwtUtils;
+import com.zw.cloud.netty.entity.dto.NettyMsgDTO;
 import com.zw.cloud.netty.enums.SearchFriendsStatusEnum;
 import com.zw.cloud.netty.web.entity.bo.UserBO;
 import com.zw.cloud.netty.web.entity.chat.ChatMsg;
@@ -208,6 +210,11 @@ public class UserInfoController {
         }
         //根据接收ID查找未签收的消息列表
         return chatMsgService.getUnReadMsgList(acceptUserId);
+    }
+
+    @PostMapping("/suggest")
+    public void suggest(@RequestBody NettyMsgDTO nettyMsgDTO) throws Exception{
+        DingTalkUtils.sendDingTalkMsg(null,nettyMsgDTO.getUserId(),nettyMsgDTO.getData());
     }
 
     /**
