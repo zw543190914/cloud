@@ -16,7 +16,7 @@ public class JjwtUtils {
     public static final String SECRET_KEY = "secret";
 
     public static void main(String[] args) throws Exception{
-        String jwt = createJwt("001","zw", Lists.newArrayList("seller"));
+        String jwt = createJwt("1601129911448313857","枫无痕", Lists.newArrayList("seller"));
         System.out.println(jwt);
         parseJwt(jwt);
         //Thread.sleep(1000);

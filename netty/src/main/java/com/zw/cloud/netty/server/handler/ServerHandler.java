@@ -204,11 +204,11 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 long fiveMin = System.currentTimeMillis() + 300000;
                 if (expiration.getTime() < fiveMin) {
                     nettyMsgDTO.setTag(EnumNettyMsgTag.REFRESH_TOKEN.getType());
-                    channel.writeAndFlush(nettyMsgDTO);
+                    channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
                 }
             } catch (Exception e) {
                 nettyMsgDTO.setTag(EnumNettyMsgTag.LOGIN.getType());
-                channel.writeAndFlush(nettyMsgDTO);
+                channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
             }
             return;
         }
