@@ -32,6 +32,7 @@ import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -189,9 +190,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         if (StringUtils.isBlank(userId)) {
             return;
         }
-        String targetUserId = nettyMsgDTO.getTargetUserId();
-        String targetGroupId = nettyMsgDTO.getTargetGroupId();
-
         Integer tag = nettyMsgDTO.getTag();
         // 心跳消息
         if (Objects.equals(EnumNettyMsgTag.HEART.getType(),tag)) {
@@ -220,22 +218,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         }
         // 聊天消息
         if (Objects.equals(EnumNettyMsgTag.CHAT.getType(),tag)) {
-            //2.2 聊天类型的消息，把聊天记录保存到数据库，同时标记消息的签收状态[未签收]
-            ChatMsg chatMsg = new ChatMsg();
-            chatMsg.setSendUserId(Long.parseLong(userId));
-            if (StringUtils.isNotBlank(targetUserId)) {
-                chatMsg.setAcceptUserId(Long.parseLong(targetUserId));
-            }
-            chatMsg.setMsg(nettyMsgDTO.getData());
-            if (StringUtils.isNotBlank(targetGroupId)) {
-                chatMsg.setAcceptGroupId(Long.parseLong(targetGroupId));
-            }
-
-            IChatMsgService chatMsgService = (IChatMsgService) SpringUtil.getBean("chatMsgServiceImpl");
-            chatMsg.setSignFlag(MsgSignFlagEnum.unsign.getType());
-            // 异步保存消息
-            CustomerExecutorService.pool.submit(() -> chatMsgService.save(chatMsg));
-
             //发送消息
             sendChatMsg(nettyMsgDTO);
 
@@ -263,18 +245,56 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     public static void sendChatMsg(NettyMsgDTO nettyMsgDTO) {
+        String userId = nettyMsgDTO.getUserId();
         String receiverId = nettyMsgDTO.getTargetUserId();
         String targetGroupId = nettyMsgDTO.getTargetGroupId();
+
+        // 聊天类型的消息，把聊天记录保存到数据库，同时标记消息的签收状态
+        ChatMsg chatMsg = new ChatMsg();
+        if (StringUtils.isNotBlank(userId)) {
+            chatMsg.setSendUserId(Long.parseLong(userId));
+        }
+        if (StringUtils.isNotBlank(receiverId)) {
+            chatMsg.setAcceptUserId(Long.parseLong(receiverId));
+        }
+        chatMsg.setMsg(nettyMsgDTO.getData());
+        if (StringUtils.isNotBlank(targetGroupId)) {
+            chatMsg.setAcceptGroupId(Long.parseLong(targetGroupId));
+        }
+
+        IChatMsgService chatMsgService = SpringUtil.getBean(IChatMsgService.class);
+
         //发送消息
         // 私聊
         if (StringUtils.isNotBlank(receiverId)) {
             Channel receiverChannel = userManage.get(receiverId);
             if(Objects.nonNull(receiverChannel) && receiverChannel.isActive()){
                 //用户在线
-                receiverChannel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
+                chatMsg.setSignFlag(MsgSignFlagEnum.signed.getType());
+                ChannelFuture channelFuture = receiverChannel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
+                /*channelFuture.addListener(new ChannelFutureListener() {
+                    @Override
+                    public void operationComplete(ChannelFuture future) {
+                        if (future.isSuccess()) {
+                            log.info("[ServerHandler][channelRead][sendTextMessage]userId is {}, receiverId is {},消息发送成功", userId, receiverId);
+                            chatMsg.setSignFlag(MsgSignFlagEnum.signed.getType());
+                        } else {
+                            log.info("[ServerHandler][channelRead][sendTextMessage]userId is {}, receiverId is {},消息发送失败", userId, receiverId);
+                            chatMsg.setSignFlag(MsgSignFlagEnum.unsign.getType());
+                        }
+                    }
+                });*/
             } else {
-                log.info("[ServerHandler][channelRead][sendTextMessage]userId is {}, receiverId is {},用户离线", nettyMsgDTO.getUserId(), receiverId);
+                chatMsg.setSignFlag(MsgSignFlagEnum.unsign.getType());
+                log.info("[ServerHandler][channelRead][sendTextMessage]userId is {}, receiverId is {},用户离线", userId, receiverId);
             }
+            // 异步保存消息
+            CompletableFuture.runAsync(() -> {
+                chatMsgService.save(chatMsg);
+            },CustomerExecutorService.pool).exceptionally(throwable -> {
+                log.error("[ServerHandler][channelRead][sendTextMessage]chatMsgService.save error is ", throwable);
+                return null;
+            });
             return;
         }
         if (StringUtils.isNotBlank(targetGroupId)) {

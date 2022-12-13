@@ -66,7 +66,7 @@ public class DingTalkUtils {
         markdown.setText("#### 意见&建议\n" +
                 "> userId : "+ userId + br +
                 "> 意见&建议 : "+ msg + br +
-                "> ![screenshot](https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg9.51tietu.net%2Fpic%2F2019-091108%2Fvmipqy4caz4vmipqy4caz4.jpg&refer=http%3A%2F%2Fimg9.51tietu.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1650772948&t=c175d48d866995d3474b52bd4547972a)\n"  +
+                "> ![screenshot](https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F2017-10-18%2F59e733be24fec.jpg&refer=http%3A%2F%2Fpic1.win4000.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1673529052&t=5763d086e9fd67b4625a3699cde8229f)\n"  +
                 "> [百度一下](http://www.baidu.com/) \n");
         request.setMarkdown(markdown);
         OapiRobotSendResponse response = client.execute(request);

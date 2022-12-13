@@ -60,32 +60,35 @@ public class NettyFullHttpRequestHandlerService {
             ChannelFuture handshake = handshaker.handshake(ctx.channel(), request);
             Map<String, String> params = getUrlParams(request.uri());
             final String accessToken = params.get("accessToken");
-            if (StringUtils.isBlank(accessToken)) {
-                log.warn("[ServerHandler][channelRead]FullHttpRequest WebSocketHandShake accessToken is null");
-                ctx.channel().writeAndFlush(new TextWebSocketFrame(buildCloseNettyMsgDTO()));
-                return;
-            }
-            Claims claims;
-            try {
-                // 过期会抛出异常 ExpiredJwtException
-                claims = JjwtUtils.parseJwt(accessToken);
-            } catch (Exception e) {
-                log.warn("[ServerHandler][channelRead]FullHttpRequest WebSocketHandShake accessToken is expiration");
-                ctx.channel().writeAndFlush(new TextWebSocketFrame(buildCloseNettyMsgDTO()));
-                return;
-            }
-            final String userId = claims.getId();
-            if (Objects.nonNull(userManage.get(userId))) {
-                //关闭重复连接
-                NettyMsgDTO nettyMsgDTO = new NettyMsgDTO();
-                nettyMsgDTO.setTag(EnumNettyMsgTag.CLOSE_WS.getType());
-                ctx.channel().writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
-                userManage.remove(userId);
-            }
 
             handshake.addListener(new ChannelFutureListener() {
                 @Override
                 public void operationComplete(ChannelFuture future) throws Exception {
+                    if (StringUtils.isBlank(accessToken)) {
+                        log.warn("[ServerHandler][channelRead]FullHttpRequest WebSocketHandShake accessToken is null");
+                        responseHttp(ctx, "error");
+                        ctx.channel().writeAndFlush(new TextWebSocketFrame(buildCloseNettyMsgDTO()));
+                        return;
+                    }
+                    Claims claims;
+                    try {
+                        // 过期会抛出异常 ExpiredJwtException
+                        claims = JjwtUtils.parseJwt(accessToken);
+                    } catch (Exception e) {
+                        log.warn("[ServerHandler][channelRead]FullHttpRequest WebSocketHandShake accessToken is expiration");
+                        responseHttp(ctx, "error");
+                        ctx.channel().writeAndFlush(new TextWebSocketFrame(buildCloseNettyMsgDTO()));
+                        return;
+                    }
+                    final String userId = claims.getId();
+                    if (Objects.nonNull(userManage.get(userId))) {
+                        //关闭重复连接
+                        NettyMsgDTO nettyMsgDTO = new NettyMsgDTO();
+                        nettyMsgDTO.setTag(EnumNettyMsgTag.CLOSE_WS.getType());
+                        userManage.get(userId).writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
+                        responseHttp(ctx, "error");
+                    }
+
                     try {
                         io.netty.util.Attribute<String> channelAttr = ctx.channel().attr(USER_ID);
                         if (Objects.nonNull(channelAttr.get())) {

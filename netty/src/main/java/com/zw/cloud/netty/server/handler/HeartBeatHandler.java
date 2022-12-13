@@ -26,12 +26,12 @@ public class HeartBeatHandler extends ChannelInboundHandlerAdapter {
             IdleStateEvent event = (IdleStateEvent) evt;        // 强制类型转换
 
             if (event.state() == IdleState.READER_IDLE) {
-                log.info("[HeartBeatHandler][userEventTriggered]进入读空闲...");
+                log.info("[HeartBeatHandler][userEventTriggered] {} 进入读空闲...",ctx.channel().id());
                 sendReConnectMsgToClient(ctx.channel());
             } else if (event.state() == IdleState.WRITER_IDLE) {
-                log.info("[HeartBeatHandler][userEventTriggered]进入写空闲...");
+                log.info("[HeartBeatHandler][userEventTriggered] {} 进入写空闲...",ctx.channel().id());
             } else if (event.state() == IdleState.ALL_IDLE) {
-                log.info("[HeartBeatHandler][userEventTriggered]读写空闲，channel关闭前，clients的数量为：{}", ServerHandler.clients.size());
+                log.info("[HeartBeatHandler][userEventTriggered] {} 读写空闲，channel关闭前，clients的数量为：{}",ctx.channel().id(), ServerHandler.clients.size());
                 // 关闭无用的channel，以防资源浪费
                 ctx.channel().close();
                 log.info("[HeartBeatHandler][userEventTriggered]channel关闭后，clients的数量为：{}",ServerHandler.clients.size());
@@ -49,7 +49,7 @@ public class HeartBeatHandler extends ChannelInboundHandlerAdapter {
         if (idleSet.contains(channelId)) {
             // 已经空闲过 关闭
             //channel.close();
-            log.info("[HeartBeatHandler][userEventTriggered]channel close,关闭后，clients的数量为：{}",ServerHandler.clients.size());
+            //log.info("[HeartBeatHandler][userEventTriggered]channel close,关闭后，clients的数量为：{}",ServerHandler.clients.size());
             return;
         }
         if (ServerHandler.clients.contains(channel)){
@@ -57,6 +57,7 @@ public class HeartBeatHandler extends ChannelInboundHandlerAdapter {
             nettyMsgDTO.setTag(EnumNettyMsgTag.HEART.getType());
             channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
             idleSet.add(channelId);
+            log.info("[HeartBeatHandler][userEventTriggered] sendReConnectMsgToClient channelId is {}",channelId);
         }
     }
 }

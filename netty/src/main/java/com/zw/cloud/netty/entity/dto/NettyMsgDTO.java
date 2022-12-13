@@ -1,6 +1,5 @@
 package com.zw.cloud.netty.entity.dto;
 
-import com.zw.cloud.netty.enums.EnumNettyMsgTag;
 import lombok.Getter;
 import lombok.Setter;
 
