@@ -48,7 +48,7 @@ public class HeartBeatHandler extends ChannelInboundHandlerAdapter {
         String channelId = channel.id().asLongText();
         if (idleSet.contains(channelId)) {
             // 已经空闲过 关闭
-            channel.close();
+            //channel.close();
             log.info("[HeartBeatHandler][userEventTriggered]channel close,关闭后，clients的数量为：{}",ServerHandler.clients.size());
             return;
         }
