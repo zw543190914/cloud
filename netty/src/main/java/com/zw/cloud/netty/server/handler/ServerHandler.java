@@ -284,6 +284,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                         }
                     }
                 });*/
+                log.info("[ServerHandler][channelRead][sendTextMessage]userId is {}, receiverId is {},消息发送成功", userId, receiverId);
             } else {
                 chatMsg.setSignFlag(MsgSignFlagEnum.unsign.getType());
                 log.info("[ServerHandler][channelRead][sendTextMessage]userId is {}, receiverId is {},用户离线", userId, receiverId);
