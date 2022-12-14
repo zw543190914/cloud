@@ -29,12 +29,9 @@ public class Server {
             bootstrap.group(bossGroup, workerGroup)  // 绑定线程池
                     .channel(NioServerSocketChannel.class) // 指定使用的channel
                     .handler(new LoggingHandler(LogLevel.INFO))
-                    .option(ChannelOption.SO_KEEPALIVE,true)
                     .option(ChannelOption.SO_BACKLOG,1024*1024*10)
                     .childHandler(new NettyServerInitializer());
 
-            //标识当服务器请求处理线程全满时，用于临时存放已完成三次握手的请求的队列的最大长度
-            bootstrap.option(ChannelOption.SO_BACKLOG, 1024);
             //Netty4使用对象池，重用缓冲区
             bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
             bootstrap.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);

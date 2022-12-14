@@ -121,7 +121,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         if (frame instanceof TextWebSocketFrame) {
             //正常的TEXT消息类型
             TextWebSocketFrame msg = (TextWebSocketFrame) frame;
-            log.info("[ServerHandler][channelRead]TextWebSocketFrame channelId is {} msg is {}", ctx.channel().id(), msg.text());
+            log.info("[ServerHandler][channelRead]TextWebSocketFrame channelId is {}", ctx.channel().id());
             if (StringUtils.isBlank(msg.text())) {
                 log.info("[ServerHandler][channelRead]TextWebSocketFrame message is null");
                 return;
@@ -176,12 +176,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     e.printStackTrace();
                 }
             }
-
-
         }
-        /*if (Objects.equals(tag,EnumNettyMsgTag.CONNECT.getType()) && StringUtils.isNotBlank(userId)) {
-            userManage.put(userId,ctx.channel());
-        }*/
     }
 
     private void sendTextMessage(NettyMsgDTO nettyMsgDTO,Channel channel) {
@@ -194,6 +189,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         // 心跳消息
         if (Objects.equals(EnumNettyMsgTag.HEART.getType(),tag)) {
             log.info("[ServerHandler][channelRead][sendTextMessage] heart msg,userId is {},nettyMsgDTO is {}", userId, JSON.toJSONString(nettyMsgDTO));
+            boolean needSendHeart = true;
             // 校验token 是否过期
             String token = nettyMsgDTO.getData();
             try {
@@ -203,11 +199,19 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 if (expiration.getTime() < fiveMin) {
                     nettyMsgDTO.setTag(EnumNettyMsgTag.REFRESH_TOKEN.getType());
                     channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
+                    needSendHeart = false;
                 }
             } catch (Exception e) {
                 nettyMsgDTO.setTag(EnumNettyMsgTag.LOGIN.getType());
                 channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
+                needSendHeart = false;
             }
+            if (needSendHeart) {
+                nettyMsgDTO.setTag(EnumNettyMsgTag.HEART.getType());
+                nettyMsgDTO.setData(null);
+                channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
+            }
+
             return;
         }
 

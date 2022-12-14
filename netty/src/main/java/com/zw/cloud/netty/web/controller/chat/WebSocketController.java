@@ -1,12 +1,10 @@
-package com.zw.cloud.netty.web.controller;
+package com.zw.cloud.netty.web.controller.chat;
 
 import com.zw.cloud.netty.entity.dto.NettyMsgDTO;
 import com.zw.cloud.netty.enums.EnumNettyMsgTag;
 import com.zw.cloud.netty.server.handler.ServerHandler;
 import io.netty.channel.Channel;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Enumeration;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,14 +13,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequestMapping("/socket")
 public class WebSocketController {
 
-    @GetMapping("/sendMsg")
+    @PostMapping("/sendMsg")
     //http://localhost:18092/socket/sendMsg?msg=test&targetUserId=
-    public void sendMsg(String msg,String targetUserId){
-        NettyMsgDTO nettyMsgDTO = new NettyMsgDTO();
-        nettyMsgDTO.setUserId("netty-server");
-        nettyMsgDTO.setData(msg);
-        nettyMsgDTO.setTargetUserId(targetUserId);
-        nettyMsgDTO.setTag(EnumNettyMsgTag.CHAT.getType());
+    public void sendMsg(@RequestBody NettyMsgDTO nettyMsgDTO){
         ServerHandler.sendChatMsg(nettyMsgDTO);
     }
 
