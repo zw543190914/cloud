@@ -205,7 +205,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         UserRole userRole = new UserRole();
         userRole.setUserId(0);
         userRole.setRoleId(0);
-        // 使用 NESTED,子事务抛出异常，区别于REQUIRED userRole 可以正常 更新
+        // 使用 NESTED,子事务抛出异常，区别于REQUIRED userInfo 可以正常 更新
         try {
             userRoleService.testPropagationNested(userRole);
         } catch (Exception e) {
