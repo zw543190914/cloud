@@ -13,7 +13,8 @@ public enum EnumNettyMsgTag {
     CLOSE_WS(6, "客户端主动关闭连接"),
     LOGIN(7, "客户端重新登陆"),
     ADD_FRIEND(8, "添加好友申请"),
-    REFRESH_TOKEN(9, "刷新TOKEN");
+    REFRESH_TOKEN(9, "刷新TOKEN"),
+    WEB_USER_INFO(10, "web网页登陆用户信息");
     private Integer type;
     private String desc;
 

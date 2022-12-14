@@ -6,6 +6,10 @@ import com.zw.cloud.common.utils.JjwtUtils;
 import com.zw.cloud.netty.entity.dto.MultipartRequestDTO;
 import com.zw.cloud.netty.entity.dto.NettyMsgDTO;
 import com.zw.cloud.netty.enums.EnumNettyMsgTag;
+import com.zw.cloud.netty.utils.SpringUtil;
+import com.zw.cloud.netty.web.entity.chat.UserInfo;
+import com.zw.cloud.netty.web.entity.vo.UserVo;
+import com.zw.cloud.netty.web.service.api.chat.IUserInfoService;
 import io.jsonwebtoken.Claims;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
@@ -60,33 +64,57 @@ public class NettyFullHttpRequestHandlerService {
             ChannelFuture handshake = handshaker.handshake(ctx.channel(), request);
             Map<String, String> params = getUrlParams(request.uri());
             final String accessToken = params.get("accessToken");
-
+            final String username = params.get("username");
             handshake.addListener(new ChannelFutureListener() {
                 @Override
                 public void operationComplete(ChannelFuture future) throws Exception {
-                    if (StringUtils.isBlank(accessToken)) {
-                        log.warn("[ServerHandler][channelRead]FullHttpRequest WebSocketHandShake accessToken is null");
+                    if (StringUtils.isBlank(accessToken) && StringUtils.isBlank(username)) {
+                        log.warn("[ServerHandler][channelRead]FullHttpRequest WebSocketHandShake accessToken && username is null");
                         responseHttp(ctx, "error");
                         ctx.channel().writeAndFlush(new TextWebSocketFrame(buildCloseNettyMsgDTO()));
                         return;
                     }
-                    Claims claims;
-                    try {
-                        // 过期会抛出异常 ExpiredJwtException
-                        claims = JjwtUtils.parseJwt(accessToken);
-                    } catch (Exception e) {
-                        log.warn("[ServerHandler][channelRead]FullHttpRequest WebSocketHandShake accessToken is expiration");
-                        responseHttp(ctx, "error");
-                        ctx.channel().writeAndFlush(new TextWebSocketFrame(buildCloseNettyMsgDTO()));
-                        return;
+                    String userId ;
+                    if (StringUtils.isNotBlank(accessToken)) {
+                        // mui-app websocket
+                        Claims claims;
+                        try {
+                            // 过期会抛出异常 ExpiredJwtException
+                            claims = JjwtUtils.parseJwt(accessToken);
+                        } catch (Exception e) {
+                            log.warn("[ServerHandler][channelRead]FullHttpRequest WebSocketHandShake accessToken is expiration");
+                            responseHttp(ctx, "error");
+                            ctx.channel().writeAndFlush(new TextWebSocketFrame(buildCloseNettyMsgDTO()));
+                            return;
+                        }
+                        userId = claims.getId();
+                    } else {
+                        // web 网页登陆
+                        String password = params.get("password");
+                        IUserInfoService userInfoService = SpringUtil.getBean(IUserInfoService.class);
+                        UserInfo userInfo = new UserInfo();
+                        userInfo.setUsername(username);
+                        userInfo.setPassword(password);
+                        try {
+                            UserVo userVo = userInfoService.registerOrLogin(userInfo);
+                            userId = String.valueOf(userVo.getId());
+                            JSONObject webLogin = new JSONObject();
+                            webLogin.put("tag",EnumNettyMsgTag.WEB_USER_INFO.getType());
+                            webLogin.put("userInfo",userVo);
+                            ctx.channel().writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(webLogin)));
+                        } catch (Exception e) {
+                            log.warn("[ServerHandler][channelRead]FullHttpRequest WebSocketHandShake username is {},error is ",username,e);
+                            responseHttp(ctx, e.getMessage());
+                            return;
+                        }
                     }
-                    final String userId = claims.getId();
                     if (Objects.nonNull(userManage.get(userId))) {
                         //关闭重复连接
                         NettyMsgDTO nettyMsgDTO = new NettyMsgDTO();
                         nettyMsgDTO.setTag(EnumNettyMsgTag.CLOSE_WS.getType());
+                        nettyMsgDTO.setData("用户在其他客户端登陆");
                         userManage.get(userId).writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
-                        responseHttp(ctx, "error");
+                        userManage.get(userId).close();
                     }
 
                     try {
@@ -100,8 +128,8 @@ public class NettyFullHttpRequestHandlerService {
                         userManage.put(userId, ctx.channel());
                         log.info("[ServerHandler][channelRead]handleShake success,现有连接数: {} ,userManage.size is {},userId is {}",clients.size(),userManage.size(),userId);
                     } catch (Exception e) {
-                        log.error("[ServerHandler][channelRead]handleShake failed");
-                        responseHttp(ctx, "error");
+                        log.error("[ServerHandler][channelRead]handleShake failed ",e);
+                        responseHttp(ctx, e.getMessage());
                         ctx.channel().writeAndFlush(new TextWebSocketFrame(buildCloseNettyMsgDTO()));
                     }
                 }
