@@ -189,7 +189,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         // 心跳消息
         if (Objects.equals(EnumNettyMsgTag.HEART.getType(),tag)) {
             log.info("[ServerHandler][channelRead][sendTextMessage] heart msg,userId is {},nettyMsgDTO is {}", userId, JSON.toJSONString(nettyMsgDTO));
-            boolean needSendHeart = true;
+            //boolean needSendHeart = true;
             // 校验token 是否过期
             String token = nettyMsgDTO.getData();
             try {
@@ -199,18 +199,18 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 if (expiration.getTime() < fiveMin) {
                     nettyMsgDTO.setTag(EnumNettyMsgTag.REFRESH_TOKEN.getType());
                     channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
-                    needSendHeart = false;
+                    //needSendHeart = false;
                 }
             } catch (Exception e) {
                 nettyMsgDTO.setTag(EnumNettyMsgTag.LOGIN.getType());
                 channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
-                needSendHeart = false;
+                //needSendHeart = false;
             }
-            if (needSendHeart) {
+           /* if (needSendHeart) {
                 nettyMsgDTO.setTag(EnumNettyMsgTag.HEART.getType());
                 nettyMsgDTO.setData(null);
                 channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(nettyMsgDTO)));
-            }
+            }*/
 
             return;
         }
