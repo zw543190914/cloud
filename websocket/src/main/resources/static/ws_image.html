@@ -49,12 +49,15 @@
         websocket.onmessage = function(event) {
             var json = JSON.parse(event.data);
             console.log(json)
-            if(json.msgType === 0){
+            if(json.msgType === "0"){
                 setMessageInnerHTML(json.currentId + ":" + json.msgContent);
-            }else if(json.msgType === 1){
+            }else if(json.msgType === "1"){
                 setMessageInnerHTML(json.currentId);
                 setIconInnerHTML(json.msgContent);
             }
+            let mp3 = new Audio('./mp3/msn.mp3') // 创建音频对象
+            mp3.loop = false
+            mp3.play()
         }
         //连接关闭的回调方法
         websocket.onclose = function() {
