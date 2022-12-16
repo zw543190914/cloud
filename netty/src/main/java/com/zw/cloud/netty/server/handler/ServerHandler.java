@@ -241,7 +241,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 }
             }
             if(CollectionUtils.isNotEmpty(msgIdList)){
-                IChatMsgService chatMsgService = (IChatMsgService) SpringUtil.getBean("chatMsgServiceImpl");
+                IChatMsgService chatMsgService = SpringUtil.getBean(IChatMsgService.class);
                 //批量签收
                 chatMsgService.batchUpdateMsgSigned(msgIdList);
             }
@@ -265,8 +265,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         if (StringUtils.isNotBlank(targetGroupId)) {
             chatMsg.setAcceptGroupId(Long.parseLong(targetGroupId));
         }
-
-        IChatMsgService chatMsgService = SpringUtil.getBean(IChatMsgService.class);
 
         //发送消息
         // 私聊
@@ -295,6 +293,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             }
             // 异步保存消息
             CompletableFuture.runAsync(() -> {
+                IChatMsgService chatMsgService = SpringUtil.getBean(IChatMsgService.class);
                 chatMsgService.save(chatMsg);
             },CustomerExecutorService.pool).exceptionally(throwable -> {
                 log.error("[ServerHandler][channelRead][sendTextMessage]chatMsgService.save error is ", throwable);
