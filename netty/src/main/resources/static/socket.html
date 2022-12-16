@@ -20,6 +20,9 @@
                 const msgData = event.data;
                 const msg = JSON.parse(msgData);
                 ta.value += msg.data +"\r\n";
+                let mp3 = new Audio('./mp3/msn.mp3') // 创建音频对象
+                mp3.loop = false
+                mp3.play()
             };
             socket.onopen = function(event){
                 const ta = document.getElementById('responseText');

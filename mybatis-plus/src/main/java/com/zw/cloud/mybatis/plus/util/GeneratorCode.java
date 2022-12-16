@@ -58,7 +58,7 @@ public class GeneratorCode {
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         //表名，多个英文逗号分割
-        strategy.setInclude("base_product_record");
+        strategy.setInclude("general_product_record","general_product_record_plan_craft");
         // 表前缀
         //strategy.setTablePrefix(pc.getModuleName() + "_");
 
