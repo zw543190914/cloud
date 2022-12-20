@@ -12,6 +12,7 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -50,8 +51,13 @@ public class OneToManyWebSocket {
      * 连接建立成功调用的方法
      */
     @OnOpen
-    public void onOpen(@PathParam("userId") String userId, Session session) {
+    public void onOpen(@PathParam("userId") String userId, Session session) throws IOException {
+        WebSocketMessage message = new WebSocketMessage();
+        message.setCurrentId(userId);
+        message.setMsgType("0");
         if (clients.containsKey(userId)) {
+            message.setMsgContent("用户名:" + userId + " 已存在,请尝试其他名称");
+            sendMessage(message,session);
             try {
                 session.close();
                 log.info("[OneToManyWebSocket][onOpen] session is {},userId repeated ", session.getId());
@@ -64,10 +70,7 @@ public class OneToManyWebSocket {
         clients.put(userId, session);
         sessionIdToUserIdMap.put(session.getId(),userId);
         log.info("[OneToManyWebSocket][onOpen] 有新连接加入：{},当前在线人数为：{},clients size is {}", session.getId(), onlineCount.get(),clients.size());
-        WebSocketMessage message = new WebSocketMessage();
         message.setMsgContent("【" + userId + "】 上线");
-        message.setCurrentId(userId);
-        message.setMsgType(0);
         sendMessage(message,session);
     }
 
@@ -75,7 +78,7 @@ public class OneToManyWebSocket {
      * 连接关闭调用的方法
      */
     @OnClose
-    public void onClose(@PathParam("userId") String userId,Session session) {
+    public void onClose(@PathParam("userId") String userId,Session session) throws IOException {
         sessionIdToUserIdMap.remove(session.getId());
         Session removeSession = clients.remove(userId);
         onlineCount.decrementAndGet(); // 在线数减1
@@ -83,7 +86,7 @@ public class OneToManyWebSocket {
         WebSocketMessage message = new WebSocketMessage();
         message.setMsgContent("【" + userId + "】 下线");
         message.setCurrentId(userId);
-        message.setMsgType(0);
+        message.setMsgType("0");
         sendMessage(message,session);
     }
 
@@ -92,18 +95,19 @@ public class OneToManyWebSocket {
      * {"currentId":"001","targetId":"002","msgContent":"test2"}
      */
     @OnMessage
-    public void onMessage(String message, Session session,@PathParam("userId") String userId) {
+    public void onMessage(String message, Session session,@PathParam("userId") String userId) throws IOException {
         log.info("[OneToManyWebSocket][onMessage] 文本消息 服务端收到客户端[{}][{}]的消息:{}", session.getId(),userId, message);
         WebSocketMessage myMessage = JSON.parseObject(message, WebSocketMessage.class);
         myMessage.setCurrentId(userId);
-        this.sendMessage(myMessage, session);
+        sendMessage(myMessage, session);
     }
 
     @OnMessage
-    public void onMessage(byte[] message, Session session,@PathParam("userId") String userId) {
+    public void onMessage(byte[] message, Session session,@PathParam("userId") String userId) throws IOException {
         log.info("[OneToManyWebSocket][onMessage] 二进制消息 服务端收到客户端[{}][{}]的消息", session.getId(),userId);
         WebSocketMessage myMessage = JSON.parseObject(message, WebSocketMessage.class);
-        this.sendMessage(myMessage, session);
+        myMessage.setCurrentId(userId);
+        sendMessage(myMessage, session);
     }
 
     @OnError
@@ -115,11 +119,16 @@ public class OneToManyWebSocket {
     /**
      * 群发消息
      */
-    private void sendMessage(WebSocketMessage message, Session fromSession) {
+    private void sendMessage(WebSocketMessage message, Session fromSession) throws IOException {
         if (StringUtils.isNotBlank(message.getTargetId())) {
             Session toSession = clients.get(message.getTargetId());
-            toSession.getAsyncRemote().sendText(JSON.toJSONString(message));
-            return;
+            if (Objects.isNull(toSession)) {
+                message.setMsgContent(message.getTargetId() + " 不在线");
+                fromSession.getAsyncRemote().sendText(JSON.toJSONString(message));
+                return;
+            }
+            sendToOneMsg(message,fromSession,toSession);
+
         }
         String fromSessionId = fromSession.getId();
         int hasSendCount = 1;
@@ -127,8 +136,25 @@ public class OneToManyWebSocket {
             Session toSession = sessionEntry.getValue();
             // 排除掉自己
             if (!fromSessionId.equals(toSession.getId())) {
-                log.info("[OneToManyWebSocket][sendMessage] 服务端给客户端[{}]发送消息{},total clients is {},has send {}", toSession.getId(), message,clients.size(),hasSendCount++);
-                toSession.getAsyncRemote().sendText(JSON.toJSONString(message));
+                //log.info("[OneToManyWebSocket][sendMessage] 服务端给客户端[{}]发送消息{},total clients is {},has send {}", toSession.getId(), message,clients.size(),hasSendCount++);
+                toSession.getBasicRemote().sendText(JSON.toJSONString(message));
             }
         }
-    }}
+    }
+
+    private void sendToOneMsg(WebSocketMessage message, Session fromSession,Session toSession) throws IOException {
+        String type = message.getMsgType();
+        //对方挂断
+        if ("hangup".equals(type)) {
+            message.setMsgContent("对方挂断！");
+        }
+
+        //视频通话请求
+        if ("call_start".equals(type)) {
+            message.setMsgContent("1");
+        }
+
+        toSession.getBasicRemote().sendText(JSON.toJSONString(message));
+
+    }
+}

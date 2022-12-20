@@ -60,6 +60,7 @@ public class OneToOneWebSocket {
     @OnOpen
     public void onOpen(Session session, @PathParam("name") String name) {
         if (clients.containsKey(name)) {
+            sendMessage("用户名:" + name + " 已存在,请尝试其他名称",session);
             throw new RuntimeException("用户已存在");
         }
         // 通过application获取bean

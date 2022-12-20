@@ -1,9 +1,11 @@
 package com.zw.cloud.tools.cache;
 
+import com.google.common.base.Splitter;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class LoadingCacheTest {
@@ -22,10 +24,15 @@ public class LoadingCacheTest {
             });
 
     public static void main(String[] args) throws Exception{
-        while (true) {
+       /* while (true) {
             queryNum(1);
             Thread.sleep(3000);
-        }
+        }*/
+
+       /* String str = "1-2-3-4-  5-  6   - 9  1";
+        List<String> list = Splitter.on("-").omitEmptyStrings().trimResults().splitToList(str);
+        System.out.println(list);*/
+
     }
 
     public static void queryNum(Integer key) throws Exception{

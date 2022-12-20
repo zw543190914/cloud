@@ -3,6 +3,7 @@ package com.zw.cloud.websocket.entity;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Map;
 
 @Data
 public class WebSocketMessage implements Serializable {
@@ -20,6 +21,15 @@ public class WebSocketMessage implements Serializable {
     private String targetId;
     /**
      * 消息类型(0:文本,1:图片)
+     * hangup 对方挂断
+     * call_start 视频通话请求
+     * offer
+     * answer
+     * _ice
      */
-    private Integer msgType;
+    private String msgType;
+
+    private String sdp;
+
+    private Map iceCandidate;
 }
