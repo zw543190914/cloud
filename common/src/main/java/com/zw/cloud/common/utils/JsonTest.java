@@ -22,59 +22,59 @@ public class JsonTest {
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"name\":\"customerNo\",\n" +
-                "            \"preciseMatch\":1000\n" +
+                "            \"preciseMatch\":600\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"name\":\"customerName\",\n" +
-                "            \"preciseMatch\":1000\n" +
+                "            \"preciseMatch\":500\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"name\":\"specification\",\n" +
-                "            \"preciseMatch\":1000\n" +
+                "            \"preciseMatch\":500\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"name\":\"stereotypeRequirement\",\n" +
-                "            \"preciseMatch\":1000\n" +
+                "            \"preciseMatch\":500\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"name\":\"productWeight\",\n" +
-                "            \"preciseMatch\":1000\n" +
+                "            \"preciseMatch\":500\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"name\":\"thickness\",\n" +
-                "            \"preciseMatch\":1000\n" +
+                "            \"preciseMatch\":500\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"name\":\"shrinkage\",\n" +
-                "            \"preciseMatch\":1000\n" +
+                "            \"preciseMatch\":500\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"name\":\"fabricWidth\",\n" +
-                "            \"preciseMatch\":1000\n" +
+                "            \"preciseMatch\":500\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"name\":\"colorSystem\",\n" +
-                "            \"preciseMatch\":1000\n" +
+                "            \"preciseMatch\":500\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"deviceBrandMatch\":20,\n" +
                 "            \"includeMatch\":500,\n" +
                 "            \"name\":\"deviceName\",\n" +
-                "            \"preciseMatch\":1000\n" +
+                "            \"preciseMatch\":600\n" +
                 "        },\n" +
                 "        {\n" +
-                "            \"allMatch\":0,\n" +
+                "            \"allMatch\":5,\n" +
                 "            \"name\":\"preOperator\",\n" +
-                "            \"preciseMatch\":0\n" +
+                "            \"preciseMatch\":10\n" +
                 "        }\n" +
                 "    ],\n" +
                 "    \"open\":[\n" +
@@ -89,54 +89,54 @@ public class JsonTest {
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"name\":\"customerNo\",\n" +
-                "            \"preciseMatch\":600\n" +
+                "            \"preciseMatch\":1000\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"name\":\"customerName\",\n" +
-                "            \"preciseMatch\":500\n" +
+                "            \"preciseMatch\":1000\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"name\":\"specification\",\n" +
-                "            \"preciseMatch\":500\n" +
+                "            \"preciseMatch\":1000\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"name\":\"stereotypeRequirement\",\n" +
-                "            \"preciseMatch\":500\n" +
+                "            \"preciseMatch\":1000\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"name\":\"productWeight\",\n" +
-                "            \"preciseMatch\":500\n" +
+                "            \"preciseMatch\":1000\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"name\":\"thickness\",\n" +
-                "            \"preciseMatch\":500\n" +
+                "            \"preciseMatch\":1000\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"name\":\"shrinkage\",\n" +
-                "            \"preciseMatch\":500\n" +
+                "            \"preciseMatch\":1000\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"name\":\"fabricWidth\",\n" +
-                "            \"preciseMatch\":500\n" +
+                "            \"preciseMatch\":1000\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"name\":\"colorSystem\",\n" +
-                "            \"preciseMatch\":500\n" +
+                "            \"preciseMatch\":1000\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"allMatch\":50,\n" +
                 "            \"deviceBrandMatch\":20,\n" +
                 "            \"includeMatch\":500,\n" +
                 "            \"name\":\"deviceName\",\n" +
-                "            \"preciseMatch\":600\n" +
+                "            \"preciseMatch\":1000\n" +
                 "        }\n" +
                 "    ]\n" +
                 "}";
