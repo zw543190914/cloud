@@ -1,11 +1,15 @@
 package com.zw.cloud.tools.config.ocr;
 
 import com.baidu.aip.ocr.AipOcr;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OcrConfig {
+
+    @Value("${logging.config}")
+    private String logFile;
 
     @Bean
     public AipOcr aipOcr() {
@@ -22,7 +26,7 @@ public class OcrConfig {
 
         // 可选：设置log4j日志输出格式，若不设置，则使用默认配置
         // 也可以直接通过jvm启动参数设置此环境变量
-        System.setProperty("aip.log4j.conf", "classpath:log/logback-spring.xml");
+        System.setProperty("aip.log4j.conf", logFile);
         return client;
     }
 

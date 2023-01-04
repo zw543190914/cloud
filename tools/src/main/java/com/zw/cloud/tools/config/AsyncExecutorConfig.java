@@ -21,7 +21,10 @@ public class AsyncExecutorConfig implements AsyncConfigurer {
         //返回可用处理器的虚拟机的最大数量不小于1
         int cpu = Runtime.getRuntime().availableProcessors();
         log.info("start asyncServiceExecutor cpu : {}", cpu);
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        //ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        // 自定义方式,在多线程中传入TID
+        MyThreadPoolTaskExecutor executor = new MyThreadPoolTaskExecutor();
+
         //配置核心线程数
         executor.setCorePoolSize(cpu);
         //配置最大线程数

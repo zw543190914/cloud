@@ -3,10 +3,9 @@ package com.zw.cloud.tools.utils;
 import com.alibaba.fastjson.JSON;
 import com.baidu.aip.face.AipFace;
 import com.baidu.aip.face.MatchRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +19,7 @@ import java.util.HashMap;
  */
 
 @Component
+@Slf4j
 public class BaiduAiUtil {
 
     @Value("${ai.appId:1}")
@@ -41,13 +41,12 @@ public class BaiduAiUtil {
         options.put("quality_control", "NORMAL");
         options.put("liveness_control", "LOW");
     }
-    private Logger logger = LoggerFactory.getLogger(BaiduAiUtil.class);
 
 
     @PostConstruct
     public void init() {
         client = new AipFace(APP_ID, API_KEY, SECRET_KEY);
-        logger.info("[BaiduAiUtil][init] client is {}", JSON.toJSONString(client));
+        log.info("[BaiduAiUtil][init] client is {}", JSON.toJSONString(client));
         // 可选：设置网络连接参数
 //        client.setConnectionTimeoutInMillis(5000);
 //        client.setSocketTimeoutInMillis(60000);
@@ -143,7 +142,7 @@ public class BaiduAiUtil {
         String imageType = "BASE64";
         // 身份验证
         JSONObject jsonObject = client.personVerify(image, imageType, idCardNumber, name, options);
-        logger.info("[BaiduAiUtil][init] checkPersonByIdCard jsonObject is {}", jsonObject.toString());
+        log.info("[BaiduAiUtil][init] checkPersonByIdCard jsonObject is {}", jsonObject.toString());
         return jsonObject;
 
 

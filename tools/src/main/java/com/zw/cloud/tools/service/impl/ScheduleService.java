@@ -14,16 +14,17 @@ import java.util.concurrent.FutureTask;
 public class ScheduleService {
 
 
-    @Async
+    @Async("asyncTaskExecutor")
     public void test() throws Exception{
-        log.info("test thread is " + Thread.currentThread().getName());
-        FutureTask<String> futureTask = new FutureTask<String>(() -> {
-            log.info("thread is " + Thread.currentThread().getName());
+        log.info("[ScheduleService]test thread is " + Thread.currentThread().getName());
+        /*FutureTask<String> futureTask = new FutureTask<String>(() -> {
+            log.info("[ScheduleService] futureTask thread is " + Thread.currentThread().getName());
             return "haha";
         });
         new Thread(futureTask).start();
-
-        System.out.println(futureTask.get());
+        log.info("[ScheduleService]test futureTask.get() is {}" , futureTask.get());
+        */
+        log.info("[ScheduleService]test thread is " + Thread.currentThread().getName());
     }
 
 }

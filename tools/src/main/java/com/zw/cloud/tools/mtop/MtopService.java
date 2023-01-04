@@ -68,13 +68,13 @@ public class MtopService {
                         }
                     }
                 } catch (Exception e) {
-                    logger.error(e.getMessage(), e);
+                    logger.error("[MtopService][init] error is ", e);
                 }
                 break;
             }
         }
-        logger.info("init mtop uri beans done!");
-        logger.info("serviceCache uri is " + serviceCache.keySet().toString());
+        logger.info("[MtopService][init] mtop uri beans done!");
+        logger.info("[MtopService][init] serviceCache uri is " + serviceCache.keySet().toString());
     }
 
     public Object mtopAdaptor(String uri, List args, String workId, String workName) throws Exception {
