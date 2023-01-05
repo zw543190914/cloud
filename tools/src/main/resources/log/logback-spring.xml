@@ -17,12 +17,26 @@
        用于区分不同应用程序的记录。一旦设置，不能修改,可以通过%contextName来打印日志上下文名称。
      -->
     <contextName>logback-spring</contextName>
-    <!-- name的值是变量的名称，value的值时变量定义的值。通过定义的值会被插入到logger上下文中。定义后，可以使“${}”来使用变量。 -->
-    <property name="logging.path" value="${LOG_PATH:- }"/>
+    <!--日志文件的存储路径-->
+    <springProperty scope="context" name="logging.path" source="logging.file.path"/>
 
-    <!-- 日志格式 -->
+    <!--0. 日志格式和颜色渲染 -->
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+
+    <!--console输出格式-->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(TID: %X{TRACE_ID}){yellow} %clr(${PID:- }){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+    <!-- 文件输出格式 -->
     <property name="FILE_LOG_PATTERN"
               value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level logger_name:%logger{36} - TID:[%X{TRACE_ID}] - message:%msg%n"/>
+    <!--文件输出格式-->
+   <!-- <property name="FILE_LOG_PATTERN"
+              value='${FILE_LOG_PATTERN:-{"level": "%level", "tid": "%tid", "thread": "%thread", "class": "%logger{1.}:%L","message": "%message", "stack": "%exception{10}"} }'/>-->
 
     <!--1. 输出到控制台-->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -34,7 +48,7 @@
         <!--日志文档输出格式-->
         <encoder>
             <!--指定日志格式-->
-            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
             <!--设置字符集-->
             <charset>UTF-8</charset>
         </encoder>
@@ -190,10 +204,6 @@
             <onMismatch>DENY</onMismatch>
         </filter>
     </appender>
-
-
-
-
 
     <!--
       <logger>用来设置某一个包或者具体的某一个类的日志打印级别、
