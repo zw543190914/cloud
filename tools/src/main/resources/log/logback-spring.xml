@@ -44,7 +44,7 @@
     <!-- 时间滚动输出 level为 DEBUG 日志 -->
     <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 正在记录的日志文件的路径及文件名~~~~~file设置打印的文件的路径及文件名，建议绝对路径-->
-        <file>${logging.path}/web_debug.log</file>
+        <file>${logging.path}/tool_debug.log</file>
 
         <!--日志文档输出格式-->
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -69,7 +69,7 @@
                 可以将此文件与file指定文件路径设置为不同路径，从而将当前日志文件或归档日志文件置不同的目录。
                 而2018-08-23的日志文件在由fileNamePattern指定。%d{yyyy-MM-dd}指定日期格式，%i指定索引
              -->
-            <fileNamePattern>${logging.path}/web-debug-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${logging.path}/tool-debug-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
 
             <!--
                配置日志文件不能超过100M，若超过100M，日志文件会以索引0开始，命名日志文件
@@ -104,7 +104,7 @@
     <!-- 2.2 level为 INFO 日志，时间滚动输出  -->
     <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 正在记录的日志文档的路径及文档名 -->
-        <file>${logging.path}/web_info.log</file>
+        <file>${logging.path}/tool_info.log</file>
         <!--日志文档输出格式-->
         <!--日志文档输出格式-->
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -116,7 +116,7 @@
         <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 每天日志归档路径以及格式 -->
-            <fileNamePattern>${logging.path}/web-info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${logging.path}/tool-info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>100MB</maxFileSize>
@@ -135,7 +135,7 @@
     <!-- 2.3 level为 WARN 日志，时间滚动输出  -->
     <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 正在记录的日志文档的路径及文档名 -->
-        <file>${logging.path}/web_warn.log</file>
+        <file>${logging.path}/tool_warn.log</file>
         <!--日志文档输出格式-->
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--指定日志格式-->
@@ -145,7 +145,7 @@
         </encoder>
         <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${logging.path}/web-warn-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${logging.path}/tool-warn-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>100MB</maxFileSize>
@@ -164,7 +164,7 @@
     <!-- 2.4 level为 ERROR 日志，时间滚动输出  -->
     <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 正在记录的日志文档的路径及文档名 -->
-        <file>${logging.path}/web_error.log</file>
+        <file>${logging.path}/tool_error.log</file>
         <!--日志文档输出格式-->
         <!--日志文档输出格式-->
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -175,7 +175,7 @@
         </encoder>
         <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${logging.path}/web-error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${logging.path}/tool-error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>100MB</maxFileSize>
