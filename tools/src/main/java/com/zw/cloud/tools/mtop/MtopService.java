@@ -3,6 +3,7 @@ package com.zw.cloud.tools.mtop;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Preconditions;
 import com.zw.cloud.common.utils.WebResult;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ import java.lang.reflect.UndeclaredThrowableException;
 import java.util.*;
 
 @Service
+@Slf4j
 public class MtopService {
 
     @Autowired
@@ -34,9 +36,6 @@ public class MtopService {
 
     private static Map<String, HandlerMethod> methodCache = new HashMap<>(255);
     private static Map<String, Object> serviceCache = new HashMap<>(255);
-
-
-    private Logger logger = LoggerFactory.getLogger(MtopService.class);
 
     @PostConstruct
     public void init() {
@@ -68,17 +67,17 @@ public class MtopService {
                         }
                     }
                 } catch (Exception e) {
-                    logger.error("[MtopService][init] error is ", e);
+                    log.error("[MtopService][init] error is ", e);
                 }
                 break;
             }
         }
-        logger.info("[MtopService][init] mtop uri beans done!");
-        logger.info("[MtopService][init] serviceCache uri is " + serviceCache.keySet().toString());
+        log.info("[MtopService][init] mtop uri beans done!");
+        log.info("[MtopService][init] serviceCache uri is " + serviceCache.keySet().toString());
     }
 
     public Object mtopAdaptor(String uri, List args, String workId, String workName) throws Exception {
-        logger.info("[MtopService][mtopAdaptor]uri is {},args is {},workerId is {},workerName is {}", uri, JSON.toJSONString(args), workId, workName);
+        log.info("[MtopService][mtopAdaptor]uri is {},args is {},workerId is {},workerName is {}", uri, JSON.toJSONString(args), workId, workName);
         HandlerMethod handlerMethod = methodCache.get(uri);
         Preconditions.checkArgument(!Objects.isNull(handlerMethod) || !Objects.isNull(serviceCache.get(uri)), "方法不存在，请核对uri");
         //logger.info("[mtopAdaptor]handlerMethod is {}",JsonUtils.toJsonString(handlerMethod));
@@ -101,7 +100,7 @@ public class MtopService {
                             argsWithType[i] = paramJson;
                         }
                     } catch (Exception e) {
-                        logger.info("[MtopService][mtopAdaptor] is error , e is " + e + " paramJson is  " + paramJson + " Type is" + methodParameters[i].getParameterType().getName());
+                        log.info("[MtopService][mtopAdaptor] is error , e is " + e + " paramJson is  " + paramJson + " Type is" + methodParameters[i].getParameterType().getName());
                         throw new RuntimeException("参数转换失败，请核对参数");
                     }
                 }
@@ -112,7 +111,7 @@ public class MtopService {
                 value = ReflectionUtils.invokeMethod(handlerMethod.getMethod(), serviceCache.get(uri));
             }
         } catch (Exception e) {
-            logger.error("[MtopService][mtopAdaptor] is error : {}", e.getMessage(), e);
+            log.error("[MtopService][mtopAdaptor] is error : {}", e.getMessage(), e);
             String message = e.getMessage();
             if (e instanceof UndeclaredThrowableException) {
                 Throwable cause = e.getCause();
@@ -128,7 +127,7 @@ public class MtopService {
         }
         if (value instanceof WebResult) {
             WebResult webResult = (WebResult) value;
-            logger.info("[MtopService][mtopAdaptor] return webResult is {}", JSON.toJSONString(webResult));
+            log.info("[MtopService][mtopAdaptor] return webResult is {}", JSON.toJSONString(webResult));
             if (StringUtils.isNotBlank(webResult.getMsg())) {
                 resultMap.put("success", false);
                 resultMap.put("errorMsg", webResult.getMsg());
@@ -139,7 +138,7 @@ public class MtopService {
                 return resultMap;
             }
         }
-        logger.info("[MtopService][mtopAdaptor] return value is {},uri is {},workId is {},workName is {}", JSON.toJSONString(value), uri, workId, workName);
+        log.info("[MtopService][mtopAdaptor] return value is {},uri is {},workId is {},workName is {}", JSON.toJSONString(value), uri, workId, workName);
         return value;
     }
 }
