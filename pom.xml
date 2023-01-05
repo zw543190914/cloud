@@ -49,6 +49,7 @@
         <module>rocketMq</module>
         <module>influxdb</module>
         <module>kafka</module>
+        <module>logging</module>
 
     </modules>
     <properties>

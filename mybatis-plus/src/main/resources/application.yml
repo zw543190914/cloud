@@ -113,4 +113,14 @@ mybatis-plus:
       #logic-delete-field: deleted
       #logic-delete-value: 1
       #logic-not-delete-value: 0
+logging:
+  file:
+    path: D:/logs/cloud
+  level:
+    com:
+      cic:
+        analysis:
+          business:
+            dao: warn
+    root: info
 
