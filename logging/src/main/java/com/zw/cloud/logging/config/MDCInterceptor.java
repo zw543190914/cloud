@@ -3,7 +3,6 @@ package com.zw.cloud.logging.config;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +26,8 @@ public class MDCInterceptor implements HandlerInterceptor {
         }
         MDC.put(TRACE_ID, tid);
         log.info("[MDCInterceptor][preHandle] tid is {}",tid);
-
+        //回写requestId到response中
+        response.setHeader(TRACE_ID,tid);
         return true;
     }
 
