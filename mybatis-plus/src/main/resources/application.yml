@@ -41,7 +41,7 @@ spring:
     # 打印sql
     props:
       sql:
-        show: true
+        show: false
     # 数据源配置
     datasource:
       #数据源，可配置多个
@@ -118,10 +118,12 @@ logging:
   file:
     path: D:/logs/cloud
   level:
+#    单独给dao下目录配置debug模式 打印sql日志
     com:
-      cic:
-        analysis:
-          business:
-            dao: warn
+      zw:
+        cloud:
+          mybatis:
+            plus:
+              mapper: debug
     root: info
 

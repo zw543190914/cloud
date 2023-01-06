@@ -31,7 +31,7 @@ public class UserController {
      */
     @GetMapping("/insertOrUpdate")
     //http://localhost:9040/user/insertOrUpdate?name=zw&age=18&desc=11
-    public void insertOrUpdate(String name,int age,String desc){
+    public void insertOrUpdate(@RequestParam String name,int age,String desc){
         User userPlus = new User();
         userPlus.setAge((byte)age);
         userPlus.setName(name);
@@ -86,13 +86,14 @@ public class UserController {
      * @return 单条数据
      */
     @GetMapping("selectOne")
-    public User selectOne(Long id) {
+    //http://localhost:9040/user/selectOne?id=1
+    public User selectOne(@RequestParam Long id) {
         return this.userService.queryById(id);
     }
 
     @GetMapping("queryBySql")
     //http://localhost:9040/user/queryBySql
-    public Map<String,Object> queryBySql(Long id) {
+    public Map<String,Object> queryBySql(@RequestParam Long id) {
         return this.userService.queryBySql(id);
     }
 
