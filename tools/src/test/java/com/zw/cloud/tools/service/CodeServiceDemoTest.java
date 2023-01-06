@@ -1,17 +1,16 @@
 package com.zw.cloud.tools.service;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.zw.cloud.common.utils.DateTimeUtils;
 import com.zw.cloud.tools.dao.CodeDao;
 import com.zw.cloud.tools.entity.Code;
 import com.zw.cloud.tools.service.impl.CodeServiceImpl;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
 import java.util.Date;
-import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -27,7 +26,7 @@ class CodeServiceDemoTest {
     CodeServiceImpl codeService;
 
     @BeforeEach
-    public void before() {
+     void before() {
 
         MockitoAnnotations.openMocks(this);
         // 解决mybatisplus orderby LambdaQueryWrapper
@@ -37,26 +36,25 @@ class CodeServiceDemoTest {
 
 
     @Test
-    public void queryAllByLimit() {
+     void queryAllByLimit() {
         Mockito.when(codeDao.queryAllByLimit(anyInt(), anyInt())).thenReturn(Lists.newArrayList());
-        List<Code> codes = codeService.queryAllByLimit(1, 20);
-        System.out.println(JSON.toJSONString(codes));
+        Assertions.assertDoesNotThrow(() -> codeService.queryAllByLimit(1, 20));
     }
 
     @Test
-    public void insert() {
+     void insert() {
         Code code = new Code();
         code.setGmtCreate(new Date());
         code.setStatus((byte)2);
         Mockito.doNothing().when(codeDao).insert(any());
-        codeService.insert(code);
+        Assertions.assertDoesNotThrow(() -> codeService.insert(code));
     }
 
     @Test
-    public void plusMonths() {
+     void plusMonths() {
         try (MockedStatic<DateTimeUtils> dateTimeUtilsMockedStatic = mockStatic(DateTimeUtils.class)) {
             dateTimeUtilsMockedStatic.when(()-> DateTimeUtils.plusMonths(anyInt())).thenReturn(new Date());
-            System.out.println(DateTimeUtils.plusMonths(1));
+            Assertions.assertDoesNotThrow(() -> DateTimeUtils.plusMonths(1));
         }
     }
 }
