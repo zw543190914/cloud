@@ -232,6 +232,13 @@
             <artifactId>apm-toolkit-logback-1.x</artifactId>
         </dependency>
 
+        <!-- 统一日志处理 -->
+        <dependency>
+            <groupId>com.zw.cloud</groupId>
+            <artifactId>logging</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!--图片转pdf-->
         <dependency>
             <groupId>com.lowagie</groupId>

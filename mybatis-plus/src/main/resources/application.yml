@@ -114,6 +114,7 @@ mybatis-plus:
       #logic-delete-value: 1
       #logic-not-delete-value: 0
 logging:
+  config: classpath:log/logback-spring.xml
   file:
     path: D:/logs/cloud
   level:

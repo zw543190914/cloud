@@ -22,7 +22,8 @@
   20. websocket 、 netty(netty-server)、 netty-client, 参考对应模块。</br>
   21. redis 分布式锁，幂等控制，参考 netty(netty-server) 模块。</br>
   22. MQ整合 rocketMq、rabbitMq、kafka. rocketMQ 使用策略模式进行消息消费</br>
-  23. 长轮询实现 </br>
+  23. 统一日志处理 参考 logging 模块。    
+  24. 长轮询实现 </br>
       poi excel 导出(百万数据使用 SXSSF),数据读取(百万数据量 使用事件模型进行读取) </br>
       小图片data url 数据库存储, 大文件 七牛云对象存储 </br>
       二维码生成和解析 </br>
@@ -32,13 +33,13 @@
       并发相关内容 锁，JUC工具类 线程池 </br>
       SPRINGBOOT单元测试 & MOCK静态方法 </br>
       参考 tools 模块 </br>
-  24. 一些开发常用工具，比如 HttpUtils ，JwtUtils </br>
+  25. 一些开发常用工具，比如 HttpUtils ，JwtUtils </br>
       整合使用IK分词器(自定义分词)或者 HanLP 分词进行文本相似度分析 </br>
       BigDecimalUtils 对数字计算和统计  </br>
       DateTimeUtils 日期工具  </br>
       使用 Pinyin4jUtils 进行 中文转拼音的相关处理， 参考 common 模块。 </br>
-  25. IM即时通讯 后端代码 netty 模块，[uni-app 代码](https://gitee.com/moon-in-the-mirror/chat)   
-  26. [常用插件](https://blog.csdn.net/weixin_41846320/article/details/82697818)
+  26. IM即时通讯 后端代码 netty 模块，[uni-app 代码](https://gitee.com/moon-in-the-mirror/chat)   
+  27. [常用插件](https://blog.csdn.net/weixin_41846320/article/details/82697818)
   
   父POM中配置了自己nexus私服，已注释，settings-nexus.xml 为自己私服对应配置文件，方便后期查找使用。</br> 
   
