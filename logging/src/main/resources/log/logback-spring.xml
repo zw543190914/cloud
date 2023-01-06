@@ -41,7 +41,7 @@
               value="${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(TID: %X{TRACE_ID}){yellow} %clr(${PID:- }){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
     <!-- 文件输出格式 -->
     <property name="FILE_LOG_PATTERN"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level logger_name:%logger{36} - TID:[%X{TRACE_ID}] - message:%msg%n"/>
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS}  %-5level TID: %X{TRACE_ID} [%thread] %logger{36} : %msg%n"/>
     <!--文件输出格式-->
    <!-- <property name="FILE_LOG_PATTERN"
               value='${FILE_LOG_PATTERN:-{"level": "%level", "tid": "%tid", "thread": "%thread", "class": "%logger{1.}:%L","message": "%message", "stack": "%exception{10}"} }'/>-->
