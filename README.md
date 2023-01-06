@@ -22,7 +22,7 @@
   20. websocket 、 netty(netty-server)、 netty-client, 参考对应模块。</br>
   21. redis 分布式锁，幂等控制，参考 netty(netty-server) 模块。</br>
   22. MQ整合 rocketMq、rabbitMq、kafka. rocketMQ 使用策略模式进行消息消费</br>
-  23. 统一日志处理 参考 logging 模块。    
+  23. 统一日志处理以及TRACE_ID生成和传递 参考 logging 模块。    
   24. 长轮询实现 </br>
       poi excel 导出(百万数据使用 SXSSF),数据读取(百万数据量 使用事件模型进行读取) </br>
       小图片data url 数据库存储, 大文件 七牛云对象存储 </br>

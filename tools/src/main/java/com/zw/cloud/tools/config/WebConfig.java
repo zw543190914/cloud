@@ -20,6 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
         .addPathPatterns("/**")
         // 不拦截的路径
         .excludePathPatterns("/exclude/*","/images/*");
+        WebMvcConfigurer.super.addInterceptors(registry);
     }
 }
 
