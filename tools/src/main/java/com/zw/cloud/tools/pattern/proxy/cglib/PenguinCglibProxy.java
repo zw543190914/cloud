@@ -10,21 +10,21 @@ import org.springframework.cglib.proxy.MethodProxy;
 import java.lang.reflect.Method;
 
 @Slf4j
-public class PenguinCjlibProxy implements MethodInterceptor {
+public class PenguinCglibProxy implements MethodInterceptor {
     /**
      * 原始对象,被代理对象
      */
     private Object originalObj;
 
-    public PenguinCjlibProxy(Object originalObj) {
+    public PenguinCglibProxy(Object originalObj) {
         this.originalObj = originalObj;
     }
 
     @Override
     public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
-        log.info("[PenguinCjlibProxy][intercept] before");
+        log.info("[PenguinCglibProxy][intercept] before");
         Object result = methodProxy.invokeSuper(proxy, args);
-        log.info("[PenguinCjlibProxy][intercept] after,result is {}", JSON.toJSONString(result));
+        log.info("[PenguinCglibProxy][intercept] after,result is {}", JSON.toJSONString(result));
         return result;
     }
 
@@ -35,7 +35,7 @@ public class PenguinCjlibProxy implements MethodInterceptor {
         // 设置enhancer对象的父类
         enhancer.setSuperclass(PenguinServiceImpl.class);
         // 设置enhancer的回调对象
-        enhancer.setCallback(new PenguinCjlibProxy(penguinService));
+        enhancer.setCallback(new PenguinCglibProxy(penguinService));
         // 创建代理对象
         PenguinServiceImpl penguinServiceProxy = (PenguinServiceImpl)enhancer.create();
         penguinServiceProxy.beat();
