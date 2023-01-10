@@ -95,7 +95,7 @@
         <commons-codec.version>1.14</commons-codec.version>
         <commons-pool2.version>2.11.1</commons-pool2.version>
         <shiro-redis.version>3.0.0</shiro-redis.version>
-        <redisson.version>3.17.5</redisson.version>
+        <redisson.version>3.19.0</redisson.version>
         <poi.version>4.1.2</poi.version>
         <easyexcel.version>3.0.5</easyexcel.version>
         <easypoi.version>4.1.2</easypoi.version>
@@ -121,7 +121,6 @@
         <mqtt-client.version>0.4.0</mqtt-client.version>
         <dingtalk.version>1.0.1</dingtalk.version>
         <kafka.version>2.8.0</kafka.version>
-        <jjwt.version>0.9.1</jjwt.version>
         <freemarker.version>2.3.31</freemarker.version>
         <kryo-serializers.version>0.45</kryo-serializers.version>
         <esotericsoftware.version>4.0.2</esotericsoftware.version>
@@ -352,13 +351,6 @@
                 <groupId>org.activiti</groupId>
                 <artifactId>activiti-image-generator</artifactId>
                 <version>${activiti.version}</version>
-            </dependency>
-
-            <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
-            <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt</artifactId>
-                <version>${jjwt.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
@@ -609,12 +601,6 @@
                 <groupId>org.freemarker</groupId>
                 <artifactId>freemarker</artifactId>
                 <version>${freemarker.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/de.javakaffee/kryo-serializers -->
-            <dependency>
-                <groupId>de.javakaffee</groupId>
-                <artifactId>kryo-serializers</artifactId>
-                <version>${kryo-serializers.version}</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/de.javakaffee/kryo-serializers -->
             <dependency>
