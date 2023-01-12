@@ -24,9 +24,12 @@
     <property name="logging.path" value="${logPath}" />
     <property name="application.name" value="${applicationName}" />
 
+    <!--日志级别-->
+    <springProperty scope="context" name="LOG_LEVEL_ROOT" source="logging.level.root" defaultValue="INFO"/>
 
-   <!-- <property name="logging.path" value="${LOG_PATH:- }"/>
-    <springProperty scope="context" name="application.name" source="spring.application.name"/>-->
+
+    <!-- <property name="logging.path" value="${LOG_PATH:- }"/>
+     <springProperty scope="context" name="application.name" source="spring.application.name"/>-->
 
     <!--0. 日志格式和颜色渲染 -->
     <!-- 彩色日志依赖的渲染类 -->
@@ -252,7 +255,7 @@
         root指定最基础的日志输出级别，level属性指定
         appender-ref标识的appender将会添加到这个logger
     -->
-    <root level="${logging.level.root:info}">
+    <root level="${LOG_LEVEL_ROOT}">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DEBUG_FILE"/>
         <appender-ref ref="INFO_FILE"/>
