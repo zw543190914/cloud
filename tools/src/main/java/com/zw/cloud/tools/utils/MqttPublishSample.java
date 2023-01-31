@@ -19,11 +19,11 @@ public class MqttPublishSample {
 
         // dev
         // 18hao设备5
-        String host = "tcp://axdkagn.iot.gz.baidubce.com";
+        /*String host = "tcp://axdkagn.iot.gz.baidubce.com";
         String userName = "thingidp@axdkagn|rr|0|MD5";
         String password = "20f582bfab251a639a8893d13d90bdc1";
         String topic = "d/rr/report";
-        String clientId = "subscribe_test_device01";
+        String clientId = "subscribe_test_device01";*/
         // qa
         // 定型机#02
         /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
@@ -31,18 +31,13 @@ public class MqttPublishSample {
         String password = "3509803995f1748b7d4c5f1ad9dfb615";
         String topic = "d/qa_test_device_stenter_02/report";
         String clientId = "subscribe_test";*/
-        // 定型机17
-       /* String host = "tcp://amgjjzk.iot.gz.baidubce.com";
-        String userName = "thingidp@amgjjzk|test_qa_17|0|MD5";
-        String password = "5ce6946268fc3acbccd0e2b53790bd0e";
-        String topic = "d/test_qa_17/report";
-        String clientId = "subscribe_test";*/
-        // 定型机16
-        /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
-        String userName = "thingidp@amgjjzk|test_device_16|0|MD5";
-        String password = "20ea5758be5e367d606287b8eeca8539";
-        String topic = "d/test_device_16/report";
-        String clientId = "subscribe_test001";*/
+        // 定型机2
+        String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+        String userName = "thingidp@amgjjzk|8888|0|MD5";
+        String password = "bdf6a12cb4d85d36954a9759e24b12d4";
+        String topic = "d/8888/report";
+        String clientId = "subscribe_test001";
+
 
         // 线上
         /*String host = "tcp://afswjqe.iot.gz.baidubce.com";
