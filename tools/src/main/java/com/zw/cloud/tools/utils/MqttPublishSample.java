@@ -19,11 +19,11 @@ public class MqttPublishSample {
 
         // dev
         // 18hao设备5
-        /*String host = "tcp://axdkagn.iot.gz.baidubce.com";
+        String host = "tcp://axdkagn.iot.gz.baidubce.com";
         String userName = "thingidp@axdkagn|rr|0|MD5";
         String password = "20f582bfab251a639a8893d13d90bdc1";
         String topic = "d/rr/report";
-        String clientId = "subscribe_test_device01";*/
+        String clientId = "subscribe_test_device01";
         // qa
         // 定型机#02
         /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
@@ -32,11 +32,11 @@ public class MqttPublishSample {
         String topic = "d/qa_test_device_stenter_02/report";
         String clientId = "subscribe_test";*/
         // 定型机2
-        String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+        /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|8888|0|MD5";
         String password = "bdf6a12cb4d85d36954a9759e24b12d4";
         String topic = "d/8888/report";
-        String clientId = "subscribe_test001";
+        String clientId = "subscribe_test001";*/
 
 
         // 线上
@@ -148,7 +148,8 @@ public class MqttPublishSample {
                 "    \"d21\": " + actValue +",\n" +
                 "    \"d22\": " + setValue +",\n" +
                 "    \"d23\": " + actValue +",\n" +
-                "    \"d24\": " + actValue +",\n" +
+                // d24	totalAmplitude 总门幅
+                "    \"d24\": " + 12 +",\n" +
                 "    \"d25\": " + actValue +",\n" +
                 "    \"d26\": " + actValue +",\n" +
                 "    \"d27\": " + actValue +",\n" +
@@ -234,8 +235,10 @@ public class MqttPublishSample {
                 "    \"d602\": " + actValue +",\n" +
                 "    \"d603\": " + actValue +",\n" +
                 "    \"d604\": " + setValue +",\n" +
+                // 后门幅实际
                 "    \"d605\": " + actValue +",\n" +
                 "    \"d606\": " + setValue +",\n" +
+                // 门幅1实际
                 "    \"d607\": " + actValue +",\n" +
                 "    \"d608\": " + setValue +",\n" +
                 "    \"d609\": " + actValue +",\n" +
@@ -256,9 +259,11 @@ public class MqttPublishSample {
                 "    \"d624\": " + setValue +",\n" +
                 "    \"d625\": " + actValue +",\n" +
                 "    \"d626\": " + setValue +",\n" +
-                "    \"d627\": " + actValue +",\n" +
+                // 门幅11实际
+                "    \"d627\": " + 120 +",\n" +
                 "    \"d628\": " + setValue +",\n" +
-                "    \"d629\": " + 110 +",\n" +
+                // 门幅12实际
+                //"    \"d629\": " + 110 +",\n" +
                 "    \"d700\": " + actValue +",\n" +
                 "    \"d701\": " + actValue +",\n" +
                 "    \"d702\": " + actValue +",\n" +

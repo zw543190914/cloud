@@ -16,4 +16,12 @@ public class InheritableThreadLocalUtil {
     public static void remove() {
         THREAD_LOCAL.remove();
     }
+
+    public static void main(String[] args) {
+        InheritableThreadLocalUtil.setValue("data");
+        new Thread(() -> System.out.println(InheritableThreadLocalUtil.getValue())).start();
+
+        RequestHolder.setValue("data1");
+        new Thread(() -> System.out.println(RequestHolder.getValue())).start();
+    }
 }
