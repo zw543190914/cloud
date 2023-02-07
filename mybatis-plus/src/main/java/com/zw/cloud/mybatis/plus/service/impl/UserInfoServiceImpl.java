@@ -1,5 +1,4 @@
 package com.zw.cloud.mybatis.plus.service.impl;
-import java.util.Date;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -19,6 +18,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -198,6 +198,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     }
 
+    /**
+     * 1 里面抛异常 如果被捕获不能影响外层执行
+     * 2 外面抛出异常，里面都要回滚
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void testPropagationNested(UserInfo userInfo) {
@@ -211,8 +215,14 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("sssss");
+        throw new BizException("exception");
     }
 
+    /**
+     * propagation = Propagation.REQUIRES_NEW 或者 默认
+     * Transaction rolled back because it has been marked as rollback-only
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void testPropagationDefault(UserInfo userInfo) {
