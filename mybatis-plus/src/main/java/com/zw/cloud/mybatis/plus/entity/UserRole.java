@@ -26,7 +26,7 @@ public class UserRole implements Serializable {
     private Integer userId;
 
     private Integer roleId;
-
+    @TableField(exist = false)
     private String remark;
 
     @TableField(fill = FieldFill.INSERT)

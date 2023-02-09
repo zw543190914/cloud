@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName(value = "user_info", autoResultMap = true)
+@TableName(value = "user_info_0", autoResultMap = true)
 public class UserInfo implements Serializable {
     private static final long serialVersionUID = 464505629765578240L;
     

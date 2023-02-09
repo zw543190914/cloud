@@ -21,11 +21,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!--Property 'sqlSessionFactory' or 'sqlSessionTemplate' are required-->
-       <!-- <dependency>
+        <!--sharding-jdbc 整合时 Property 'sqlSessionFactory' or 'sqlSessionTemplate' are required-->
+        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
@@ -78,10 +78,10 @@
         </dependency>
 
         <!--sharding-jdbc-->
-        <dependency>
-            <groupId>org.apache.shardingsphere</groupId>
-            <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.shardingsphere</groupId>-->
+<!--            <artifactId>sharding-jdbc-spring-boot-starter</artifactId>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>

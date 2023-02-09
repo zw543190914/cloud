@@ -34,7 +34,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
+    @Transactional(propagation = Propagation.NESTED)
     public void testPropagationNested(UserRole role) {
         save(role);
         throw new BizException("exception");

@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
-import com.zw.cloud.common.exception.BizException;
 import com.zw.cloud.mybatis.plus.entity.UserInfo;
 import com.zw.cloud.mybatis.plus.entity.UserRole;
 import com.zw.cloud.mybatis.plus.mapper.UserInfoMapper;
@@ -203,7 +202,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
      * 2 外面抛出异常，里面都要回滚
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED)
     public void testPropagationNested(UserInfo userInfo) {
         baseMapper.updateById(userInfo);
         UserRole userRole = new UserRole();
@@ -215,8 +214,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         System.out.println("sssss");
-        throw new BizException("exception");
     }
 
     /**
