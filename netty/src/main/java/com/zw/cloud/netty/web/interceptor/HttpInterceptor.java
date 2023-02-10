@@ -25,6 +25,9 @@ public class HttpInterceptor implements HandlerInterceptor {
         String uri = request.getRequestURI();
         String method = request.getMethod();
         log.info("[HttpInterceptor][preHandle]uri is {},method is {}",uri,method);
+        if (!uri.startsWith("/chat/user")) {
+            return true;
+        }
         String accessToken = request.getHeader("accessToken");
         if (StringUtils.isBlank(accessToken)) {
             Map<String, String> urlParams = UrlParamsUtils.getUrlParams(uri);

@@ -35,16 +35,16 @@ public class IdeLockAspect {
         Object arg = args[argsIndex];
 
         String perFix = ide.perFix();
+        // 其他类型 获取参数对应字段
+        String[] fieldNames = ide.objectFieldName();
+
         StringBuilder lockKey = new StringBuilder(perFix);
-        if (arg instanceof Byte || arg instanceof Short || arg instanceof Integer || arg instanceof Long
+        if (fieldNames.length == 0 || arg instanceof Byte || arg instanceof Short || arg instanceof Integer || arg instanceof Long
                 || arg instanceof Double || arg instanceof Float || arg instanceof Boolean || arg instanceof Character
                 || arg instanceof String || arg instanceof BigDecimal) {
             // 基本类型 + String类型直接取 指定参数值 作为 锁标志
             lockKey.append("_").append(arg);
         } else {
-            // 其他类型 获取参数对应字段
-            String[] fieldNames = ide.objectFieldName();
-
             try {
                 for (String fieldName : fieldNames) {
                     if (StringUtils.isBlank(fieldName)) {

@@ -15,7 +15,7 @@ public @interface IdeLock {
     // key的参数下标
     int paramIndex() default 0;
     // 如果类型是我们自定义的对象，使用对象哪个字段作为key值来源
-    String[] objectFieldName() default {""};
+    String[] objectFieldName() default {};
     // 使用 lock.tryLock() 还是 lock.lock() 方式加锁
     boolean useTryLock() default true;
 
