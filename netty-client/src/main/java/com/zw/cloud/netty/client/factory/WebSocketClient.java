@@ -81,7 +81,6 @@ public class WebSocketClient {
             //通常希望服务是低延迟的,建议将TCP_NODELAY设置为true。
             bootstrap.option(ChannelOption.TCP_NODELAY, true);
             //服务端将不能处理的客户端连接请求放在队列中等待处理，backlog参数指定了队列的大小
-            bootstrap.option(ChannelOption.SO_BACKLOG, webSocketConfigDTO.getBackLog());
             bootstrap.handler(new LoggingHandler(LogLevel.INFO));
             bootstrap.channel(NioSocketChannel.class);
             bootstrap.handler(new ChannelInitializer<SocketChannel>() {
