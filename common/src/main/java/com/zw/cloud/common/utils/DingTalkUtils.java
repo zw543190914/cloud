@@ -72,4 +72,18 @@ public class DingTalkUtils {
         OapiRobotSendResponse response = client.execute(request);
         log.info("[DingTalkUtils][sendDingTalkMsg] response is {}", JSONUtil.toJsonStr(response));
     }
+
+    public static void sendDingTalkChatMsg(String msg) throws Exception {
+        String token = "";
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/robot/send?access_token=" + token);
+        OapiRobotSendRequest request = new OapiRobotSendRequest();
+        request.setMsgtype("markdown");
+        OapiRobotSendRequest.Markdown markdown = new OapiRobotSendRequest.Markdown();
+        markdown.setTitle("chatGPT");
+        markdown.setText("#### chat\n" +
+                "> "+ msg + "\n");
+        request.setMarkdown(markdown);
+        OapiRobotSendResponse response = client.execute(request);
+        log.info("[DingTalkUtils][sendDingTalkChatMsg] response is {}", JSONUtil.toJsonStr(response));
+    }
 }
