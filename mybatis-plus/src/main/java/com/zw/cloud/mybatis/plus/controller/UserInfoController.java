@@ -3,6 +3,7 @@ package com.zw.cloud.mybatis.plus.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -129,6 +130,17 @@ public class UserInfoController {
             throw new RuntimeException("名称重复");
         }
 
+    }
+
+    @GetMapping("/updateToNull")
+    //http://localhost:8080/user-info/updateToNull?id=1588093790661382148
+    public void updateToNull(@RequestParam Long id) {
+        UserInfo user = new UserInfo();
+        user.setName("updateToNull");
+        LambdaUpdateWrapper<UserInfo> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.set(UserInfo::getOther,null);
+        updateWrapper.eq(UserInfo::getId,id);
+        mapper.update(user,updateWrapper);
     }
 
 

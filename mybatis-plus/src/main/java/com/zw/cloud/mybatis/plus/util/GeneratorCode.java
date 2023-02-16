@@ -58,7 +58,7 @@ public class GeneratorCode {
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         //表名，多个英文逗号分割
-        strategy.setInclude("general_product_record","general_product_record_plan_craft");
+        strategy.setInclude("product_record_detail");
         // 表前缀
         //strategy.setTablePrefix(pc.getModuleName() + "_");
 
@@ -75,7 +75,13 @@ public class GeneratorCode {
         TableFill createTime = new TableFill("create_time", FieldFill.INSERT);
         TableFill updateTime = new TableFill("update_time", FieldFill.INSERT_UPDATE);
         TableFill userId = new TableFill("user_id", FieldFill.INSERT_UPDATE);
-        ArrayList<TableFill> fills = Lists.newArrayList(createTime,updateTime,userId);
+        TableFill createUser = new TableFill("create_user", FieldFill.INSERT);
+        TableFill createSystem = new TableFill("create_system", FieldFill.INSERT);
+        TableFill updateUser = new TableFill("update_user", FieldFill.INSERT_UPDATE);
+        TableFill updateSystem = new TableFill("update_system", FieldFill.INSERT_UPDATE);
+
+        ArrayList<TableFill> fills = Lists.newArrayList(createTime,updateTime,userId,
+                createUser,createSystem,updateUser,updateSystem);
         strategy.setTableFillList(fills);
         // 乐观锁
         strategy.setVersionFieldName("version");
