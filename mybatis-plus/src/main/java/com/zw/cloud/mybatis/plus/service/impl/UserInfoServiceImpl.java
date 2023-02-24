@@ -92,6 +92,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             userInfoList.forEach(mapper::insertByMapper);
             sqlSession.commit();
         } catch (Exception e) {
+            sqlSession.rollback();
             throw e;
         } finally {
             sqlSession.close();
