@@ -18,6 +18,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,6 +33,12 @@ public class UserInfoController {
     private IUserInfoService userService;
     @Autowired
     private UserInfoMapper mapper;
+
+    @GetMapping("/testBatchInsertJdbc")
+    //http://localhost:8080/user-info/testBatchInsertJdbc
+    public void testBatchInsertJdbc() throws SQLException {
+        userService.testBatchInsertJdbc(buildUserList());
+    }
 
     @GetMapping("/testBatchInsertOneByOne")
     //http://localhost:8080/user-info/testBatchInsertOneByOne
@@ -270,9 +277,9 @@ public class UserInfoController {
     }
 
     private List<UserInfo> buildUserList(){
-        List<UserInfo> userInfoList = new ArrayList<>(30000);
+        List<UserInfo> userInfoList = new ArrayList<>(300000);
         Random random = new Random();
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 300000; i++) {
             UserInfo user = new UserInfo();
             user.setName("test" + i);
             user.setAge(random.nextInt(100));

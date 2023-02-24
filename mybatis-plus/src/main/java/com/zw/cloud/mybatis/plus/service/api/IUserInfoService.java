@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zw.cloud.mybatis.plus.entity.UserInfo;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 public interface IUserInfoService extends IService<UserInfo> {
+
+    void testBatchInsertJdbc(List<UserInfo> userInfoList) throws SQLException;
 
     void testBatchInsertOneByOne(List<UserInfo> userInfoList);
 

@@ -20,9 +20,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -32,6 +39,48 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     private SqlSessionFactory sqlSessionFactory;
     @Autowired
     private IUserRoleService userRoleService;
+    @Autowired
+    private DataSource dataSource;
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void testBatchInsertJdbc(List<UserInfo> userInfoList) throws SQLException {
+        long start = System.currentTimeMillis();
+        Connection connection = null;
+        try {
+            connection = dataSource.getConnection();
+            //设置手动提交
+            connection.setAutoCommit(false);
+            //预编译sql对象,只编译一回
+            PreparedStatement ps = connection.prepareStatement(
+                    "insert into user_info_0 (name, age, bir, other,update_time) values(?,?,?,?,?)");
+            for (UserInfo userInfo : userInfoList) {
+                ps.setString(1, userInfo.getName());
+                ps.setInt(2,userInfo.getAge());
+                // java.sql.Date
+                ps.setDate(3, java.sql.Date.valueOf(userInfo.getBir()));
+                ps.setString(4,JSON.toJSONString(userInfo.getOther()));
+                ps.setTimestamp(5,java.sql.Timestamp.valueOf(LocalDateTime.now()));
+                //添加到批次
+                ps.addBatch();
+            }
+            //提交批处理
+            ps.executeBatch();
+            connection.commit();
+        } catch (SQLException sqlException) {
+            if (Objects.nonNull(connection)) {
+                connection.rollback();
+            }
+            throw sqlException;
+        } finally {
+            if (Objects.nonNull(connection)) {
+                connection.close();
+            }
+        }
+        // 10000 条数据 431
+        // 30万 13796 20075 13521
+        log.info("[testBatchInsertJdbc] use time {}", System.currentTimeMillis() - start);
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -50,6 +99,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         // 2000条数据 260
         // 10000条数据 810  接入 sharding-jdbc 6868 2518
         // 1362 2793 2862
+        // 30万 31076 24161 19086
         log.info("[testBatchInsertOneByOne] use time {}", System.currentTimeMillis() - start);
     }
 
@@ -61,6 +111,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         // 2000条数据 330
         // 10000条数据 1180  接入 sharding-jdbc 1953 1596
         // 556 1129 1115
+        // 30万 74593 41711
         log.info("[testBatchInsertByMapper] use time {}", System.currentTimeMillis() - start);
     }
 
@@ -68,10 +119,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Transactional(rollbackFor = Exception.class)
     public void testBatchInsertByMybatisPlus(List<UserInfo> userInfoList) {
         long start = System.currentTimeMillis();
-        saveBatch(userInfoList,10000);
+        saveBatch(userInfoList,userInfoList.size());
         // 2000条数据 320
         // 10000条数据 1140 接入 sharding-jdbc 3824 6966
         // 1895 3369 3252
+        // 30万 80725 46066 34753
         log.info("[testBatchInsertByMybatisPlus] use time {}", System.currentTimeMillis() - start);
     }
 

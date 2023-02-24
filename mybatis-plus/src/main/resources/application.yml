@@ -124,6 +124,6 @@ logging:
         cloud:
           mybatis:
             plus:
-              mapper: debug
+              mapper: info
     root: info
 
