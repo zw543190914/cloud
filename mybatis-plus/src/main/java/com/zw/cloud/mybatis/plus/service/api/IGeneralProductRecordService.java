@@ -13,4 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IGeneralProductRecordService extends IService<GeneralProductRecord> {
 
+    boolean start(Long id);
+
+    boolean finish(Long id);
 }
