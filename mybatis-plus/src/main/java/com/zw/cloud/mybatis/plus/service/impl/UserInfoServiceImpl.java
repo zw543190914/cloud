@@ -100,7 +100,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         // 2000条数据 260
         // 10000条数据 810  接入 sharding-jdbc 6868 2518
         // 1362 2793 2862
-        // 30万 31076 24161 19086
+        // 30万 31076 24161 19086  54138 42820 32304  106337,98758(去除 rewriteBatchedStatements=true)
         log.info("[testBatchInsertOneByOne] use time {}", System.currentTimeMillis() - start);
     }
 
