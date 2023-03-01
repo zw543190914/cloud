@@ -157,7 +157,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     /**
      * 无论是否有 @Transactional
      * 数据存在，其他事务此时更新,再次读取任然是当前值
-     * 数据不存在，其他事务插入新数据并提交，此时更新或者删除 上一个事务提交的数据，可以更新成新值或者删除新数据  没有完全禁止幻读
+     * 数据不存在，其他事务插入新数据并提交，此时更新或者删除 上一个事务提交的数据，可以更新成新值或者删除新数据,数据也可以查询到  没有完全禁止幻读
      * 解决：@Transactional 并且使用锁 select for update
      */
     @Override
@@ -169,13 +169,15 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         log.info("[testMvcc] userInfo is {}", JSON.toJSONString(userInfo));
 
         try {
-            Thread.sleep(3000);
+            Thread.sleep(4000);
             UserInfo updateUserInfo = new UserInfo();
             updateUserInfo.setId(id);
             updateUserInfo.setAge(66);
             // 此时其他事务提交，该id 有数据，可以修改成功
             int i = baseMapper.updateById(updateUserInfo);
-            log.info("[testMvcc] update is {}", i);
+            UserInfo userInfo2 = baseMapper.selectById(id);
+            // 此时数据有值
+            log.info("[testMvcc] update is {},userInfo2 is {}", i,JSON.toJSONString(userInfo2));
         } catch (Exception e) {
             log.error("[testMvcc] error is ", e);
         }
