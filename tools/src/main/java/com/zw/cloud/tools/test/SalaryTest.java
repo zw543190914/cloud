@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class SalaryTest {
     public static void main(String[] args) {
-        System.out.println(cale(new BigDecimal(""),new BigDecimal((3290 + 2500) * 12 + 4000)));
+        System.out.println(cale(new BigDecimal(""),new BigDecimal((3290 + 3500) * 12 + 4000)));
         /*BigDecimal salary = new BigDecimal("");
         int decreaseAvg = (1500 + 1000) * 12;
         BigDecimal decrease = new BigDecimal(decreaseAvg);
@@ -31,7 +31,6 @@ public class SalaryTest {
         if (total.compareTo(new BigDecimal(0)) <= 0) {
             return null;
         }
-        total = total.subtract(new BigDecimal(36000));
         // 不超过36000元的 3% 速算扣除数 0
         if (total.compareTo(new BigDecimal(36000)) <= 0) {
             return total.multiply(new BigDecimal("0.03")).setScale(2, RoundingMode.HALF_UP);
