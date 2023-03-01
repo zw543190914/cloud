@@ -21,5 +21,15 @@ public class LazyMan {
                 System.out.println(Thread.currentThread().getName() + instance);
             }).start();
         }
+
+        /**
+         * LazyMan初始化
+         * LazyMan初始化
+         * Thread-0com.zw.cloud.tools.concurrent.single.LazyMan@2bde0b70
+         * Thread-4com.zw.cloud.tools.concurrent.single.LazyMan@2398c3c0
+         * Thread-2com.zw.cloud.tools.concurrent.single.LazyMan@2398c3c0
+         * Thread-1com.zw.cloud.tools.concurrent.single.LazyMan@2398c3c0
+         * Thread-3com.zw.cloud.tools.concurrent.single.LazyMan@2bde0b70
+         */
     }
 }
