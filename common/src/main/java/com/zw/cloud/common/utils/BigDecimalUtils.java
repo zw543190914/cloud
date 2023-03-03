@@ -2,6 +2,7 @@ package com.zw.cloud.common.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -12,7 +13,7 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
+@Slf4j
 public class BigDecimalUtils {
 
     public static void main(String[] args) {
@@ -239,6 +240,71 @@ public class BigDecimalUtils {
             total = total.add(arg);
         }
         return total.divide(new BigDecimal(args.size()), 2, RoundingMode.HALF_UP);
+    }
+
+    /**
+     * 计算json对象中平均值
+     *
+     * @param data     json
+     * @param lastChar 最后一个非数字字符，主要用于排序，
+     *                 因为计算要 去掉前两节和最后一节，其他节数排除值为空的
+     *                 eg:json对象的key为 dryingRoomPresetTemp1 传 p
+     * @return
+     */
+    public static BigDecimal caleJsonObjectAvg(Object data, String lastChar) {
+        // 值有空串，也有整数和小数。。。用 object
+        Map<String, Object> dataMap = JSON.parseObject(JSON.toJSONString(data), Map.class);
+        if (MapUtils.isEmpty(dataMap)) {
+            return null;
+        }
+        TreeMap<Integer, String> sortedMap = new TreeMap<>();
+
+        for (Map.Entry<String, Object> entry : dataMap.entrySet()) {
+            try {
+                String k = entry.getKey();
+                if (Objects.isNull(entry.getValue())) {
+                    continue;
+                }
+                String v = String.valueOf(entry.getValue());
+                if (StringUtils.isBlank(v)) {
+                    continue;
+                }
+                // 0值不参与计算
+                if (StringUtils.equals("0",v)) {
+                    continue;
+                }
+                String key = k.substring(k.lastIndexOf(lastChar) + 1);
+                sortedMap.put(Integer.parseInt(key), v);
+            } catch (Exception e) {
+                log.warn("[CaleJsonDataAvgUtils][caleAvg] data is {},warn is {}", JSON.toJSONString(data), e);
+            }
+        }
+        List<String> dryingRoomList = Lists.newArrayList(sortedMap.values());
+        return getAvgWithFilterFirstSecondAndLast(dryingRoomList);
+    }
+
+    /**
+     * 求平均数
+     */
+    private static BigDecimal getAvgWithFilterFirstSecondAndLast(List<String> args) {
+        if (CollectionUtils.isEmpty(args) || args.size() < 4) {
+            return null;
+        }
+        // 去掉前两节和最后一节，其他节数排除值为空的
+        args.remove(0);
+        args.remove(0);
+        args.remove(args.size() - 1);
+
+        BigDecimal num = new BigDecimal(0);
+        BigDecimal oneBigDecimal = new BigDecimal(1);
+        BigDecimal total = BigDecimal.ZERO;
+        for (String arg : args) {
+            if (arg != null) {
+                total = total.add(new BigDecimal(arg));
+                num = num.add(oneBigDecimal);
+            }
+        }
+        return total.divide(num, 0, RoundingMode.HALF_UP);
     }
 
     private static  Integer buildTemp(BigDecimal num, int size) {
