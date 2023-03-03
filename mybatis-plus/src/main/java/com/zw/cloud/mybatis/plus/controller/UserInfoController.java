@@ -211,6 +211,24 @@ public class UserInfoController {
         userService.testPropagationDefault(userInfo);
     }
 
+    @GetMapping("/queryWithLock/{id}")
+    @Transactional
+    //http://localhost:8080/user-info/queryWithLock/1
+    public UserInfo queryWithLock(@PathVariable Long id) throws InterruptedException {
+        UserInfo userInfo = mapper.queryByIdForUpdate(id);
+        TimeUnit.SECONDS.sleep(15);
+        return userInfo;
+    }
+
+    @GetMapping("/updateById/{id}")
+    //http://localhost:8080/user-info/updateById/1
+    public int updateById(@PathVariable Long id) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(id);
+        userInfo.setName("testLock");
+        return mapper.updateById(userInfo);
+    }
+
     @GetMapping("/query")
     //http://localhost:8080/user-info/query?name=test9998
     public Page<UserInfo> pageQuery(String name) {

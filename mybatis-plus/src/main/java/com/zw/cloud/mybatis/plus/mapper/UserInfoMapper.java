@@ -23,10 +23,10 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
     List<UserInfo> queryJsonDataLike(@Param("userInfo") UserInfo userInfo);
 
 
-    @Select("select * from user_info where id = #{id} for update;")
+    @Select("select * from user_info_0 where id = #{id} for update;")
     UserInfo queryByIdForUpdate(@Param("id") Long id);
 
-    @Select("select * from user_info order by id desc")
+    @Select("select * from user_info_0 order by id desc")
     IPage<UserInfo> queryAllDataTest(IPage<UserInfo> page);
 
     @Select({"${sql}"})
