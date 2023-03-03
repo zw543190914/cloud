@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author zw
- * @since 2023-02-15
+ * @since 2023-03-03
  */
 @Service
 public class ProductRecordDetailServiceImpl extends ServiceImpl<ProductRecordDetailMapper, ProductRecordDetail> implements IProductRecordDetailService {

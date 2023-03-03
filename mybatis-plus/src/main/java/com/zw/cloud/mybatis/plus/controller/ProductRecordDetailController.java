@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author zw
- * @since 2023-02-15
+ * @since 2023-03-03
  */
 @RestController
 @RequestMapping("/product-record-detail")

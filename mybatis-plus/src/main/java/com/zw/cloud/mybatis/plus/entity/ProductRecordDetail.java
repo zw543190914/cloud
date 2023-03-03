@@ -1,11 +1,8 @@
 package com.zw.cloud.mybatis.plus.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.Version;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,10 +13,11 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author zw
- * @since 2023-02-15
+ * @since 2023-03-03
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
+@TableName(value = "product_record_detail", autoResultMap = true)
 public class ProductRecordDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -80,6 +78,16 @@ public class ProductRecordDetail implements Serializable {
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
+
+    /**
+     * 还原克重(实际生产)
+     */
+    private String reductionWeight;
+
+    /**
+     * 还原门幅(实际生产)
+     */
+    private String reductionAmplitude;
 
 
 }

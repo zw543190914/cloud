@@ -30,4 +30,5 @@ public interface ProductRecordMapper extends BaseMapper<ProductRecord> {
 
     List<ProductRecord> queryProductRecordExceptionList(@Param("record") ProductRecordReportQueryDTO productRecordReportQueryDTO);
 
+    int insertProductRecord(ProductRecord productRecord);
 }

@@ -87,7 +87,7 @@ CREATE TABLE `base_tender_craft` (
                                      KEY `idx_no` (`org_code`,`customer_no`,`fabric_no`,`craft_type`,`specification`,`style`) USING BTREE
 ) ENGINE=InnoDB COMMENT='定型工艺';
 
-CREATE TABLE `base_product_record` (
+CREATE TABLE `product_record` (
                                        `id` bigint NOT NULL COMMENT '主键',
                                        `product_info_id` bigint DEFAULT NULL COMMENT '历史生产信息表id',
                                        `org_code` varchar(32) NOT NULL COMMENT '机构编号',
@@ -188,8 +188,27 @@ CREATE TABLE `base_product_record` (
                                        `thickness` varchar(100) DEFAULT '' COMMENT '厚度',
                                        `process_report_type` tinyint NOT NULL DEFAULT '0' COMMENT '报工标识(0:初始状态 10: 不可报工,20:未报工,30:已报工)',
                                        PRIMARY KEY (`id`) USING BTREE,
+                                       UNIQUE KEY `uk_product_info_id` (`product_info_id`) USING BTREE,
                                        KEY `idx_org_code_end_time` (`org_code`,`end_time`) USING BTREE
 ) ENGINE=InnoDB  COMMENT='生产记录表';
+
+CREATE TABLE `product_record_detail` (
+                                         `id` bigint NOT NULL COMMENT '主键',
+                                         `product_record_id` bigint NOT NULL COMMENT '生产记录ID',
+                                         `org_code` varchar(32) NOT NULL COMMENT '机构编号',
+                                         `exception_update_time` datetime DEFAULT NULL COMMENT '异常更新时间',
+                                         `create_user` varchar(32) NOT NULL DEFAULT '' COMMENT '创建用户',
+                                         `create_system` varchar(32) NOT NULL DEFAULT '' COMMENT '创建系统',
+                                         `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                         `update_user` varchar(32) NOT NULL DEFAULT '' COMMENT '更新用户',
+                                         `update_system` varchar(32) NOT NULL DEFAULT '' COMMENT '修改系统',
+                                         `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                         `reduction_weight` varchar(32) DEFAULT NULL COMMENT '还原克重(实际生产)',
+                                         `reduction_amplitude` varchar(32) DEFAULT NULL COMMENT '还原门幅(实际生产)',
+                                         PRIMARY KEY (`id`),
+                                         UNIQUE KEY `uk_product_record_id` (`product_record_id`) USING BTREE,
+                                         KEY `idx_exception_update_time` (`org_code`,`exception_update_time`) USING BTREE
+) ENGINE=InnoDB COMMENT='生产记录关联表';
 
 CREATE TABLE `general_product_record` (
                                           `id` bigint NOT NULL COMMENT '主键',
