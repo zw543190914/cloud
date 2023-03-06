@@ -65,4 +65,13 @@
             </if>
         </where>
     </select>
+
+    <insert id="onDuplicateUpdate" keyColumn="id" keyProperty="id" parameterType="java.util.List" useGeneratedKeys="true">
+        insert into user_info_0 (name, age, bir, other,update_time) values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.name}, #{item.age,jdbcType=TINYINT}, #{item.bir,jdbcType=TIMESTAMP},
+             #{item.other,typeHandler=com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler},#{item.updateTime})
+        </foreach>
+        on duplicate key update age=values(age), bir=values(bir),other=values(other)
+    </insert>
 </mapper>

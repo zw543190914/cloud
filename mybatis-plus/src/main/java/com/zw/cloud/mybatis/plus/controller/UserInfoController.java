@@ -230,6 +230,30 @@ public class UserInfoController {
         return mapper.updateById(userInfo);
     }
 
+    @GetMapping("/onDuplicateUpdate")
+    //http://localhost:8080/user-info/onDuplicateUpdate
+    public int onDuplicateUpdate() {
+        LocalDate now = LocalDate.now();
+        UserInfo userInfo = new UserInfo();
+        userInfo.setName("zw1");
+        userInfo.setAge(21);
+        userInfo.setBir(now);
+        userInfo.setOther(Lists.newArrayList(1));
+
+        UserInfo userInfo2 = new UserInfo();
+        userInfo2.setName("zw2");
+        userInfo2.setAge(22);
+        userInfo2.setBir(now.plusDays(1));
+        userInfo2.setOther(Lists.newArrayList(2));
+
+        UserInfo userInfo3 = new UserInfo();
+        userInfo3.setName("zw1");
+        userInfo3.setAge(23);
+        userInfo3.setBir(now.plusDays(2));
+        userInfo3.setOther(Lists.newArrayList(3));
+        return mapper.onDuplicateUpdate(Lists.newArrayList(userInfo,userInfo2,userInfo3));
+    }
+
     @GetMapping("/query")
     //http://localhost:8080/user-info/query?name=test9998
     public Page<UserInfo> pageQuery(String name) {
