@@ -9,7 +9,8 @@ CREATE TABLE `user_info_0` (
                              `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                              `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
                              `org_code` varchar(255) NOT NULL DEFAULT '' COMMENT '组织id',
-                             PRIMARY KEY (`id`)
+                             PRIMARY KEY (`id`),
+                             UNIQUE KEY `uk_name` (`name`)
 ) ENGINE=InnoDB COMMENT='用户表';
 
 CREATE TABLE `user_info_1` (

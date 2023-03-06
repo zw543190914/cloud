@@ -23,8 +23,10 @@ public class UserInfo implements Serializable {
 
     private String name;
 
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate bir;
 
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private Integer age;
 
 
@@ -34,9 +36,10 @@ public class UserInfo implements Serializable {
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String description;
 
-    @TableField(typeHandler = JsonTypeHandler.class)
+    @TableField(typeHandler = JsonTypeHandler.class,updateStrategy = FieldStrategy.IGNORED)
     private Object other;
 
     @TableLogic

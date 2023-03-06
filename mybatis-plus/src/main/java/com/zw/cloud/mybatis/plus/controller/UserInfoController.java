@@ -145,6 +145,7 @@ public class UserInfoController {
         UserInfo user = new UserInfo();
         user.setName("updateToNull");
         LambdaUpdateWrapper<UserInfo> updateWrapper = new LambdaUpdateWrapper<>();
+        // 或者 @TableField(updateStrategy = FieldStrategy.IGNORED)
         updateWrapper.set(UserInfo::getOther,null);
         updateWrapper.eq(UserInfo::getId,id);
         mapper.update(user,updateWrapper);
