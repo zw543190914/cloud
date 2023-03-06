@@ -78,6 +78,9 @@ public class BigDecimalUtils {
         System.out.println(findLastValueFromJsonObject(map, "test"));
         map.put("test7",new BigDecimal("2"));
         System.out.println(new BigDecimal(map.get("test7").toString()));
+        System.out.println(doubleRound(5.3));
+        System.out.println(doubleRound(5.5));
+        System.out.println(doubleRound(5.8));
     }
 
     /**
@@ -360,4 +363,11 @@ public class BigDecimalUtils {
         return res * 10 + ge;
     }
 
+    /**
+     * double 四舍五入取整
+     */
+    private static long doubleRound(double number){
+        // Double number1 四舍五入
+        return Math.round(number);
+    }
 }
