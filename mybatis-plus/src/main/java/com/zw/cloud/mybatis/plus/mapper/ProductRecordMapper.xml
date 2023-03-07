@@ -106,7 +106,7 @@
     </select>
     <select id="queryAllFinishedProductIdListForReport" resultType="long">
         select id
-        from base_product_record
+        from product_record
         where org_code = #{record.orgCode,jdbcType=VARCHAR}  and platform = 0
         <if test="record.historyProductInfoIdList != null and record.historyProductInfoIdList.size &gt; 0">
             and product_info_id in
@@ -287,7 +287,7 @@
         select id,device_id,device_name,customer_name,fabric_name,fabric_no,color,employee_name,batch_no,product_card_code,workshop_name,
         pt_quantity,gram_weight,gram_heft,product_weight,lower_door_width,avg_temperature,avg_car_speed,defect,car_number,
         markup_craft,result,craft_type,operator,end_time
-        from base_product_record
+        from product_record
         where org_code = #{record.orgCode,jdbcType=VARCHAR}
 
         <if test="record.startTime != null and record.endTime != null">
@@ -467,7 +467,7 @@
     
     <select id="pageQueryAllFinishedProductForReport" resultMap="BaseResultMap">
         select *
-        from base_product_record
+        from product_record
         where org_code = #{record.orgCode,jdbcType=VARCHAR}  and platform = 0
         <if test="record.historyProductInfoIdList != null and record.historyProductInfoIdList.size &gt; 0">
             and product_info_id in
@@ -640,7 +640,7 @@
 
     <select id="countAllFinishedProductForReport" resultType="int">
         select count(*)
-        from base_product_record
+        from product_record
         where org_code = #{record.orgCode,jdbcType=VARCHAR}  and platform = 0
         <if test="record.historyProductInfoIdList != null and record.historyProductInfoIdList.size &gt; 0">
             and product_info_id in
@@ -809,7 +809,7 @@
 
     <select id="queryProductRecordExceptionList" resultMap="BaseResultMap">
         select exception_type,assistant_exception_type,craft_exception_type
-        from base_product_record
+        from product_record
         where org_code = #{record.orgCode,jdbcType=VARCHAR}
         <if test="record.historyProductInfoIdList != null and record.historyProductInfoIdList.size &gt; 0">
             and product_info_id in

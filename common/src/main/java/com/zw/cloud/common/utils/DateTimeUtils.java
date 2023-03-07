@@ -12,6 +12,8 @@ import java.util.*;
 
 public class DateTimeUtils {
 
+    public static final String dateTimePattern = "yyyy-MM-dd HH:mm:ss";
+
     public static void main(String[] args) throws Exception{
         //获取秒数
         LocalDateTime now = LocalDateTime.now();
@@ -385,6 +387,11 @@ public class DateTimeUtils {
             last.setEndTime(endTime);
         }
         return result;
+    }
+
+    public static String parse2Str(LocalDateTime date, String pattern) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
+        return date.format(dateTimeFormatter);
     }
 
 }

@@ -2,17 +2,33 @@ package com.zw.cloud.mybatis.plus.controller;
 
 
 import com.alibaba.fastjson.JSON;
+import com.zw.cloud.common.exception.BizException;
+import com.zw.cloud.common.utils.DateTimeUtils;
 import com.zw.cloud.mybatis.plus.entity.ProductRecord;
 import com.zw.cloud.mybatis.plus.entity.dto.ProductRecordDTO;
 import com.zw.cloud.mybatis.plus.entity.dto.ProductRecordReportQueryDTO;
+import com.zw.cloud.mybatis.plus.entity.dto.RowTitleDTO;
 import com.zw.cloud.mybatis.plus.service.api.IProductRecordService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.xssf.streaming.SXSSFCell;
+import org.apache.poi.xssf.streaming.SXSSFRow;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -78,6 +94,107 @@ public class ProductRecordController {
     //http://localhost:8080/base-product-record/pageQueryAllFinishedProduct
     public Map<String, Object> pageQueryAllFinishedProduct(@RequestBody ProductRecordReportQueryDTO productRecordReportQueryDTO) {
         return baseProductRecordService.pageQueryAllFinishedProduct(productRecordReportQueryDTO);
+    }
+
+    @GetMapping("/exportFinishedProduct")
+    //http://localhost:8080/base-product-record/exportFinishedProduct
+    public void exportFinishedProduct(HttpServletResponse response) throws Exception {
+        ProductRecordReportQueryDTO productRecordReportQueryDTO = buildProductRecordReportQueryDTO();
+        productRecordReportQueryDTO.setOrgCode("devController");
+        List<RowTitleDTO> rowTitleDTOList = productRecordReportQueryDTO.getRowTitleDTOList();
+        if (CollectionUtils.isEmpty(rowTitleDTOList)) {
+            throw new BizException("导出的列为空");
+        }
+        List<ProductRecordDTO> productRecordDTOList = baseProductRecordService.queryAllFinishedProductForReport(productRecordReportQueryDTO);
+        if (CollectionUtils.isEmpty(productRecordDTOList)) {
+            throw new BizException("暂无数据");
+        }
+        //创建HSSFWorkbook对象(excel的文档对象)
+        SXSSFWorkbook workbook = new SXSSFWorkbook(productRecordDTOList.size());
+        //建立新的sheet对象（excel的表单）
+        SXSSFSheet sheet = workbook.createSheet("定型生产记录");
+        CellStyle cellStyle = workbook.createCellStyle();
+        cellStyle.setWrapText(true);
+        //在sheet里创建第一行，参数为行索引(excel的行)
+        SXSSFRow row1 = sheet.createRow(0);
+        //创建单元格并设置单元格内容
+        int i = 0;
+        for (RowTitleDTO rowTitleDTO : rowTitleDTOList) {
+            row1.createCell(i).setCellValue(rowTitleDTO.getLabel());
+            i ++;
+        }
+        int rowNum = 1;
+        Class<ProductRecordDTO> productRecordDTOClass = ProductRecordDTO.class;
+        for (ProductRecordDTO productRecordDTO : productRecordDTOList){
+            SXSSFRow row = sheet.createRow(rowNum);
+            for (int cellNo = 0; cellNo < rowTitleDTOList.size(); cellNo++) {
+                SXSSFCell cell = row.createCell(cellNo);
+                String fieldName = rowTitleDTOList.get(cellNo).getKey();
+
+                // 异常类型
+                if (StringUtils.endsWithIgnoreCase("exceptionType",fieldName)) {
+                    String exceptionTypeName = Optional.ofNullable(productRecordDTO.getExceptionTypeName()).orElse("");
+                    if (org.apache.commons.lang3.StringUtils.isNotBlank(exceptionTypeName)) {
+                        exceptionTypeName = exceptionTypeName.replace("正常数据","");
+                    }
+                    if (StringUtils.isNotBlank(productRecordDTO.getAssistantExceptionName())) {
+                        exceptionTypeName = exceptionTypeName + "\n"+ productRecordDTO.getAssistantExceptionName();
+                    }
+                    if (Objects.nonNull(productRecordDTO.getCraftExceptionType()) && 1 == productRecordDTO.getCraftExceptionType()) {
+                        exceptionTypeName = exceptionTypeName + "\n"+ productRecordDTO.getCraftExceptionTypeName();
+                    }
+                    cell.setCellStyle(cellStyle);
+                    exceptionTypeName = org.apache.commons.lang3.StringUtils.equals("",exceptionTypeName) ? "-" : exceptionTypeName;
+                    cell.setCellValue(exceptionTypeName);
+                    continue;
+                }
+                // 配桶数量
+                if (StringUtils.endsWithIgnoreCase("ptQuantity",fieldName)) {
+                    BigDecimal ptQuantity = productRecordDTO.getPtQuantity();
+                    if (Objects.nonNull(ptQuantity)) {
+                        cell.setCellValue(ptQuantity.stripTrailingZeros().toPlainString());
+                    }
+                    continue;
+                }
+
+                Field declaredField = null;
+                try {
+                    declaredField = productRecordDTOClass.getDeclaredField(fieldName);
+                } catch (NoSuchFieldException e) {
+                    log.warn("[exportFinishedProduct]NoSuchFieldException is ",e);
+                    continue;
+                }
+                declaredField.setAccessible(true);
+                Object value = declaredField.get(productRecordDTO);
+                if (Objects.isNull(value)) {
+                    continue;
+                }
+                if (value instanceof BigDecimal) {
+                    BigDecimal bigDecimal = new BigDecimal(String.valueOf(value));
+                    cell.setCellValue(bigDecimal.stripTrailingZeros().toPlainString());
+                    continue;
+                }
+                if (value instanceof Double) {
+                    BigDecimal bigDecimal = new BigDecimal(String.valueOf(value));
+                    cell.setCellValue(bigDecimal.stripTrailingZeros().toPlainString());
+                    continue;
+                }
+                if (value instanceof LocalDateTime) {
+                    String timeStr = DateTimeUtils.parse2Str((LocalDateTime) value, DateTimeUtils.dateTimePattern);
+                    cell.setCellValue(timeStr);
+                    continue;
+                }
+                cell.setCellType(CellType.STRING);
+                cell.setCellValue(String.valueOf(value));
+
+            }
+            rowNum ++;
+        }
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("content-Type", "application/vnd.ms-excel");
+        response.setHeader("Content-Disposition",
+                "attachment;filename=" + new String( "定型生产记录.xlsx".getBytes(), StandardCharsets.ISO_8859_1));
+        workbook.write(response.getOutputStream());
     }
 
     private ProductRecord buildProductRecord() {
@@ -182,5 +299,232 @@ public class ProductRecordController {
                 "    \"cardSort\":0\n" +
                 "}";
         return JSON.parseObject(s,ProductRecord.class);
+    }
+
+    private ProductRecordReportQueryDTO buildProductRecordReportQueryDTO() {
+        String s = "{\n" +
+                "    \"workshopId\":0,\n" +
+                "    \"workshopType\":\"workshopStereotype\",\n" +
+                "    \"startTime\":\"2023-03-06 10:58:00\",\n" +
+                "    \"endTime\":\"2023-03-07 14:36:57\",\n" +
+                "    \"isShowExceptions\":false,\n" +
+                "    \"rowTitleDTOList\":[\n" +
+                "        {\n" +
+                "            \"key\":\"productCardCode\",\n" +
+                "            \"label\":\"流转卡号\",\n" +
+                "            \"isFixed\":true\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"isRepairCard\",\n" +
+                "            \"label\":\"回修\",\n" +
+                "            \"isFixed\":true\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"customerName\",\n" +
+                "            \"label\":\"客户名称\",\n" +
+                "            \"isFixed\":true\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"fabricNo\",\n" +
+                "            \"label\":\"坯布编码\",\n" +
+                "            \"isFixed\":true\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"fabricName\",\n" +
+                "            \"label\":\"坯布名称\",\n" +
+                "            \"isFixed\":true\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"color\",\n" +
+                "            \"label\":\"颜色名称\",\n" +
+                "            \"isFixed\":true\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"colorNo\",\n" +
+                "            \"label\":\"颜色编号\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"craftTypeName\",\n" +
+                "            \"label\":\"工序类型\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"colorSystem\",\n" +
+                "            \"label\":\"色系\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"batchNo\",\n" +
+                "            \"label\":\"批次号\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"employeeName\",\n" +
+                "            \"label\":\"业务员\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"ptQuantity\",\n" +
+                "            \"label\":\"配桶数量(kg)\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"actualMeters\",\n" +
+                "            \"label\":\"长度\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"matches\",\n" +
+                "            \"label\":\"匹数\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"teamGroupAndReportMsgList\",\n" +
+                "            \"label\":\"报工信息(匹)\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"shrinkage\",\n" +
+                "            \"label\":\"缩率(%)\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"gramWeight\",\n" +
+                "            \"label\":\"白坯克重(g/m²)\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"fabricWidth\",\n" +
+                "            \"label\":\"成品门幅\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"productWeight\",\n" +
+                "            \"label\":\"成品克重\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"markupCraft\",\n" +
+                "            \"label\":\"加价要求\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"deptName\",\n" +
+                "            \"label\":\"染色车间\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"deviceName\",\n" +
+                "            \"label\":\"机台\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"operatorInfo\",\n" +
+                "            \"label\":\"后车操作员\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"preOperator\",\n" +
+                "            \"label\":\"中车操作员\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"frontOperator\",\n" +
+                "            \"label\":\"前车操作员\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"teamGroup\",\n" +
+                "            \"label\":\"班组\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"preCarNumber\",\n" +
+                "            \"label\":\"定前车号\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"carNumber\",\n" +
+                "            \"label\":\"定后车号\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"preWeight\",\n" +
+                "            \"label\":\"定前克重(g/m²)\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"gramHeft\",\n" +
+                "            \"label\":\"定后克重(g/m²)\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"weftDensity\",\n" +
+                "            \"label\":\"纬密(根/cm)\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"upperDoorWidth\",\n" +
+                "            \"label\":\"上机门幅(cm)\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"lowerDoorWidth\",\n" +
+                "            \"label\":\"下机门幅(cm)\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"reductionWeight\",\n" +
+                "            \"label\":\"还原克重(g/m²)\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"reductionAmplitude\",\n" +
+                "            \"label\":\"还原门幅(cm)\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"defect\",\n" +
+                "            \"label\":\"疵点记录\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"result\",\n" +
+                "            \"label\":\"处理结果\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"severity\",\n" +
+                "            \"label\":\"严重程度\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"avgCarSpeed\",\n" +
+                "            \"label\":\"平均车速(米/分)\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"avgTemperature\",\n" +
+                "            \"label\":\"平均温度(℃)\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"avgWindSpeed\",\n" +
+                "            \"label\":\"平均风速(r/min)\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"avgTopFeed\",\n" +
+                "            \"label\":\"平均上超喂(%)\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"assistant\",\n" +
+                "            \"label\":\"助剂情况\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"actualTime\",\n" +
+                "            \"label\":\"实际执行时长(min)\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"expectedTime\",\n" +
+                "            \"label\":\"预计执行时长(min)\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"craftSuitability\",\n" +
+                "            \"label\":\"工艺匹配度(%)\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"exceptionType\",\n" +
+                "            \"label\":\"异常类型\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"remark\",\n" +
+                "            \"label\":\"备注\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"createTypeName\",\n" +
+                "            \"label\":\"创建类型\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"startTime\",\n" +
+                "            \"label\":\"中车开始时间\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"endTime\",\n" +
+                "            \"label\":\"中车结束时间\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"key\":\"handleTime\",\n" +
+                "            \"label\":\"后车结束时间\"\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}";
+        return JSON.parseObject(s,ProductRecordReportQueryDTO.class);
     }
 }
