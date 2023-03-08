@@ -72,6 +72,6 @@
             (#{item.name}, #{item.age,jdbcType=TINYINT}, #{item.bir,jdbcType=TIMESTAMP},
              #{item.other,typeHandler=com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler},#{item.updateTime})
         </foreach>
-        on duplicate key update age=values(age), bir=values(bir),other=values(other)
+        on duplicate key update age=values(age), bir=values(bir),other=values(other),update_time = values(update_time)
     </insert>
 </mapper>

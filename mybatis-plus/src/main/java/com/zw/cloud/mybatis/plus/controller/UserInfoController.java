@@ -251,6 +251,7 @@ public class UserInfoController {
         userInfo3.setAge(23);
         userInfo3.setBir(now.plusDays(2));
         userInfo3.setOther(Lists.newArrayList(3));
+        userInfo3.setUpdateTime(LocalDateTime.now());
         return mapper.onDuplicateUpdate(Lists.newArrayList(userInfo,userInfo2,userInfo3));
     }
 
