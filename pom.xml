@@ -28,7 +28,7 @@
         <module>feign-provider02</module>
         <module>feign-provider-api</module>
         <module>feign-consumer</module>
-        <module>db</module>
+        <module>mybatis</module>
         <module>common</module>
         <module>xxl-job</module>
         <module>activiti</module>
