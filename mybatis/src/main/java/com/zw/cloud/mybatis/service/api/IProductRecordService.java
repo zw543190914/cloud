@@ -8,4 +8,6 @@ import java.util.List;
 public interface IProductRecordService {
 
     PageInfo<ProductRecord> queryList(ProductRecord productRecord);
+
+    ProductRecord insert(ProductRecord productRecord);
 }

@@ -1,5 +1,6 @@
 package com.zw.cloud.mybatis.service.impl;
 
+import cn.hutool.core.util.IdUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zw.cloud.mybatis.entity.ProductRecord;
@@ -36,4 +37,12 @@ public class ProductRecordServiceImpl implements IProductRecordService {
         List<ProductRecord> productRecords = mapper.selectByExampleWithBLOBs(example);
         return new PageInfo<ProductRecord>(productRecords);
     }
+
+    @Override
+    public ProductRecord insert(ProductRecord productRecord) {
+        productRecord.setId(IdUtil.getSnowflakeNextId());
+        mapper.insertSelective(productRecord);
+        return productRecord;
+    }
+
 }
