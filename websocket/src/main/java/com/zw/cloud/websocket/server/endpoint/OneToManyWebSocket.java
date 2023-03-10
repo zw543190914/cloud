@@ -11,6 +11,7 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,20 +23,24 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @ServerEndpoint(value = "/test/oneToMany") 前端通过此URI 和后端交互，建立连接
  * ws://localhost:18092/test/oneToMany
- * http://localhost:18092/index.html
+ * http://localhost:18092/chat/user/login
  */
 @Slf4j
-@ServerEndpoint(value = "/test/oneToMany/{userId}")
+@ServerEndpoint(value = "/test/oneToMany/{username}")
 @Component
 public class OneToManyWebSocket {
 
     /** 记录当前在线连接数 */
     private static AtomicInteger onlineCount = new AtomicInteger(0);
 
-    /** 存放所有在线的客户端 userId -> Session */
+    public static Map<String, Session> getClients() {
+        return clients;
+    }
+
+    /** 存放所有在线的客户端 username -> Session */
     private static Map<String, Session> clients = new ConcurrentHashMap<>();
 
-    /** 存放所有在线的客户端 sessionId -> userId */
+    /** 存放所有在线的客户端 sessionId -> username */
     private static Map<String, String> sessionIdToUserIdMap = new ConcurrentHashMap<>();
 
     /**
@@ -51,26 +56,26 @@ public class OneToManyWebSocket {
      * 连接建立成功调用的方法
      */
     @OnOpen
-    public void onOpen(@PathParam("userId") String userId, Session session) throws IOException {
+    public void onOpen(@PathParam("username") String username, Session session) throws IOException {
         WebSocketMessage message = new WebSocketMessage();
-        message.setCurrentId(userId);
+        message.setCurrentId(username);
         message.setMsgType("0");
-        if (clients.containsKey(userId)) {
-            message.setMsgContent("用户名:" + userId + " 已存在,请尝试其他名称");
+        if (clients.containsKey(username)) {
+            message.setMsgContent("用户名:" + username + " 已存在,请尝试其他名称");
             sendMessage(message,session);
             try {
                 session.close();
-                log.info("[OneToManyWebSocket][onOpen] session is {},userId repeated ", session.getId());
+                log.info("[OneToManyWebSocket][onOpen] session is {},username is {},username repeated ", session.getId(),username);
             } catch (IOException e) {
-                log.error("[OneToManyWebSocket][onOpen] session is {},session.close error is ", session.getId(), e);
+                log.error("[OneToManyWebSocket][onOpen] session is {},username is {},session.close error is ", session.getId(),username, e);
             }
             return;
         }
         onlineCount.incrementAndGet(); // 在线数加1
-        clients.put(userId, session);
-        sessionIdToUserIdMap.put(session.getId(),userId);
-        log.info("[OneToManyWebSocket][onOpen] 有新连接加入：{},当前在线人数为：{},clients size is {}", session.getId(), onlineCount.get(),clients.size());
-        message.setMsgContent("【" + userId + "】 上线");
+        clients.put(username, session);
+        sessionIdToUserIdMap.put(session.getId(),username);
+        log.info("[OneToManyWebSocket][onOpen] 有新连接加入,username is {},sessionId is {},当前在线人数为：{},clients size is {}",username, session.getId(), onlineCount.get(),clients.size());
+        message.setMsgContent("【" + username + "】 上线");
         sendMessage(message,session);
     }
 
@@ -78,14 +83,14 @@ public class OneToManyWebSocket {
      * 连接关闭调用的方法
      */
     @OnClose
-    public void onClose(@PathParam("userId") String userId,Session session) throws IOException {
+    public void onClose(@PathParam("username") String username,Session session) throws IOException {
         sessionIdToUserIdMap.remove(session.getId());
-        Session removeSession = clients.remove(userId);
+        Session removeSession = clients.remove(username);
         onlineCount.decrementAndGet(); // 在线数减1
-        log.info("[OneToManyWebSocket][onClose] 有一连接关闭：{}，当前在线人数为：{}", removeSession.getId(), onlineCount.get());
+        log.info("[OneToManyWebSocket][onClose] 有一连接关闭：{},username is {},当前在线人数为：{}", removeSession.getId(),username, onlineCount.get());
         WebSocketMessage message = new WebSocketMessage();
-        message.setMsgContent("【" + userId + "】 下线");
-        message.setCurrentId(userId);
+        message.setMsgContent("【" + username + "】 下线");
+        message.setCurrentId(username);
         message.setMsgType("0");
         sendMessage(message,session);
     }
@@ -95,31 +100,32 @@ public class OneToManyWebSocket {
      * {"msgType":0,"msgContent":"test2"}
      */
     @OnMessage
-    public void onMessage(String message, Session session,@PathParam("userId") String userId) throws IOException {
-        log.info("[OneToManyWebSocket][onMessage] 文本消息 服务端收到客户端[{}][{}]的消息:{}", session.getId(),userId, message);
+    public void onMessage(String message, Session session,@PathParam("username") String username) throws IOException {
+        log.info("[OneToManyWebSocket][onMessage] 文本消息 服务端收到客户端[{}][{}]的消息:{}", session.getId(),username, message);
         WebSocketMessage myMessage = JSON.parseObject(message, WebSocketMessage.class);
-        myMessage.setCurrentId(userId);
+        myMessage.setCurrentId(username);
         sendMessage(myMessage, session);
     }
 
     @OnMessage
-    public void onMessage(byte[] message, Session session,@PathParam("userId") String userId) throws IOException {
-        log.info("[OneToManyWebSocket][onMessage] 二进制消息 服务端收到客户端[{}][{}]的消息", session.getId(),userId);
+    public void onMessage(byte[] message, Session session,@PathParam("username") String username) throws IOException {
+        log.info("[OneToManyWebSocket][onMessage] 二进制消息 服务端收到客户端[{}][{}]的消息", session.getId(),username);
         WebSocketMessage myMessage = JSON.parseObject(message, WebSocketMessage.class);
-        myMessage.setCurrentId(userId);
+        myMessage.setCurrentId(username);
         sendMessage(myMessage, session);
     }
 
     @OnError
     public void onError(Session session, Throwable error) {
-        String userId = sessionIdToUserIdMap.get(session.getId());
-        log.error("[OneToManyWebSocket][onError] 发生错误,session.id is {},userId is {},error is ",session.getId(),userId,error);
+        String username = sessionIdToUserIdMap.get(session.getId());
+        log.error("[OneToManyWebSocket][onError] 发生错误,session.id is {},username is {},error is ",session.getId(),username,error);
     }
 
     /**
      * 群发消息
      */
     private void sendMessage(WebSocketMessage message, Session fromSession) throws IOException {
+        message.setDate(LocalDateTime.now());
         if (StringUtils.isNotBlank(message.getTargetId())) {
             Session toSession = clients.get(message.getTargetId());
             if (Objects.isNull(toSession)) {

@@ -3,12 +3,10 @@ package com.zw.cloud.websocket.server.endpoint;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zw.cloud.websocket.entity.WebSocketMessage;
-import com.zw.cloud.websocket.service.OtherService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -48,7 +46,6 @@ public class OneToOneWebSocket {
      */
     private static ApplicationContext applicationContext;
 
-    private OtherService otherService;
 
     public static void setApplicationContext(ApplicationContext applicationContext){
         OneToOneWebSocket.applicationContext = applicationContext;
@@ -63,8 +60,6 @@ public class OneToOneWebSocket {
             sendMessage("用户名:" + name + " 已存在,请尝试其他名称",session);
             throw new RuntimeException("用户已存在");
         }
-        // 通过application获取bean
-        otherService = applicationContext.getBean(OtherService.class);
         onlineCount.incrementAndGet(); // 在线数加1
         clients.put(name, session);
         clientIdName.put(session.getId(), name);

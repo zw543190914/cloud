@@ -9,6 +9,28 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     default-property-inclusion: non_null
 
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      initial-size: 100
+      min-idle: 50
+      max-active: 200
+      max-wait: 10000
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      validation-query: "select 1"
+      filters: stat,slf4j
+      filter:
+        stat:
+          slow-sql-millis: 2000
+          log-slow-sql: true
+    url: jdbc:mysql://localhost:3306/chat?serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+    username: root
+    password: password
+  main:
+    allow-circular-references: true
+
 server:
   port: 18092
 

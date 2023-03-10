@@ -1,8 +1,11 @@
 package com.zw.cloud.websocket.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Map;
 
 @Data
@@ -19,6 +22,10 @@ public class WebSocketMessage implements Serializable {
      * 接收人
      */
     private String targetId;
+
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
+    public LocalDateTime date;
+
     /**
      * 消息类型(0:文本,1:图片)
      * hangup 对方挂断
