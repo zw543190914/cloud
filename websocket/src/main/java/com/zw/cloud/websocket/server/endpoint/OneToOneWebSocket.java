@@ -68,7 +68,7 @@ public class OneToOneWebSocket {
         onlineCount.incrementAndGet(); // 在线数加1
         clients.put(name, session);
         clientIdName.put(session.getId(), name);
-        log.info("有新连接加入：{}，当前在线人数为：{},basicRemote : {}", name, onlineCount.get(), session.getBasicRemote());
+        log.info("[OneToOneWebSocket]有新连接加入：{}，当前在线人数为：{},basicRemote : {}", name, onlineCount.get(), session.getBasicRemote());
     }
 
     /**
@@ -83,7 +83,7 @@ public class OneToOneWebSocket {
         String name = clientIdName.get(session.getId());
         clients.remove(name);
         clientIdName.remove(session.getId());
-        log.info("有一连接关闭：{}，当前在线人数为：{}", name, onlineCount.get());
+        log.info("[OneToOneWebSocket]有一连接关闭：{}，当前在线人数为：{}", name, onlineCount.get());
     }
 
     /**
@@ -93,8 +93,9 @@ public class OneToOneWebSocket {
      */
     @OnMessage
     public void onMessage(String message, Session session) {
-        log.info("服务端收到客户端[{}]的消息[{}]", session.getId(), message);
-        otherService.test();
+        log.info("[OneToOneWebSocket][onMessage]服务端收到客户端[{}]的消息[{}]", session.getId(), message);
+        /*otherService = applicationContext.getBean(OtherService.class);
+        otherService.test();*/
         try {
             WebSocketMessage myMessage = JSON.parseObject(message, WebSocketMessage.class);
             if (myMessage != null) {
@@ -104,13 +105,13 @@ public class OneToOneWebSocket {
                 }
             }
         } catch (Exception e) {
-            log.error("解析失败：{}", e);
+            log.error("[OneToOneWebSocket][onMessage]解析失败,error is ", e);
         }
     }
 
     @OnError
     public void onError(Session session, Throwable error) {
-        log.error("发生错误");
+        log.error("[OneToOneWebSocket]发生错误");
         error.printStackTrace();
     }
 
@@ -120,7 +121,7 @@ public class OneToOneWebSocket {
     //@PostConstruct
     public void startCodeOrderHeart() {
         startHeart();
-        System.out.println("启动心跳线程");
+        System.out.println("[OneToOneWebSocket]启动心跳线程");
     }
 
     /**
@@ -128,7 +129,7 @@ public class OneToOneWebSocket {
      */
     private void sendMessage(String message, Session toSession) {
         try {
-            log.info("服务端给客户端[{}]发送消息[{}]", toSession.getId(), message);
+            log.info("[OneToOneWebSocket][sendMessage]服务端给客户端[{}]发送消息[{}]", toSession.getId(), message);
             if (message.equals("ping")) {
                 toSession.getBasicRemote().sendText("pong");
             } else {
@@ -136,7 +137,7 @@ public class OneToOneWebSocket {
             }
 
         } catch (Exception e) {
-            log.error("服务端发送消息给客户端失败：", e);
+            log.error("[OneToOneWebSocket][sendMessage]服务端发送消息给客户端失败：", e);
         }
     }
 
@@ -162,7 +163,7 @@ public class OneToOneWebSocket {
             LocalDateTime now = LocalDateTime.now();
             heartJson.put("timeStamp", now.getNano());
             try {
-                log.debug("发送心跳包当前人数为:" + clients.size() + "当前时间:" + now);
+                log.debug("[OneToOneWebSocket]发送心跳包当前人数为:" + clients.size() + "当前时间:" + now);
                 sendPing(heartJson.toString());
             } catch (Exception e) {
                 e.printStackTrace();

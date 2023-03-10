@@ -14,5 +14,6 @@ public class WebSocketApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext applicationContext = SpringApplication.run(WebSocketApplication.class);
         OneToManyWebSocket.setApplicationContext(applicationContext);
+        OneToOneWebSocket.setApplicationContext(applicationContext);
     }
 }

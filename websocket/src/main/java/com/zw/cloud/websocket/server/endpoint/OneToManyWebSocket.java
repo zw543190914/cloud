@@ -92,7 +92,7 @@ public class OneToManyWebSocket {
 
     /**
      * 收到客户端消息后调用的方法
-     * {"currentId":"001","targetId":"002","msgContent":"test2"}
+     * {"msgType":0,"msgContent":"test2"}
      */
     @OnMessage
     public void onMessage(String message, Session session,@PathParam("userId") String userId) throws IOException {
