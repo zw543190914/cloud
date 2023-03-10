@@ -1,6 +1,7 @@
 package com.zw.cloud.websocket.server.endpoint;
 
 import com.alibaba.fastjson.JSON;
+import com.zw.cloud.common.exception.BizException;
 import com.zw.cloud.websocket.entity.WebSocketMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -59,22 +60,18 @@ public class OneToManyWebSocket {
     public void onOpen(@PathParam("username") String username, Session session) throws IOException {
         WebSocketMessage message = new WebSocketMessage();
         message.setCurrentId(username);
-        message.setMsgType("0");
         if (clients.containsKey(username)) {
-            message.setMsgContent("用户名:" + username + " 已存在,请尝试其他名称");
-            sendMessage(message,session);
-            try {
-                session.close();
-                log.info("[OneToManyWebSocket][onOpen] session is {},username is {},username repeated ", session.getId(),username);
-            } catch (IOException e) {
-                log.error("[OneToManyWebSocket][onOpen] session is {},username is {},session.close error is ", session.getId(),username, e);
-            }
-            return;
+            message.setMsgType("0");
+            message.setMsgContent(username + " 重复登陆,强制下线,请注意......");
+            clients.get(username).getBasicRemote().sendText(JSON.toJSONString(message));
+            session.getBasicRemote().sendText(JSON.toJSONString(message));
+            session.close();
         }
         onlineCount.incrementAndGet(); // 在线数加1
         clients.put(username, session);
         sessionIdToUserIdMap.put(session.getId(),username);
         log.info("[OneToManyWebSocket][onOpen] 有新连接加入,username is {},sessionId is {},当前在线人数为：{},clients size is {}",username, session.getId(), onlineCount.get(),clients.size());
+        message.setMsgType("-1");
         message.setMsgContent("【" + username + "】 上线");
         sendMessage(message,session);
     }
@@ -86,12 +83,15 @@ public class OneToManyWebSocket {
     public void onClose(@PathParam("username") String username,Session session) throws IOException {
         sessionIdToUserIdMap.remove(session.getId());
         Session removeSession = clients.remove(username);
+        if (Objects.isNull(removeSession)) {
+            return;
+        }
         onlineCount.decrementAndGet(); // 在线数减1
         log.info("[OneToManyWebSocket][onClose] 有一连接关闭：{},username is {},当前在线人数为：{}", removeSession.getId(),username, onlineCount.get());
         WebSocketMessage message = new WebSocketMessage();
         message.setMsgContent("【" + username + "】 下线");
         message.setCurrentId(username);
-        message.setMsgType("0");
+        message.setMsgType("-2");
         sendMessage(message,session);
     }
 
@@ -134,7 +134,7 @@ public class OneToManyWebSocket {
                 return;
             }
             sendToOneMsg(message,fromSession,toSession);
-
+            return;
         }
         String fromSessionId = fromSession.getId();
         int hasSendCount = 1;
@@ -143,7 +143,7 @@ public class OneToManyWebSocket {
             // 排除掉自己
             if (!fromSessionId.equals(toSession.getId())) {
                 //log.info("[OneToManyWebSocket][sendMessage] 服务端给客户端[{}]发送消息{},total clients is {},has send {}", toSession.getId(), message,clients.size(),hasSendCount++);
-                toSession.getBasicRemote().sendText(JSON.toJSONString(message));
+                toSession.getAsyncRemote().sendText(JSON.toJSONString(message));
             }
         }
     }

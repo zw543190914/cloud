@@ -27,7 +27,7 @@ public class WebSocketMessage implements Serializable {
     public LocalDateTime date;
 
     /**
-     * 消息类型(0:文本,1:图片)
+     * 消息类型(0:文本,1:图片,-1:上线,-2:下线,-3:重复登陆)
      * hangup 对方挂断
      * call_start 视频通话请求
      * offer

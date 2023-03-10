@@ -1,5 +1,5 @@
 <!DOCTYPE>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
   <head>
     <title>聊天室</title>
     <script src="/js/jquery-1.12.3.min.js"></script>
@@ -21,7 +21,8 @@ body{
 				  </div>
 				  <div class="panel-body">
 				    <div class="list-group">
-					 <a href="#" class="list-group-item">你好，<span id="user"></span></a>
+						<input id="autoflag" type="hidden" th:value="${uid}">
+						<a href="#" class="list-group-item">你好，<span id="user"></span></a>
 					 <a href="logout" class="list-group-item">退出</a>
 					</div>
 				  </div>
@@ -85,31 +86,46 @@ Date.prototype.format = function(fmt) {
 
 
     $(document).ready(function() {
-    	var user;
-    	var uid;
+		var uid =document.getElementById("autoflag").value;
+		var user;
+    	// var uid;
     	// 指定websocket路径
 	    var websocket;
-    	$.get("/currentUser",function(data){
+	    console.log(uid)
+    	$.get("/currentUser/" + uid,function(data){
+    		if (data == null) {
+    			alert("获取用户信息失败")
+			}
     		user = data.username;
     		uid = data.id;
     		$("#user").html(user);
     		
 	        if ('WebSocket' in window) {
-				websocket = new WebSocket("ws://localhost:18092/test/oneToMany/"+user);
+				websocket = new WebSocket("ws://192.168.0.114:18092/test/oneToMany/"+user);
+			}
+			websocket.onerror = function() {
+				$("#log-container").append("<div class='bg-info'><label class='text-danger'>"+"系统提示"+"&nbsp;"+"  "+"</label><div class='text-success'>"+"WebSocket连接发生错误,检查用户使用已经登陆"+"</div></div><br>");
+				// 滚动条滚动到最低部
+				scrollToBottom();
+			};
+			websocket.onclose = function(event) {
+				$("#log-container").append("<div class='bg-info'><label class='text-danger'>"+"系统提示"+"&nbsp;"+"  "+"</label><div class='text-success'>"+"连接断开,请重新登陆"+"</div></div><br>");
+				// 滚动条滚动到最低部
+				scrollToBottom();
 			}
 			websocket.onmessage = function(event) {
 	       	 var data=JSON.parse(event.data);
-	            if(data.targetId==0){//上线消息
-	            	if(data.msgContent!=user)
+	            if(data.msgType === "-1"){//上线消息
+	            	if(data.currentId!=user)
 	            	{	
-	            		$("#users").append('<a href="#" onclick="talk(this)" class="list-group-item">'+data.msgContent+'</a>');
-	            		alert(data.msgContent);
+	            		$("#users").append('<a href="#" onclick="talk(this)" class="list-group-item">'+data.currentId+'</a>');
+	            		// alert(data.msgContent);
 	            	}
-	            }else if(data.targetId==-2){//下线消息
-	            	if(data.msgContent!=user)
+	            }else if(data.msgType == "-2"){//下线消息
+	            	if(data.currentId!=user)
 	            	{	
-	            		$("#users > a").remove(":contains('"+data.text+"')");
-	            		alert(data.msgContent);
+	            		$("#users > a").remove(":contains('"+data.currentId+"')");
+	            		// alert(data.msgContent);
 	            	}
 	            }else {
 	            	console.log(data)

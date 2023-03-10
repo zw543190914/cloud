@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 
@@ -32,16 +33,19 @@ public class UserInfoController {
      */
     @PostMapping("/registerOrLogin")
     //http://localhost:18092/chat/user/registerOrLogin
-    public String registerOrLogin(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession httpSession) {
+    public ModelAndView registerOrLogin(@RequestParam("username") String username, @RequestParam("password") String password) {
         UserInfo user = new UserInfo();
         user.setUsername(username);
         user.setPassword(password);
+        ModelAndView modelAndView = new ModelAndView();
         try {
             UserVo userVo = userServices.registerOrLogin(user);
-            httpSession.setAttribute("uid", userVo.getId());
-            return "chatroom";
+            modelAndView.setViewName("/chatroom.html");
+            modelAndView.addObject("uid",userVo.getId());
+            return modelAndView;
         } catch (Exception e) {
-            return "fail";
+            modelAndView.setViewName("/fail.html");
+            return modelAndView;
         }
 
     }
@@ -53,7 +57,7 @@ public class UserInfoController {
     }
 
     @RequestMapping("/logout")
-    public String logout(HttpSession httpSession){
+    public String logout(){
         return "login";
     }
 

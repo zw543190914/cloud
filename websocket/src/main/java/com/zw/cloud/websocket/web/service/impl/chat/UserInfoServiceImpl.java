@@ -33,7 +33,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     @Transactional
     public UserVo registerOrLogin(UserInfo user) {
-        log.info("[UserInfoServiceImpl][registerOrLogin]user is {}", JSON.toJSONString(user));
+        log.info("[websocket][UserInfoServiceImpl][registerOrLogin]user is {}", JSON.toJSONString(user));
 
         UserInfo userResult = checkUserNameIsExit(user.getUsername());
         UserVo userVo = new UserVo();
@@ -47,7 +47,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 throw new BizException("密码错误 或者 用户名已经被注册");
             }
             BeanUtils.copyProperties(userResult, userVo);
-            log.info("[UserInfoServiceImpl][registerOrLogin]userVo is {}", JSON.toJSONString(userVo));
+            log.info("[websocket][UserInfoServiceImpl][registerOrLogin]userVo is {}", JSON.toJSONString(userVo));
             return userVo;
         }
 
@@ -56,8 +56,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         user.setNickname(user.getUsername());
         user.setPassword(EncryptUtils.encrypted(user.getPassword()));
         save(user);
-
-        log.info("[UserInfoServiceImpl][registerOrLogin]userVo is {}", JSON.toJSONString(userVo));
+        BeanUtils.copyProperties(user, userVo);
+        log.info("[websocket][UserInfoServiceImpl][registerOrLogin]userVo is {}", JSON.toJSONString(userVo));
         return userVo;
     }
 

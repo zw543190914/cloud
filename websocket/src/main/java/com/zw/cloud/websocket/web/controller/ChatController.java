@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 public class ChatController {
@@ -43,10 +40,15 @@ public class ChatController {
 		return userServices.getUserByUsername(username);
 	}
 
-	@GetMapping(value="/currentUser")
-	public UserVo currentUser(HttpSession httpSession){
-		Long uid = (Long)httpSession.getAttribute("uid");
+	@GetMapping(value="/currentUser/{uid}")
+	public UserVo currentUser(@PathVariable("uid") Long uid){
+		if (Objects.isNull(uid)) {
+			return null;
+		}
 		UserInfo userInfo = userServices.getById(uid);
+		if (Objects.isNull(userInfo)) {
+			return null;
+		}
 		UserVo userVo = new UserVo();
 		BeanUtils.copyProperties(userInfo,userVo);
 		return userVo;
