@@ -2,6 +2,7 @@ package com.zw.cloud.mybatis.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ibatis.annotations.Options;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

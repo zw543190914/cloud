@@ -38,10 +38,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.zw.cloud</groupId>
-            <artifactId>db</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.jsoup</groupId>
