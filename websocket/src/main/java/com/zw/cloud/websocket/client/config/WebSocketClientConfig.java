@@ -6,11 +6,9 @@ import org.java_websocket.client.WebSocketClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -24,12 +22,13 @@ public class WebSocketClientConfig {
      * 使用 tomcat 时，消息大小配置
      * https://www.cnblogs.com/yunnick/p/14545252.html
      */
-    @Lazy
     @Bean
     public WebSocketClient webSocketClient() throws URISyntaxException{
+        log.info("[WebSocketClientConfig][webSocketClient] init");
         String ws="ws://localhost:18092/test/oneToMany/" + userId;
         try {
             WebSocketClient webSocketClient = new MyWebSocketClient(new URI(ws));
+            // 启动成功后连接
             webSocketClient.connect();
             return webSocketClient;
         } catch (URISyntaxException e) {

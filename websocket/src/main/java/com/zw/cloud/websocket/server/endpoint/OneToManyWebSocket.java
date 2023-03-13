@@ -1,7 +1,6 @@
 package com.zw.cloud.websocket.server.endpoint;
 
 import com.alibaba.fastjson.JSON;
-import com.zw.cloud.common.exception.BizException;
 import com.zw.cloud.websocket.entity.WebSocketMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
