@@ -2,6 +2,8 @@ package com.zw.cloud.websocket.server.endpoint;
 
 import com.alibaba.fastjson.JSON;
 import com.zw.cloud.websocket.entity.WebSocketMessage;
+import com.zw.cloud.websocket.web.entity.chat.UserVo;
+import com.zw.cloud.websocket.web.service.api.chat.IUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
@@ -57,14 +59,27 @@ public class OneToManyWebSocket {
      */
     @OnOpen
     public void onOpen(@PathParam("username") String username, Session session) throws IOException {
+        IUserInfoService userInfoService = applicationContext.getBean(IUserInfoService.class);
+        UserVo user = userInfoService.getUserByUsername(username);
         WebSocketMessage message = new WebSocketMessage();
         message.setCurrentId(username);
+        message.setDate(LocalDateTime.now());
+        if (Objects.isNull(user)) {
+            message.setMsgType("0");
+            message.setMsgContent("非法访问");
+            session.getBasicRemote().sendText(JSON.toJSONString(message));
+            session.close();
+            return;
+        }
         if (clients.containsKey(username)) {
             message.setMsgType("0");
             message.setMsgContent(username + " 重复登陆,强制下线,请注意......");
-            clients.get(username).getBasicRemote().sendText(JSON.toJSONString(message));
+            Session repeatSession = clients.get(username);
+            repeatSession.getBasicRemote().sendText(JSON.toJSONString(message));
             session.getBasicRemote().sendText(JSON.toJSONString(message));
+            repeatSession.close();
             session.close();
+            return;
         }
         onlineCount.incrementAndGet(); // 在线数加1
         clients.put(username, session);

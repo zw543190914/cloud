@@ -14,7 +14,7 @@ public class ClientScheduleTask {
     private WebSocketClient webSocketClient;
 
 
-    @Scheduled(cron = "0 0/1 * * * ? ")
+    @Scheduled(cron = "0 0/5 * * * ? ")
     @Async
     public void reconnectTask() {
         log.info("[ClientScheduleTask][reconnectTask] start ");
