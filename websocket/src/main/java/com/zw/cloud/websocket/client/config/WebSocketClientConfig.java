@@ -29,7 +29,7 @@ public class WebSocketClientConfig {
         try {
             WebSocketClient webSocketClient = new MyWebSocketClient(new URI(ws));
             // 启动成功后连接
-            webSocketClient.connect();
+            //webSocketClient.connect();
             return webSocketClient;
         } catch (URISyntaxException e) {
             log.error("[WebSocketClientConfig][webSocketClient] error is ",e);
