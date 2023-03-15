@@ -101,10 +101,10 @@ Date.prototype.format = function(fmt) {
     		$("#user").html(user);
     		
 	        if ('WebSocket' in window) {
-				websocket = new WebSocket("ws://192.168.0.114:18092/test/oneToMany/"+user);
+				websocket = new WebSocket("ws://127.0.0.1:18092/test/oneToMany/"+user);
 			}
 			websocket.onerror = function() {
-				$("#log-container").append("<div class='bg-info'><label class='text-danger'>"+"系统提示"+"&nbsp;"+"  "+"</label><div class='text-success'>"+"WebSocket连接发生错误,检查用户使用已经登陆"+"</div></div><br>");
+				$("#log-container").append("<div class='bg-info'><label class='text-danger'>"+"系统提示"+"&nbsp;"+"  "+"</label><div class='text-success'>"+"WebSocket连接发生错误,检查用户是否已经登陆"+"</div></div><br>");
 				// 滚动条滚动到最低部
 				scrollToBottom();
 			};
