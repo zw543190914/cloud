@@ -81,6 +81,8 @@ public class BigDecimalUtils {
         System.out.println(doubleRound(5.3));
         System.out.println(doubleRound(5.5));
         System.out.println(doubleRound(5.8));
+
+        System.out.println(getAvgWithFilterFirstSecondAndLast(Lists.newArrayList("1", "2", "3","4")).toPlainString());
     }
 
     /**
@@ -294,9 +296,7 @@ public class BigDecimalUtils {
             return null;
         }
         // 去掉前两节和最后一节，其他节数排除值为空的
-        args.remove(0);
-        args.remove(0);
-        args.remove(args.size() - 1);
+        args = args.subList(2, args.size() - 1);
 
         BigDecimal num = new BigDecimal(0);
         BigDecimal oneBigDecimal = new BigDecimal(1);
