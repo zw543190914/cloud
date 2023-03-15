@@ -37,5 +37,6 @@ server:
 ws:
   client:
     accessId: client_zw
+  needCheckUser: false
 
 

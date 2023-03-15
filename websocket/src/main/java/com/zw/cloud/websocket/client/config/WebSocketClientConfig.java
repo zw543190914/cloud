@@ -44,7 +44,7 @@ public class WebSocketClientConfig {
             try {
                 WebSocketClient webSocketClient = new MyWebSocketClient(new URI(ws));
                 webSocketClient.connect();
-                TimeUnit.MILLISECONDS.sleep(100);
+                TimeUnit.MILLISECONDS.sleep(1);
                 log.info("[WebSocketClientConfig][test] connect count is {}",i);
             } catch (URISyntaxException | InterruptedException e) {
                 log.error("[WebSocketClientConfig][test] error is ",e);

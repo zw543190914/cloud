@@ -6,6 +6,7 @@ import com.zw.cloud.websocket.web.entity.chat.UserVo;
 import com.zw.cloud.websocket.web.service.api.chat.IUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -54,32 +55,19 @@ public class OneToManyWebSocket {
         OneToManyWebSocket.applicationContext = applicationContext;
     }
 
+    @Value("${ws.needCheckUser}")
+    private boolean needCheckUser;
+
     /**
      * 连接建立成功调用的方法
      */
     @OnOpen
     public void onOpen(@PathParam("username") String username, Session session) throws IOException {
-        IUserInfoService userInfoService = applicationContext.getBean(IUserInfoService.class);
-        UserVo user = userInfoService.getUserByUsername(username);
         WebSocketMessage message = new WebSocketMessage();
         message.setCurrentId(username);
-        message.setDate(LocalDateTime.now());
-        if (Objects.isNull(user)) {
-            message.setMsgType("0");
-            message.setMsgContent("非法访问");
-            session.getBasicRemote().sendText(JSON.toJSONString(message));
-            session.close();
-            return;
-        }
-        if (clients.containsKey(username)) {
-            message.setMsgType("0");
-            message.setMsgContent(username + " 重复登陆,强制下线,请注意......");
-            Session repeatSession = clients.get(username);
-            repeatSession.getBasicRemote().sendText(JSON.toJSONString(message));
-            session.getBasicRemote().sendText(JSON.toJSONString(message));
-            repeatSession.close();
-            session.close();
-            return;
+        if (needCheckUser) {
+            // 校验用户是否存在
+            checkUser(username,session,message);
         }
         onlineCount.incrementAndGet(); // 在线数加1
         clients.put(username, session);
@@ -176,5 +164,26 @@ public class OneToManyWebSocket {
 
         toSession.getBasicRemote().sendText(JSON.toJSONString(message));
 
+    }
+
+    private void checkUser(String username,Session session,WebSocketMessage message) throws IOException {
+        IUserInfoService userInfoService = applicationContext.getBean(IUserInfoService.class);
+        UserVo user = userInfoService.getUserByUsername(username);
+        if (Objects.isNull(user)) {
+            message.setMsgType("0");
+            message.setMsgContent("非法访问");
+            session.getBasicRemote().sendText(JSON.toJSONString(message));
+            session.close();
+            return;
+        }
+        if (clients.containsKey(username)) {
+            message.setMsgType("0");
+            message.setMsgContent(username + " 重复登陆,强制下线,请注意......");
+            Session repeatSession = clients.get(username);
+            repeatSession.getBasicRemote().sendText(JSON.toJSONString(message));
+            session.getBasicRemote().sendText(JSON.toJSONString(message));
+            repeatSession.close();
+            session.close();
+        }
     }
 }
