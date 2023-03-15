@@ -25,7 +25,7 @@ public class MDCInterceptor implements HandlerInterceptor {
             tid = UUID.randomUUID().toString().replace("-", "");
         }
         MDC.put(TRACE_ID, tid);
-        log.info("[MDCInterceptor][preHandle] tid is {}",tid);
+        log.info("[MDCInterceptor][preHandle] tid is {},uri is {}",tid,request.getRequestURI());
         //回写requestId到response中
         response.setHeader(TRACE_ID,tid);
         return true;
