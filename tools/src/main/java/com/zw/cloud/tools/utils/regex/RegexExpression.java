@@ -16,6 +16,7 @@ public class RegexExpression {
         System.out.println(NUMBER_PATTERN.matcher("-010").matches());
         System.out.println(Validator.isNumber("-010.100"));
         System.out.println(Validator.hasChinese("han01"));
+        System.out.println(Validator.isEmail("shaoxiulong.sct@challenge-21c.com"));
 
     }
 }
