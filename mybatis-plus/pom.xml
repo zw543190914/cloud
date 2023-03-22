@@ -58,7 +58,6 @@
         <dependency>
             <groupId>cn.smallbun.screw</groupId>
             <artifactId>screw-core</artifactId>
-            <version>1.0.5</version>
         </dependency>
         <!--datatime -format-->
         <dependency>
@@ -119,7 +118,7 @@
                     <!--jdbc url-->
                     <jdbcUrl>jdbc:mysql://127.0.0.1:3306/test</jdbcUrl>
                     <!--生成文件类型-->
-                   <!-- <fileType>HTML</fileType>-->
+                    <!-- <fileType>HTML</fileType>-->
                     <fileType>WORD</fileType>
                     <!--打开文件输出目录-->
                     <openOutputDir>false</openOutputDir>

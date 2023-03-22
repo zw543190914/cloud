@@ -130,6 +130,7 @@
         <skywalking.toolkit.version>8.9.0</skywalking.toolkit.version>
         <sharding-jdbc.version>4.1.1</sharding-jdbc.version>
         <metadata-extractor.version>2.18.0</metadata-extractor.version>
+        <screw.version>1.0.5</screw.version>
     </properties>
 
     <dependencyManagement>
@@ -235,16 +236,19 @@
                 <version>${druid.version}</version>
             </dependency>
 
+            <!-- screw 库，简洁好用的数据库表结构文档生成器 -->
+            <dependency>
+                <groupId>cn.smallbun.screw</groupId>
+                <artifactId>screw-core</artifactId>
+                <version>${screw.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.zw.cloud</groupId>
                 <artifactId>common</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.zw.cloud</groupId>
-                <artifactId>db</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+
             <!--二维码-->
             <dependency>
                 <groupId>com.google.zxing</groupId>

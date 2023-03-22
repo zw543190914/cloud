@@ -30,9 +30,9 @@ spring:
         stat:
           slow-sql-millis: 2000
           log-slow-sql: true
-    url: jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
-    username: root
-    password: password
+      url: jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+      username: root
+      password: password
   main:
     allow-circular-references: true
 
