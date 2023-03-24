@@ -63,11 +63,10 @@ public class BeanCopyTest {
         System.out.println(JSON.toJSONString(target));
         System.out.println(source == target); // false
         System.out.println(source.getPoem() == target.getPoem()); // true
-        BeanUtil.copyProperties(source,target);
-        System.out.println("===================");
-        System.out.println(JSON.toJSONString(target));
+        // 转为JSON 后重新转换
+        target = JSON.parseObject(JSON.toJSONString(source), UserDTO.class);
         System.out.println(source == target); // false
-        System.out.println(source.getPoem() == target.getPoem()); // true
+        System.out.println(source.getPoem() == target.getPoem()); // false
     }
 
 
