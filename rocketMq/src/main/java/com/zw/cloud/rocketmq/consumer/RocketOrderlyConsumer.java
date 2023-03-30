@@ -40,7 +40,7 @@ public class RocketOrderlyConsumer implements RocketMQPushConsumerLifecycleListe
         log.info("[RocketOrderlyConsumer][onMessage] tag is {},receive messageBody is {}", tag, messageBody);
         ConsumerHandler handlerInstance = ConsumerHandler.getConsumerHandlerInstance(topic,tag);
         if (Objects.isNull(handlerInstance)) {
-            log.error("[RocketOrderlyConsumer][onMessage] tag is {},receive messageBody is {},handlerInstance is null", tag, messageBody);
+            log.warn("[RocketOrderlyConsumer][onMessage] tag is {},receive messageBody is {},handlerInstance is null", tag, messageBody);
             return;
         }
         handlerInstance.handleRocketMQMsg(messageBody);

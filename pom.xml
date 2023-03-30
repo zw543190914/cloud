@@ -131,6 +131,7 @@
         <sharding-jdbc.version>4.1.1</sharding-jdbc.version>
         <metadata-extractor.version>2.18.0</metadata-extractor.version>
         <screw.version>1.0.5</screw.version>
+        <rocketmq.version>2.2.2</rocketmq.version>
     </properties>
 
     <dependencyManagement>
@@ -203,6 +204,12 @@
                 <groupId>io.github.openfeign</groupId>
                 <artifactId>feign-okhttp</artifactId>
                 <version>${feign-okhttp.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocketmq.version}</version>
             </dependency>
 
             <dependency>
@@ -709,6 +716,13 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.zw.cloud</groupId>
+            <artifactId>logging</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
     </dependencies>
 
     <!--自己  nexus 私服配置-->

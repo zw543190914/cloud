@@ -28,7 +28,7 @@ public class RocketProductOrderly {
      * consumeMode = ConsumeMode.ORDERLY
      */
     @GetMapping("/syncSendOrderly")
-    //http://localhost:10000/rocket/syncSendOrderly?topic=topicA:tag2
+    //http://localhost:9095/rocket/syncSendOrderly?topic=topicA:tag2
     public void syncSendOrderly(@RequestParam String topic) {
         for (int i = 0; i < 100; i++) {
             String msg = String.valueOf(atomicInteger.getAndAdd(1));
@@ -50,7 +50,7 @@ public class RocketProductOrderly {
     }
 
     @GetMapping("/testStrategy/{topic}/{tag}")
-    //http://localhost:10000/rocket/testStrategy/topic
+    //http://localhost:9095/rocket/testStrategy/topic
     public void testStrategy(@PathVariable String topic,@PathVariable String tag) {
         ConsumerHandler task1 = ConsumerHandler.getConsumerHandlerInstance(topic,tag);
         task1.handleRocketMQMsg(tag);

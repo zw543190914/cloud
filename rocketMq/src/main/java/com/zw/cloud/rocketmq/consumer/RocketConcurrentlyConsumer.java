@@ -17,7 +17,7 @@ import java.util.Objects;
 
 @Component
 @Slf4j
-@RocketMQMessageListener(topic = "topicA", consumerGroup = "group1",consumeMode = ConsumeMode.CONCURRENTLY)
+@RocketMQMessageListener(topic = "topicB", consumerGroup = "group1",selectorExpression = "tag1 || tag2 || tag3",consumeMode = ConsumeMode.CONCURRENTLY)
 public class RocketConcurrentlyConsumer implements RocketMQPushConsumerLifecycleListener, RocketMQListener<MessageExt> {
 
     @Override
@@ -39,7 +39,7 @@ public class RocketConcurrentlyConsumer implements RocketMQPushConsumerLifecycle
         log.info("[RocketConcurrentlyConsumer][onMessage] tag is {},receive messageBody is {}", tag, messageBody);
         ConsumerHandler handlerInstance = ConsumerHandler.getConsumerHandlerInstance(topic,tag);
         if (Objects.isNull(handlerInstance)) {
-            log.error("[RocketConcurrentlyConsumer][onMessage] tag is {},receive messageBody is {},handlerInstance is null", tag, messageBody);
+            log.warn("[RocketConcurrentlyConsumer][onMessage] tag is {},receive messageBody is {},handlerInstance is null", tag, messageBody);
             return;
         }
         handlerInstance.handleRocketMQMsg(messageBody);
@@ -48,7 +48,7 @@ public class RocketConcurrentlyConsumer implements RocketMQPushConsumerLifecycle
 
     @Override
     public void prepareStart(DefaultMQPushConsumer consumer) {
-        consumer.setConsumeThreadMax(30);
-        consumer.setConsumeThreadMin(20);
+        consumer.setConsumeThreadMax(8);
+        consumer.setConsumeThreadMin(2);
     }
 }

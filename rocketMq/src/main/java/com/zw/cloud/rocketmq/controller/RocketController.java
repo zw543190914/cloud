@@ -33,7 +33,7 @@ public class RocketController {
 
     //发送消息
     @GetMapping("/sendMsg")
-    //http://localhost:10000/rocket/sendMsg?msg=aaa&topic=topicA&tag=tag1
+    //http://localhost:9095/rocket/sendMsg?msg=zw&topic=topicB&tag=tag1
     public void sendMsg(@RequestParam String msg,@RequestParam String topic,@RequestParam String tag) throws Exception{
         //SendResult hashkey = rocketMQTemplate.syncSendOrderly(topic, msg + " : " + atomicInteger.getAndAdd(1), "hashkey");
         topic = topic + ":" + tag;
@@ -65,18 +65,34 @@ public class RocketController {
 
     //发送消息
     @GetMapping("/stopSendMsg")
-    //http://localhost:10000/rocket/stopSendMsg
+    //http://localhost:9095/rocket/stopSendMsg
     public void stopSendMsg() {
         run = false;
     }
 
+    //发送消息
+    @GetMapping("/sendOneMsg")
+    //http://localhost:9095/rocket/sendOneMsg?msg=zw1&topic=topicB&tag=tag1
+    public void sendOneMsg(@RequestParam String msg,@RequestParam String topic,@RequestParam String tag) {
+        Message<byte[]> message = MessageBuilder.withPayload(msg.getBytes(StandardCharsets.UTF_8)).build();
+        rocketMQTemplate.asyncSend( topic + ":" + tag, message, new SendCallback() {
+            @Override
+            public void onSuccess(SendResult sendResult) {
+                log.info("[sendOneMsg] send success " + sendResult);
+            }
+            @Override
+            public void onException(Throwable throwable) {
+                log.info("[sendOneMsg] send error is ", throwable);
+            }
+        });
+    }
     /**
      * 发送延迟消息
      * 1  2   3   4   5  6  7  8  9 10 11 12 13 14  15  16  17 18
      * 1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h
      */
     @GetMapping("/sendDelayMsg")
-    //http://localhost:10000/rocket/sendDelayMsg?msg=aaa&topic=topicA&tag=tag1
+    //http://localhost:9095/rocket/sendDelayMsg?msg=zw&topic=topicB&tag=tag1
     public void sendDelayMsg(@RequestParam String msg,@RequestParam String topic,@RequestParam String tag) {
         topic = topic + ":" + tag;
         Message<byte[]> message = MessageBuilder.withPayload(msg.getBytes(StandardCharsets.UTF_8)).build();
@@ -96,7 +112,7 @@ public class RocketController {
 
     //发送事务消息
     @GetMapping("/sendMessageIntransaction")
-    //http://localhost:10000/rocket/sendMessageIntransaction?msg=qq&topic=topicA
+    //http://localhost:9095/rocket/sendMessageIntransaction?msg=qq&topic=topicA
     public void sendMessageIntransaction(@RequestParam String msg,@RequestParam String topic) {
         Message<String> message = MessageBuilder.withPayload(msg + " : " + atomicInteger.getAndAdd(1))
                /* .setHeader(RocketMQHeaders.TRANSACTION_ID, UUID.randomUUID().toString())
