@@ -23,7 +23,8 @@ public class SetTest {
         System.out.println(sum);
         BigDecimal sum2 = Lists.newArrayList(new BigDecimal(1),new BigDecimal(1),new BigDecimal(3)).stream().reduce(new BigDecimal(0),BigDecimal::add);
         System.out.println(sum2);
-        System.out.println(set1.stream().reduce(0, Integer::sum));
+        System.out.println("reduce:" + set1.stream().reduce(0, Integer::sum));
+        System.out.println("summarizingLong:" + set1.stream().collect(Collectors.summarizingLong(v->v)).getSum());
 
         User user = new User();
         user.setId(null);

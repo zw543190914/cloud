@@ -71,7 +71,7 @@ public class DateTimeUtils {
         System.out.println(instant1);
 
         System.out.println("=========时间间隔===========");
-        Duration duration = Duration.between(LocalDateTime.parse("2022-05-18T23:58:00"), LocalDateTime.parse("2022-05-18T23:59:00"));
+        Duration duration = Duration.between(LocalDateTime.parse("2022-05-18T23:58:20"), LocalDateTime.parse("2022-05-18T23:59:00"));
         System.out.println(duration.toMinutes());
         System.out.println("instant = " + instant + ",instant + 60s = " + instant.plusSeconds(60));
         Duration between1 = Duration.between(instant, instant.plusSeconds(60));
@@ -392,6 +392,15 @@ public class DateTimeUtils {
     public static String parse2Str(LocalDateTime date, String pattern) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
         return date.format(dateTimeFormatter);
+    }
+
+    public static void between(LocalDateTime start,LocalDateTime end) {
+        Duration duration = Duration.between(start,end);
+        long days = duration.toDays(); //相差的天数
+        long hours = duration.toHours();//相差的小时数
+        long minutes = duration.toMinutes();//相差的分钟数
+        long millis = duration.toMillis();//相差毫秒数
+        long nanos = duration.toNanos();//相差的纳秒数
     }
 
 }

@@ -83,6 +83,11 @@ public class BigDecimalUtils {
         System.out.println(doubleRound(5.8));
 
         System.out.println(getAvgWithFilterFirstSecondAndLast(Lists.newArrayList("1", "2", "3","4")).toPlainString());
+
+        BigDecimal bigDecimal2 = new BigDecimal("5.23").setScale(0, RoundingMode.DOWN);
+        System.out.println(bigDecimal2);
+        BigDecimal bigDecimal3 = new BigDecimal("5.98").setScale(0, RoundingMode.DOWN);
+        System.out.println(bigDecimal3);
     }
 
     /**
