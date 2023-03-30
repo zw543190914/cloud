@@ -16,14 +16,19 @@ import java.util.Collections;
 public class ScrewUtils {
 
     private static final String DB_URL = "jdbc:mysql://192.168.22.70:3306";
+    private static final String DB_NAME = "dyeing_stenter?serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull";
+    private static final String DB_USERNAME = "dyeing_stenter_dev";
+    private static final String DB_PASSWORD = "a6gOzjU6eSGLOYMVDELULxNiVbJ4FQux";
+
+    /*private static final String DB_URL = "jdbc:mysql://192.168.22.70:3306";
     private static final String DB_NAME = "dyeing_cloud?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull";
     private static final String DB_USERNAME = "dev_waven";
-    private static final String DB_PASSWORD = "lZKYZ32AHAqMKVW43aVUwWHHFizRM4JV";
+    private static final String DB_PASSWORD = "lZKYZ32AHAqMKVW43aVUwWHHFizRM4JV";*/
 
     private static final String FILE_OUTPUT_DIR = "D:\\";
     // 可以设置 Word 或者 Markdown 格式
     private static final EngineFileType FILE_OUTPUT_TYPE = EngineFileType.WORD;
-    private static final String DOC_FILE_NAME = "数据字段说明";
+    private static final String DOC_FILE_NAME = "报工数据同步";
     private static final String DOC_VERSION = "V1.0.0";
     private static final String DOC_DESCRIPTION = "文档描述";
 
@@ -87,9 +92,9 @@ public class ScrewUtils {
     private static ProcessConfig buildProcessConfig() {
         return ProcessConfig.builder()
                 // 根据名称指定表生成
-                .designatedTableName(Lists.newArrayList("product_ic_card"))
+                .designatedTableName(Lists.newArrayList("product_process_record_external"))
                 // 根据表前缀生成
-                .designatedTablePrefix(Lists.newArrayList("sc_"))
+                //.designatedTablePrefix(Lists.newArrayList("sc_"))
                 // 根据表后缀生成
                 .designatedTableSuffix(Collections.emptyList())
                 // 忽略表名

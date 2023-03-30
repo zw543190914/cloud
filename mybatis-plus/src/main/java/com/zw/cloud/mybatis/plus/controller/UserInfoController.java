@@ -35,25 +35,25 @@ public class UserInfoController {
     private UserInfoMapper mapper;
 
     @GetMapping("/testBatchInsertJdbc")
-    //http://localhost:8080/user-info/testBatchInsertJdbc
+    //http://localhost:8082/user-info/testBatchInsertJdbc
     public void testBatchInsertJdbc() throws SQLException {
         userService.testBatchInsertJdbc(buildUserList());
     }
 
     @GetMapping("/testBatchInsertOneByOne")
-    //http://localhost:8080/user-info/testBatchInsertOneByOne
+    //http://localhost:8082/user-info/testBatchInsertOneByOne
     public void testBatchInsertOneByOne() {
         userService.testBatchInsertOneByOne(buildUserList());
     }
 
     @GetMapping("/testBatchInsertByMapper")
-    //http://localhost:8080/user-info/testBatchInsertByMapper
+    //http://localhost:8082/user-info/testBatchInsertByMapper
     public void testBatchInsertByMapper() {
         userService.testBatchInsertByMapper(buildUserList());
     }
 
     @GetMapping("/testBatchInsertByMybatisPlus")
-    //http://localhost:8080/user-info/testBatchInsertByMybatisPlus
+    //http://localhost:8082/user-info/testBatchInsertByMybatisPlus
     public void testBatchInsertByMybatisPlus() {
         long start = System.currentTimeMillis();
         userService.testBatchInsertByMybatisPlus(buildUserList());
@@ -64,7 +64,7 @@ public class UserInfoController {
 
     @GetMapping("/insertWithJson")
     @Transactional
-    //http://localhost:8080/user-info/insertWithJson
+    //http://localhost:8082/user-info/insertWithJson
     public void insertWithJson() {
         UserInfo user = new UserInfo();
         user.setId(1L);
@@ -79,7 +79,7 @@ public class UserInfoController {
 
     @PostMapping
     @Transactional
-    //http://localhost:8080/user-info?name=test100000
+    //http://localhost:8082/user-info?name=test100000
     public void updateUserInfo(@RequestBody UserInfo user) {
         user.setAge(22);
         JSONObject jsonObject = new JSONObject();
@@ -91,7 +91,7 @@ public class UserInfoController {
     }
 
     @GetMapping("/updateTest")
-    //http://localhost:8080/user-info/updateTest
+    //http://localhost:8082/user-info/updateTest
     @Transactional
     public void updateTest() throws InterruptedException {
         UserInfo userPlus = userService.getById(1588093790661382146L);
@@ -109,7 +109,7 @@ public class UserInfoController {
     }
 
     @GetMapping("/updateTest2")
-    //http://localhost:8080/user-info/updateTest2
+    //http://localhost:8082/user-info/updateTest2
     @Transactional
     public void updateTest2() throws InterruptedException {
 
@@ -128,7 +128,7 @@ public class UserInfoController {
     }
 
     @GetMapping("/batchInsertByMapper")
-    //http://localhost:8080/user-info/batchInsertByMapper
+    //http://localhost:8082/user-info/batchInsertByMapper
     public void batchInsertByMapper() {
 
         try {
@@ -140,7 +140,7 @@ public class UserInfoController {
     }
 
     @GetMapping("/updateToNull")
-    //http://localhost:8080/user-info/updateToNull?id=1588093790661382148
+    //http://localhost:8082/user-info/updateToNull?id=1588093790661382148
     public void updateToNull(@RequestParam Long id) {
         UserInfo user = new UserInfo();
         user.setName("updateToNull");
@@ -153,31 +153,31 @@ public class UserInfoController {
 
 
     @GetMapping("/batchUpdate")
-    //http://localhost:8080/user-info/batchUpdate
+    //http://localhost:8082/user-info/batchUpdate
     public void batchUpdate() {
         userService.batchSaveOrUpdate(buildData());
     }
 
     @GetMapping("/testMvcc")
-    //http://localhost:8080/user-info/testMvcc?id=1
+    //http://localhost:8082/user-info/testMvcc?id=1
     public void testMvcc(@RequestParam Long id) {
         userService.testMvcc(id);
     }
 
     @GetMapping("/testRepeatRead")
-    //http://localhost:8080/user-info/testRepeatRead?id=1542758664088105011
+    //http://localhost:8082/user-info/testRepeatRead?id=1542758664088105011
     public void testRepeatRead(@RequestParam Long id) {
         userService.testRepeatRead(id);
     }
 
     @GetMapping("/testSerializable")
-    //http://localhost:8080/user-info/testSerializable?id=794254126413250560
+    //http://localhost:8082/user-info/testSerializable?id=794254126413250560
     public void testSerializable() {
         userService.testSerializable();
     }
 
     @GetMapping("/testPropagationRequiresNew/{id}")
-    //http://localhost:8080/user-info/testPropagationRequiresNew/1588093790661382146
+    //http://localhost:8082/user-info/testPropagationRequiresNew/1588093790661382146
     public void testPropagationRequiresNew(@PathVariable Long id) {
         UserInfo userInfo = new UserInfo();
         userInfo.setId(id);
@@ -186,7 +186,7 @@ public class UserInfoController {
     }
 
     @GetMapping("/testPropagationRequires/{id}")
-    //http://localhost:8080/user-info/testPropagationRequires/1588093790661382146
+    //http://localhost:8082/user-info/testPropagationRequires/1588093790661382146
     public void testPropagationRequires(@PathVariable Long id) {
         UserInfo userInfo = new UserInfo();
         userInfo.setId(id);
@@ -195,7 +195,7 @@ public class UserInfoController {
     }
 
     @GetMapping("/testPropagationNested/{id}")
-    //http://localhost:8080/user-info/testPropagationNested/1588093790661382146
+    //http://localhost:8082/user-info/testPropagationNested/1588093790661382146
     public void testPropagationNested(@PathVariable Long id) {
         UserInfo userInfo = new UserInfo();
         userInfo.setId(id);
@@ -204,7 +204,7 @@ public class UserInfoController {
     }
 
     @GetMapping("/testPropagationDefault/{id}")
-    //http://localhost:8080/user-info/testPropagationDefault/1588093790661382146
+    //http://localhost:8082/user-info/testPropagationDefault/1588093790661382146
     public void testPropagationDefault(@PathVariable Long id) {
         UserInfo userInfo = new UserInfo();
         userInfo.setId(id);
@@ -214,7 +214,7 @@ public class UserInfoController {
 
     @GetMapping("/queryWithLock/{id}")
     @Transactional
-    //http://localhost:8080/user-info/queryWithLock/1
+    //http://localhost:8082/user-info/queryWithLock/1
     public UserInfo queryWithLock(@PathVariable Long id) throws InterruptedException {
         UserInfo userInfo = mapper.queryByIdForUpdate(id);
         TimeUnit.SECONDS.sleep(15);
@@ -222,7 +222,7 @@ public class UserInfoController {
     }
 
     @GetMapping("/updateById/{id}")
-    //http://localhost:8080/user-info/updateById/1
+    //http://localhost:8082/user-info/updateById/1
     public int updateById(@PathVariable Long id) {
         UserInfo userInfo = new UserInfo();
         userInfo.setId(id);
@@ -231,7 +231,7 @@ public class UserInfoController {
     }
 
     @GetMapping("/onDuplicateUpdate")
-    //http://localhost:8080/user-info/onDuplicateUpdate
+    //http://localhost:8082/user-info/onDuplicateUpdate
     public int onDuplicateUpdate() {
         LocalDate now = LocalDate.now();
         UserInfo userInfo = new UserInfo();
@@ -256,8 +256,9 @@ public class UserInfoController {
     }
 
     @GetMapping("/query")
-    //http://localhost:8080/user-info/query?name=test9998
+    //http://localhost:8082/user-info/query?name=test9998
     public Page<UserInfo> pageQuery(String name) {
+        log.info("[UserInfoController][pageQuery]name is {}",name);
         UserInfo user = UserInfo.builder().name(name).build();
         //UserInfo user = new UserInfo();
         user.setName(name);
@@ -277,19 +278,19 @@ public class UserInfoController {
     }
 
     @GetMapping("/queryJsonData")
-    //http://localhost:8080/user-info/queryJsonData?name=ee挺剂TF-630
+    //http://localhost:8082/user-info/queryJsonData?name=ee挺剂TF-630
     public List<UserInfo> queryJsonData(String name) {
         return userService.queryJsonData(name);
     }
 
     @GetMapping("/queryJsonDataLike")
-    //http://localhost:8080/user-info/queryJsonDataLike?name=挺剂
+    //http://localhost:8082/user-info/queryJsonDataLike?name=挺剂
     public List<UserInfo> queryJsonDataLike(String name) {
         return userService.queryJsonDataLike(name);
     }
 
     @GetMapping("/queryRangeDataTest")
-    //http://localhost:8080/user-info/queryRangeDataTest?id=794253004214632449
+    //http://localhost:8082/user-info/queryRangeDataTest?id=794253004214632449
     public List<UserInfo> queryRangeDataTest(@RequestParam Long id) {
         LambdaQueryWrapper<UserInfo> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.ge(UserInfo::getId,id);
@@ -297,7 +298,7 @@ public class UserInfoController {
     }
 
     @GetMapping("/queryAllDataTest/{pageNo}/{pageSize}")
-    //http://localhost:8080/user-info/queryAllDataTest/1/10
+    //http://localhost:8082/user-info/queryAllDataTest/1/10
     public IPage<UserInfo> queryAllDataTest(@PathVariable Integer pageNo, @PathVariable Integer pageSize) {
         return userService.queryAllDataTest(pageNo,pageSize);
     }

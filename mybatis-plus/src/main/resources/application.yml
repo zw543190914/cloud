@@ -1,6 +1,7 @@
+
 spring:
   application:
-    name: mybatis-plus-demo
+    name: mybatis-plus
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
@@ -126,4 +127,5 @@ logging:
             plus:
               mapper: info
     root: info
-
+server:
+  port: 8082
