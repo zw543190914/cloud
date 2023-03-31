@@ -28,15 +28,16 @@ public class RocketProductOrderly {
      * consumeMode = ConsumeMode.ORDERLY
      */
     @GetMapping("/syncSendOrderly")
-    //http://localhost:9095/rocket/syncSendOrderly?topic=topicA:tag2
-    public void syncSendOrderly(@RequestParam String topic) {
-        for (int i = 0; i < 100; i++) {
+    //http://localhost:9095/rocket/syncSendOrderly?topic=topicA&tag=tag1
+    public void syncSendOrderly(@RequestParam String topic,@RequestParam String tag) {
+        for (int i = 0; i < 10; i++) {
             String msg = String.valueOf(atomicInteger.getAndAdd(1));
             Message<byte[]> message = MessageBuilder.withPayload(msg.getBytes(StandardCharsets.UTF_8)).build();
             //SendResult result = rocketMQTemplate.syncSendOrderly(topic, message, "hashKey");
             //log.info("send success {}" ,JSONUtil.toJsonStr(result));
             // 异步发送
-            rocketMQTemplate.asyncSendOrderly(topic, message, "hashKey", new SendCallback() {
+            String hashKey = msg;
+            rocketMQTemplate.asyncSendOrderly(topic + ":" + tag, message, hashKey, new SendCallback() {
                 @Override
                 public void onSuccess(SendResult sendResult) {
                     log.info("[syncSendOrderly] send success " + sendResult);

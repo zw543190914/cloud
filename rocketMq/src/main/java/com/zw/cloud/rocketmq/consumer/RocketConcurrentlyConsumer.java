@@ -4,12 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.zw.cloud.rocketmq.consumer.handler.ConsumerHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.spring.annotation.ConsumeMode;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
-import org.apache.rocketmq.spring.core.RocketMQPushConsumerLifecycleListener;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -17,8 +15,9 @@ import java.util.Objects;
 
 @Component
 @Slf4j
-@RocketMQMessageListener(topic = "topicB", consumerGroup = "group1",selectorExpression = "tag1 || tag2 || tag3",consumeMode = ConsumeMode.CONCURRENTLY)
-public class RocketConcurrentlyConsumer implements RocketMQPushConsumerLifecycleListener, RocketMQListener<MessageExt> {
+@RocketMQMessageListener(topic = "topicB", consumerGroup = "group1",selectorExpression = "tag1 || tag2 || tag3",
+        consumeThreadMax = 8,consumeMode = ConsumeMode.CONCURRENTLY)
+public class RocketConcurrentlyConsumer implements RocketMQListener<MessageExt> {
 
     @Override
     public void onMessage(MessageExt messageExt) {
@@ -45,10 +44,4 @@ public class RocketConcurrentlyConsumer implements RocketMQPushConsumerLifecycle
         handlerInstance.handleRocketMQMsg(messageBody);
     }
 
-
-    @Override
-    public void prepareStart(DefaultMQPushConsumer consumer) {
-        consumer.setConsumeThreadMax(8);
-        consumer.setConsumeThreadMin(2);
-    }
 }

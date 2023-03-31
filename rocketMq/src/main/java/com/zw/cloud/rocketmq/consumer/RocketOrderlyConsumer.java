@@ -18,8 +18,8 @@ import java.util.Objects;
 
 @Component
 @Slf4j
-@RocketMQMessageListener(topic = "topicA", consumerGroup = "group1",consumeMode = ConsumeMode.ORDERLY)
-public class RocketOrderlyConsumer implements RocketMQPushConsumerLifecycleListener, RocketMQListener<MessageExt> {
+@RocketMQMessageListener(topic = "topicA", consumerGroup = "group2",consumeMode = ConsumeMode.ORDERLY)
+public class RocketOrderlyConsumer implements RocketMQListener<MessageExt> {
 
     @Override
     public void onMessage(MessageExt messageExt) {
@@ -46,10 +46,4 @@ public class RocketOrderlyConsumer implements RocketMQPushConsumerLifecycleListe
         handlerInstance.handleRocketMQMsg(messageBody);
     }
 
-
-    @Override
-    public void prepareStart(DefaultMQPushConsumer consumer) {
-        consumer.setConsumeThreadMax(30);
-        consumer.setConsumeThreadMin(10);
-    }
 }

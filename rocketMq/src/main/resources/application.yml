@@ -8,8 +8,8 @@ spring:
       write-dates-as-timestamps: true
 
 rocketmq:
-  consumer:
-    group: group2
+#  consumer:
+#    group: group2
 #    pull-batch-size: 2
   name-server: 127.0.0.1:9876
   producer:

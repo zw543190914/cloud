@@ -35,20 +35,19 @@ public class RocketController {
     @GetMapping("/sendMsg")
     //http://localhost:9095/rocket/sendMsg?msg=zw&topic=topicB&tag=tag1
     public void sendMsg(@RequestParam String msg,@RequestParam String topic,@RequestParam String tag) throws Exception{
-        //SendResult hashkey = rocketMQTemplate.syncSendOrderly(topic, msg + " : " + atomicInteger.getAndAdd(1), "hashkey");
         topic = topic + ":" + tag;
         int count = 1;
         if (!run) {
             run = true;
         }
-        while (run) {
+//        while (run) {
             for (int i = 0; i < 500; i++) {
 
                 Message<byte[]> message = MessageBuilder.withPayload((msg + count).getBytes(StandardCharsets.UTF_8)).build();
                 rocketMQTemplate.asyncSend(topic, message, new SendCallback() {
                     @Override
                     public void onSuccess(SendResult sendResult) {
-                        log.info("[sendMsg] send success ");
+                        log.info("[sendMsg] send success " + sendResult);
                     }
                     @Override
                     public void onException(Throwable throwable) {
@@ -56,11 +55,10 @@ public class RocketController {
                     }
                 });
                 log.info("[sendMsg] count is {}",count);
-                i ++;
                 count ++;
             }
-            TimeUnit.SECONDS.sleep(1);
-        }
+//            TimeUnit.SECONDS.sleep(1);
+//        }
     }
 
     //发送消息
@@ -113,7 +111,7 @@ public class RocketController {
     //发送事务消息
     @GetMapping("/sendMessageIntransaction")
     //http://localhost:9095/rocket/sendMessageIntransaction?msg=qq&topic=topicA
-    public void sendMessageIntransaction(@RequestParam String msg,@RequestParam String topic) {
+    public void sendMessageIntransaction(@RequestParam String msg,@RequestParam String topic,@RequestParam String tag) {
         Message<String> message = MessageBuilder.withPayload(msg + " : " + atomicInteger.getAndAdd(1))
                /* .setHeader(RocketMQHeaders.TRANSACTION_ID, UUID.randomUUID().toString())
                 .setHeader(RocketMQHeaders.TAGS, "tag1")
