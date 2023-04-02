@@ -18,7 +18,8 @@ import java.util.Objects;
 
 @Component
 @Slf4j
-@RocketMQMessageListener(topic = "topicA", consumerGroup = "group2",consumeMode = ConsumeMode.ORDERLY)
+@RocketMQMessageListener(topic = "topicA", consumerGroup = "group2",maxReconsumeTimes = 3,
+        selectorExpression = "tag4 || tag5",consumeMode = ConsumeMode.ORDERLY)
 public class RocketOrderlyConsumer implements RocketMQListener<MessageExt> {
 
     @Override

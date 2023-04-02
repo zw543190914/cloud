@@ -15,8 +15,8 @@ import java.util.Objects;
 
 @Component
 @Slf4j
-@RocketMQMessageListener(topic = "topicB", consumerGroup = "group1",selectorExpression = "tag1 || tag2 || tag3",
-        consumeThreadMax = 8,consumeMode = ConsumeMode.CONCURRENTLY)
+@RocketMQMessageListener(topic = "topicA", consumerGroup = "group1",selectorExpression = "tag1 || tag2 || tag3",
+        consumeThreadNumber = 8,maxReconsumeTimes = 3,consumeMode = ConsumeMode.CONCURRENTLY)
 public class RocketConcurrentlyConsumer implements RocketMQListener<MessageExt> {
 
     @Override

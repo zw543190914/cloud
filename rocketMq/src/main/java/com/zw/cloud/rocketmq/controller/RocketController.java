@@ -33,7 +33,7 @@ public class RocketController {
 
     //发送消息
     @GetMapping("/sendMsg")
-    //http://localhost:9095/rocket/sendMsg?msg=zw&topic=topicB&tag=tag1
+    //http://localhost:9095/rocket/sendMsg?msg=zw&topic=topicA&tag=tag1
     public void sendMsg(@RequestParam String msg,@RequestParam String topic,@RequestParam String tag) throws Exception{
         topic = topic + ":" + tag;
         int count = 1;
@@ -41,7 +41,7 @@ public class RocketController {
             run = true;
         }
 //        while (run) {
-            for (int i = 0; i < 500; i++) {
+            for (int i = 0; i < 10; i++) {
 
                 Message<byte[]> message = MessageBuilder.withPayload((msg + count).getBytes(StandardCharsets.UTF_8)).build();
                 rocketMQTemplate.asyncSend(topic, message, new SendCallback() {
@@ -70,7 +70,7 @@ public class RocketController {
 
     //发送消息
     @GetMapping("/sendOneMsg")
-    //http://localhost:9095/rocket/sendOneMsg?msg=zw1&topic=topicB&tag=tag1
+    //http://localhost:9095/rocket/sendOneMsg?msg=zw1&topic=topicA&tag=tag5
     public void sendOneMsg(@RequestParam String msg,@RequestParam String topic,@RequestParam String tag) {
         Message<byte[]> message = MessageBuilder.withPayload(msg.getBytes(StandardCharsets.UTF_8)).build();
         rocketMQTemplate.asyncSend( topic + ":" + tag, message, new SendCallback() {
@@ -90,7 +90,7 @@ public class RocketController {
      * 1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h
      */
     @GetMapping("/sendDelayMsg")
-    //http://localhost:9095/rocket/sendDelayMsg?msg=zw&topic=topicB&tag=tag1
+    //http://localhost:9095/rocket/sendDelayMsg?msg=zw&topic=topicA&tag=tag1
     public void sendDelayMsg(@RequestParam String msg,@RequestParam String topic,@RequestParam String tag) {
         topic = topic + ":" + tag;
         Message<byte[]> message = MessageBuilder.withPayload(msg.getBytes(StandardCharsets.UTF_8)).build();

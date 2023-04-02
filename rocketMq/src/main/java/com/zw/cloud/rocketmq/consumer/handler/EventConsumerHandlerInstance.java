@@ -13,7 +13,7 @@ public class EventConsumerHandlerInstance extends ConsumerHandler{
     public void handleRocketMQMsg(String messageBody) {
         log.info("[EventConsumerHandlerInstance][handleRocketMQMsg] messageBody is {}",messageBody);
         // 有异常，阻塞后续消费
-        /* if (StringUtils.equals("5",messageBody)) {
+        /*if (StringUtils.equals("zw5",messageBody)) {
             throw new BizException("ex");
         }*/
         log.info("[EventConsumerHandlerInstance][handleRocketMQMsg] messageBody is {},end ",messageBody);
