@@ -46,8 +46,8 @@ public class BeanCopyTest {
         // Java 中只有值传递，是没有引用传递的
         // person1 和 person2 的互换只是拷贝的两个地址的互换罢了，并不会影响到实参 xiaoZhang 和 xiaoLi
         swap(xiaoZhang, xiaoLi);
-        System.out.println("xiaoZhang:" + xiaoZhang.getName()); // 小张
-        System.out.println("xiaoLi:" + xiaoLi.getName()); // 小李
+        System.out.println("person1:" + xiaoZhang.getName()); // 小张
+        System.out.println("person2:" + xiaoLi.getName()); // 小李
     }
 
     public static void testDeepCopy(){
@@ -71,10 +71,12 @@ public class BeanCopyTest {
 
 
     public static void swap(Person person1, Person person2) {
+        System.out.println(person1 + ":" + person2);
         Person temp = person1;
         person1 = person2;
         person2 = temp;
-        System.out.println("person1:" + person1.getName()); // 小李
-        System.out.println("person2:" + person2.getName()); // 小张
+        System.out.println(person1 + ":" + person2);
+        System.out.println("swap person1:" + person1.getName()); // 小李
+        System.out.println("swap person2:" + person2.getName()); // 小张
     }
 }

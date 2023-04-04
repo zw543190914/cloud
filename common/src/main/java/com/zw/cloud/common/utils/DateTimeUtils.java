@@ -78,6 +78,7 @@ public class DateTimeUtils {
         System.out.println(between1.toMinutes());
         System.out.println(Duration.between(instant.plusSeconds(60), now.atZone(ZoneId.systemDefault()).toInstant()).toMinutes());
 
+        between(LocalDateTime.parse("2023-04-03T18:47:00"),LocalDateTime.parse("2023-04-04T14:28:00"));
     }
 
     public static LocalDateTime dateToLocalDateTime(Date date) {
@@ -399,6 +400,7 @@ public class DateTimeUtils {
         long days = duration.toDays(); //相差的天数
         long hours = duration.toHours();//相差的小时数
         long minutes = duration.toMinutes();//相差的分钟数
+        System.out.println("between:" + minutes);
         long millis = duration.toMillis();//相差毫秒数
         long nanos = duration.toNanos();//相差的纳秒数
     }
