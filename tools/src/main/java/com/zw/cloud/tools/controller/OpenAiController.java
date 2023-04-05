@@ -15,19 +15,19 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/chatGPT")
 @Slf4j
-public class OpenAiCOntroller {
+public class OpenAiController {
 
     @NotNeedResponseAutoWrapper
-    //http://localhost:9040/chatGPT?text=true&prompt=java 冒泡排序
+    //http://localhost:9040/chatGPT?text=true&prompt=
     public List<CompletionChoice> getAiResult(@RequestParam boolean text,@RequestParam String prompt) {
         return OpenAiUtils.getAiResult(text,prompt);
     }
 
     @GetMapping("/chat")
-    //http://localhost:9040/chat/sendByDingTalk?msg=java 冒泡排序
+    //http://localhost:9040/chatGPT/chat?msg=java
     public String chat(@RequestParam String msg){
         List<CompletionChoice> aiResultList = OpenAiUtils.getAiResult(true, msg);
-        log.info("[OpenAiCOntroller][sendByDingTalk]aiResultList is {}", JSON.toJSON(aiResultList));
+        log.info("[OpenAiController][sendByDingTalk]aiResultList is {}", JSON.toJSON(aiResultList));
         String result = aiResultList.stream().map(CompletionChoice::getText).collect(Collectors.joining("<\br>"));
         result = result.replaceAll("\\n\n", "<br>");
         return result.replaceAll("\\n","<br>");
