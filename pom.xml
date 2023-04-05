@@ -132,6 +132,7 @@
         <metadata-extractor.version>2.18.0</metadata-extractor.version>
         <screw.version>1.0.5</screw.version>
         <rocketmq.version>2.2.2</rocketmq.version>
+        <zip4j.version>2.11.5</zip4j.version>
     </properties>
 
     <dependencyManagement>
@@ -662,6 +663,13 @@
                 <groupId>com.drewnoakes</groupId>
                 <artifactId>metadata-extractor</artifactId>
                 <version>${metadata-extractor.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/net.lingala.zip4j/zip4j -->
+            <dependency>
+                <groupId>net.lingala.zip4j</groupId>
+                <artifactId>zip4j</artifactId>
+                <version>${zip4j.version}</version>
             </dependency>
 
         </dependencies>
