@@ -18,11 +18,10 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class KafkaConsumerService {
 
-    @KafkaListener(topics = {"topic1"},groupId = "group01",id = "group1")
+    @KafkaListener(topics = {"topic1","gemi_device_upstream_dyeing"},groupId = "group01",idIsGroup = false)
     public void onMessage(ConsumerRecord<?, ?> record) throws InterruptedException {
         // 消费的哪个topic、partition的消息,打印出消息内容
-        log.info("[KafkaConsumerService][onMessage] thread is {},partition is {},msg is {}",Thread.currentThread().getName(),record.partition(),record.value());
-        ProductRecord productRecord = buildProductRecord();
+        log.info("[KafkaConsumerService][onMessage] thread is {},topic is {},partition is {},msg is {}",Thread.currentThread().getName(),record.topic(),record.partition(),record.value());
 
         //TimeUnit.MILLISECONDS.sleep(50);
 
