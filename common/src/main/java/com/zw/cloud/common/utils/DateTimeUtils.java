@@ -79,6 +79,8 @@ public class DateTimeUtils {
         System.out.println(Duration.between(instant.plusSeconds(60), now.atZone(ZoneId.systemDefault()).toInstant()).toMinutes());
 
         between(LocalDateTime.parse("2023-04-03T18:47:00"),LocalDateTime.parse("2023-04-04T14:28:00"));
+        System.out.println("zero:" + transferTimeToZero(LocalDateTime.now()));
+
     }
 
     public static LocalDateTime dateToLocalDateTime(Date date) {
@@ -403,6 +405,11 @@ public class DateTimeUtils {
         System.out.println("between:" + minutes);
         long millis = duration.toMillis();//相差毫秒数
         long nanos = duration.toNanos();//相差的纳秒数
+    }
+
+    public static LocalDateTime transferTimeToZero(LocalDateTime localDateTime) {
+        return LocalDateTime.of(localDateTime.getYear(), localDateTime.getMonth(), localDateTime.getDayOfMonth(), 0, 0, 0);
+        //return localDateTime.withHour(0).withMinute(0).withSecond(0).withNano(0);
     }
 
 }
