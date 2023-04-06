@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -107,7 +108,7 @@ public class KafkaProductController {
                 "                \"ptQuantityFu\":\"\"\n" +
                 "            }\n" +
                 "        ],\n" +
-                "        \"msgId\":\"dec30415bc2f499abc9443b9b0958a28\",\n" +
+                "        \"msgId\":\"" + UUID.randomUUID().toString() + "\",\n" +
                 "        \"msgType\":\"work_report\",\n" +
                 "        \"orgCode\":\"3983D94F788342E1B0D8F52EA890D8E8\",\n" +
                 "        \"subTopic\":\"/up/stenter/erp\",\n" +

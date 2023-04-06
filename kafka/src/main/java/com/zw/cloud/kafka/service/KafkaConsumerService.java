@@ -7,8 +7,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Objects;
 
 /**
  * @author zhengwei
@@ -21,8 +20,12 @@ public class KafkaConsumerService {
     @KafkaListener(topics = {"topic1","gemi_device_upstream_dyeing"},groupId = "group01",idIsGroup = false)
     public void onMessage(ConsumerRecord<?, ?> record) throws InterruptedException {
         // 消费的哪个topic、partition的消息,打印出消息内容
-        log.info("[KafkaConsumerService][onMessage] thread is {},topic is {},partition is {},msg is {}",Thread.currentThread().getName(),record.topic(),record.partition(),record.value());
-
+        Object value = record.value();
+        log.info("[KafkaConsumerService][onMessage] thread is {},topic is {},partition is {},msg is {}",Thread.currentThread().getName(),record.topic(),record.partition(), value);
+        if (Objects.isNull(value)) {
+            return;
+        }
+        String message = value.toString();
         //TimeUnit.MILLISECONDS.sleep(50);
 
     }
