@@ -1,4 +1,4 @@
-package com.zw.cloud.common.utils;
+package com.zw.cloud.common.utils.file;
 
 import java.io.*;
 import java.net.HttpURLConnection;

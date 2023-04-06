@@ -1,7 +1,7 @@
 package com.zw.cloud.tools.controller.html;
 
 import com.zw.cloud.common.entity.vo.ImgAttachmentVO;
-import com.zw.cloud.common.utils.FileUtils;
+import com.zw.cloud.common.utils.file.FileUtils;
 import com.zw.cloud.common.utils.bean.BeanUtils;
 import com.zw.cloud.common.utils.selenium.BaiduImgSeleniumHtmlUtils;
 import com.zw.cloud.tools.entity.img.ImgAttachment;
