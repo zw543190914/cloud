@@ -2,6 +2,7 @@ package com.zw.cloud.tools.utils.reflect;
 
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.json.JSONUtil;
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -46,6 +47,14 @@ public class ReflectUtils {
                 continue;
             }
             field.setAccessible(true);
+            // 获取字段上的注解
+            ExcelProperty annotation = field.getAnnotation(ExcelProperty.class);
+            if (Objects.nonNull(annotation)) {
+                String[] value = annotation.value();
+                if (value.length > 0) {
+                    System.out.println("ExcelProperty:" + value[0]);
+                }
+            }
             System.out.println("field:" + field.getName());
             PropertyDescriptor propertyDescriptor = new PropertyDescriptor(field.getName(),userClass);
             // get 方法
