@@ -95,7 +95,7 @@
         <commons-codec.version>1.14</commons-codec.version>
         <commons-pool2.version>2.11.1</commons-pool2.version>
         <shiro-redis.version>3.0.0</shiro-redis.version>
-        <redisson.version>3.18.1</redisson.version>
+        <redisson.version>3.17.7</redisson.version>
         <redis.version>3.0.2</redis.version>
         <poi.version>4.1.2</poi.version>
         <easyexcel.version>3.0.5</easyexcel.version>
@@ -407,6 +407,12 @@
             <dependency>
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.redisson/redisson -->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
                 <version>${redisson.version}</version>
             </dependency>
 

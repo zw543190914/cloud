@@ -43,7 +43,7 @@ public class RedisController {
     }
 
     @GetMapping("/sortedSet")
-    //http://localhost:18092/redis
+    //http://localhost:18092/redis/sortedSet
     public Set sortedSet(){
         for (int i = 0; i < 5; i++) {
             redisTemplate.opsForZSet().remove("zw", i);
@@ -57,7 +57,10 @@ public class RedisController {
             System.out.println(k.getValue());
             System.out.println(JSON.toJSONString(k));
         });
-
+        Set zw1 = redisTemplate.opsForZSet().rangeByScore("zw", 3, 5);
+        zw1.forEach(k -> {
+            System.out.println(JSON.toJSONString(k));
+        });
         return zw;
     }
 
