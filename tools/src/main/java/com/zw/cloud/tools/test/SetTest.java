@@ -16,8 +16,9 @@ public class SetTest {
         HashSet<Integer> set1 = Sets.newHashSet(1, 2, 3,5);
         HashSet<Integer> set2 = Sets.newHashSet( 2, 3,4);
         Set<Integer> difference = Sets.difference(set1, set2);
-        System.out.println(difference.toString());
-        System.out.println(Sets.intersection(set1, set2).toString());
+        System.out.println("difference" + difference.toString());
+        System.out.println("symmetricDifference" + Sets.symmetricDifference(set1, set2));
+        System.out.println("intersection" + Sets.intersection(set1, set2).toString());
         ArrayList<Integer> list = Lists.newArrayList();
         Integer sum = list.stream().reduce(null,Integer::sum);
         System.out.println(sum);
