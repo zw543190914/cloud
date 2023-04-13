@@ -4,8 +4,10 @@ import com.google.common.base.Splitter;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class LoadingCacheTest {
@@ -24,10 +26,17 @@ public class LoadingCacheTest {
             });
 
     public static void main(String[] args) throws Exception{
-       /* while (true) {
-            queryNum(1);
+        while (true) {
+            try {
+                queryNum(1);
+                // 返回 null 抛出InvalidCacheLoadException,后面需要查询db
+                queryNum(0);
+            } catch (CacheLoader.InvalidCacheLoadException e) {
+
+            }
+
             Thread.sleep(3000);
-        }*/
+        }
 
        /* String str = "1-2-3-4-  5-  6   - 9  1";
         List<String> list = Splitter.on("-").omitEmptyStrings().trimResults().splitToList(str);
@@ -36,11 +45,15 @@ public class LoadingCacheTest {
     }
 
     public static void queryNum(Integer key) throws Exception{
-        System.out.println(numCache.get(key));
+        numCache.get(key);
     }
 
     private static Integer queryFromDB(Integer key){
-        System.out.println("db");
+        if (Objects.equals(0,key)) {
+            System.out.println(key + " db");
+            return null;
+        }
+        System.out.println(key + " db");
         return key;
     }
 }
