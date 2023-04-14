@@ -104,9 +104,9 @@ public class WebSocketClient {
             });
 
             url = String
-                    .format("%s://%s%s?userId=%s", webSocketConfigDTO.getWsProtocol(), addr,
+                    .format("%s://%s%s?username=%s&password=%s", webSocketConfigDTO.getWsProtocol(), addr,
                             webSocketConfigDTO.getWsPath(),
-                            webSocketConfigDTO.getUserId());
+                            webSocketConfigDTO.getUserId(),webSocketConfigDTO.getUserId());
             URI websocketURI = new URI(url);
             // //根据升级协议，获取http请求头sec-websocket-version获取客户端支持版本
              //根据版本创建不同版本握手对象
@@ -157,7 +157,7 @@ public class WebSocketClient {
                         connnetFailureCountNum = 0;
                     } else {
                         connnetFailureCountNum++;
-                        log.warn("[WebSocketClient][sendMsg] 发送消息失败={},connnetFailureCountNum is {} ", channelFuture1.cause().getMessage(),connnetFailureCountNum);
+                        log.warn("[WebSocketClient][sendMsg] 发送消息失败,nettyMsgDTO is {},connnetFailureCountNum is {},error is",JSON.toJSONString(nettyMsgDTO),connnetFailureCountNum,channelFuture1.cause());
                     }
                 } catch (Exception e) {
                     log.error("[WebSocketClient][sendMsg] 发送消息异常", e);

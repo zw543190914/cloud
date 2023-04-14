@@ -189,6 +189,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         // 心跳消息
         if (Objects.equals(EnumNettyMsgTag.HEART.getType(),tag)) {
             log.info("[ServerHandler][channelRead][sendTextMessage] heart msg,userId is {},nettyMsgDTO is {}", userId, JSON.toJSONString(nettyMsgDTO));
+            if (StringUtils.equals("netty-client",userId)) {
+                return;
+            }
             //boolean needSendHeart = true;
             // 校验token 是否过期
             String token = nettyMsgDTO.getData();
@@ -303,6 +306,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         }
         if (StringUtils.isNotBlank(targetGroupId)) {
             // TODO 群消息
+
             return;
         }
         // 全部发送

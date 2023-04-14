@@ -80,11 +80,15 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
             if (nettyMsgDTO == null) {
                 return;
             }
-            if (EnumNettyMsgTag.allKeys().contains(nettyMsgDTO.getTag())) {
+            if (EnumNettyMsgTag.CONNECT.getType().equals(nettyMsgDTO.getTag())
+                    || EnumNettyMsgTag.HEART.getType().equals(nettyMsgDTO.getTag())
+                    || EnumNettyMsgTag.CLOSE_WS.getType().equals(nettyMsgDTO.getTag())) {
                 //处理客户端上线、下线等存活问题，维护存活的客户端节点列表
                 NettyActiveMsgUtil.dealClientActive(nettyMsgDTO, webSocketClient);
+                return;
             }
-
+            // 处理消息
+            log.info("[WebSocketClientHandler][channelRead0] msg is {}", msgJson);
 
         } else if (msg instanceof BinaryWebSocketFrame) {
             ByteBuf content = ((BinaryWebSocketFrame) msg).content();
@@ -96,8 +100,13 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
     }
 
     @Override
+    public void channelInactive(ChannelHandlerContext ctx) {
+        log.warn("[WebSocketClientHandler][channelInactive] 与服务端断开连接");
+    }
+
+    @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        cause.printStackTrace();
+        log.warn("[WebSocketClientHandler][exceptionCaught]cause is ", cause);
         ctx.close();
     }
 }

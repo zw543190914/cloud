@@ -31,7 +31,7 @@ websocket:
     backLog: 1024
     #webSocket 传输最大数据量(不常改)
     data-max-length: 65536000
-    user-id: 001
+    user-id: netty-client
     task:
       # 心跳
       heart-listen-cron: "0 */2 * * * ?"
