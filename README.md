@@ -9,7 +9,7 @@
   7. 熔断、降级、限流 使用 Sentinel 代替 Hystrix 更加灵活，代码侵入性更低。参考 sentinel 相关模块 </br>
   8. 分布式链路追踪 Zipkin ,参考 feign 相关模块。 </br>
   9. 分布式链路监控与追踪系统使用 Zipkin。参考 feign-provider </br>
-  10. 分布式任务调度使用 xxl-job(客户端)，xxl-job-server 为服务端。参考xxl-job，xxl-job-server 模块 </br>
+  10. 分布式任务调度使用 xxl-job(客户端)，xxl-job-admin 为服务端。参考xxl-job，xxl-job-admin 模块 </br>
   11. sso单点登录使用 xxl-sso(客户端)，xxl-sso-server 为服务端。参考xxl-sso,xxl-sso-server 模块 </br>
   12. 分布式锁 zookeeper(ZkInterProcessMutex,LeaderLatch)。参考 feign-provider 模块。
   13. activiti工作流引擎使用整合。参考 activiti 模块。  </br>
@@ -18,7 +18,7 @@
   16. 整合 shiro 进行权限控制，缓存使用 ehcache(单机) 或者 redis(微服务) 。参考 shiro 模块 </br>
   17. elasticsearch 整合，工具类封装，数据来源为Jsoup获取网页数据。 参考 elasticsearch 模块。 </br>
   18. shop 商品模块，主要添加秒杀相关。
-  19. mybatis-plus整合,sharding-jdbc分表,mybatis-plus generate 代码生成，参考 mybatis-plus 模块。</br>
+  19. mybatis-plus整合,sharding-jdbc分表,mybatis-plus generate 代码生成,事务传播机制&MVCC测试，参考 mybatis-plus 模块。</br>
   20. websocket 、 netty(netty-server)、 netty-client, 参考对应模块。</br>
   21. redis 分布式锁，幂等控制，参考 netty(netty-server) 模块。</br>
   22. MQ整合 rocketMq、rabbitMq、kafka. rocketMQ 使用策略模式进行消息消费</br>
