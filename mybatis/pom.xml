@@ -60,12 +60,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.zw.cloud</groupId>
-            <artifactId>logging</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
     </dependencies>
 
     <build>
