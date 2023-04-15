@@ -34,7 +34,7 @@ public class XxlJobConfig {
     @Value("${xxl.job.executor.port}")
     private int port;
 
-    @Value("${xxl.job.executor.logpath}")
+    @Value("${logging.file.path}")
     private String logPath;
 
     @Value("${xxl.job.executor.logretentiondays}")

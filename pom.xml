@@ -36,7 +36,7 @@
         <module>tools</module>
         <module>xxl-sso</module>
         <module>xxl-sso-server</module>
-        <module>xxl-job-server</module>
+        <module>xxl-job-admin</module>
         <module>elasticsearch</module>
         <module>shop</module>
         <module>spring-security</module>
@@ -69,6 +69,7 @@
 <!--        <alibaba.spring-context-support.version>1.0.6</alibaba.spring-context-support.version>-->
         <mybatis-spring-boot-starter.version>2.2.2</mybatis-spring-boot-starter.version>
         <pagehelper-spring-boot-starter.version>1.2.13</pagehelper-spring-boot-starter.version>
+        <mysql-connector-j.version>8.0.32</mysql-connector-j.version>
         <logback.version>1.2.0</logback.version>
         <slf4j.version>1.7.21</slf4j.version>
         <zing-core.version>3.3.0</zing-core.version>
@@ -107,7 +108,7 @@
         <aliyun-java-sdk-core.version>4.1.1</aliyun-java-sdk-core.version>
         <ST4.version>4.3.1</ST4.version>
         <xxl-sso-core.version>1.1.0</xxl-sso-core.version>
-        <xxl-job-core.version>2.2.0</xxl-job-core.version>
+        <xxl-job-core.version>2.4.0</xxl-job-core.version>
         <webcam-capture.version>0.3.12</webcam-capture.version>
         <webmagic.version>0.7.6</webmagic.version>
         <swagger.version>2.10.5</swagger.version>
@@ -217,6 +218,12 @@
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis-spring-boot-starter.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
+            <dependency>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
+                <version>${mysql-connector-j.version}</version>
             </dependency>
 
             <!-- https://mvnrepository.com/artifact/com.alibaba.csp/sentinel-apache-dubbo-adapter -->

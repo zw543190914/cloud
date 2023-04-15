@@ -1,9 +1,8 @@
 package com.zw.cloud.xxljob.service;
 
 import com.xxl.job.core.biz.model.ReturnT;
-import com.xxl.job.core.handler.IJobHandler;
+import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
-import com.xxl.job.core.util.ShardingUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -56,22 +55,23 @@ public class SampleXxlJob {
      * 2、分片广播任务
      */
     @XxlJob("shardingJobHandler")
-    public ReturnT<String> shardingJobHandler(String param) throws Exception {
+    public void shardingJobHandler() throws Exception {
 
         // 分片参数
-        ShardingUtil.ShardingVO shardingVO = ShardingUtil.getShardingVo();
-        log.info("分片参数：当前分片序号 = {}, 总分片数 = {}", shardingVO.getIndex(), shardingVO.getTotal());
+        int shardIndex = XxlJobHelper.getShardIndex();
+        int shardTotal = XxlJobHelper.getShardTotal();
+
+        XxlJobHelper.log("分片参数：当前分片序号 = {}, 总分片数 = {}", shardIndex, shardTotal);
 
         // 业务逻辑
-        for (int i = 0; i < shardingVO.getTotal(); i++) {
-            if (i == shardingVO.getIndex()) {
-                log.info("第 {} 片, 命中分片开始处理", i);
+        for (int i = 0; i < shardTotal; i++) {
+            if (i == shardIndex) {
+                XxlJobHelper.log("第 {} 片, 命中分片开始处理", i);
             } else {
-                log.info("第 {} 片, 忽略", i);
+                XxlJobHelper.log("第 {} 片, 忽略", i);
             }
         }
 
-        return ReturnT.SUCCESS;
     }
 
 
@@ -79,28 +79,34 @@ public class SampleXxlJob {
      * 3、命令行任务
      */
     @XxlJob("commandJobHandler")
-    public ReturnT<String> commandJobHandler(String param) throws Exception {
-        String command = param;
+    public void commandJobHandler() throws Exception {
+        String command = XxlJobHelper.getJobParam();
         int exitValue = -1;
 
         BufferedReader bufferedReader = null;
         try {
             // command process
-            Process process = Runtime.getRuntime().exec(command);
+            ProcessBuilder processBuilder = new ProcessBuilder();
+            processBuilder.command(command);
+            processBuilder.redirectErrorStream(true);
+
+            Process process = processBuilder.start();
+            //Process process = Runtime.getRuntime().exec(command);
+
             BufferedInputStream bufferedInputStream = new BufferedInputStream(process.getInputStream());
             bufferedReader = new BufferedReader(new InputStreamReader(bufferedInputStream));
 
             // command log
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                log.info(line);
+                XxlJobHelper.log(line);
             }
 
             // command exit
             process.waitFor();
             exitValue = process.exitValue();
         } catch (Exception e) {
-            log.error("commandJobHandler error is ",e);
+            XxlJobHelper.log(e);
         } finally {
             if (bufferedReader != null) {
                 bufferedReader.close();
@@ -108,10 +114,11 @@ public class SampleXxlJob {
         }
 
         if (exitValue == 0) {
-            return IJobHandler.SUCCESS;
+            // default success
         } else {
-            return new ReturnT<String>(IJobHandler.FAIL.getCode(), "command exit value("+exitValue+") is failed");
+            XxlJobHelper.handleFail("command exit value("+exitValue+") is failed");
         }
+
     }
 
 
@@ -123,13 +130,17 @@ public class SampleXxlJob {
      *      "data: content\n";
      */
     @XxlJob("httpJobHandler")
-    public ReturnT<String> httpJobHandler(String param) throws Exception {
+    public void httpJobHandler() throws Exception {
 
         // param parse
+        String param = XxlJobHelper.getJobParam();
         if (param==null || param.trim().length()==0) {
-            log.info("param["+ param +"] invalid.");
-            return ReturnT.FAIL;
+            XxlJobHelper.log("param["+ param +"] invalid.");
+
+            XxlJobHelper.handleFail();
+            return;
         }
+
         String[] httpParams = param.split("\n");
         String url = null;
         String method = null;
@@ -148,13 +159,18 @@ public class SampleXxlJob {
 
         // param valid
         if (url==null || url.trim().length()==0) {
-            log.info("url["+ url +"] invalid.");
-            return ReturnT.FAIL;
+            XxlJobHelper.log("url["+ url +"] invalid.");
+
+            XxlJobHelper.handleFail();
+            return;
         }
         if (method==null || !Arrays.asList("GET", "POST").contains(method)) {
-            log.info("method["+ method +"] invalid.");
-            return ReturnT.FAIL;
+            XxlJobHelper.log("method["+ method +"] invalid.");
+
+            XxlJobHelper.handleFail();
+            return;
         }
+        boolean isPostMethod = method.equals("POST");
 
         // request
         HttpURLConnection connection = null;
@@ -166,7 +182,7 @@ public class SampleXxlJob {
 
             // connection setting
             connection.setRequestMethod(method);
-            connection.setDoOutput(true);
+            connection.setDoOutput(isPostMethod);
             connection.setDoInput(true);
             connection.setUseCaches(false);
             connection.setReadTimeout(5 * 1000);
@@ -179,7 +195,7 @@ public class SampleXxlJob {
             connection.connect();
 
             // data
-            if (data!=null && data.trim().length()>0) {
+            if (isPostMethod && data!=null && data.trim().length()>0) {
                 DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
                 dataOutputStream.write(data.getBytes("UTF-8"));
                 dataOutputStream.flush();
@@ -201,11 +217,14 @@ public class SampleXxlJob {
             }
             String responseMsg = result.toString();
 
-            log.info(responseMsg);
-            return ReturnT.SUCCESS;
+            XxlJobHelper.log(responseMsg);
+
+            return;
         } catch (Exception e) {
-            log.error("httpJobHandler error is ",e);
-            return ReturnT.FAIL;
+            XxlJobHelper.log(e);
+
+            XxlJobHelper.handleFail();
+            return;
         } finally {
             try {
                 if (bufferedReader != null) {
@@ -215,7 +234,7 @@ public class SampleXxlJob {
                     connection.disconnect();
                 }
             } catch (Exception e2) {
-                log.error("httpJobHandler error is ",e2);
+                XxlJobHelper.log(e2);
             }
         }
 
@@ -225,16 +244,16 @@ public class SampleXxlJob {
      * 5、生命周期任务示例：任务初始化与销毁时，支持自定义相关逻辑；
      */
     @XxlJob(value = "demoJobHandler2", init = "init", destroy = "destroy")
-    public ReturnT<String> demoJobHandler2(String param) throws Exception {
-        log.info("XXL-JOB, Hello World.");
-        return ReturnT.SUCCESS;
+    public void demoJobHandler2() throws Exception {
+        XxlJobHelper.log("XXL-JOB, Hello World.");
     }
     public void init(){
         log.info("init");
     }
     public void destroy(){
-        log.info("destory");
+        log.info("destroy");
     }
+
 
 
 }
