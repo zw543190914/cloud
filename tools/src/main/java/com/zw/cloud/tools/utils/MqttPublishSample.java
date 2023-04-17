@@ -1,5 +1,6 @@
 package com.zw.cloud.tools.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -14,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 /**
  *发布端
  */
+@Slf4j
 public class MqttPublishSample {
     public static void main(String[] args) throws Exception{
 
@@ -26,7 +28,7 @@ public class MqttPublishSample {
         String clientId = "subscribe_test_device01";
         // qa
         // 定型机#02
-        /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+       /* String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|qa_test_device_stenter_02|0|MD5";
         String password = "3509803995f1748b7d4c5f1ad9dfb615";
         String topic = "d/qa_test_device_stenter_02/report";
@@ -100,15 +102,9 @@ public class MqttPublishSample {
                 sampleClient.publish(topic, message);
 
             } catch (MqttException me) {
-                System.out.println("reason " + me.getReasonCode());
-                System.out.println("msg " + me.getMessage());
-                System.out.println("loc " + me.getLocalizedMessage());
-                System.out.println("cause " + me.getCause());
-                System.out.println("excep " + me);
-                me.printStackTrace();
+                log.error("sampleClient.publish error is ",me);
             }
-            System.out.println("finish " + second);
-            //System.out.println(content);
+            log.error("sampleClient.publish finish {}",second);
             TimeUnit.SECONDS.sleep(30);
         }
         // 断开连接
@@ -205,6 +201,7 @@ public class MqttPublishSample {
                 "    \"d80\": " + actValue +",\n" +
                 "    \"d81\": " + setValue +",\n" +
                 "    \"d82\": " + actValue +",\n" +
+                // 排风设定转速百分比1
                 "    \"d83\": " + 80 +",\n" +
                 "    \"d84\": " + 80 +",\n" +
                 "    \"d85\": " + 80 +",\n" +
@@ -223,8 +220,10 @@ public class MqttPublishSample {
                 "    \"d98\": " + 80 +",\n" +
                 "    \"d99\": " + 80 +",\n" +
                 "    \"d100\": " + 80 +",\n" +
+                // 循环风设定转速百分比12
                 "    \"d101\": " + 80 +", \n" +
-                "    \"d150\": " + 60 +",\n" +
+                // 协议版本号（固定为1.6）
+                "    \"d150\": " + 1.6 +",\n" +
                 "    \"d400\": " + setValue +",\n" +
                 "    \"d401\": " + actValue +",\n" +
                 "    \"d500\": " + actValue +",\n" +
@@ -263,7 +262,7 @@ public class MqttPublishSample {
                 "    \"d627\": " + 120 +",\n" +
                 "    \"d628\": " + setValue +",\n" +
                 // 门幅12实际
-                //"    \"d629\": " + 110 +",\n" +
+                "    \"d629\": " + 110 +",\n" +
                 "    \"d700\": " + actValue +",\n" +
                 "    \"d701\": " + actValue +",\n" +
                 "    \"d702\": " + actValue +",\n" +
