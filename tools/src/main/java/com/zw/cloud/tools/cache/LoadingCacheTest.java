@@ -1,13 +1,10 @@
 package com.zw.cloud.tools.cache;
 
-import com.google.common.base.Splitter;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 public class LoadingCacheTest {
@@ -20,20 +17,19 @@ public class LoadingCacheTest {
             maximumSize(100).
             build(new CacheLoader<Integer, Integer>() {
                 @Override
-                public Integer load(Integer key) throws Exception {
+                public Integer load(Integer key) {
+                    System.out.println(key + " db");
+                    // 结果返回为空 会抛出InvalidCacheLoadException,后续查询会继续查询数据库,只有缓存中有值才会走缓存
                     return queryFromDB(key);
                 }
             });
 
     public static void main(String[] args) throws Exception{
         while (true) {
-            try {
-                queryNum(1);
-                // 返回 null 抛出InvalidCacheLoadException,后面需要查询db
-                queryNum(0);
-            } catch (CacheLoader.InvalidCacheLoadException e) {
 
-            }
+            queryNum(1);
+            // 返回 null 抛出InvalidCacheLoadException,后面需要查询db
+            queryNum(0);
 
             Thread.sleep(3000);
         }
@@ -44,16 +40,19 @@ public class LoadingCacheTest {
 
     }
 
-    public static void queryNum(Integer key) throws Exception{
-        numCache.get(key);
+    public static Integer queryNum(Integer key) {
+        try {
+            return numCache.get(key);
+        } catch (CacheLoader.InvalidCacheLoadException | ExecutionException e) {
+            //e.printStackTrace();
+        }
+        return null;
     }
 
     private static Integer queryFromDB(Integer key){
         if (Objects.equals(0,key)) {
-            System.out.println(key + " db");
             return null;
         }
-        System.out.println(key + " db");
         return key;
     }
 }
