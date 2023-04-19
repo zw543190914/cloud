@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
+import com.zw.cloud.common.exception.BizException;
 import com.zw.cloud.mybatis.plus.entity.UserInfo;
 import com.zw.cloud.mybatis.plus.entity.UserRole;
 import com.zw.cloud.mybatis.plus.mapper.UserInfoMapper;
@@ -17,8 +18,11 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -41,6 +45,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     private IUserRoleService userRoleService;
     @Autowired
     private DataSource dataSource;
+    @Autowired
+    private PlatformTransactionManager transactionManager;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -131,6 +137,29 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     public void batchInsertByMapper(List<UserInfo> userInfoList) {
         baseMapper.batchInsertByMapper(userInfoList);
+    }
+
+    /**
+     * 异步中编程式事务测试
+     */
+    @Override
+    public void asynUpdate(Long id) {
+        new Thread(() -> {
+            TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
+            try {
+                UserInfo userInfo = new UserInfo();
+                userInfo.setId(id);
+                userInfo.setName("asynUpdate");
+                baseMapper.updateById(userInfo);
+                if (id == 1) {
+                    throw new BizException("asynUpdate");
+                }
+                transactionManager.commit(status);
+            } catch (Exception e) {
+                transactionManager.rollback(status);
+            }
+        }).start();
+
     }
 
     @Override

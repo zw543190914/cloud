@@ -62,6 +62,15 @@ public class UserInfoController {
 
     }
 
+    /**
+     * 异步中编程式事务测试
+     */
+    @GetMapping("/asynUpdate/{id}")
+    //http://localhost:8082/user-info/asynUpdate/1
+    public void asynUpdate(@PathVariable Long id) {
+        userService.asynUpdate(id);
+    }
+
     @GetMapping("/insertWithJson")
     @Transactional
     //http://localhost:8082/user-info/insertWithJson

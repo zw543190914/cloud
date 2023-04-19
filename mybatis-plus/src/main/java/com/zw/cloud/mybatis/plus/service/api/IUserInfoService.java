@@ -20,6 +20,11 @@ public interface IUserInfoService extends IService<UserInfo> {
 
     void batchInsertByMapper(List<UserInfo> userInfoList);
 
+    /**
+     * 异步中编程式事务测试
+     */
+    void asynUpdate(Long id);
+
     void batchUpdateUserListByMapper(List<UserInfo> userInfoList);
 
     void batchUpdateUserList(List<UserInfo> userInfoList);
