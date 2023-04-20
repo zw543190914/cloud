@@ -145,7 +145,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     public void asynUpdate(Long id) {
         new Thread(() -> {
-            TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
+            DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
+            // ISOLATION_READ_COMMITTED
+            defaultTransactionDefinition.setIsolationLevel(2);
+            TransactionStatus status = transactionManager.getTransaction(defaultTransactionDefinition);
             try {
                 UserInfo userInfo = new UserInfo();
                 userInfo.setId(id);

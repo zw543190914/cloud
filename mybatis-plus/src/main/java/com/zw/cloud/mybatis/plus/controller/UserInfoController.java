@@ -79,14 +79,20 @@ public class UserInfoController {
     /**
      * 异步中编程式事务测试
      */
-    @GetMapping("/asynTest")
-    //http://localhost:8082/user-info/asynTest
-    public void asynTest() {
+    @GetMapping("/asynTest/{rollback}")
+    //http://localhost:8082/user-info/asynTest/true
+    public void asynTest(@PathVariable boolean rollback) {
         new Thread(() -> {
-            TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
+            DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
+            // ISOLATION_READ_COMMITTED
+            defaultTransactionDefinition.setIsolationLevel(2);
+            TransactionStatus status = transactionManager.getTransaction(defaultTransactionDefinition);
             try {
                 userService.testBatchInsertByMapper(buildData());
-                throw new BizException("asynTest");
+                if (rollback) {
+                    throw new BizException("asynTest");
+                }
+                transactionManager.commit(status);
             } catch (BizException e) {
                 transactionManager.rollback(status);
             }
