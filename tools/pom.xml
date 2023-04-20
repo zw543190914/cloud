@@ -253,7 +253,6 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-inline</artifactId>
-            <version>3.11.2</version>
             <scope>test</scope>
         </dependency>
         <!-- ====mock静态方法 start=====-->
