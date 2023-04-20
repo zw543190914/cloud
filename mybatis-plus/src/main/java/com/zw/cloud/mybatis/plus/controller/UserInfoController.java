@@ -15,7 +15,10 @@ import com.zw.cloud.mybatis.plus.service.api.IUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -33,6 +36,8 @@ public class UserInfoController {
     private IUserInfoService userService;
     @Autowired
     private UserInfoMapper mapper;
+    @Autowired
+    private PlatformTransactionManager transactionManager;
 
     @GetMapping("/testBatchInsertJdbc")
     //http://localhost:8082/user-info/testBatchInsertJdbc
@@ -69,6 +74,24 @@ public class UserInfoController {
     //http://localhost:8082/user-info/asynUpdate/1
     public void asynUpdate(@PathVariable Long id) {
         userService.asynUpdate(id);
+    }
+
+    /**
+     * 异步中编程式事务测试
+     */
+    @GetMapping("/asynTest")
+    //http://localhost:8082/user-info/asynTest
+    public void asynTest() {
+        new Thread(() -> {
+            TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
+            try {
+                userService.testBatchInsertByMapper(buildData());
+                throw new BizException("asynTest");
+            } catch (BizException e) {
+                transactionManager.rollback(status);
+            }
+        }).start();
+
     }
 
     @GetMapping("/insertWithJson")
@@ -319,7 +342,7 @@ public class UserInfoController {
         user.setAge(11);
         UserInfo user2 = new UserInfo();
         //user2.setId(1438688954489552898L);
-        user2.setName("zzzz");
+        user2.setName("zzzz2");
         user2.setAge(11);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("2222","name11");
