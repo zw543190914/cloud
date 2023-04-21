@@ -29,7 +29,9 @@ public class UserInfoControllerTest {
 
     @Test
     void pageQuery(){
-        Assertions.assertDoesNotThrow(() -> userInfoController.pageQuery("zw"));
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(1L).setAge(12);
+        Assertions.assertDoesNotThrow(() -> userInfoController.pageQuery(userInfo));
     }
 
 }

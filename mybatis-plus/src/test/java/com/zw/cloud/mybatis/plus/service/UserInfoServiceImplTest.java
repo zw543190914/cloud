@@ -1,20 +1,18 @@
 package com.zw.cloud.mybatis.plus.service;
 
-import com.baomidou.mybatisplus.core.MybatisConfiguration;
-import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.google.common.collect.Lists;
-import com.zw.cloud.mybatis.plus.entity.UserInfo;
 import com.zw.cloud.mybatis.plus.mapper.UserInfoMapper;
 import com.zw.cloud.mybatis.plus.service.impl.UserInfoServiceImpl;
-import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.transaction.PlatformTransactionManager;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,6 +23,10 @@ public class UserInfoServiceImplTest {
     UserInfoServiceImpl userInfoService;
     @Mock
     private UserInfoMapper baseMapper;
+    @Mock
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+    @Mock
+    private PlatformTransactionManager transactionManager;
 
     @BeforeEach
     void before() {
@@ -38,5 +40,27 @@ public class UserInfoServiceImplTest {
             Assertions.assertDoesNotThrow(() -> userInfoService.testBatchInsertByMybatisPlus(Lists.newArrayList()));
         }
 
+       /* try (MockedStatic<MybatisPlusUtil> mybatisPlusUtil = mockStatic(MybatisPlusUtil.class)) {
+            mybatisPlusUtil.when(() -> MybatisPlusUtil.toPageInfo(any(), (Class<GeneralProductRecord>) any())).thenReturn(pageInfo);
+            mybatisPlusUtil.when(() -> MybatisPlusUtil.wrapperFrom(any(), any())).thenReturn(new QueryWrapper<GeneralProductRecord>());
+            Mockito.when(mapper.selectPage(any(), any())).thenReturn(null);
+            Mockito.when(mapper.selectList(any())).thenReturn(list);
+            generalProductRecordServiceForApp.pageQuery(new GeneralProductHistoryQueryDTO());
+            Assertions.assertDoesNotThrow(() -> generalProductRecordServiceForApp.pageQuery(new GeneralProductHistoryQueryDTO()));
+        }*/
+    }
+
+    @Test
+    void asynUpdate(){
+        userInfoService.asynUpdate(2L);
+    }
+
+    @Test
+    void asynUpdateTask() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Class<UserInfoServiceImpl> userInfoServiceClass = UserInfoServiceImpl.class;
+        Method asynUpdateTask = userInfoServiceClass.getDeclaredMethod("asynUpdateTask", Long.class);
+        asynUpdateTask.setAccessible(true);
+        Mockito.when(baseMapper.updateById(any())).thenReturn(1);
+        Assertions.assertDoesNotThrow(() -> asynUpdateTask.invoke(userInfoService,2L));
     }
 }

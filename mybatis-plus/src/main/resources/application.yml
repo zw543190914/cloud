@@ -125,7 +125,7 @@ logging:
         cloud:
           mybatis:
             plus:
-              mapper: info
+              mapper: debug
     root: info
 server:
   port: 8082

@@ -17,6 +17,8 @@ import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -47,6 +49,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     private DataSource dataSource;
     @Autowired
     private PlatformTransactionManager transactionManager;
+    @Autowired
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -144,25 +148,28 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
      */
     @Override
     public void asynUpdate(Long id) {
-        new Thread(() -> {
-            DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
-            // ISOLATION_READ_COMMITTED
-            defaultTransactionDefinition.setIsolationLevel(2);
-            TransactionStatus status = transactionManager.getTransaction(defaultTransactionDefinition);
-            try {
-                UserInfo userInfo = new UserInfo();
-                userInfo.setId(id);
-                userInfo.setName("asynUpdate");
-                baseMapper.updateById(userInfo);
-                if (id == 1) {
-                    throw new BizException("asynUpdate");
-                }
-                transactionManager.commit(status);
-            } catch (Exception e) {
-                transactionManager.rollback(status);
-            }
-        }).start();
+        threadPoolTaskExecutor.submit(() -> asynUpdateTask(id));
 
+    }
+
+    private void asynUpdateTask(Long id) {
+        DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
+        // ISOLATION_READ_COMMITTED
+        defaultTransactionDefinition.setIsolationLevel(2);
+        TransactionStatus status = transactionManager.getTransaction(defaultTransactionDefinition);
+        try {
+            UserInfo userInfo = new UserInfo();
+            userInfo.setId(id);
+            userInfo.setName("asynUpdate");
+            int i = baseMapper.updateById(userInfo);
+            log.info("[UserInfoServiceImpl][asynUpdate] updateById {}", i);
+            if (id == 1) {
+                throw new BizException("asynUpdate");
+            }
+            transactionManager.commit(status);
+        } catch (Exception e) {
+            transactionManager.rollback(status);
+        }
     }
 
     @Override

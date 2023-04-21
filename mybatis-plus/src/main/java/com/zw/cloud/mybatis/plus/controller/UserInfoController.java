@@ -14,7 +14,9 @@ import com.zw.cloud.mybatis.plus.mapper.UserInfoMapper;
 import com.zw.cloud.mybatis.plus.service.api.IUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +40,8 @@ public class UserInfoController {
     private UserInfoMapper mapper;
     @Autowired
     private PlatformTransactionManager transactionManager;
+    @Autowired
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     @GetMapping("/testBatchInsertJdbc")
     //http://localhost:8082/user-info/testBatchInsertJdbc
@@ -82,13 +86,14 @@ public class UserInfoController {
     @GetMapping("/asynTest/{rollback}")
     //http://localhost:8082/user-info/asynTest/true
     public void asynTest(@PathVariable boolean rollback) {
-        new Thread(() -> {
+        threadPoolTaskExecutor.submit(() -> {
             DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
             // ISOLATION_READ_COMMITTED
             defaultTransactionDefinition.setIsolationLevel(2);
             TransactionStatus status = transactionManager.getTransaction(defaultTransactionDefinition);
             try {
                 userService.testBatchInsertByMapper(buildData());
+                log.info("[UserInfoController][asynTest]testBatchInsertByMapper end");
                 if (rollback) {
                     throw new BizException("asynTest");
                 }
@@ -96,7 +101,7 @@ public class UserInfoController {
             } catch (BizException e) {
                 transactionManager.rollback(status);
             }
-        }).start();
+        });
 
     }
 
@@ -293,26 +298,26 @@ public class UserInfoController {
         return mapper.onDuplicateUpdate(Lists.newArrayList(userInfo,userInfo2,userInfo3));
     }
 
-    @GetMapping("/query")
-    //http://localhost:8082/user-info/query?name=test9998
-    public Page<UserInfo> pageQuery(String name) {
-        log.info("[UserInfoController][pageQuery]name is {}",name);
-        UserInfo user = UserInfo.builder().name(name).build();
-        //UserInfo user = new UserInfo();
-        user.setName(name);
+    @PostMapping("/query")
+    //http://localhost:8082/user-info/query
+    public Page<UserInfo> pageQuery(@RequestBody UserInfo user) {
+        log.info("[UserInfoController][pageQuery]user is {}",JSON.toJSONString(user));
        /* QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id","name")
                 .eq(Objects.nonNull(user.getId()),"id",user.getId())
                 .eq(Objects.nonNull(user.getName()),"name",user.getName())
                 .orderByDesc("id");*/
                 //.last("limit 1");
-       /* LambdaQueryWrapper<UserInfo> queryWrapper = Wrappers.lambdaQuery();
+        // deleted=0 AND (id = ? AND name = ? OR age = ?) ORDER BY id DESC
+        LambdaQueryWrapper<UserInfo> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.eq(Objects.nonNull(user.getId()), UserInfo::getId, user.getId())
                 .eq(Objects.nonNull(user.getName()), UserInfo::getName, user.getName())
-                .orderByDesc(UserInfo::getId);*/
-        LambdaQueryWrapper<UserInfo> lambdaQuery = Wrappers.lambdaQuery(user);
+                .orderByDesc(UserInfo::getId);
+        LambdaQueryWrapper<UserInfo> or = queryWrapper.or();
+        or.eq(Objects.nonNull(user.getAge()), UserInfo::getAge, user.getAge());
+        //LambdaQueryWrapper<UserInfo> queryWrapper = Wrappers.lambdaQuery(user);
         Page<UserInfo> page = new Page<>(1,10);
-        return userService.page(page, lambdaQuery);
+        return userService.page(page, queryWrapper);
     }
 
     @GetMapping("/queryJsonData")
