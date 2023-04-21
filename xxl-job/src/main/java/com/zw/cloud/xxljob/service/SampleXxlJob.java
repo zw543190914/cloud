@@ -4,6 +4,8 @@ import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedInputStream;
@@ -13,6 +15,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -39,15 +42,24 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class SampleXxlJob {
 
+    private static final String TRACE_ID = "TRACE_ID";
+
     /**
      * 1、简单任务示例（Bean模式）
      */
     @XxlJob("demoJobHandler")
     public ReturnT<String> demoJobHandler(String param) throws Exception {
-        log.info("XXL-JOB, Hello World start");
-        TimeUnit.SECONDS.sleep(10);
-        log.info("XXL-JOB, Hello World end");
-        return ReturnT.SUCCESS;
+        try {
+            if (StringUtils.isBlank(MDC.get(TRACE_ID))) {
+                MDC.put(TRACE_ID,UUID.randomUUID().toString().replace("-", ""));
+            }
+            log.info("XXL-JOB, Hello World start");
+            TimeUnit.SECONDS.sleep(10);
+            log.info("XXL-JOB, Hello World end");
+            return ReturnT.SUCCESS;
+        } finally {
+            MDC.remove(TRACE_ID);
+        }
     }
 
 
