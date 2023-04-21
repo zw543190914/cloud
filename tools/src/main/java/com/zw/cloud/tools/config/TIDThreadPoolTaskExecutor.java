@@ -7,8 +7,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
-public class MyThreadPoolTaskExecutor  extends ThreadPoolTaskExecutor {
-    public MyThreadPoolTaskExecutor() {
+public class TIDThreadPoolTaskExecutor  extends ThreadPoolTaskExecutor {
+    public TIDThreadPoolTaskExecutor() {
         super();
     }
 

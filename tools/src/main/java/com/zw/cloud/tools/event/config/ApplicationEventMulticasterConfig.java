@@ -1,6 +1,6 @@
 package com.zw.cloud.tools.event.config;
 
-import com.zw.cloud.tools.config.MyThreadPoolTaskExecutor;
+import com.zw.cloud.tools.config.TIDThreadPoolTaskExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +28,7 @@ public class ApplicationEventMulticasterConfig {
         log.info("threadPoolTaskExecutor cpu : {}", cpu);
         //ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         // 自定义方式,在多线程中传入TID
-        MyThreadPoolTaskExecutor executor = new MyThreadPoolTaskExecutor();
+        TIDThreadPoolTaskExecutor executor = new TIDThreadPoolTaskExecutor();
 
         //配置核心线程数
         executor.setCorePoolSize(cpu);
