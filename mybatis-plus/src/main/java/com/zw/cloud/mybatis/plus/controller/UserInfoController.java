@@ -309,13 +309,29 @@ public class UserInfoController {
                 .eq(Objects.nonNull(user.getName()),"name",user.getName())
                 .orderByDesc("id");*/
                 //.last("limit 1");
-        // deleted=0 AND (id = ? AND name = ? OR age = ?) ORDER BY id DESC
-        LambdaQueryWrapper<UserInfo> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.eq(Objects.nonNull(user.getId()), UserInfo::getId, user.getId())
+        LambdaQueryWrapper<UserInfo> queryWrapper = new LambdaQueryWrapper<>();
+        /*queryWrapper.eq(Objects.nonNull(user.getId()), UserInfo::getId, user.getId())
                 .eq(Objects.nonNull(user.getName()), UserInfo::getName, user.getName())
-                .orderByDesc(UserInfo::getId);
+                .orderByDesc(UserInfo::getId);*/
+
+        /**
+         *  () or ()
+         */
+        //  WHERE deleted=0 AND ((id = ? AND name = ?) OR (age = ? AND name = ?)) ORDER BY id DESC LIMIT ?
+        queryWrapper.and(wrapper -> wrapper.eq(Objects.nonNull(user.getId()), UserInfo::getId, user.getId())
+                .eq(Objects.nonNull(user.getName()), UserInfo::getName, user.getName()));
+
         LambdaQueryWrapper<UserInfo> or = queryWrapper.or();
-        or.eq(Objects.nonNull(user.getAge()), UserInfo::getAge, user.getAge());
+        or.or(wrapper -> wrapper.eq(Objects.nonNull(user.getAge()), UserInfo::getAge, user.getAge())
+                .eq(Objects.nonNull(user.getName()), UserInfo::getName, user.getName()));
+        /**
+         * and  or
+         */
+        // WHERE deleted=0 AND (id = ? AND name = ? OR age = ?) ORDER BY id DESC LIMIT ?
+        /*queryWrapper.eq(Objects.nonNull(user.getId()), UserInfo::getId, user.getId())
+                .eq(Objects.nonNull(user.getName()), UserInfo::getName, user.getName());
+        queryWrapper.or().eq(Objects.nonNull(user.getAge()), UserInfo::getAge, user.getAge());
+        queryWrapper.orderByDesc(UserInfo::getId);*/
         //LambdaQueryWrapper<UserInfo> queryWrapper = Wrappers.lambdaQuery(user);
         Page<UserInfo> page = new Page<>(1,10);
         return userService.page(page, queryWrapper);
