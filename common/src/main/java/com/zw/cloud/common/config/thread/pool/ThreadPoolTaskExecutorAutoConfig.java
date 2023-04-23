@@ -1,6 +1,8 @@
-package com.zw.cloud.common.thread.pool;
+package com.zw.cloud.common.config.thread.pool;
 
+import com.zw.cloud.common.thread.pool.TIDThreadPoolTaskExecutor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -9,7 +11,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 @Slf4j
 @Configuration
-public class ThreadPoolTaskExecutorConfig {
+@ConditionalOnExpression("${com.zw.cloud.default.thread.pool.enable:true}")
+public class ThreadPoolTaskExecutorAutoConfig {
 
     @Bean("cpuThreadPoolTaskExecutor")
     public ThreadPoolTaskExecutor cpuThreadPoolTaskExecutor() {
