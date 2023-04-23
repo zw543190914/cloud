@@ -6,7 +6,16 @@ import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiRobotSendRequest;
 import com.dingtalk.api.response.OapiRobotSendResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 
 /**
@@ -20,6 +29,7 @@ public class DingTalkUtils {
     private static String br = " \n\n ";
 
     public static void main(String[] args) throws Exception {
+        System.out.println(genSign(System.currentTimeMillis(), "SEC1ded33d7e58ef4aa813d074e7e24e7df83d9427ee7496d819bdff256ceda1583"));
         sendDingTalkMsg("7b66a82f1620672a1f5b2229d536d41cd978fb9f949141df8b40cd3b8bc9dd54",DingTalkUtils.class,"sendDingTalkMsg",null,new RuntimeException("running exception..."));
     }
 
@@ -91,5 +101,13 @@ public class DingTalkUtils {
         request.setMarkdown(markdown);
         OapiRobotSendResponse response = client.execute(request);
         log.info("[DingTalkUtils][sendDingTalkChatMsg] response is {}", JSONUtil.toJsonStr(response));
+    }
+
+    private static String genSign(long timestamp,String secret) throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeyException {
+        String stringToSign = timestamp + "\n" + secret;
+        Mac mac = Mac.getInstance("HmacSHA256");
+        mac.init(new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
+        byte[] signData = mac.doFinal(stringToSign.getBytes(StandardCharsets.UTF_8));
+        return URLEncoder.encode(new String(Base64.encodeBase64(signData)),"UTF-8");
     }
 }
