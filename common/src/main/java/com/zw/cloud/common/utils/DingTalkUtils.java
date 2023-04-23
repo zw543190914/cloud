@@ -8,6 +8,12 @@ import com.dingtalk.api.response.OapiRobotSendResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+
+/**
+ * https://open.dingtalk.com/document/orgapp/custom-bot-to-send-group-chat-messages
+ * 加签
+ * https://open.dingtalk.com/document/robots/customize-robot-security-settings
+ */
 @Slf4j
 public class DingTalkUtils {
 
