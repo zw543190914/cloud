@@ -71,8 +71,12 @@ public class HttpClientUtils {
             throw new RuntimeException("[发送Get请求错误：]" + e.getMessage());
         } finally {
             try {
-                httpGet.releaseConnection();
-                response.close();
+                if (Objects.nonNull(httpGet)) {
+                    httpGet.releaseConnection();
+                }
+                if (Objects.nonNull(response)) {
+                    response.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -139,8 +143,7 @@ public class HttpClientUtils {
         PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
         HttpClients.custom().setConnectionManager(connManager);
         // 创建自定义的httpsclient对象
-        CloseableHttpClient client = HttpClients.custom().setConnectionManager(connManager).build();
-        return client;
+        return HttpClients.custom().setConnectionManager(connManager).build();
     }
     private static SSLContext createIgnoreVerifySSL() {
         // 创建套接字对象
