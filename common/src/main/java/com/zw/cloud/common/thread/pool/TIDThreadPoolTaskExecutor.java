@@ -1,4 +1,4 @@
-package com.zw.cloud.tools.config;
+package com.zw.cloud.common.thread.pool;
 
 import com.zw.cloud.common.utils.ThreadMdcUtil;
 import org.slf4j.MDC;
@@ -7,7 +7,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
-public class TIDThreadPoolTaskExecutor  extends ThreadPoolTaskExecutor {
+public class TIDThreadPoolTaskExecutor extends ThreadPoolTaskExecutor {
     public TIDThreadPoolTaskExecutor() {
         super();
     }

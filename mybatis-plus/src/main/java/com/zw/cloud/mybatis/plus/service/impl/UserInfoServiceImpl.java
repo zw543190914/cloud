@@ -50,7 +50,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Autowired
     private PlatformTransactionManager transactionManager;
     @Autowired
-    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+    @Qualifier("ioThreadPoolTaskExecutor")
+    private ThreadPoolTaskExecutor ioThreadPoolTaskExecutor;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -148,8 +149,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
      */
     @Override
     public void asynUpdate(Long id) {
-        threadPoolTaskExecutor.submit(() -> asynUpdateTask(id));
-
+        ioThreadPoolTaskExecutor.submit(() -> asynUpdateTask(id));
     }
 
     private void asynUpdateTask(Long id) {

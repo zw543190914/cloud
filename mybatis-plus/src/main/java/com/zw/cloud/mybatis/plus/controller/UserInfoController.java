@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,8 +41,8 @@ public class UserInfoController {
     private UserInfoMapper mapper;
     @Autowired
     private PlatformTransactionManager transactionManager;
-    @Autowired
-    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+    @Resource(name = "ioThreadPoolTaskExecutor")
+    private ThreadPoolTaskExecutor ioThreadPoolTaskExecutor;
 
     @GetMapping("/testBatchInsertJdbc")
     //http://localhost:8082/user-info/testBatchInsertJdbc
@@ -86,7 +87,7 @@ public class UserInfoController {
     @GetMapping("/asynTest/{rollback}")
     //http://localhost:8082/user-info/asynTest/true
     public void asynTest(@PathVariable boolean rollback) {
-        threadPoolTaskExecutor.submit(() -> {
+        ioThreadPoolTaskExecutor.submit(() -> {
             DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
             // ISOLATION_READ_COMMITTED
             defaultTransactionDefinition.setIsolationLevel(2);

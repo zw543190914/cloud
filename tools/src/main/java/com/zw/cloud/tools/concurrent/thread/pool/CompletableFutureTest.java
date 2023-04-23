@@ -1,4 +1,4 @@
-package com.zw.cloud.tools.concurrent.threadpool;
+package com.zw.cloud.tools.concurrent.thread.pool;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;

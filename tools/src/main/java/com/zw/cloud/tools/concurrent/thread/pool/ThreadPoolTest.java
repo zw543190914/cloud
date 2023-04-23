@@ -1,4 +1,4 @@
-package com.zw.cloud.tools.concurrent.threadpool;
+package com.zw.cloud.tools.concurrent.thread.pool;
 
 import com.zw.cloud.tools.utils.CustomerExecutorService;
 
