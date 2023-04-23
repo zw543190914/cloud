@@ -1,8 +1,8 @@
 package com.zw.cloud.common.utils;
 
-import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSON;
 import com.zw.cloud.common.entity.dto.FeishuMsgDTO;
+import com.zw.cloud.common.utils.http.HttpClientUtils;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Mac;
@@ -35,7 +35,8 @@ public class FeishuMsgUtils {
         msgContent.setText(msg);
         feishuMsgDTO.setContent(msgContent);
         //发送post请求
-        return HttpRequest.post(WEB_HOOK_URL).body(JSON.toJSONString(feishuMsgDTO), "application/json;charset=UTF-8").execute().body();
+        return HttpClientUtils.doPostJson(WEB_HOOK_URL,JSON.toJSONString(feishuMsgDTO),null);
+        //return HttpRequest.post(WEB_HOOK_URL).body(JSON.toJSONString(feishuMsgDTO), "application/json;charset=UTF-8").execute().body();
     }
 
     private static String genSign() throws NoSuchAlgorithmException, InvalidKeyException {

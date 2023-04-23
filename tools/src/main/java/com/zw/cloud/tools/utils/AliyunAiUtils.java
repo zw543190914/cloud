@@ -1,16 +1,13 @@
 package com.zw.cloud.tools.utils;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.CommonRequest;
 import com.aliyuncs.CommonResponse;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
-import com.google.gson.Gson;
-import com.zw.cloud.common.utils.HttpClientUtils;
+import com.zw.cloud.common.utils.http.HttpClientUtils;
 import com.zw.cloud.tools.modle.vo.AliyunDataVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

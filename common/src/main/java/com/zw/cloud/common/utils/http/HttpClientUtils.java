@@ -1,5 +1,6 @@
-package com.zw.cloud.common.utils;
+package com.zw.cloud.common.utils.http;
 
+import org.apache.commons.collections4.MapUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -11,7 +12,6 @@ import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
@@ -25,9 +25,10 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.util.Map;
+import java.util.Objects;
 
 public class HttpClientUtils {
-    private static CloseableHttpClient client = null;//
+    private static CloseableHttpClient client;
     static {
         PoolingHttpClientConnectionManager clientConnectionManager = new PoolingHttpClientConnectionManager();
         //检测有效连接的间隔
@@ -93,7 +94,7 @@ public class HttpClientUtils {
 //            entity.setContentEncoding(new BasicHeader("Content-Type", "application/json;charset=UTF-8"));
             httpPost.setEntity(entity);
             //是否有header
-            if (headers != null && headers.size() > 0) {
+            if (MapUtils.isNotEmpty(headers)) {
                 for (Map.Entry<String, String> entry : headers.entrySet()) {
                     httpPost.addHeader(entry.getKey(), entry.getValue());
                 }
@@ -109,8 +110,12 @@ public class HttpClientUtils {
             throw new RuntimeException("[发送POST请求错误：]" + e.getMessage());
         } finally {
             try {
-                httpPost.releaseConnection();
-                response.close();
+                if (Objects.nonNull(httpPost)) {
+                    httpPost.releaseConnection();
+                }
+                if (Objects.nonNull(response)) {
+                    response.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
