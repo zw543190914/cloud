@@ -180,7 +180,7 @@ public class ProductRecordController {
                     continue;
                 }
                 if (value instanceof LocalDateTime) {
-                    String timeStr = DateTimeUtils.parse2Str((LocalDateTime) value, DateTimeUtils.dateTimePattern);
+                    String timeStr = DateTimeUtils.parse2Str((LocalDateTime) value, DateTimeUtils.DATE_TIME_PATTERN);
                     cell.setCellValue(timeStr);
                     continue;
                 }

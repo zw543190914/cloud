@@ -1,9 +1,9 @@
 package com.zw.cloud.common.utils;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.base.Preconditions;
 import com.zw.cloud.common.entity.dto.LocalDateTimeDTO;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Assert;
 
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -13,7 +13,9 @@ import java.util.*;
 
 public class DateTimeUtils {
 
-    public static final String dateTimePattern = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_PATTERN = "yyyy-MM-dd";
+    public static final String MONTH_PATTERN = "yyyy-MM";
 
     public static void main(String[] args) throws Exception{
         //获取秒数
@@ -274,7 +276,7 @@ public class DateTimeUtils {
     public static List<String> getMonthBetween(Date start, Date endTime){
         ArrayList<String> result = new ArrayList<>();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        SimpleDateFormat sdf = new SimpleDateFormat(MONTH_PATTERN);
         String lastMonth = sdf.format(endTime);
 
         Calendar calendar = Calendar.getInstance();
@@ -297,7 +299,7 @@ public class DateTimeUtils {
      * @return 返回天数
      */
     public static int getTheNumberOfDaysBetweenTwoDates(Date start, Date end) {
-        Preconditions.checkArgument(start != null && end != null, "start and end is not null");
+        Assert.isTrue(start != null && end != null, "start and end is not null");
         LocalDate startDate = dateToLocalDate(start);
         LocalDate endDate = dateToLocalDate(end);
         return (int) (endDate.toEpochDay() - startDate.toEpochDay());
@@ -348,7 +350,7 @@ public class DateTimeUtils {
      * 根据指定时间 切分时间
      */
     public static List<LocalDateTimeDTO> calBetweenTime(LocalDateTime startTime, LocalDateTime endTime, LocalDateTime configTime) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
         // 日开始统计时间
         List<LocalDateTimeDTO> result = new ArrayList<>();
         // 开始时间和结束时间都在配置时间之前
@@ -401,7 +403,7 @@ public class DateTimeUtils {
             return null;
         }
         if (StringUtils.isBlank(pattern)) {
-            pattern = dateTimePattern;
+            pattern = DATE_TIME_PATTERN;
         }
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
         return localDateTime.format(dateTimeFormatter);
@@ -412,7 +414,7 @@ public class DateTimeUtils {
             return null;
         }
         if (StringUtils.isBlank(pattern)) {
-            pattern = dateTimePattern;
+            pattern = DATE_TIME_PATTERN;
         }
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
         return LocalDateTime.parse(date, dateTimeFormatter);
