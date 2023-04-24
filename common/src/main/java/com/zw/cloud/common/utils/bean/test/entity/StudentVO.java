@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 public class StudentVO implements Serializable {
 
     private Long id;
-    @CopyField(originName = "name")
+    @CopyField(targetFieldName = "name")
     private String nm;
-    @CopyField(originName = "birthday")
+    @CopyField(targetFieldName = "birthday")
     private LocalDateTime bir;
 }

@@ -45,14 +45,5 @@ public class SetTest {
         Map<Long, String> map = Lists.newArrayList(user, user2, user3, user4,user5).stream().collect(Collectors.toMap(User::getId, User::getName, (v1, v2) -> v1));
         System.out.println(JSON.toJSONString(map));
 
-        Map<String,BigDecimal> map1 = new HashMap<>();
-        map1.put("1",new BigDecimal(1));
-        map1.put("2",new BigDecimal(2));
-        map1.put("3",new BigDecimal(3));
-        Map<String,BigDecimal> map2 = new HashMap<>();
-        map2.put("2",new BigDecimal(2));
-        map2.put("4",new BigDecimal(4));
-        Map<String, BigDecimal> collect = Stream.of(map1, map2).flatMap(v -> v.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> (v1.subtract(v2).abs()).divide(v2, 4, RoundingMode.HALF_UP)));
-        System.out.println(JSON.toJSONString(collect));
     }
 }
