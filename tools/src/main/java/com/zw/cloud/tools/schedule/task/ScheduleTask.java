@@ -16,7 +16,7 @@ public class ScheduleTask {
     AtomicInteger count = new AtomicInteger();
 
     @Async("asyncTaskExecutor")
-    @Scheduled(cron = "0/5 * * * * ? ")
+    @Scheduled(cron = "35 0/2 * * * ? ")
     public void task() throws InterruptedException {
         log.info("[ScheduleTask][task] start");
         int increment = count.getAndIncrement();
