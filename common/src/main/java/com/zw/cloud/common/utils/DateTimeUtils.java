@@ -3,6 +3,7 @@ package com.zw.cloud.common.utils;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Preconditions;
 import com.zw.cloud.common.entity.dto.LocalDateTimeDTO;
+import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -80,6 +81,9 @@ public class DateTimeUtils {
 
         between(LocalDateTime.parse("2023-04-03T18:47:00"),LocalDateTime.parse("2023-04-04T14:28:00"));
         System.out.println("zero:" + transferTimeToZero(LocalDateTime.now()));
+
+        System.out.println(parse2datetime("2023-04-03 18:47:02",null));
+        System.out.println(parse2Str(LocalDateTime.now(),null));
 
     }
 
@@ -392,9 +396,26 @@ public class DateTimeUtils {
         return result;
     }
 
-    public static String parse2Str(LocalDateTime date, String pattern) {
+    public static String parse2Str(LocalDateTime localDateTime, String pattern) {
+        if (Objects.isNull(localDateTime)) {
+            return null;
+        }
+        if (StringUtils.isBlank(pattern)) {
+            pattern = dateTimePattern;
+        }
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
-        return date.format(dateTimeFormatter);
+        return localDateTime.format(dateTimeFormatter);
+    }
+
+    public static LocalDateTime parse2datetime(String date, String pattern) {
+        if (StringUtils.isBlank(date)) {
+            return null;
+        }
+        if (StringUtils.isBlank(pattern)) {
+            pattern = dateTimePattern;
+        }
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
+        return LocalDateTime.parse(date, dateTimeFormatter);
     }
 
     public static void between(LocalDateTime start,LocalDateTime end) {
