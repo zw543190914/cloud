@@ -1,11 +1,8 @@
 package com.zw.cloud.tools.test;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
 import com.alibaba.fastjson.JSON;
 import com.zw.cloud.common.utils.bean.test.entity.Student;
 import com.zw.cloud.common.utils.bean.test.entity.StudentVO;
-import com.zw.cloud.tools.entity.User;
 import com.zw.cloud.tools.entity.UserDTO;
 import com.zw.cloud.tools.entity.poem.Poem;
 import lombok.AllArgsConstructor;

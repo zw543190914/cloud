@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.IntSummaryStatistics;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,6 +22,11 @@ public class StreamTest {
         System.out.println("列表中最小的数 : "+statistics.getMin());
         System.out.println("平均数 : "+statistics.getAverage());
         System.out.println("所有数之和 : "+statistics.getSum());
+        LongSummaryStatistics collect = number.stream().collect(Collectors.summarizingLong(v -> v));
+        System.out.println("列表中最大的数 : "+collect.getMax());
+        System.out.println("列表中最小的数 : "+collect.getMin());
+        System.out.println("平均数 : "+collect.getAverage());
+        System.out.println("所有数之和 : "+collect.getSum());
     }
 
     private static void flatMap() {
