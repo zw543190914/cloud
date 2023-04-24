@@ -28,7 +28,7 @@ public class MqttPublishSample {
         String clientId = "subscribe_test_device01";
         // qa
         // 定型机#02
-       /* String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+        /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|qa_test_device_stenter_02|0|MD5";
         String password = "3509803995f1748b7d4c5f1ad9dfb615";
         String topic = "d/qa_test_device_stenter_02/report";
@@ -104,7 +104,7 @@ public class MqttPublishSample {
             } catch (MqttException me) {
                 log.error("sampleClient.publish error is ",me);
             }
-            log.error("sampleClient.publish finish {}",second);
+            log.info("sampleClient.publish finish {}",second);
             TimeUnit.SECONDS.sleep(30);
         }
         // 断开连接

@@ -1,6 +1,10 @@
 package com.zw.cloud.tools.mqtt.config;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.zw.cloud.common.utils.bean.BeanUtils;
+import com.zw.cloud.tools.entity.mqtt.IotInfoDto;
+import com.zw.cloud.tools.entity.mqtt.IotMessageDto;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -41,11 +45,15 @@ public class MqttCallBackService implements MqttCallback {
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         log.info("[Mqtt][messageArrived]topic {},message is  {}",topic, JSON.toJSONString(message));
-
-        System.out.println(String.format("接收消息主题 : %s",topic));
+        /*System.out.println(String.format("接收消息主题 : %s",topic));
         System.out.println(String.format("接收消息Qos : %d",message.getQos()));
         System.out.println(String.format("接收消息内容 : %s",new String(message.getPayload())));
-        System.out.println(String.format("接收消息retained : %b",message.isRetained()));
+        System.out.println(String.format("接收消息retained : %b",message.isRetained()));*/
+        JSONObject jsonObject = JSON.parseObject(new String(message.getPayload()));
+        IotMessageDto iotMessageDto = JSON.parseObject(JSON.toJSONString(jsonObject.get("stenterStatus")), IotMessageDto.class);
+        IotInfoDto iotInfoDto = new IotInfoDto();
+        BeanUtils.copyByCopyField(iotMessageDto,iotInfoDto);
+        log.info("[Mqtt][messageArrived]topic {},iotMessageDto is {},iotInfoDto is {}",topic, JSON.toJSONString(iotMessageDto),JSON.toJSONString(iotInfoDto));
 
     }
 
