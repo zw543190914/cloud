@@ -1,5 +1,6 @@
 package com.zw.cloud.common.utils.http;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -27,6 +28,7 @@ import java.security.cert.CertificateException;
 import java.util.Map;
 import java.util.Objects;
 
+@Slf4j
 public class HttpClientUtils {
     private static CloseableHttpClient client;
     static {
@@ -68,6 +70,7 @@ public class HttpClientUtils {
                 return EntityUtils.toString(response.getEntity(), "UTF-8");
             }
         } catch (Exception e) {
+            log.error("[HttpClientUtils][doGet] error is ",e);
             throw new RuntimeException("[发送Get请求错误：]" + e.getMessage());
         } finally {
             try {
@@ -78,7 +81,7 @@ public class HttpClientUtils {
                     response.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("[HttpClientUtils][doGet]releaseConnection error is ",e);
             }
         }
         return null;
@@ -111,6 +114,7 @@ public class HttpClientUtils {
             }
 
         } catch (Exception e) {
+            log.error("[HttpClientUtils][doPostJson] error is ",e);
             throw new RuntimeException("[发送POST请求错误：]" + e.getMessage());
         } finally {
             try {
@@ -121,7 +125,7 @@ public class HttpClientUtils {
                     response.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("[HttpClientUtils][doPostJson]releaseConnection error is ",e);
             }
         }
         return null;
@@ -147,11 +151,12 @@ public class HttpClientUtils {
     }
     private static SSLContext createIgnoreVerifySSL() {
         // 创建套接字对象
-        SSLContext sslContext = null;
+        SSLContext sslContext ;
         try {
             //指定TLS版本
             sslContext = SSLContext.getInstance("TLSv1.2");
         } catch (NoSuchAlgorithmException e) {
+            log.error("[HttpClientUtils][doPostJson]createIgnoreVerifySSL error is ",e);
             throw new RuntimeException("[创建套接字失败:] " + e.getMessage());
         }
         // 实现X509TrustManager接口，用于绕过验证
@@ -175,6 +180,7 @@ public class HttpClientUtils {
             //初始化sslContext对象
             sslContext.init(null, new TrustManager[]{trustManager}, null);
         } catch (KeyManagementException e) {
+            log.error("[HttpClientUtils][doPostJson]sslContext.init error is ",e);
             throw new RuntimeException("[初始化套接字失败:] " + e.getMessage());
         }
         return sslContext;
