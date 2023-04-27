@@ -1,6 +1,6 @@
 package com.zw.cloud.common.utils.selenium;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.zw.cloud.common.entity.vo.ImgAttachmentVO;
 import com.zw.cloud.common.utils.jsoup.JsoupUtils;
 import lombok.extern.slf4j.Slf4j;

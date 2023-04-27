@@ -1,6 +1,6 @@
 package com.zw.cloud.common.utils.bean.test;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.zw.cloud.common.utils.bean.BeanUtils;
 import com.zw.cloud.common.utils.bean.test.entity.Student;
 import com.zw.cloud.common.utils.bean.test.entity.StudentVO;

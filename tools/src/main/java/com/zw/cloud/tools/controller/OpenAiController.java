@@ -1,6 +1,6 @@
 package com.zw.cloud.tools.controller;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.theokanning.openai.completion.CompletionChoice;
 import com.zw.cloud.common.annotation.NotNeedResponseAutoWrapper;
 import com.zw.cloud.common.entity.dto.DingTalkRequestDTO;

@@ -1,7 +1,7 @@
 package com.zw.cloud.tools.controller;
 
 import cn.hutool.json.JSONUtil;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.google.common.collect.Lists;
 import com.zw.cloud.tools.entity.User;
 import com.zw.cloud.tools.modle.vo.TcResultVO;

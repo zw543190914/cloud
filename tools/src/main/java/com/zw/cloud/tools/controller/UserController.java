@@ -1,6 +1,6 @@
 package com.zw.cloud.tools.controller;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.zw.cloud.tools.entity.User;
 import com.zw.cloud.tools.service.api.UserService;
 import org.springframework.web.bind.annotation.*;

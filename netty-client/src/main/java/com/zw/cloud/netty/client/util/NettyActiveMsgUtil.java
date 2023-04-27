@@ -1,6 +1,6 @@
 package com.zw.cloud.netty.client.util;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.zw.cloud.netty.client.factory.WebSocketClient;
 import com.zw.cloud.netty.client.dto.NettyMsgDTO;
 import com.zw.cloud.netty.client.enums.EnumNettyMsgTag;

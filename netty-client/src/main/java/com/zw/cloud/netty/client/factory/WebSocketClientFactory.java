@@ -1,6 +1,6 @@
 package com.zw.cloud.netty.client.factory;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.zw.cloud.netty.client.dto.WebSocketConfigDTO;
 import com.zw.cloud.netty.client.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;

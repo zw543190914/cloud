@@ -1,6 +1,6 @@
 package com.zw.cloud.netty.web.service.impl.chat;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.zw.cloud.netty.enums.MsgSignFlagEnum;
 import com.zw.cloud.netty.web.entity.chat.ChatMsg;

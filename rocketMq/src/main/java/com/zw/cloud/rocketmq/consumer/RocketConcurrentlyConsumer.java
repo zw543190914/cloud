@@ -1,6 +1,5 @@
 package com.zw.cloud.rocketmq.consumer;
 
-import com.alibaba.fastjson.JSON;
 import com.zw.cloud.rocketmq.consumer.handler.ConsumerHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -9,7 +8,6 @@ import org.apache.rocketmq.spring.annotation.ConsumeMode;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.stereotype.Component;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
@@ -21,7 +19,6 @@ public class RocketConcurrentlyConsumer implements RocketMQListener<MessageExt> 
 
     @Override
     public void onMessage(MessageExt messageExt) {
-        log.info("[RocketConcurrentlyConsumer][onMessage] thread is {},messageExt is {}", Thread.currentThread().getName() ,JSON.toJSONString(messageExt));
         if (Objects.isNull(messageExt)) {
             log.info("[RocketConcurrentlyConsumer][onMessage] messageExt is null");
             return;

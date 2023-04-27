@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@RequestMapping("/rocket")
+@RequestMapping("/rocket/orderly")
 @RestController
 @Slf4j
-public class RocketProductOrderly {
+public class RocketProductOrderlyController {
 
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
@@ -28,7 +28,7 @@ public class RocketProductOrderly {
      * consumeMode = ConsumeMode.ORDERLY
      */
     @GetMapping("/syncSendOrderly")
-    //http://localhost:9095/rocket/syncSendOrderly?topic=topicA&tag=tag1
+    //http://localhost:9095/rocket/orderly/syncSendOrderly?topic=topicA&tag=tag1
     public void syncSendOrderly(@RequestParam String topic,@RequestParam String tag) {
         for (int i = 0; i < 10; i++) {
             String msg = String.valueOf(atomicInteger.getAndAdd(1));
@@ -51,7 +51,7 @@ public class RocketProductOrderly {
     }
 
     @GetMapping("/testStrategy/{topic}/{tag}")
-    //http://localhost:9095/rocket/testStrategy/topic
+    //http://localhost:9095/rocket/orderly/testStrategy/topic
     public void testStrategy(@PathVariable String topic,@PathVariable String tag) {
         ConsumerHandler task1 = ConsumerHandler.getConsumerHandlerInstance(topic,tag);
         task1.handleRocketMQMsg(tag);

@@ -1,6 +1,6 @@
 package com.zw.cloud.netty.client.schedule;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.zw.cloud.netty.client.factory.WebSocketClient;
 import com.zw.cloud.netty.client.factory.WebSocketClientFactory;
 import com.zw.cloud.netty.client.dto.WebSocketConfigDTO;

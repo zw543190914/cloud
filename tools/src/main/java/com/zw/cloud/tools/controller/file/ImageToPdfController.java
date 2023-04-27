@@ -1,6 +1,6 @@
 package com.zw.cloud.tools.controller.file;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.zw.cloud.tools.utils.ImageToPdfUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

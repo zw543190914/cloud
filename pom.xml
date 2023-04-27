@@ -88,7 +88,7 @@
         <hanlp.version>portable-1.7.5</hanlp.version>
         <hutool-all.version>5.7.22</hutool-all.version>
         <ikanalyzer.version>2012_u6</ikanalyzer.version>
-        <fastjson.version>1.2.78</fastjson.version>
+        <fastjson2.version>2.0.29</fastjson2.version>
         <guava.version>30.0-jre</guava.version>
         <httpclient.version>4.5.13</httpclient.version>
         <shiro-spring.version>1.8.0</shiro-spring.version>
@@ -132,7 +132,7 @@
         <sharding-jdbc.version>4.1.1</sharding-jdbc.version>
         <metadata-extractor.version>2.18.0</metadata-extractor.version>
         <screw.version>1.0.5</screw.version>
-        <rocketmq.version>2.2.2</rocketmq.version>
+        <rocketmq.version>2.2.3</rocketmq.version>
         <zip4j.version>2.11.5</zip4j.version>
         <mockito-inline.version>3.11.2</mockito-inline.version>
     </properties>
@@ -707,11 +707,13 @@
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <!-- https://mvnrepository.com/artifact/com.alibaba.fastjson22/fastjson2 -->
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
+            <groupId>com.alibaba.fastjson22</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${fastjson2.version}</version>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
             <groupId>com.google.guava</groupId>

@@ -1,7 +1,7 @@
 package com.zw.cloud.common.utils;
 
 import cn.hutool.http.HttpStatus;
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 
 import java.io.Serializable;
 

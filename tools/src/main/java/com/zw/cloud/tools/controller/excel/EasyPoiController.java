@@ -7,7 +7,7 @@ import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
 import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
 import cn.afterturn.easypoi.handler.inter.IExcelDictHandler;
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.zw.cloud.tools.entity.dto.ShipmentOrderDTO;
 import com.zw.cloud.tools.utils.excel.ExcelExportUtils;
 import com.zw.cloud.tools.utils.excel.ExcelImportUtils;
