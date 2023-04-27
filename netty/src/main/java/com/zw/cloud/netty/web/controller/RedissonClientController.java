@@ -28,16 +28,16 @@ public class RedissonClientController {
 
     private void test() {
         RLock lock = redissonClient.getLock("test_lock");
-        lock.lock(1,TimeUnit.SECONDS);
+        lock.lock(3,TimeUnit.SECONDS);
         log.info("[lock] start ");
         try {
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        } /*finally {
-            if (lock.isLocked()) {
+        } finally {
+            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
                 lock.unlock();
             }
-        }*/
+        }
     }
 }
