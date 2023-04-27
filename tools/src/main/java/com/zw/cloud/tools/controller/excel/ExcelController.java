@@ -73,14 +73,27 @@ public class ExcelController {
                 //HSSFRow hssfRow = hssfSheet.getRow(rowNum);
                 Row hssfRow = hssfSheet.getRow(rowNum);
                 if (hssfRow != null) {
-                    User user = new User();
+                    /*User user = new User();
                     // todo
                     int cell = 0;
                     String name = hssfRow.getCell(cell ++).getStringCellValue();
                     byte age = Byte.valueOf(hssfRow.getCell(cell ++).getStringCellValue());
                     user.setAge(age);
                     user.setName(name);
-                    userList.add(user);
+                    userList.add(user);*/
+                    String fieldName = hssfRow.getCell(1).getStringCellValue();
+
+                    String desc = hssfRow.getCell(2).getStringCellValue();
+                    if (desc.contains("水槽温度实际温度") || fieldName.equals("e32") || fieldName.contains("e54")) {
+                        String targetName = hssfRow.getCell(6).getStringCellValue();
+                        // SPEED("d01", "车速", "speed", "车速"),
+                        System.out.println(targetName.toUpperCase() + "(\"" + fieldName + "\", \"" + desc + "\", \""+ targetName +"\", \"" + desc + "\"),");
+//                        System.out.println("  /**\n" +
+//                                "     * "+ desc +"\n" +
+//                                "     */\n" +
+//                                "    private RedisDeviceAlertBaseModel " + targetName + ";");
+                    }
+
                 }
             }
         }
