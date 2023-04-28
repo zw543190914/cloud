@@ -21,32 +21,47 @@ public class MqttPublishSample {
 
         // dev
         // 18hao设备5
-        String host = "tcp://axdkagn.iot.gz.baidubce.com";
+        /*String host = "tcp://axdkagn.iot.gz.baidubce.com";
         String userName = "thingidp@axdkagn|rr|0|MD5";
         String password = "20f582bfab251a639a8893d13d90bdc1";
         String topic = "d/rr/report";
         String clientId = "subscribe_test_device01";
+        boolean isStenter = true;*/
+
+
         // qa
         // 定型机#02
         /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|qa_test_device_stenter_02|0|MD5";
         String password = "3509803995f1748b7d4c5f1ad9dfb615";
         String topic = "d/qa_test_device_stenter_02/report";
-        String clientId = "subscribe_test";*/
+        String clientId = "subscribe_test";
+        boolean isStenter = true;*/
+
+
         // 定型机2
         /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|8888|0|MD5";
         String password = "bdf6a12cb4d85d36954a9759e24b12d4";
         String topic = "d/8888/report";
-        String clientId = "subscribe_test001";*/
-
+        String clientId = "subscribe_test001";
+        boolean isStenter = true;*/
 
         // 线上
         /*String host = "tcp://afswjqe.iot.gz.baidubce.com";
         String userName = "thingidp@afswjqe|xnbh06|0|MD5";
         String password = "885c1c1ba9c32c96f2c0e4f5dd0b4e01";
         String topic = "d/xnbh06/report";
-        String clientId = "subscribe_test";*/
+        String clientId = "subscribe_test";
+        boolean isStenter = true;*/
+
+        // qa通用设备 测试机001  2342701
+        String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+        String userName = "thingidp@amgjjzk|2342701|0|MD5";
+        String password = "25249998d919796775bb61fbc1559fe7";
+        String topic = "d/2342701/report";
+        String clientId = "subscribe_test_device01";
+        boolean isStenter = false;
 
         int qos = 1;
         // 内存存储
@@ -71,27 +86,13 @@ public class MqttPublishSample {
         for (int i = 0; i < 120; i++) {
 
             second = second + 30;
-            String content = null;
-            if (i == 0) {
+            String content;
+            if (isStenter) {
                 content = buildContent(181,actValue ,130.4,180.56,100 ,stop,second);
-            } else if (i == 1){
-                stop = 66;
-                content = buildContent(181,actValue ,130.4,180.56,200 ,stop,second);
-            } else if (i == 2){
-                stop = 66;
-                content = buildContent(181,actValue ,130.4,180.56,300.1 ,stop,second);
-            }else if (i == 3){
-                stop = 66;
-                content = buildContent(181,actValue ,160,179.6,400 ,stop,second);
-            }else if (i == 4){
-                stop = 66;
-                content = buildContent(181,actValue ,160,179.6,500 ,stop,second);
-            }else if (i == 5){
-                stop = 66;
-                content = buildContent(181,actValue ,170,179.6,600 ,stop,second);
             } else {
-                content = buildContent(181,actValue ,170,179.6,600 ,stop,second);
+                content = buildCommonContent(99,120,second);
             }
+
             try {
 
                 // 创建消息
