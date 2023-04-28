@@ -13,7 +13,7 @@ public enum ConsumerEnum {
     /**
      * 变更
      */
-    CHANGE_TASK_CONSUMER("topicB","tag1", "任务2","changeConsumerHandlerInstance");
+    ORDERLY_TASK_CONSUMER("topicB","tag1", "任务2","orderlyConsumerHandlerInstance");
 
 
     /**

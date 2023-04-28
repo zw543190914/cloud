@@ -51,7 +51,8 @@ public class RocketProductController {
                         log.info("[sendMsg] send error is ", throwable);
                     }
                 });
-                log.info("[sendMsg] count is {}",count);
+                //SendResult sendResult = rocketMQTemplate.syncSend(topic, message);
+                //log.info("[sendMsg] send success " + sendResult);
                 count ++;
             }
 //            TimeUnit.SECONDS.sleep(1);

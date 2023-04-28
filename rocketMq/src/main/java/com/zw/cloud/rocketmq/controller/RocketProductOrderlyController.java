@@ -28,16 +28,16 @@ public class RocketProductOrderlyController {
      * consumeMode = ConsumeMode.ORDERLY
      */
     @GetMapping("/syncSendOrderly")
-    //http://localhost:9095/rocket/orderly/syncSendOrderly?topic=topicA&tag=tag1
-    public void syncSendOrderly(@RequestParam String topic,@RequestParam String tag) {
+    //http://localhost:9095/rocket/orderly/syncSendOrderly?topic=topicB&tag=tag1&msg=zw
+    public void syncSendOrderly(@RequestParam String msg,@RequestParam String topic,@RequestParam String tag) {
         for (int i = 0; i < 10; i++) {
-            String msg = String.valueOf(atomicInteger.getAndAdd(1));
-            Message<byte[]> message = MessageBuilder.withPayload(msg.getBytes(StandardCharsets.UTF_8)).build();
+            Message<byte[]> message = MessageBuilder.withPayload((msg + atomicInteger.getAndAdd(1)).getBytes(StandardCharsets.UTF_8)).build();
             //SendResult result = rocketMQTemplate.syncSendOrderly(topic, message, "hashKey");
             //log.info("send success {}" ,JSONUtil.toJsonStr(result));
-            // 异步发送
-            String hashKey = msg;
-            rocketMQTemplate.asyncSendOrderly(topic + ":" + tag, message, hashKey, new SendCallback() {
+            // 异步发送,未按顺序发送
+            String hashKey = "msg";
+
+            /*rocketMQTemplate.asyncSendOrderly(topic + ":" + tag, message, hashKey, new SendCallback() {
                 @Override
                 public void onSuccess(SendResult sendResult) {
                     log.info("[syncSendOrderly] send success " + sendResult);
@@ -46,7 +46,11 @@ public class RocketProductOrderlyController {
                 public void onException(Throwable throwable) {
                     log.info("[syncSendOrderly] send error is " + throwable.getMessage());
                 }
-            });
+            });*/
+            // 同步发送 保证顺序
+            SendResult sendResult = rocketMQTemplate.syncSendOrderly(topic + ":" + tag, message, hashKey);
+            log.info("[syncSendOrderly] send success " + sendResult);
+
         }
     }
 
