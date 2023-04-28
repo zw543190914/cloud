@@ -275,4 +275,81 @@ public class MqttPublishSample {
                 "  }\n" +
                 "}";
     }
+
+    public static String buildCommonContent(int setValue,int actValue,Long second){
+        return  "{\n" +
+                "    \"generalReport\":{\n" +
+                "        \"ctime\":" + second + ",\n" +
+                "        \"rtime\":" + second + ",\n" +
+                "        \"mt\":1,\n" +
+                "        \"ec\":8830,\n" +
+                "        \"e01\":"+ setValue +",\n" +
+                "        \"e02\":"+ actValue +",\n" +
+                "        \"e03\":"+ actValue +",\n" +
+                "        \"e04\":"+ setValue +",\n" +
+                "        \"e05\":"+ actValue +",\n" +
+                "        \"e06\":"+ setValue +",\n" +
+                "        \"e07\":"+ actValue +",\n" +
+                "        \"e08\":"+ setValue +",\n" +
+                "        \"e09\":"+ actValue +",\n" +
+                "        \"e10\":"+ setValue +",\n" +
+                "        \"e11\":"+ actValue +",\n" +
+                "        \"e12\":"+ setValue +",\n" +
+                "        \"e13\":"+ actValue +",\n" +
+                "        \"e14\":"+ setValue +",\n" +
+                "        \"e15\":"+ actValue +",\n" +
+                "        \"e16\":"+ setValue +",\n" +
+                "        \"e17\":"+ actValue +",\n" +
+                "        \"e18\":"+ setValue +",\n" +
+                "        \"e19\":"+ actValue +",\n" +
+                "        \"e20\":"+ setValue +",\n" +
+                "        \"e21\":"+ actValue +",\n" +
+                "        \"e22\":"+ setValue +",\n" +
+                "        \"e23\":"+ actValue +",\n" +
+                "        \"e24\":"+ setValue +",\n" +
+                "        \"e25\":"+ actValue +",\n" +
+                "        \"e027\":"+ setValue +",\n" +
+                "        \"e27\":"+ actValue +",\n" +
+                "        \"e28\":"+ setValue +",\n" +
+                "        \"e29\":"+ actValue +",\n" +
+                "        \"e30\":"+ actValue +",\n" +
+                "        \"e31\":"+ setValue +",\n" +
+                "        \"e32\":"+ actValue +",\n" +
+                "        \"e33\":"+ setValue +",\n" +
+                "        \"e34\":"+ actValue +",\n" +
+                "        \"e35\":"+ setValue +",\n" +
+                "        \"e36\":"+ actValue +",\n" +
+                "        \"e37\":"+ setValue +",\n" +
+                "        \"e38\":"+ actValue +",\n" +
+                "        \"e39\":"+ setValue +",\n" +
+                "        \"e40\":"+ actValue +",\n" +
+                "        \"e41\":"+ setValue +",\n" +
+                "        \"e42\":"+ actValue +",\n" +
+                "        \"e43\":"+ setValue +",\n" +
+                "        \"e44\":"+ actValue +",\n" +
+                "        \"e45\":"+ setValue +",\n" +
+                "        \"e46\":"+ actValue +",\n" +
+                "        \"e47\":"+ setValue +",\n" +
+                "        \"e48\":"+ actValue +",\n" +
+                "        \"e49\":"+ setValue +",\n" +
+                "        \"e50\":"+ actValue +",\n" +
+                "        \"e51\":"+ setValue +",\n" +
+                "        \"e52\":"+ actValue +",\n" +
+                "        \"e53\":"+ setValue +",\n" +
+                "        \"e54\":"+ actValue +",\n" +
+                "        \"e55\":"+ actValue +",\n" +
+                "        \"e56\":"+ setValue +",\n" +
+                "        \"e57\":"+ actValue +",\n" +
+                "        \"e58\":"+ setValue +",\n" +
+                "        \"e59\":"+ actValue +",\n" +
+                "        \"e60\":"+ setValue +",\n" +
+                "        \"e61\":"+ actValue +",\n" +
+                "        \"e62\":"+ setValue +",\n" +
+                "        \"e63\":"+ actValue +",\n" +
+                "        \"e64\":"+ setValue +",\n" +
+                "        \"e65\":"+ actValue +"\n" +
+                "    }\n" +
+                "}";
+
+    }
 }
