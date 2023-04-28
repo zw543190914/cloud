@@ -308,7 +308,6 @@ public class MqttPublishSample {
                 "        \"e23\":"+ actValue +",\n" +
                 "        \"e24\":"+ setValue +",\n" +
                 "        \"e25\":"+ actValue +",\n" +
-                "        \"e027\":"+ setValue +",\n" +
                 "        \"e27\":"+ actValue +",\n" +
                 "        \"e28\":"+ setValue +",\n" +
                 "        \"e29\":"+ actValue +",\n" +
