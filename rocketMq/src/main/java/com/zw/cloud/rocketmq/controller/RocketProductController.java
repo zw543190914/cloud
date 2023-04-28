@@ -102,6 +102,8 @@ public class RocketProductController {
                 log.info("[sendDelayMsg] send error is " + throwable.getMessage());
             }
         },3000,4);
+        // 定时消息
+        //SendResult sendResult = rocketMQTemplate.syncSendDeliverTimeMills(topic, message, System.currentTimeMillis() + 5000);
 
     }
 
