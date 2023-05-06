@@ -12,6 +12,10 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
+/**
+ *  同步顺序发送，使用orderly可以顺序消费 有异常，maxReconsumeTimes不设置，阻塞后续消费,不断重试
+ *  异步发送无法，使用orderly无法保证顺序消息
+ */
 @Component
 @Slf4j
 @RocketMQMessageListener(topic = "topicB", consumerGroup = "group2", consumeThreadNumber = 5,maxReconsumeTimes = 4,

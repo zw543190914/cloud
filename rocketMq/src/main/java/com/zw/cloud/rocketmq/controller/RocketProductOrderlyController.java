@@ -37,6 +37,10 @@ public class RocketProductOrderlyController {
             // 异步发送,未按顺序发送
             String hashKey = "msg";
 
+            /**
+             *  同步顺序发送，使用orderly可以顺序消费 有异常，maxReconsumeTimes不设置，阻塞后续消费,不断重试
+             *  异步发送无法，使用orderly无法保证顺序消息
+             */
             /*rocketMQTemplate.asyncSendOrderly(topic + ":" + tag, message, hashKey, new SendCallback() {
                 @Override
                 public void onSuccess(SendResult sendResult) {
