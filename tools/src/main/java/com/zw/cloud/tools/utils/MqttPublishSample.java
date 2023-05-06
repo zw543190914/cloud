@@ -55,7 +55,7 @@ public class MqttPublishSample {
         String clientId = "subscribe_test";
         boolean isStenter = true;*/
 
-        // qa通用设备 测试机001  2342701
+        // qa通用设备 device1651719933  2342701
         String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|2342701|0|MD5";
         String password = "25249998d919796775bb61fbc1559fe7";
@@ -79,7 +79,6 @@ public class MqttPublishSample {
         sampleClient.connect(connOpts);
         //long second = 1658383250;
         int stop = 66;
-        Random random = new Random();
         int actValue = 75 ;
         long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
 
@@ -116,6 +115,9 @@ public class MqttPublishSample {
     }
 
     public static String buildContent(int setValue,int actValue,double actValue01,double actValue02,double actValue03,int speed,Long second){
+        Random random = new Random();
+        int nextInt = random.nextInt(20);
+        actValue = actValue + nextInt;
         return "{\n" +
                 "\"stenterStatus\":{\n" +
                 "    \"rtime\": "+ second +",     \n" +
@@ -278,6 +280,9 @@ public class MqttPublishSample {
     }
 
     public static String buildCommonContent(int setValue,int actValue,Long second){
+        Random random = new Random();
+        int nextInt = random.nextInt(20);
+        actValue = actValue + nextInt;
         return  "{\n" +
                 "    \"generalReport\":{\n" +
                 "        \"ctime\":" + second + ",\n" +
