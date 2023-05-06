@@ -1,0 +1,3 @@
+# Run Listeners
+org.springframework.boot.SpringApplicationRunListener=\
+com.zw.cloud.tools.use.time.listen.MySpringApplicationRunListener
