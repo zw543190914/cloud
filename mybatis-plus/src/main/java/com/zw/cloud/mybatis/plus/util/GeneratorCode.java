@@ -58,7 +58,7 @@ public class GeneratorCode {
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         //表名，多个英文逗号分割
-        strategy.setInclude("product_record_detail");
+        strategy.setInclude("productivity_coefficient");
         // 表前缀
         //strategy.setTablePrefix(pc.getModuleName() + "_");
 
@@ -79,9 +79,10 @@ public class GeneratorCode {
         TableFill createSystem = new TableFill("create_system", FieldFill.INSERT);
         TableFill updateUser = new TableFill("update_user", FieldFill.INSERT_UPDATE);
         TableFill updateSystem = new TableFill("update_system", FieldFill.INSERT_UPDATE);
+        TableFill orgCode = new TableFill("org_code", FieldFill.INSERT);
 
         ArrayList<TableFill> fills = Lists.newArrayList(createTime,updateTime,userId,
-                createUser,createSystem,updateUser,updateSystem);
+                createUser,createSystem,updateUser,updateSystem,orgCode);
         strategy.setTableFillList(fills);
         // 乐观锁
         strategy.setVersionFieldName("version");
