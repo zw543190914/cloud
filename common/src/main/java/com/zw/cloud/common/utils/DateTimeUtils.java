@@ -86,7 +86,8 @@ public class DateTimeUtils {
 
         System.out.println(parse2datetime("2023-04-03 18:47:02",null));
         System.out.println(parse2Str(LocalDateTime.now(),null));
-
+        System.out.println(parse2date("2023-04-03"));
+        System.out.println(LocalDateTime.parse("2023-04-03T18:47:00").compareTo(LocalDateTime.parse("2023-04-03T18:47:00")));
     }
 
     public static LocalDateTime dateToLocalDateTime(Date date) {
@@ -418,6 +419,14 @@ public class DateTimeUtils {
         }
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
         return LocalDateTime.parse(date, dateTimeFormatter);
+    }
+
+    public static LocalDate parse2date(String date) {
+        if (StringUtils.isBlank(date)) {
+            return null;
+        }
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+        return LocalDate.parse(date, dateTimeFormatter);
     }
 
     public static void between(LocalDateTime start,LocalDateTime end) {
