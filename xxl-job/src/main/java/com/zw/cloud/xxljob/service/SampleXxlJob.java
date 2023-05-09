@@ -15,6 +15,7 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
@@ -56,8 +57,14 @@ public class SampleXxlJob {
                 MDC.put(TRACE_ID,UUID.randomUUID().toString().replace("-", ""));
             }
             String param = XxlJobHelper.getJobParam();
-            Map map = JSON.parseObject(param, Map.class);
-            log.info("XXL-JOB, Hello World start,param is {}",JSON.toJSONString(map));
+            if (StringUtils.isNotBlank(param)) {
+                /**
+                 * {"startTime":"2023-05-09"}
+                 */
+                Map<String, String> map = JSON.parseObject(param, Map.class);
+                log.info("XXL-JOB, Hello World start,param is {}",map.get("startTime"));
+            }
+
             //TimeUnit.SECONDS.sleep(10);
             log.info("XXL-JOB, Hello World end");
             return ReturnT.SUCCESS;
