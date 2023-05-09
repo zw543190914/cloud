@@ -1,5 +1,6 @@
 package com.zw.cloud.xxljob.service;
 
+import com.alibaba.fastjson2.JSON;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
@@ -15,6 +16,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -48,13 +50,15 @@ public class SampleXxlJob {
      * 1、简单任务示例（Bean模式）
      */
     @XxlJob("demoJobHandler")
-    public ReturnT<String> demoJobHandler(String param) throws Exception {
+    public ReturnT<String> demoJobHandler() throws Exception {
         try {
             if (StringUtils.isBlank(MDC.get(TRACE_ID))) {
                 MDC.put(TRACE_ID,UUID.randomUUID().toString().replace("-", ""));
             }
-            log.info("XXL-JOB, Hello World start");
-            TimeUnit.SECONDS.sleep(10);
+            String param = XxlJobHelper.getJobParam();
+            Map map = JSON.parseObject(param, Map.class);
+            log.info("XXL-JOB, Hello World start,param is {}",JSON.toJSONString(map));
+            //TimeUnit.SECONDS.sleep(10);
             log.info("XXL-JOB, Hello World end");
             return ReturnT.SUCCESS;
         } finally {
