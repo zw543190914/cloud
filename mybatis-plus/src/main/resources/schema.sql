@@ -269,3 +269,36 @@ CREATE TABLE `general_product_record_plan_craft` (
                                                      PRIMARY KEY (`id`),
                                                      UNIQUE KEY `uk_general_product_record_id` (`general_product_record_id`) USING BTREE
 ) ENGINE=InnoDB COMMENT='通用生产记录工艺关联表';
+
+CREATE TABLE `productivity_coefficient` (
+                                            `id` bigint NOT NULL COMMENT '主键',
+                                            `statistical_date` date NOT NULL COMMENT '统计日期',
+                                            `total_product_record` int NOT NULL COMMENT '生产记录数量',
+                                            `productivity_coefficient` decimal(8,4) DEFAULT NULL COMMENT '生产力系数',
+                                            `has_craft_rate` decimal(5,4) DEFAULT NULL COMMENT '有工艺的数量占比',
+                                            `craft_suitability_rate` decimal(5,4) DEFAULT NULL COMMENT '定型生产整体匹配度',
+                                            `controllable_time` decimal(5,4) DEFAULT NULL COMMENT '时长可控范围内的数量占比',
+                                            `repair_rate` decimal(5,4) DEFAULT NULL COMMENT '定型数量回修率',
+                                            `not_has_craft_rate` decimal(5,4) DEFAULT NULL COMMENT '无工艺占比',
+                                            `has_craft_suitability_rate` decimal(5,4) DEFAULT NULL COMMENT '有匹配度占比',
+                                            `not_has_craft_suitability` decimal(5,4) DEFAULT NULL COMMENT '无匹配度占比',
+                                            `craft_suitability_greater_than_standard_rate` decimal(5,4) DEFAULT NULL COMMENT '匹配度大于标准占比',
+                                            `craft_suitability_greater_than_overall_rate` decimal(5,4) DEFAULT NULL COMMENT '匹配度大于整体占比',
+                                            `craft_suitability_less_than_standard_rate` decimal(5,4) DEFAULT NULL COMMENT '匹配度小于标准占比',
+                                            `craft_suitability_less_than_overall_rate` decimal(5,4) DEFAULT NULL COMMENT '匹配度小于整体占比',
+                                            `duration_normal_rate` decimal(5,4) DEFAULT NULL COMMENT '时长正常占比',
+                                            `duration_abnormal_rate` decimal(5,4) DEFAULT NULL COMMENT '时长异常占比',
+                                            `no_time_rate` decimal(5,4) DEFAULT NULL COMMENT '无时长占比',
+                                            `craft_differential_distribution` json DEFAULT NULL COMMENT '工艺参数差异分布',
+                                            `non_standard_operations_distribution` json DEFAULT NULL COMMENT '系统操作不规范人员分布',
+                                            `org_code` varchar(32) NOT NULL COMMENT '机构编号',
+                                            `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已经删除，0未删除,1已删除',
+                                            `create_user` varchar(32) NOT NULL DEFAULT '' COMMENT '创建用户',
+                                            `create_system` varchar(32) NOT NULL DEFAULT '' COMMENT '创建系统',
+                                            `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                            `update_user` varchar(32) NOT NULL DEFAULT '' COMMENT '更新用户',
+                                            `update_system` varchar(32) NOT NULL DEFAULT '' COMMENT '修改系统',
+                                            `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                            PRIMARY KEY (`id`),
+                                            UNIQUE KEY `idx_statistical_date` (`statistical_date`,`org_code`,`is_deleted`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='定型生产力系数';
