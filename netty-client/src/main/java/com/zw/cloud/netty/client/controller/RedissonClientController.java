@@ -1,4 +1,4 @@
-package com.zw.cloud.netty.web.controller;
+package com.zw.cloud.netty.client.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
@@ -22,20 +22,19 @@ public class RedissonClientController {
     @Resource(name = "ioThreadPoolTaskExecutor")
     private ThreadPoolTaskExecutor ioThreadPoolTaskExecutor;
 
-
     @GetMapping("/lock")
-    //http://localhost:18092/redisson/lock
+    //http://localhost:18093/redisson/lock
     public void lock(){
         ioThreadPoolTaskExecutor.execute(this::test);
     }
 
     private void test() {
         RLock lock = redissonClient.getLock("test_lock");
-        lock.lock(3,TimeUnit.SECONDS);
+        lock.lock(8,TimeUnit.SECONDS);
         log.info("[lock] start ");
         try {
-            TimeUnit.SECONDS.sleep(6);
-        } catch (InterruptedException e) {
+            TimeUnit.SECONDS.sleep(10);
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (lock.isLocked() && lock.isHeldByCurrentThread()) {
