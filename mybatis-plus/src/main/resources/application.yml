@@ -34,6 +34,8 @@ spring:
       url: jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
       username: root
       password: password
+      connect-timeout: 60000
+      socket-timeout: 60000
   main:
     allow-circular-references: true
 
@@ -125,7 +127,7 @@ logging:
         cloud:
           mybatis:
             plus:
-              mapper: debug
+              mapper: info
     root: info
 server:
   port: 8082

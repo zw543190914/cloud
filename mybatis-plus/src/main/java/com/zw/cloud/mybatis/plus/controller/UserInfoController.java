@@ -263,20 +263,28 @@ public class UserInfoController {
         return userInfo;
     }
 
-    @GetMapping("/updateById/{id}")
-    //http://localhost:8082/user-info/updateById/1630149914552054161
-    public void updateById(@PathVariable Long id) {
-        UserInfo userInfo = new UserInfo();
-        userInfo.setId(id);
-        userInfo.setAge(21);
-        mapper.updateById(userInfo);
+    int i = 0;
+    @GetMapping("testDuplicateUpdate")
+    //http://localhost:8082/user-info/testDuplicateUpdate
+    public void testDuplicateUpdate() {
+        // i 线程不安全
+        i = i+1;
+        onDuplicateUpdate(String.valueOf(i));
+        updateByName(String.valueOf(i - new Random().nextInt(20)));
     }
 
-    @GetMapping("/onDuplicateUpdate")
-    //http://localhost:8082/user-info/onDuplicateUpdate
-    public void onDuplicateUpdate() {
+    @GetMapping("/updateByName/{name}")
+    //http://localhost:8082/user-info/updateByName/zw4
+    public void updateByName(@PathVariable String name) {
+        userService.updateByName(name);
+    }
+
+    @GetMapping("/onDuplicateUpdate/{name}")
+    //http://localhost:8082/user-info/onDuplicateUpdate/zw2
+    public void onDuplicateUpdate(@PathVariable String name) {
+        log.info("[UserInfoController][onDuplicateUpdate]name is {}",name);
         UserInfo userInfo = new UserInfo();
-        userInfo.setName("zw1");
+        userInfo.setName(name);
         userInfo.setAge(23);
         userInfo.setOther(Lists.newArrayList(3));
         userInfo.setUpdateTime(LocalDateTime.now());

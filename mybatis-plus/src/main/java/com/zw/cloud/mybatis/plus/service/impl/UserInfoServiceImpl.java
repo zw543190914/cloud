@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -381,5 +382,20 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Transactional
     public void onDuplicateUpdate(List<UserInfo> userInfoList) {
         baseMapper.onDuplicateUpdate(userInfoList);
+    }
+
+    @Override
+    @Transactional
+    public void updateByName(String name) {
+        UserInfo userInfo = baseMapper.selectOne(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getName, name));
+        if (Objects.nonNull(userInfo)) {
+            /*try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
+            userInfo.setAge(1);
+            updateById(userInfo);
+        }
     }
 }

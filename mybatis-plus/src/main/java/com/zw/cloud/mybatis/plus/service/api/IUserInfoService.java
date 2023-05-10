@@ -57,4 +57,6 @@ public interface IUserInfoService extends IService<UserInfo> {
     Map<String, Object> queryUserData();
 
     void onDuplicateUpdate(List<UserInfo> userInfoList);
+
+    void updateByName(String name);
 }
