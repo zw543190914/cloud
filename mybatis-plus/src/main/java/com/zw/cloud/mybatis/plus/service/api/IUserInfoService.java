@@ -55,4 +55,6 @@ public interface IUserInfoService extends IService<UserInfo> {
     IPage<UserInfo> queryAllDataTest(Integer pageNo, Integer pageSize);
 
     Map<String, Object> queryUserData();
+
+    void onDuplicateUpdate(List<UserInfo> userInfoList);
 }

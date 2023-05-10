@@ -5,7 +5,6 @@ import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.zw.cloud.common.exception.BizException;
@@ -14,7 +13,6 @@ import com.zw.cloud.mybatis.plus.mapper.UserInfoMapper;
 import com.zw.cloud.mybatis.plus.service.api.IUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -266,37 +264,23 @@ public class UserInfoController {
     }
 
     @GetMapping("/updateById/{id}")
-    //http://localhost:8082/user-info/updateById/1
-    public int updateById(@PathVariable Long id) {
+    //http://localhost:8082/user-info/updateById/1630149914552054161
+    public void updateById(@PathVariable Long id) {
         UserInfo userInfo = new UserInfo();
         userInfo.setId(id);
-        userInfo.setName("testLock");
-        return mapper.updateById(userInfo);
+        userInfo.setAge(21);
+        mapper.updateById(userInfo);
     }
 
     @GetMapping("/onDuplicateUpdate")
     //http://localhost:8082/user-info/onDuplicateUpdate
-    public int onDuplicateUpdate() {
-        LocalDate now = LocalDate.now();
+    public void onDuplicateUpdate() {
         UserInfo userInfo = new UserInfo();
         userInfo.setName("zw1");
-        userInfo.setAge(21);
-        userInfo.setBir(now);
-        userInfo.setOther(Lists.newArrayList(1));
-
-        UserInfo userInfo2 = new UserInfo();
-        userInfo2.setName("zw2");
-        userInfo2.setAge(22);
-        userInfo2.setBir(now.plusDays(1));
-        userInfo2.setOther(Lists.newArrayList(2));
-
-        UserInfo userInfo3 = new UserInfo();
-        userInfo3.setName("zw1");
-        userInfo3.setAge(23);
-        userInfo3.setBir(now.plusDays(2));
-        userInfo3.setOther(Lists.newArrayList(3));
-        userInfo3.setUpdateTime(LocalDateTime.now());
-        return mapper.onDuplicateUpdate(Lists.newArrayList(userInfo,userInfo2,userInfo3));
+        userInfo.setAge(23);
+        userInfo.setOther(Lists.newArrayList(3));
+        userInfo.setUpdateTime(LocalDateTime.now());
+        userService.onDuplicateUpdate(Lists.newArrayList(userInfo));
     }
 
     @PostMapping("/query")

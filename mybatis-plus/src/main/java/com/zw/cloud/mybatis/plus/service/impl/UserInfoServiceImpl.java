@@ -31,7 +31,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -376,5 +375,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         and calc_day = '2021-11-10'
         GROUP BY device_id,device_name*/
         return baseMapper.queryUserData(sql.toString());
+    }
+
+    @Override
+    @Transactional
+    public void onDuplicateUpdate(List<UserInfo> userInfoList) {
+        baseMapper.onDuplicateUpdate(userInfoList);
     }
 }
