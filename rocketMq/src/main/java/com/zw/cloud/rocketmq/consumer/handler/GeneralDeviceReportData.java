@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Component("generalDeviceReportData")
 @Slf4j
@@ -50,6 +51,11 @@ public class GeneralDeviceReportData extends ConsumerHandler{
             IotInfoDto iotInfoDto = new IotInfoDto();
             BeanUtils.copyByCopyField(iotMessageDto, iotInfoDto);
             iotInfoDto.setCtime(LocalDateTime.ofEpochSecond(iotMessageDto.getCtime(),0, ZoneOffset.of("+8")));
+            try {
+                TimeUnit.SECONDS.sleep(8);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             JSONObject jsonObject = restTemplate.exchange("http://127.0.0.1:8082/general-device-report-data",
                     HttpMethod.POST, new HttpEntity<>(JSON.toJSONString(iotInfoDto)), JSONObject.class).getBody();
             log.info("[GeneralDeviceReportData][handleRocketMQMsg] messageBody is {}, jsonObject is {}",messageBody, JSON.toJSONString(jsonObject));
