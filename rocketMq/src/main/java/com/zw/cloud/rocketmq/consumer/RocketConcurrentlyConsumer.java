@@ -13,7 +13,7 @@ import java.util.Objects;
 
 @Component
 @Slf4j
-@RocketMQMessageListener(topic = "topicA", consumerGroup = "group1",selectorExpression = "tag1 || tag2 || tag3",
+@RocketMQMessageListener(topic = "general_device_report_data", consumerGroup = "group1",selectorExpression = "tag1 || tag2 || tag3",
         consumeThreadNumber = 4,consumeMode = ConsumeMode.CONCURRENTLY)
 public class RocketConcurrentlyConsumer implements RocketMQListener<MessageExt> {
 

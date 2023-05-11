@@ -7,11 +7,11 @@ import org.apache.commons.lang3.StringUtils;
  */
 public enum ConsumerEnum {
     /**
-     * 事件
+     * 通用设备上报数据
      */
-    EVENT_TASK_CONSUMER( "topicA","tag1", "任务1","eventConsumerHandlerInstance"),
+    GENERAL_DEVICE_REPORT_DATA( "general_device_report_data","tag1", "通用设备上报数据","generalDeviceReportData"),
     /**
-     * 变更
+     * 顺序消费
      */
     ORDERLY_TASK_CONSUMER("topicB","tag1", "任务2","orderlyConsumerHandlerInstance");
 

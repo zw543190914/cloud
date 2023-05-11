@@ -16,7 +16,6 @@ public class IotMessageDto implements Serializable {
     /**
      * 表示设备发送数据的时间戳，单位(秒），必填  采集时间
      */
-    @CopyField(targetFieldName = "ctime")
     private Long ctime;
     /**
      * 消息类型

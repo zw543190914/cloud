@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 public class IotInfoDto implements Serializable {
@@ -14,7 +15,7 @@ public class IotInfoDto implements Serializable {
     /**
      * 表示设备发送数据的时间戳，单位(秒），必填  采集时间
      */
-    private Long ctime;
+    private LocalDateTime ctime;
     /**
      * 消息类型
      * 1：事件类、2： 状态类
