@@ -26,7 +26,22 @@ public class SubmitAndExecuteTest {
             System.out.println("execute end");
         });
 
-
+        // 中断正在运行线程
+        Future<?> future = threadPoolExecutor.submit(() -> {
+            System.out.println("submit start");
+            while (true) {
+                System.out.println("submit end");
+                if (Thread.currentThread().isInterrupted()) {
+                    break;
+                }
+            }
+        });
+        try {
+            future.get(2,TimeUnit.SECONDS);
+        } catch (TimeoutException e) {
+            future.cancel(true);
+            e.printStackTrace();
+        }
         threadPoolExecutor.shutdown();
     }
 }
