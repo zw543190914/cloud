@@ -8,7 +8,7 @@ update  `base_tenter_craft` SET speci_wind_speed = JSON_SET(speci_wind_speed, '$
 WHERE JSON_CONTAINS(device_ids,JSON_OBJECT('id','1625739547898167298'));
 
 -- json数组包含
-SELECT * FROM `user_info` where JSON_CONTAINS(description,JSON_OBJECT('preOperatorAssistantStatisticDTOList', JSON_OBJECT('statisticDTOList',JSON_OBJECT('actualAmount',3.50))))
+SELECT * FROM `user_info` where JSON_CONTAINS(description,JSON_OBJECT('preOperatorAssistantStatisticDTOList', JSON_OBJECT('statisticDTOList',JSON_OBJECT('actualAmount',3.50))));
 /**
   [
     {
@@ -49,6 +49,11 @@ insert into `product_report_search_condition` (name,org_code,type,name_id,create
 SELECT customer_name as name, org_code,'customerName' as type,customer_no as name_id,now(),now()
 FROM  product_record where customer_name is not null
 GROUP BY customer_name;
+
+-- 将所有org_code数据中增加一个type13的数据。 按照orgCode分组，向每一组中都新增一条数据
+INSERT INTO `dyeing_stenter`.`base_shaping_param_config` (`name`, `product_card_field`, `status`, `sort`, `remark`, `module`, `type`, `update_user`, `update_system`, `update_time`, `org_code`, `config_json`)
+SELECT 'dryingRoomTempSetting', 0, 0, 2, '设定温度', '', 13, '陈启康', 'B4263529337148489E88A215BE562CF8', '2022-10-17 17:31:50', org_code , '{\"value\": \"˚C\", \"options\": [\"˚C\"], \"isRequire\": true}'
+FROM  `dyeing_stenter`.`base_shaping_param_config` GROUP BY org_code;
 
 -- 假如要将B表中的字段更新到A表中语句：
 update 库名.表A

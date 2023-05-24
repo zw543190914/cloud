@@ -1,5 +1,6 @@
 package com.zw.cloud.common.entity.dto;
 
+import com.alibaba.fastjson2.annotation.JSONField;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,4 +15,6 @@ public class ScoreConfigJsonDTO implements Serializable {
     private Integer includeMatch;
     private Integer allMatch;
     private Integer deviceBrandMatch;
+    @JSONField(name = "isTest")
+    private boolean isTest;
 }

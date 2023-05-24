@@ -19,6 +19,14 @@ public class JsonTest {
         String s = formulaSettingShowBaseJson();
         FormulaSettingShowBaseDTO formulaSettingShowBaseDTO = JSON.parseObject(s, FormulaSettingShowBaseDTO.class);
         System.out.println(JSON.toJSONString(formulaSettingShowBaseDTO));
+
+        ScoreConfigJsonDTO scoreConfigJsonDTO = new ScoreConfigJsonDTO();
+        scoreConfigJsonDTO.setTest(true);
+        String scoreConfigJsonDTOStr = JSON.toJSONString(scoreConfigJsonDTO);
+        // isTest 字段被修改为 test {"test":true}
+        System.out.println(scoreConfigJsonDTOStr);
+        ScoreConfigJsonDTO scoreConfigJsonDTO1 = JSON.parseObject(scoreConfigJsonDTOStr, ScoreConfigJsonDTO.class);
+        System.out.println(scoreConfigJsonDTO1.isTest()); // true
     }
 
     private static String configJson() {
