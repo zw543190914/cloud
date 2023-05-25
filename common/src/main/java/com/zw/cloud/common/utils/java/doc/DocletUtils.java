@@ -1,4 +1,4 @@
-package com.zw.cloud.common.utils;
+package com.zw.cloud.common.utils.java.doc;
 
 import com.alibaba.fastjson2.JSON;
 import com.sun.javadoc.ClassDoc;
