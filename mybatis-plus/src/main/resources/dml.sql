@@ -53,7 +53,7 @@ GROUP BY customer_name;
 -- 将所有org_code数据中增加一个type13的数据。 按照orgCode分组，向每一组中都新增一条数据
 INSERT INTO `dyeing_stenter`.`base_shaping_param_config` (`name`, `product_card_field`, `status`, `sort`, `remark`, `module`, `type`, `update_user`, `update_system`, `update_time`, `org_code`, `config_json`)
 SELECT 'dryingRoomTempSetting', 0, 0, 2, '设定温度', '', 13, '陈启康', 'B4263529337148489E88A215BE562CF8', '2022-10-17 17:31:50', org_code , '{\"value\": \"˚C\", \"options\": [\"˚C\"], \"isRequire\": true}'
-FROM  `dyeing_stenter`.`base_shaping_param_config` GROUP BY org_code;
+FROM  `dyeing_stenter`.`base_shaping_param_config` where type = 13 GROUP BY org_code;
 
 -- 假如要将B表中的字段更新到A表中语句：
 update 库名.表A
