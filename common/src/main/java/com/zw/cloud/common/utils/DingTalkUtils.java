@@ -74,7 +74,7 @@ public class DingTalkUtils {
         //log.info("[DingTalkUtils][sendDingTalkMsg] response is {}", JSONUtil.toJsonStr(response));
     }
 
-    public static void sendDingTalkMsgWithSign(String token,String sign,String msg) {
+    public static void sendDingTalkMsgWithSign(String title,String token,String sign,String msg) {
         try {
             long timestamp = System.currentTimeMillis();
             String genSign = genSign(timestamp, sign);
@@ -82,7 +82,7 @@ public class DingTalkUtils {
             OapiRobotSendRequest request = new OapiRobotSendRequest();
             request.setMsgtype("markdown");
             OapiRobotSendRequest.Markdown markdown = new OapiRobotSendRequest.Markdown();
-            markdown.setTitle("天气预报");
+            markdown.setTitle(title);
             markdown.setText(msg);
             request.setMarkdown(markdown);
             OapiRobotSendResponse response = client.execute(request);

@@ -2,7 +2,7 @@ package com.zw.cloud.tools.controller;
 
 import com.zw.cloud.common.entity.vo.LocationCodeVO;
 import com.zw.cloud.common.entity.vo.WeatherDTO;
-import com.zw.cloud.common.entity.vo.WeatherVO;
+import com.zw.cloud.common.entity.vo.WeatherLiveVO;
 import com.zw.cloud.common.gaode.IpLocationUtils;
 import com.zw.cloud.common.gaode.WeatherUtils;
 import com.zw.cloud.common.utils.WebResult;
@@ -19,9 +19,9 @@ public class UtilController {
 
     @GetMapping("/getWeatherByGaoDe")
     //http://localhost:9040/util/getWeatherByGaoDe
-    public WebResult<WeatherVO> getWeatherByGaoDe(HttpServletRequest request) {
+    public WebResult<WeatherLiveVO> getWeatherByGaoDe(HttpServletRequest request) {
         LocationCodeVO ipLocation = IpLocationUtils.getIpLocation(IpUtils.getUserIp(request));
-        return WebResult.build(WeatherUtils.getWeatherByGaoDe(ipLocation.getAdcode()));
+        return WebResult.build(WeatherUtils.getLiveWeatherByGaoDe(ipLocation.getAdcode()));
     }
 
     @GetMapping("/getWeatherByXinZhi")

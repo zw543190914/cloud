@@ -2,6 +2,7 @@ package com.zw.cloud.common.gaode;
 
 import com.alibaba.fastjson2.JSON;
 import com.zw.cloud.common.entity.vo.WeatherDTO;
+import com.zw.cloud.common.entity.vo.WeatherLiveVO;
 import com.zw.cloud.common.entity.vo.WeatherVO;
 import com.zw.cloud.common.utils.DingTalkUtils;
 import com.zw.cloud.common.utils.http.HttpClientUtils;
@@ -18,8 +19,33 @@ public class WeatherUtils {
     private static String br = " \n\n ";
 
     public static void main(String[] args) {
-        System.out.println(JSON.toJSONString(getWeatherByGaoDe("310000")));
+        //System.out.println(JSON.toJSONString(getWeatherByGaoDe("310000")));
+        System.out.println(JSON.toJSONString(getLiveWeatherByGaoDe("310000")));
         //System.out.println(JSON.toJSONString(getWeatherByXinZhi("上海")));
+    }
+
+    public static WeatherLiveVO getLiveWeatherByGaoDe(String adcode) {
+        Map<String,String> paramMap = new HashMap<>();
+        paramMap.put("city",adcode);
+        String response = HttpClientUtils.doGet("https://restapi.amap.com/v3/weather/weatherInfo?key=de60322325f689139040aae38ecba0d7", paramMap, null);
+        WeatherLiveVO weatherVO = JSON.parseObject(response, WeatherLiveVO.class);
+        List<WeatherLiveVO.ForecastsDTO> lives = weatherVO.getLives();
+        if (CollectionUtils.isEmpty(lives)) {
+            return weatherVO;
+        }
+        WeatherLiveVO.ForecastsDTO forecastsDTO = weatherVO.getLives().get(0);
+        StringBuffer msg = new StringBuffer("#### " + forecastsDTO.getCity() +" 天气预报\n");
+
+            msg.append("> 实时天气:" + forecastsDTO.getWeather() + br)
+                    .append("> 实时气温:" + forecastsDTO.getTemperature() + br)
+                    .append("> 风  向:").append(forecastsDTO.getWinddirection()).append(br)
+                    .append("> 风力级别:" + forecastsDTO.getWindpower() + br)
+                    .append("> 空气湿度:" + forecastsDTO.getHumidity() + br)
+                    .append("> ====================="+ br);
+
+        msg.append("> 数据发布时间:" + forecastsDTO.getReporttime());
+        DingTalkUtils.sendDingTalkMsgWithSign("天气预报","3a93469afdb2c38e22f0944e7f61a9b4d2e95a0138901d813ce6fe2c33dd1145","SECd51ae59f656260a2f859e4e149a54e120c8673a9aa789cf60f7ee20f09048a49",msg.toString());
+        return weatherVO;
     }
 
     public static WeatherVO getWeatherByGaoDe(String adcode) {
@@ -49,7 +75,7 @@ public class WeatherUtils {
                     .append("> ====================="+ br);
         }
         msg.append("> 数据发布时间:" + forecastsDTO.getReporttime());
-        DingTalkUtils.sendDingTalkMsgWithSign("3a93469afdb2c38e22f0944e7f61a9b4d2e95a0138901d813ce6fe2c33dd1145","SECd51ae59f656260a2f859e4e149a54e120c8673a9aa789cf60f7ee20f09048a49",msg.toString());
+        DingTalkUtils.sendDingTalkMsgWithSign("天气预报","3a93469afdb2c38e22f0944e7f61a9b4d2e95a0138901d813ce6fe2c33dd1145","SECd51ae59f656260a2f859e4e149a54e120c8673a9aa789cf60f7ee20f09048a49",msg.toString());
         return weatherVO;
     }
 
@@ -82,7 +108,7 @@ public class WeatherUtils {
 
         }
         msg.append("> 数据更新时间:" + resultsDTO.getLast_update());
-        DingTalkUtils.sendDingTalkMsgWithSign("3a93469afdb2c38e22f0944e7f61a9b4d2e95a0138901d813ce6fe2c33dd1145","SECd51ae59f656260a2f859e4e149a54e120c8673a9aa789cf60f7ee20f09048a49",msg.toString());
+        DingTalkUtils.sendDingTalkMsgWithSign("天气预报","3a93469afdb2c38e22f0944e7f61a9b4d2e95a0138901d813ce6fe2c33dd1145","SECd51ae59f656260a2f859e4e149a54e120c8673a9aa789cf60f7ee20f09048a49",msg.toString());
         return weatherDTO;
     }
 }
