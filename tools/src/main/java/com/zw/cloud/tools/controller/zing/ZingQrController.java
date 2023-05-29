@@ -58,6 +58,7 @@ public class ZingQrController {
 
     @GetMapping
     //http://localhost:9040/zing/qr?content=13422发
+    //http://8.130.80.181/web/zing/qr?content=13422发
     public void createSimpleQRCodeForWeb(@RequestParam String content, HttpServletResponse response) throws Exception {
         log.info("[ZingQrController][createSimpleQRCodeForWeb]content is {}",content);
 
