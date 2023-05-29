@@ -28,6 +28,7 @@ public class DateTimeUtils {
         System.out.println("=========毫秒数===========");
         System.out.println(milliSecond);
         System.out.println(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        System.out.println("=========毫秒数转为LocalDateTime===========");
         System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(milliSecond), ZoneId.systemDefault()));
 
         System.out.println("=========LocalDateTime 转为 Instant===========");
@@ -35,6 +36,7 @@ public class DateTimeUtils {
         System.out.println("=========Instant 转为 LocalDateTime===========");
         System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(milliSecond), ZoneId.systemDefault()));
 
+        System.out.println("=========Instant===========");
         Instant instant = Instant.ofEpochSecond(second);
         System.out.println(instant);
         System.out.println(instant.atZone(ZoneId.systemDefault()));
@@ -242,6 +244,9 @@ public class DateTimeUtils {
     }
 
 
+    /**
+     * 获取每季度 第一天或者最后一天
+     */
     public static Date getStartOrEndDayOfQuarter(LocalDate today, Boolean isFirst){
         LocalDate resDate = LocalDate.now();
         if (today == null) {
@@ -259,6 +264,9 @@ public class DateTimeUtils {
         return Date.from(instant);
     }
 
+    /**
+     * 获取每年 第一天或者最后一天
+     */
     public static Date getStartOrEndDayOfYear(LocalDate today, Boolean isFirst){
         LocalDate resDate = LocalDate.now();
         if (today == null) {
@@ -439,6 +447,23 @@ public class DateTimeUtils {
         long nanos = duration.toNanos();//相差的纳秒数
     }
 
+    /**
+     * 秒转为 LocalDateTime
+     */
+    public LocalDateTime secondToLocalDateTime(Long second) {
+        return LocalDateTime.ofEpochSecond(second, 0, ZoneOffset.of("+8"));
+    }
+
+    /**
+     * 毫秒转为 LocalDateTime
+     */
+    public LocalDateTime milliSecondToLocalDateTime(Long milliSecond) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(milliSecond), ZoneId.systemDefault());
+    }
+
+    /**
+     * 时分秒 置为0
+     */
     public static LocalDateTime transferTimeToZero(LocalDateTime localDateTime) {
         return LocalDateTime.of(localDateTime.getYear(), localDateTime.getMonth(), localDateTime.getDayOfMonth(), 0, 0, 0);
         //return localDateTime.withHour(0).withMinute(0).withSecond(0).withNano(0);
