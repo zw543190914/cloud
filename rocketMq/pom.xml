@@ -34,7 +34,6 @@
         <dependency>
             <groupId>com.zw.cloud</groupId>
             <artifactId>common</artifactId>
-            <version>${project.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>guava</artifactId>
