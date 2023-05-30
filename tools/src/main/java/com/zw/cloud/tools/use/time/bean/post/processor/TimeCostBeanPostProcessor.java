@@ -28,8 +28,8 @@ public class TimeCostBeanPostProcessor implements BeanPostProcessor {
             Long start = costMap.get(beanName);
             long cost  = System.currentTimeMillis() - start;
             if (cost > 0) {
-                System.out.println("bean: " + beanName + "\ttime: " + cost);
-                //log.info("[TimeCostBeanPostProcessor][postProcessAfterInitialization] beanName is {},cost time is {}",beanName,cost);
+                //System.out.println("bean: " + beanName + "\ttime: " + cost);
+                log.info("[TimeCostBeanPostProcessor][postProcessAfterInitialization] beanName is {},cost time is {}",beanName,cost);
             }
         }
         return bean;
