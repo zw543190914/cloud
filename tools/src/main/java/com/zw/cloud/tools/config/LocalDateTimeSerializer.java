@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 /**
- * 处理localdatetime 不返回时间戳的问题
+ * LocalDateTime序列化为毫秒级时间戳
  * @author zhengwei
  * @date 2022/4/13 18:59
  */

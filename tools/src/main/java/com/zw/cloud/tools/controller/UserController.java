@@ -41,10 +41,7 @@ public class UserController {
 
     @PostMapping
     //http://localhost:9040/user
-    public void insert(){
-        User userPlus = new User();
-        userPlus.setAge((byte)11);
-        userPlus.setName("001");
+    public void insert(@RequestBody User userPlus){
         User insert = userService.insert(userPlus);
         System.out.println(insert);
         // 主键生成策略- 默认雪花算法
@@ -86,7 +83,7 @@ public class UserController {
      * @return 单条数据
      */
     @GetMapping("selectOne")
-    //http://localhost:9040/user/selectOne?id=1
+    //http://localhost:9040/user/selectOne?id=1656239449518108674
     public User selectOne(@RequestParam Long id) {
         return this.userService.queryById(id);
     }

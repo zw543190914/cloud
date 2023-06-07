@@ -102,7 +102,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.zw.cloud.tools.entity.User">
-    insert into user (id, name, age, 
+    insert into user_info_0 (id, name, age,
       bir, create_time, update_time, 
       deleted)
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{age,jdbcType=TINYINT}, 
@@ -110,7 +110,7 @@
       #{deleted,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.zw.cloud.tools.entity.User">
-    insert into user
+    insert into user_info_0
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -165,7 +165,7 @@
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update user
+    update user_info_0
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
@@ -194,7 +194,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update user
+    update user_info_0
     set id = #{record.id,jdbcType=BIGINT},
       name = #{record.name,jdbcType=VARCHAR},
       age = #{record.age,jdbcType=TINYINT},
@@ -207,7 +207,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.zw.cloud.tools.entity.User">
-    update user
+    update user_info_0
     <set>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
@@ -231,7 +231,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zw.cloud.tools.entity.User">
-    update user
+    update user_info_0
     set name = #{name,jdbcType=VARCHAR},
       age = #{age,jdbcType=TINYINT},
       bir = #{bir,jdbcType=TIMESTAMP},
@@ -246,7 +246,7 @@
       这个节点为代码生成工具生成，请不要修改!
       @author hewei
     -->
-    insert into user (id, name, age, bir, create_time, update_time, deleted)
+    insert into user_info_0 (id, name, age, bir, create_time, update_time, deleted)
     values
     <foreach collection="list" item="item" separator=",">
        (#{item.id,jdbcType=BIGINT}, #{item.name,jdbcType=VARCHAR}, #{item.age,jdbcType=TINYINT}, #{item.bir,jdbcType=TIMESTAMP}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}, #{item.deleted,jdbcType=INTEGER})
@@ -271,11 +271,8 @@
   </select>
 
   <insert id="insertOrUpdate">
-    INSERT INTO `test`.`user`( `name`, age,`description`) VALUES (#{user.name},#{age},#{description})
+    INSERT INTO `test`.`user_info_0`( `name`, age,`description`) VALUES (#{user.name},#{age},#{description})
       ON DUPLICATE KEY UPDATE description= VALUES(description);
   </insert>
 
-  <select id="selectBySql" resultType="map">
-    ${sql}
-  </select>
 </mapper>

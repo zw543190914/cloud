@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Select;
 
 public interface UserMapper {
@@ -49,6 +50,8 @@ public interface UserMapper {
      */
     User selectOneByExample(UserExample example);
 
+    @Select({"${sql}"})
+    @ResultType(Map.class)
     Map<String,Object> selectBySql(@Param("sql") String sql);
 
 
