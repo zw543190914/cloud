@@ -34,8 +34,7 @@ public class DateTimeUtils {
         System.out.println("=========LocalDateTime 转为 Instant===========");
         System.out.println(now.atZone(ZoneId.systemDefault()).toInstant());
         System.out.println("=========Instant 转为 LocalDateTime===========");
-        System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(milliSecond), ZoneId.systemDefault()));
-
+        System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(milliSecond), ZoneId.of("UTC+8")));
         System.out.println("=========Instant===========");
         Instant instant = Instant.ofEpochSecond(second);
         System.out.println(instant);
@@ -90,6 +89,8 @@ public class DateTimeUtils {
         System.out.println(parse2Str(LocalDateTime.now(),null));
         System.out.println(parse2date("2023-04-03"));
         System.out.println(LocalDateTime.parse("2023-04-03T18:47:00").compareTo(LocalDateTime.parse("2023-04-03T18:47:00")));
+        System.out.println("=========将时间按照每7天进行截取===========");
+        System.out.println(getTimePeriods(now.minusDays(21),now.minusDays(1)));
     }
 
     public static LocalDateTime dateToLocalDateTime(Date date) {
@@ -405,6 +406,26 @@ public class DateTimeUtils {
             last.setEndTime(endTime);
         }
         return result;
+    }
+
+    /**
+     * 将时间按照每7天进行截取
+     */
+    public static List<LocalDateTimeDTO> getTimePeriods(LocalDateTime startDate, LocalDateTime endDate) {
+        List<LocalDateTimeDTO> timePeriods = new ArrayList<>();
+        LocalDateTime periodStart = startDate;
+        while (periodStart.isBefore(endDate)) {
+            LocalDateTime periodEnd = periodStart.plusDays(7);
+            if (periodEnd.isAfter(endDate)) {
+                periodEnd = endDate;
+            }
+            LocalDateTimeDTO timePeriod = new LocalDateTimeDTO();
+            timePeriod.setStartTime(periodStart);
+            timePeriod.setEndTime(periodEnd);
+            timePeriods.add(timePeriod);
+            periodStart = periodEnd;
+        }
+        return timePeriods;
     }
 
     public static String parse2Str(LocalDateTime localDateTime, String pattern) {
