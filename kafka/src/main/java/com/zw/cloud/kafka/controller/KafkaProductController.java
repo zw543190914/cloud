@@ -64,6 +64,45 @@ public class KafkaProductController {
         });
     }
 
+    @GetMapping(value = {"/sendMessage3/{topic}"})
+    //http://localhost:9085/kafka/sendMessage3/gemi_device_upstream_dyeing
+    public long sendMessage3(@PathVariable("topic") String topic) {
+        long currentTimeMillis = System.currentTimeMillis();
+        //发送消息
+        String message = " {\"sdata\":{\n" +
+                "    \"msgType\":\"workStatus\",\n" +
+                "    \"msgId\":\"" + UUID.randomUUID().toString() +"\",\n" +
+                "    \"timestamp\":1686138054,\n" +
+                "    \"orgCode\":\"354B9027AD8C47AA9B35372196216A2B\",\n" +
+                "    \"traceId\":\"\",\n" +
+                "    \"data\":{\n" +
+                "        \"cloudMsgId\":\"\",\n" +
+                "        \"deviceId\":\"1567550808302391298\",\n" +
+                "        \"workOrderId\":\""+ currentTimeMillis +"\",\n" +
+                "        \"craftId\":\"\",\n" +
+                "        \"craftVersion\":0,\n" +
+                "        \"status\":80,\n" +
+                "        \"code\":0,\n" +
+                "        \"message\":\"\"\n" +
+                "    }\n" +
+                "},\"mdata\":{\"created\":true,\"device\":{\"name\":\"dyeing-gateway-qa1\",\"ns\":\"dyeing\"},\"labels\":{\"activateStatus\":\"activated\",\"activateTime\":\"2021-11-26T16:15:47.814+08:00\",\"batchId\":\"61a07b518b3c29ab80d4eea4\",\"kind\":\"gateway\",\"linkType\":\"baidu\",\"productId\":\"61a05c908b3c29ab80d4eea3\",\"tlsEnabled\":false},\"link\":{\"name\":\"dyeing-gateway-qa1\",\"type\":\"baidu\"},\"mqtt\":{\"topic\":\"d/dyeing-gateway-qa1/up/work/status\"},\"msg\":{\"id\":\"977d24e6-8082-44c5-85d1-1667153a7713\",\"kafkaReceiveTime\":\"2023-06-08T07:18:20.824992225Z\",\"kafkaSendTime\":\"2023-06-08T07:18:20.047Z\",\"rootTopic\":\"upstream\",\"subTopic\":\"work_status\",\"topic\":\"qa1_upstream_dyeing\"},\"receiveTime\":1686208700826}}";
+        ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send(topic, message);
+        future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
+            @Override
+            public void onFailure(@NonNull Throwable throwable) {
+                //发送失败的处理
+                log.info("生产者发送消息失败：" + throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(SendResult<String, Object> stringObjectSendResult) {
+                //成功的处理
+                log.info("生产者发送消息成功：" + stringObjectSendResult.toString());
+            }
+        });
+        return currentTimeMillis;
+    }
+
     @GetMapping("mocksSendMessage/{count}")
     //http://localhost:9085/kafka/mocksSendMessage/10000
     public void mocksSendMessage(@PathVariable("topic") String topic,@PathVariable("count") Long count) throws InterruptedException {
