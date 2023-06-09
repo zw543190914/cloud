@@ -24,7 +24,7 @@ spring:
 #    connect-timeout: 3000
   redis2:
     # Redis服务器地址
-    host: 127.0.0.1
+    host: 8.130.80.181
     # Redis数据库索引（默认为0）
     database: 2
     # Redis服务器连接端口

@@ -16,6 +16,7 @@
     <description>Demo project for Spring Boot</description>
 
     <modules>
+        <module>admin</module>
         <module>dubbo-provider</module>
         <module>dubbo-provider-api</module>
         <module>dubbo-consumer</module>
@@ -62,6 +63,7 @@
         <ribbon.version>1.4.7.RELEASE</ribbon.version>
         <spring-cloud-starter.version>3.1.3</spring-cloud-starter.version>
         <zipkin.version>2.2.8.RELEASE</zipkin.version>
+        <spring.boot.version>2.6.7</spring.boot.version>
         <feign-okhttp.version>11.9.1</feign-okhttp.version>
 <!--        <dubbo.version>2.6.8</dubbo.version>-->
 <!--        <dubbo-registry-nacos.version>2.7.7</dubbo-registry-nacos.version>-->
@@ -692,6 +694,18 @@
                 <artifactId>mockito-inline</artifactId>
                 <version>${mockito-inline.version}</version>
                 <scope>test</scope>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/de.codecentric/spring-boot-admin-starter-server -->
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-server</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-client</artifactId>
+                <version>${spring.boot.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
