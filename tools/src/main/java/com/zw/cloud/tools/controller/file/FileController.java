@@ -1,22 +1,16 @@
 package com.zw.cloud.tools.controller.file;
 
 import com.zw.cloud.common.utils.WebResult;
-import com.zw.cloud.tools.modle.vo.MyPutRet;
 import com.zw.cloud.tools.service.impl.FileServiceImpl;
-import com.zw.cloud.tools.utils.CustomerExecutorService;
+import com.zw.cloud.tools.utils.WorderToNewWordUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
@@ -26,7 +20,7 @@ import java.nio.channels.WritableByteChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.concurrent.Future;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/tools/file")
@@ -157,6 +151,15 @@ public class FileController {
 
         inChannel.close();
         outChannel.close();
+    }
+
+    @PostMapping(value = "/downloadDocument")
+    //http://localhost:9040/tools/file/downloadDocument
+    public void downloadDocument(@RequestBody Map<String,String> textMap, HttpServletResponse response) throws IOException {
+        byte[] documentBytes = WorderToNewWordUtils.generateDocument(textMap.get("text"));
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment;filename=example.docx");
+        response.getOutputStream().write(documentBytes);
     }
 
 }
