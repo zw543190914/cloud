@@ -96,7 +96,7 @@
         <commons-codec.version>1.14</commons-codec.version>
         <commons-pool2.version>2.11.1</commons-pool2.version>
         <shiro-redis.version>3.0.0</shiro-redis.version>
-        <redisson.version>3.19.3</redisson.version>
+        <redisson.version>2.15.2</redisson.version>
         <redis.version>3.0.2</redis.version>
         <poi.version>4.1.2</poi.version>
         <easyexcel.version>3.0.5</easyexcel.version>

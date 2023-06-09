@@ -2,7 +2,6 @@ package com.zw.cloud.netty.web.controller;
 
 import com.alibaba.fastjson2.JSON;
 import com.google.common.collect.Lists;
-import com.zw.cloud.netty.utils.IpAddressUtils;
 import com.zw.cloud.netty.utils.RedisUtils;
 import com.zw.cloud.netty.web.entity.poem.Poem;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/redis")
@@ -23,6 +22,8 @@ import java.util.concurrent.TimeUnit;
 public class RedisController {
     @Autowired
     private RedisTemplate redisTemplate;
+    @Resource(name = "redisTemplate2")
+    private RedisTemplate redisTemplate2;
     @Autowired
     private RedisUtils redisUtils;
 
@@ -90,6 +91,18 @@ public class RedisController {
     //http://localhost:18092/redis/setnx
     public Boolean setnx(){
         return redisUtils.setnx("key", "value", 60);
+    }
+
+    @GetMapping("/redisTemplate2/{key}/{value}")
+    //http://localhost:18092/redis/redisTemplate2/zw/12
+    public void setString(@PathVariable String key,@PathVariable String value){
+        redisTemplate2.opsForValue().set(key,value);
+    }
+
+    @GetMapping("/redisTemplate2/getString/{key}")
+    //http://localhost:18092/redis/redisTemplate2/getString/zw
+    public Object getString(@PathVariable String key){
+        return redisTemplate2.opsForValue().get(key);
     }
 
     private Poem buildPoem() {

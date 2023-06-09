@@ -1,11 +1,16 @@
 package com.zw.cloud.netty.config;
 
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 
@@ -14,12 +19,13 @@ public class RedisConfig {
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
-        /*RedisTemplate<String, Object> template = new RedisTemplate<>();
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
         //自定义Jackson序列化配置
         Jackson2JsonRedisSerializer<Object> jsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
         objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL);
         jsonRedisSerializer.setObjectMapper(objectMapper);
 
@@ -32,10 +38,10 @@ public class RedisConfig {
         template.setHashKeySerializer(stringRedisSerializer);
         //hash的value也是用jackson的序列化方式
         template.setHashValueSerializer(jsonRedisSerializer);
-        template.afterPropertiesSet();*/
-
+        template.afterPropertiesSet();
+        return template;
         // key序列化
-        RedisSerializer<?> keySerializer = new StringRedisSerializer();
+        /*RedisSerializer<?> keySerializer = new StringRedisSerializer();
         // value序列化
         KryoRedisSerializerConfig<Object> valueSerializer = new KryoRedisSerializerConfig<>();
         // 配置redisTemplate
@@ -50,7 +56,7 @@ public class RedisConfig {
         // Hash value序列化
         redisTemplate.setHashValueSerializer(valueSerializer);
         redisTemplate.afterPropertiesSet();
-        return redisTemplate;
+        return redisTemplate;*/
     }
 
 }
