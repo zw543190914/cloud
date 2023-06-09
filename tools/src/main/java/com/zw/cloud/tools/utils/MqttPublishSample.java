@@ -21,13 +21,28 @@ public class MqttPublishSample {
 
         // dev
         // 18hao设备5
-        /*String host = "tcp://axdkagn.iot.gz.baidubce.com";
+        String host = "tcp://axdkagn.iot.gz.baidubce.com";
         String userName = "thingidp@axdkagn|rr|0|MD5";
         String password = "20f582bfab251a639a8893d13d90bdc1";
         String topic = "d/rr/report";
         String clientId = "subscribe_test_device01";
+        boolean isStenter = true;
+
+       /* // test_定型机#cqk
+        String host = "tcp://axdkagn.iot.gz.baidubce.com";
+        String userName = "thingidp@axdkagn|cqk_zy|0|MD5";
+        String password = "668eeb0a7fa18dab53a805b317b45976";
+        String topic = "d/cqk_zy/report";
+        String clientId = "subscribe_test_device01";
         boolean isStenter = true;*/
 
+        // 其他工厂 dev 大栋  321
+        /*String host = "tcp://axdkagn.iot.gz.baidubce.com";
+        String userName = "thingidp@axdkagn|1211|0|MD5";
+        String password = "5e0b273cdf52f75570b3710574af3ea0";
+        String topic = "d/1211/report";
+        String clientId = "subscribe_test";
+        boolean isStenter = true;*/
 
         // qa
         // 定型机#02
@@ -56,12 +71,12 @@ public class MqttPublishSample {
         boolean isStenter = true;*/
 
         // qa通用设备 device1651719933  2342701
-        String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+       /* String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|2342701|0|MD5";
         String password = "25249998d919796775bb61fbc1559fe7";
         String topic = "d/2342701/report";
         String clientId = "subscribe_test_device01";
-        boolean isStenter = false;
+        boolean isStenter = false;*/
 
         int qos = 1;
         // 内存存储
@@ -78,11 +93,11 @@ public class MqttPublishSample {
         // 建立连接
         sampleClient.connect(connOpts);
         //long second = 1658383250;
-        int stop = 66;
+        int stop = 7;
         int actValue = 75 ;
         long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
 
-        for (int i = 0; i < 120; i++) {
+        for (int i = 0; i < 44640; i++) {
 
             second = second + 30;
             String content;
@@ -104,7 +119,7 @@ public class MqttPublishSample {
             } catch (MqttException me) {
                 log.error("sampleClient.publish error is ",me);
             }
-            log.info("sampleClient.publish finish {}",second);
+            log.info("sampleClient.publish finish {}, i is {}",second,i);
             TimeUnit.SECONDS.sleep(30);
         }
         // 断开连接
