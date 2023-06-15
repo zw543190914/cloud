@@ -2,7 +2,7 @@ package com.zw.cloud.mybatis.controller;
 
 import com.alibaba.fastjson2.JSON;
 import com.github.pagehelper.PageInfo;
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import com.zw.cloud.mybatis.entity.ProductRecord;
 import com.zw.cloud.mybatis.service.api.IProductRecordService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,13 +21,13 @@ public class ProductRecordController {
     @PostMapping("/queryList")
     //http://localhost:8080/product-record/queryList
     public WebResult<PageInfo<ProductRecord>> queryList(@RequestBody ProductRecord productRecord) {
-        return WebResult.build(productRecordService.queryList(productRecord));
+        return WebResult.success(productRecordService.queryList(productRecord));
     }
 
     @GetMapping("/insert")
     //http://localhost:8080/product-record/insert
     public WebResult<ProductRecord> insert() {
-        return WebResult.build(productRecordService.insert(buildProductRecord()));
+        return WebResult.success(productRecordService.insert(buildProductRecord()));
     }
 
 

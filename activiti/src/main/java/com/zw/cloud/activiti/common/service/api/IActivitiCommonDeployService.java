@@ -1,6 +1,6 @@
 package com.zw.cloud.activiti.common.service.api;
 
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 

@@ -8,7 +8,7 @@ import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowException;
 import com.alibaba.csp.sentinel.slots.system.SystemBlockException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -25,17 +25,17 @@ public class CustomerBlockHandler implements BlockExceptionHandler {
         WebResult webResult = null;
         log.info("BlockException======="+e.getRule());
         if(e instanceof FlowException){
-            webResult = WebResult.failed().withErrorCodeAndMsg(300,"接口被限流了");
+            webResult = WebResult.fail(300,"接口被限流了");
         } else if(e instanceof DegradeException){
-            webResult = WebResult.failed().withErrorCodeAndMsg(301,"接口被熔断降级了");
+            webResult =  WebResult.fail(301,"接口被熔断降级了");
         } else if(e instanceof ParamFlowException){
-            webResult = WebResult.failed().withErrorCodeAndMsg(302,"接口热点参数限流了");
+            webResult =  WebResult.fail(302,"接口热点参数限流了");
         } else if(e instanceof SystemBlockException){
-            webResult = WebResult.failed().withErrorCodeAndMsg(303,"接口触发系统保护规则了");
+            webResult =  WebResult.fail(303,"接口触发系统保护规则了");
         } else if(e instanceof AuthorityException){
-            webResult = WebResult.failed().withErrorCodeAndMsg(304,"授权接口不通过");
+            webResult =  WebResult.fail(304,"授权接口不通过");
         } else {
-            webResult = WebResult.failed().withErrorCodeAndMsg(500,"服务错误");
+            webResult =  WebResult.fail(500,"服务错误");
         }
         //返回json格式
         httpServletResponse.setStatus(500);

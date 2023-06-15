@@ -7,8 +7,8 @@ import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import com.zw.cloud.common.entity.vo.OcrQrVO;
-import com.zw.cloud.common.utils.WebResult;
 import com.zw.cloud.common.utils.zing.QrCodeUtils;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import com.zw.cloud.tools.entity.PostCard;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -89,7 +89,7 @@ public class ZingQrController {
         // 转为base64
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         ImageIO.write(bufferedImage, "png", os);
-        return WebResult.build("data:image/png;base64," + Base64.encode(os.toByteArray()));
+        return WebResult.success("data:image/png;base64," + Base64.encode(os.toByteArray()));
     }
 
     @PostMapping
@@ -126,6 +126,6 @@ public class ZingQrController {
                 throw new RuntimeException("二维码图片无法识别,请重新上传");
             }
         }
-        return WebResult.build(resultMap);
+        return WebResult.success(resultMap);
     }
 }

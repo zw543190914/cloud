@@ -1,6 +1,6 @@
 package com.zw.cloud.feignproviderapi.service;
 
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 

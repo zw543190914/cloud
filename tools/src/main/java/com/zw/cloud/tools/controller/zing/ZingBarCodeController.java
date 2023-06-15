@@ -6,7 +6,7 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +41,7 @@ public class ZingBarCodeController {
             BitMatrix matrix = writer.encode(content, BarcodeFormat.CODE_128, 550, 250, null);
             // 将位图矩阵BitMatrix保存为图片
             ImageIO.write(MatrixToImageWriter.toBufferedImage(matrix), "png", os);
-            return WebResult.build("data:image/png;base64," + Base64.encode(os.toByteArray()));
+            return WebResult.success("data:image/png;base64," + Base64.encode(os.toByteArray()));
         }
     }
 

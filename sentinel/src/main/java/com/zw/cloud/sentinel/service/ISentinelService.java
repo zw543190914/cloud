@@ -1,6 +1,6 @@
 package com.zw.cloud.sentinel.service;
 
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import com.zw.cloud.sentinel.service.impl.FeignProviderCallbackServiceImpl;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

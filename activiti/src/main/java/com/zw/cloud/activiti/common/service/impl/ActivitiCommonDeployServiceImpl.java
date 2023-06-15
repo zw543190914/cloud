@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.zw.cloud.activiti.common.service.api.IActivitiCommonDeployService;
 import com.zw.cloud.activiti.dao.ActReDeploymentMapper;
 import com.zw.cloud.activiti.entity.ActReDeploymentExample;
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import org.activiti.engine.*;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
