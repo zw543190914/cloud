@@ -6,7 +6,7 @@ import com.zw.cloud.activiti.dao.ActHiActinstMapper;
 import com.zw.cloud.activiti.dao.ActHiCommentMapper;
 import com.zw.cloud.activiti.dao.ActRuTaskMapper;
 import com.zw.cloud.activiti.entity.*;
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;

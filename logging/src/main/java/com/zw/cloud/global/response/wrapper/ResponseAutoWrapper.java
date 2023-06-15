@@ -1,6 +1,9 @@
-package com.zw.cloud.sentinel.base;
+package com.zw.cloud.global.response.wrapper;
 
-import com.zw.cloud.common.utils.WebResult;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zw.cloud.global.response.wrapper.annotation.NotNeedResponseAutoWrapper;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
+import lombok.SneakyThrows;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +19,14 @@ public class ResponseAutoWrapper implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter methodParameter, Class aClass) {
-        /*if (Objects.isNull(methodParameter.getMethod())) {
+        if (Objects.isNull(methodParameter.getMethod())) {
             return false;
         }
-        Class<?> returnType = methodParameter.getMethod().getReturnType();
-        String returnTypeName = returnType.getName();
-        // true 转换
-        return !Objects.equals(returnTypeName,String.class.getName()) && !Objects.equals(returnTypeName,WebResult.class.getName());
-*/
-        return true;
+        NotNeedResponseAutoWrapper annotation = methodParameter.getMethod().getAnnotation(NotNeedResponseAutoWrapper.class);
+        return Objects.isNull(annotation);
     }
 
+    @SneakyThrows
     @Override
     public Object beforeBodyWrite(Object data, MethodParameter methodParameter, MediaType mediaType, Class aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
         if (Objects.isNull(data)) {
@@ -35,6 +35,10 @@ public class ResponseAutoWrapper implements ResponseBodyAdvice<Object> {
         if (data instanceof WebResult || data instanceof ResponseEntity){
             return data;
         }
-        return WebResult.build(data);
+        if (data instanceof String) {
+            ObjectMapper om = new ObjectMapper();
+            return om.writeValueAsString(WebResult.success(data));
+        }
+        return WebResult.success(data);
     }
 }

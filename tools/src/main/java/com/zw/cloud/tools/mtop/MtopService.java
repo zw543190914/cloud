@@ -2,12 +2,10 @@ package com.zw.cloud.tools.mtop;
 
 import com.alibaba.fastjson2.JSON;
 import com.google.common.base.Preconditions;
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
@@ -128,9 +126,9 @@ public class MtopService {
         if (value instanceof WebResult) {
             WebResult webResult = (WebResult) value;
             log.info("[MtopService][mtopAdaptor] return webResult is {}", JSON.toJSONString(webResult));
-            if (StringUtils.isNotBlank(webResult.getMsg())) {
+            if (StringUtils.isNotBlank(webResult.getMessage())) {
                 resultMap.put("success", false);
-                resultMap.put("errorMsg", webResult.getMsg());
+                resultMap.put("errorMsg", webResult.getMessage());
                 return resultMap;
             }
             if (null == webResult.getData()) {

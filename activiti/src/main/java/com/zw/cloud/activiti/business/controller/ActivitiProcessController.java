@@ -5,7 +5,7 @@ import com.zw.cloud.activiti.common.service.api.IActivitiCommonProcessService;
 import com.zw.cloud.activiti.entity.ParamVO;
 import com.zw.cloud.activiti.entity.VariableVO;
 import com.zw.cloud.activiti.utils.SecurityUtils;
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

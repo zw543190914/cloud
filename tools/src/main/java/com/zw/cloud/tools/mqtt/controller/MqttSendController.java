@@ -1,6 +1,6 @@
 package com.zw.cloud.tools.mqtt.controller;
 
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import com.zw.cloud.tools.mqtt.config.MqttConfig;
 import com.zw.cloud.tools.utils.CustomerExecutorService;
 import com.zw.cloud.tools.utils.MqttPublishSample;
@@ -31,7 +31,7 @@ public class MqttSendController {
 
     @RequestMapping("/sendMessage/{setValue}/{actValue}/{times}")
     //http://localhost:9040/mqtt/sendMessage/80/96/10
-    public WebResult<Boolean> sendMessage(@PathVariable Integer setValue,@PathVariable Integer actValue,@PathVariable Integer times) throws Exception{
+    public WebResult<Boolean> sendMessage(@PathVariable Integer setValue, @PathVariable Integer actValue, @PathVariable Integer times) throws Exception{
         AtomicInteger count = new AtomicInteger(0);
         CountDownLatch countDownLatch = new CountDownLatch(times);
         ScheduledFuture<?> scheduledFuture = CustomerExecutorService.scheduledExecutorService.scheduleAtFixedRate(() -> {
@@ -49,6 +49,6 @@ public class MqttSendController {
         }, 0, 30, TimeUnit.SECONDS);
         countDownLatch.await();
         scheduledFuture.cancel(false);
-        return WebResult.build(true);
+        return WebResult.success(true);
     }
 }

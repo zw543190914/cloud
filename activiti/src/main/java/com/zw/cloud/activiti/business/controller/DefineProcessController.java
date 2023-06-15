@@ -1,7 +1,7 @@
 package com.zw.cloud.activiti.business.controller;
 
 import com.zw.cloud.activiti.common.service.api.IActivitiCommonDeployService;
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

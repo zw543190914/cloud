@@ -1,6 +1,6 @@
 package com.zw.cloud.activiti.business.controller;
 
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +28,7 @@ public class FileController {
 
         try {
             if (file.isEmpty()) {
-                return WebResult.failed().withErrorMsg("文件为空");
+                return WebResult.fail("文件为空");
             }
             Map<String,String> result = new HashMap<>();
             // 获取文件名
@@ -56,7 +56,7 @@ public class FileController {
             return WebResult.success().withData(result);
         } catch (Exception e) {
             e.printStackTrace();
-            return WebResult.failed().withErrorMsg(e.getMessage());
+            return WebResult.fail(e.getMessage());
         }
     }
 

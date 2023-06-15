@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zw.cloud.common.utils.http.HttpClientUtils;
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import com.zw.cloud.netty.entity.dto.QueryDTO;
 import com.zw.cloud.netty.entity.vo.TcResultVO;
 import com.zw.cloud.netty.web.entity.tc.Tc;

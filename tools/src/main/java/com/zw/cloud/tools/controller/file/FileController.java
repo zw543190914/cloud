@@ -1,6 +1,6 @@
 package com.zw.cloud.tools.controller.file;
 
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import com.zw.cloud.tools.service.impl.FileServiceImpl;
 import com.zw.cloud.tools.utils.WorderToNewWordUtils;
 import lombok.extern.slf4j.Slf4j;
