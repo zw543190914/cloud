@@ -43,6 +43,8 @@ SELECT * FROM `user_info` where JSON_CONTAINS(description,JSON_OBJECT('preOperat
  */
 -- json 数组模糊搜索
 select * from user_info_0 where  json_extract(other,"$[*].name") like CONCAT('%','test','%');
+-- 过滤出 assistant不为[]的数据
+SELECT id,assistant FROM `base_tenter_craft` WHERE JSON_LENGTH(assistant) > 0;
 
 -- 将数据插入其他表
 insert into `product_report_search_condition` (name,org_code,type,name_id,create_time,update_time)

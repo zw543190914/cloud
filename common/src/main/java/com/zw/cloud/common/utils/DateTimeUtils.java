@@ -1,6 +1,7 @@
 package com.zw.cloud.common.utils;
 
 import com.alibaba.fastjson2.JSON;
+import com.zw.cloud.common.entity.dto.LocalDateDTO;
 import com.zw.cloud.common.entity.dto.LocalDateTimeDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
@@ -68,7 +69,7 @@ public class DateTimeUtils {
         String config = "2022-05-19T23:50:00";
         LocalDateTime configTime = LocalDateTime.parse(config);
         List<LocalDateTimeDTO> localDateTimeDTOS = calBetweenTime(startTime, endTime, configTime);
-        System.out.println(JSON.toJSONString(localDateTimeDTOS));
+        System.out.println("根据指定时间 切分时间:" + JSON.toJSONString(localDateTimeDTOS));
         System.out.println(LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8")));
         System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(1656915925000L), ZoneId.systemDefault()));
         Instant instant1 = Instant.ofEpochSecond(System.currentTimeMillis()/1000);
@@ -91,6 +92,15 @@ public class DateTimeUtils {
         System.out.println(LocalDateTime.parse("2023-04-03T18:47:00").compareTo(LocalDateTime.parse("2023-04-03T18:47:00")));
         System.out.println("=========将时间按照每7天进行截取===========");
         System.out.println(getTimePeriods(now.minusDays(21),now.minusDays(1)));
+
+        LocalDate firstDayOfMonth = parse2date("2023-06-04").with(TemporalAdjusters.firstDayOfMonth());
+        System.out.println("指定日期月份的第一天:" + firstDayOfMonth);
+        LocalDate sunday = firstDayOfMonth.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        System.out.println("指定日期的本周日为:" + sunday);
+
+        List<LocalDateDTO> weekPeriodsByMonth = getWeekPeriodsByMonth(parse2date("2023-06-04"));
+        System.out.println("按 自然周 拆分指定月份:" + JSON.toJSONString(weekPeriodsByMonth));
+
     }
 
     public static LocalDateTime dateToLocalDateTime(Date date) {
@@ -426,6 +436,46 @@ public class DateTimeUtils {
             periodStart = periodEnd;
         }
         return timePeriods;
+    }
+
+    /**
+     * 按 自然周 拆分指定月份
+     */
+    public static List<LocalDateDTO> getWeekPeriodsByMonth(LocalDate localDate) {
+        if (Objects.isNull(localDate)) {
+            return Collections.emptyList();
+        }
+        LocalDate firstDayOfMonth = localDate.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate lastDayOfMonth = localDate.with(TemporalAdjusters.lastDayOfMonth());
+        if (lastDayOfMonth.isAfter(LocalDate.now())) {
+            lastDayOfMonth = LocalDate.now();
+        }
+        LocalDateDTO first = new LocalDateDTO();
+        first.setDateStr("1");
+        first.setStartTime(firstDayOfMonth);
+        // 第一个周日
+        LocalDate firstSunday = firstDayOfMonth.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        first.setEndTime(firstSunday);
+        List<LocalDateDTO> localDateDTOList = new ArrayList<>();
+        localDateDTOList.add(first);
+        if (firstSunday.isAfter(lastDayOfMonth)) {
+            return localDateDTOList;
+        }
+        LocalDate sunday = firstSunday;
+        int num = 2;
+        while (sunday.isBefore(lastDayOfMonth)) {
+            LocalDateDTO localDateDTO = new LocalDateDTO();
+            localDateDTO.setDateStr(String.valueOf(num ++));
+            localDateDTO.setStartTime(sunday.plusDays(1));
+            sunday = sunday.plusDays(7);
+            localDateDTO.setEndTime(sunday);
+            localDateDTOList.add(localDateDTO);
+        }
+        return localDateDTOList;
+    }
+
+    private LocalDate getLocalDateDTO(LocalDate firstLocalDate) {
+        return firstLocalDate.plusDays(7);
     }
 
     public static String parse2Str(LocalDateTime localDateTime, String pattern) {
