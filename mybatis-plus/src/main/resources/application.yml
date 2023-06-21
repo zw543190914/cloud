@@ -107,7 +107,7 @@ mybatis-plus:
   type-handlers-package: com.zw.cloud.mybatis.plus.db.typehandlers.ext
   configuration:
     map-underscore-to-camel-case: true
-    #log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+#    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
   global-config:
     banner: false
     db-config:
@@ -127,7 +127,7 @@ logging:
         cloud:
           mybatis:
             plus:
-              mapper: info
+              mapper: debug
     root: info
 server:
   port: 8082

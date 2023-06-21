@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
@@ -289,6 +290,21 @@ public class UserInfoController {
         userInfo.setOther(Lists.newArrayList(3));
         userInfo.setUpdateTime(LocalDateTime.now());
         userService.onDuplicateUpdate(Lists.newArrayList(userInfo));
+    }
+
+    @GetMapping("updateWrapper/{age}/{id}")
+    //http://localhost:8082/user-info/updateWrapper/12/1656220227651997698
+    public void updateWrapper(@PathVariable Integer age,@PathVariable Long id) {
+        LambdaUpdateWrapper<UserInfo> updateWrapper = new LambdaUpdateWrapper<>();
+         /*updateWrapper
+                .set(UserInfo::getAge,age)
+                .set(UserInfo::getOther,new HashMap<>())
+                .in(UserInfo::getId,Lists.newArrayList(id));*/
+        UserInfo userInfo = new UserInfo();
+        userInfo.setOther(new HashMap<>());
+        updateWrapper
+                .in(UserInfo::getId,Lists.newArrayList(id));
+        mapper.update(userInfo,updateWrapper);
     }
 
     @PostMapping("/query")
