@@ -98,7 +98,7 @@ public class DateTimeUtils {
         LocalDate sunday = firstDayOfMonth.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
         System.out.println("指定日期的本周日为:" + sunday);
 
-        List<LocalDateDTO> weekPeriodsByMonth = getWeekPeriodsByMonth(parse2date("2023-06-04"));
+        List<LocalDateDTO> weekPeriodsByMonth = getWeekPeriodsByMonth(parse2date("2023-05-04"));
         System.out.println("按 自然周 拆分指定月份:" + JSON.toJSONString(weekPeriodsByMonth));
 
     }
@@ -468,7 +468,11 @@ public class DateTimeUtils {
             localDateDTO.setDateStr(String.valueOf(num ++));
             localDateDTO.setStartTime(sunday.plusDays(1));
             sunday = sunday.plusDays(7);
-            localDateDTO.setEndTime(sunday);
+            if (sunday.isAfter(lastDayOfMonth)) {
+                localDateDTO.setEndTime(lastDayOfMonth);
+            } else {
+                localDateDTO.setEndTime(sunday);
+            }
             localDateDTOList.add(localDateDTO);
         }
         return localDateDTOList;
