@@ -58,7 +58,7 @@ public class GeneratorCode {
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         //表名，多个英文逗号分割
-        strategy.setInclude("general_device_report_data");
+        strategy.setInclude("report_product_count");
         // 表前缀
         //strategy.setTablePrefix(pc.getModuleName() + "_");
 

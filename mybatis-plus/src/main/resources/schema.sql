@@ -345,3 +345,29 @@ CREATE TABLE `general_device_report_data` (
                                               PRIMARY KEY (`id`),
                                               KEY `idx_ctime` (`ctime`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='通用设备上报数据';
+
+CREATE TABLE `report_product_count` (
+                                        `id` bigint NOT NULL COMMENT '主键ID',
+                                        `org_code` varchar(64) NOT NULL COMMENT '工厂code',
+                                        `device_id` bigint NOT NULL COMMENT '设备id',
+                                        `device_name` varchar(64) DEFAULT NULL COMMENT '设备名称',
+                                        `workshop_id` bigint DEFAULT NULL COMMENT '车间id',
+                                        `calc_day` date DEFAULT NULL COMMENT '统计日期，格式 yyyy-MM-dd',
+                                        `product_quantity` decimal(18,4) DEFAULT NULL COMMENT '产量',
+                                        `product_num` int DEFAULT NULL COMMENT '生产记录数',
+                                        `white_product_quantity` decimal(18,4) DEFAULT NULL COMMENT '白班产量',
+                                        `white_product_num` int DEFAULT NULL COMMENT '白班生产记录数',
+                                        `white_product_quantity_rate` decimal(5,2) DEFAULT NULL COMMENT '白班产量占比',
+                                        `black_product_quantity` decimal(18,4) DEFAULT NULL COMMENT '晚班产量',
+                                        `black_product_num` int DEFAULT NULL COMMENT '晚班生产记录数',
+                                        `black_product_quantity_rate` decimal(5,2) DEFAULT NULL COMMENT '晚班产量占比',
+                                        `craft_product_info` json DEFAULT NULL COMMENT '按工序统计的生产信息',
+                                        `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                        `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+                                        `create_user` varchar(32) DEFAULT '' COMMENT '创建用户',
+                                        `update_user` varchar(32) DEFAULT '' COMMENT '修改用户',
+                                        `create_system` varchar(32) DEFAULT NULL COMMENT '创建系统',
+                                        `update_system` varchar(32) DEFAULT NULL COMMENT '更新系统',
+                                        PRIMARY KEY (`id`),
+                                        UNIQUE KEY `uk_org_code_w_d_c_t` (`org_code`,`calc_day`,`workshop_id`,`device_id`) USING BTREE
+) ENGINE=InnoDB COMMENT='定型产量统计报表';

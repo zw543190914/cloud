@@ -98,7 +98,7 @@ public class DateTimeUtils {
         LocalDate sunday = firstDayOfMonth.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
         System.out.println("指定日期的本周日为:" + sunday);
 
-        List<LocalDateDTO> weekPeriodsByMonth = getWeekPeriodsByMonth(parse2date("2023-05-04"));
+        List<LocalDateDTO> weekPeriodsByMonth = getWeekPeriodsByMonth(parse2date("2023-06-24"));
         System.out.println("按 自然周 拆分指定月份:" + JSON.toJSONString(weekPeriodsByMonth));
 
     }
@@ -445,17 +445,18 @@ public class DateTimeUtils {
         if (Objects.isNull(localDate)) {
             return Collections.emptyList();
         }
+        String month2Str = parseMonth2Str(localDate, null);
         LocalDate firstDayOfMonth = localDate.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate lastDayOfMonth = localDate.with(TemporalAdjusters.lastDayOfMonth());
         if (lastDayOfMonth.isAfter(LocalDate.now())) {
             lastDayOfMonth = LocalDate.now();
         }
         LocalDateDTO first = new LocalDateDTO();
-        first.setDateStr("1");
         first.setStartTime(firstDayOfMonth);
         // 第一个周日
         LocalDate firstSunday = firstDayOfMonth.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
         first.setEndTime(firstSunday);
+        first.setDateStr(month2Str + "月:第一周:(" + parse2Str(firstDayOfMonth,"MM/dd") + "-" +  parse2Str(firstSunday,"MM/dd") + ")");
         List<LocalDateDTO> localDateDTOList = new ArrayList<>();
         localDateDTOList.add(first);
         if (firstSunday.isAfter(lastDayOfMonth)) {
@@ -465,7 +466,6 @@ public class DateTimeUtils {
         int num = 2;
         while (sunday.isBefore(lastDayOfMonth)) {
             LocalDateDTO localDateDTO = new LocalDateDTO();
-            localDateDTO.setDateStr(String.valueOf(num ++));
             localDateDTO.setStartTime(sunday.plusDays(1));
             sunday = sunday.plusDays(7);
             if (sunday.isAfter(lastDayOfMonth)) {
@@ -473,9 +473,32 @@ public class DateTimeUtils {
             } else {
                 localDateDTO.setEndTime(sunday);
             }
+            localDateDTO.setDateStr(parseMonth2Str(localDate, null) + ":第" + convertNumToCN(num ++) + "周:("  + parse2Str(localDateDTO.getStartTime(),"MM/dd") + "-" +  parse2Str(localDateDTO.getEndTime(),"MM/dd") + ")");
             localDateDTOList.add(localDateDTO);
         }
         return localDateDTOList;
+    }
+
+    private static String convertNumToCN(int num) {
+        if (num == 1) {
+            return "一";
+        }
+        if (num == 2) {
+            return "二";
+        }
+        if (num == 3) {
+            return "三";
+        }
+        if (num == 4) {
+            return "四";
+        }
+        if (num == 5) {
+            return "五";
+        }
+        if (num == 6) {
+            return "六";
+        }
+        return "";
     }
 
     private LocalDate getLocalDateDTO(LocalDate firstLocalDate) {
@@ -484,13 +507,35 @@ public class DateTimeUtils {
 
     public static String parse2Str(LocalDateTime localDateTime, String pattern) {
         if (Objects.isNull(localDateTime)) {
-            return null;
+            return "";
         }
         if (StringUtils.isBlank(pattern)) {
             pattern = DATE_TIME_PATTERN;
         }
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
         return localDateTime.format(dateTimeFormatter);
+    }
+
+    public static String parse2Str(LocalDate localDate, String pattern) {
+        if (Objects.isNull(localDate)) {
+            return "";
+        }
+        if (StringUtils.isBlank(pattern)) {
+            pattern = DATE_PATTERN;
+        }
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
+        return localDate.format(dateTimeFormatter);
+    }
+
+    public static String parseMonth2Str(LocalDate localDate, String pattern) {
+        if (Objects.isNull(localDate)) {
+            return "";
+        }
+        if (StringUtils.isBlank(pattern)) {
+            pattern = MONTH_PATTERN;
+        }
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
+        return localDate.format(dateTimeFormatter);
     }
 
     public static LocalDateTime parse2datetime(String date, String pattern) {
