@@ -2,6 +2,7 @@ package com.zw.cloud.common.utils;
 
 import com.alibaba.fastjson2.JSON;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -88,6 +89,16 @@ public class BigDecimalUtils {
         System.out.println(bigDecimal2);
         BigDecimal bigDecimal3 = new BigDecimal("5.98").setScale(0, RoundingMode.DOWN);
         System.out.println(bigDecimal3);
+        Map<String,Object> jsonMap = new HashMap<>();
+        jsonMap.put("test1","1");
+        jsonMap.put("test5","11");
+        jsonMap.put("test2","3");
+        jsonMap.put("test7","13");
+        jsonMap.put("test4",null);
+        System.out.println("JSON 中最大值:" + findMaxValueFromJsonObject(jsonMap));
+        Map<String, Object> testMap = fillEveryOneJsonValue(jsonMap, BigDecimal.valueOf(20), "test", 10);
+        System.out.println("为JSON 中每一节赋值:" + JSON.toJSONString(testMap));
+        System.out.println(JSON.toJSONString(buildJsonForRecommendCraft(testMap,BigDecimal.valueOf(40),"test",12)));
     }
 
     /**
@@ -313,6 +324,90 @@ public class BigDecimalUtils {
             }
         }
         return total.divide(num, 0, RoundingMode.HALF_UP);
+    }
+
+    /**
+     * JSON 中最大值
+     */
+    public static BigDecimal findMaxValueFromJsonObject(Object jsonValue){
+        if (Objects.isNull(jsonValue)) {
+            return null;
+        }
+        Map<String, Object> dryingRoomPresetTempMap = JSON.parseObject(JSON.toJSONString(jsonValue), Map.class);
+        if (MapUtils.isEmpty(dryingRoomPresetTempMap)) {
+            return null;
+        }
+        Collection<Object> values = dryingRoomPresetTempMap.values();
+        Optional<BigDecimal> max = values.stream().filter(Objects::nonNull).map(s -> new BigDecimal(String.valueOf(s))).max(Comparator.comparing(s -> s));
+        if (max.isEmpty()) {
+            return null;
+        }
+        return max.get();
+    }
+
+    /**
+     * 为JSON 中每一节赋值
+     */
+    public static Map<String,Object> fillEveryOneJsonValue(Object jsonValue,BigDecimal totalValue,String prefix,Integer tempCount) {
+        // 每一节赋值
+        Map<String,Object> jsonMap = new LinkedHashMap<>();
+        Map<String,Object> oldMap = new LinkedHashMap<>();
+        if (Objects.nonNull(jsonValue)) {
+            oldMap = JSON.parseObject(JSON.toJSONString(jsonValue), Map.class);
+        }
+        for (int i = 1; i <= tempCount ; i++) {
+            Object value = Optional.ofNullable(oldMap.get(prefix + i)).orElse(totalValue);
+            jsonMap.put(prefix + i, value);
+        }
+        return jsonMap;
+    }
+
+
+    //    如果大于10节 ，最后一节补充为标准工艺最后一节，其他节优先取标准工艺对应节数，没有对应的取总值，总值为空则数据为空
+    //    机台 1  2  ...  9  10 11  12
+    //    标准 1  2  ... 9   总  总  10
+    //    小于 10 节 ，最后一节补充为标准工艺最后一节，其他节优先取标准工艺对应节数
+    //    机台 1  2  ...  7  8
+    //    标准 1  2  ... 7  10
+    public static LinkedHashMap<String, BigDecimal> buildJsonForRecommendCraft(Object jsonData,BigDecimal totalVal, String jsonKey, Integer roomCount) {
+        LinkedHashMap<String, BigDecimal> resultMap = Maps.newLinkedHashMap();
+        if (Objects.isNull(roomCount) || roomCount <= 0 || StringUtils.isBlank(jsonKey)) {
+            return resultMap;
+        }
+
+        if (Objects.isNull(totalVal) && Objects.isNull(jsonData)) {
+            //都没值
+            return resultMap;
+        }
+        if (Objects.isNull(jsonData)) {
+            // 取总值填充
+            for (int i = 1; i <= roomCount; i++) {
+                resultMap.put(jsonKey + i, totalVal);
+            }
+            return resultMap;
+        }
+
+        LinkedHashMap<String, Object> oldMap = JSON.parseObject(JSON.toJSONString(jsonData), LinkedHashMap.class);
+        if (Objects.isNull(totalVal)) {
+            // 总值没有值 ,取json最大值作为总值
+            totalVal = findMaxValueFromJsonObject(oldMap);
+        }
+        if (Objects.isNull(totalVal)) {
+            return resultMap;
+        }
+        Object tenValue = oldMap.remove(jsonKey + 10);
+        BigDecimal lastValue = Objects.isNull(tenValue) ? totalVal : new BigDecimal(String.valueOf(tenValue));
+        for (int i = 1; i < roomCount; i++) {
+            Object currValue = oldMap.get(jsonKey + i);
+            if (Objects.isNull(currValue)) {
+                resultMap.put(jsonKey + i, totalVal);
+            } else {
+                resultMap.put(jsonKey + i, new BigDecimal(String.valueOf(currValue)));
+            }
+        }
+
+        resultMap.put(jsonKey + roomCount, lastValue);
+        return resultMap;
     }
 
     private static  Integer buildTemp(BigDecimal num, int size) {
