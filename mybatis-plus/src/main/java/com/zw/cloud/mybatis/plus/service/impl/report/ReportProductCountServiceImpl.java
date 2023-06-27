@@ -16,11 +16,25 @@ import com.zw.cloud.mybatis.plus.entity.report.vo.ReportProductCountVO;
 import com.zw.cloud.mybatis.plus.mapper.ReportProductCountMapper;
 import com.zw.cloud.mybatis.plus.service.api.report.IReportProductCountService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.streaming.SXSSFCell;
+import org.apache.poi.xssf.streaming.SXSSFRow;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
@@ -35,6 +49,7 @@ import java.util.stream.Collectors;
  * @since 2023-06-25
  */
 @Service
+@Slf4j
 public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCountMapper, ReportProductCount> implements IReportProductCountService {
 
     @Override
@@ -49,6 +64,7 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
             // 按月
             productReportCountQueryDTO.setEndTime(productReportCountQueryDTO.getEndTime().with(TemporalAdjusters.lastDayOfMonth()));
         }
+        Integer caleType = productReportCountQueryDTO.getCaleType();
         // 查询数据库中相关数据
         LambdaQueryWrapper<ReportProductCount> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(ReportProductCount::getOrgCode,productReportCountQueryDTO.getOrgCode())
@@ -56,6 +72,7 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
                 .ge(ReportProductCount::getCalcDay,productReportCountQueryDTO.getStartTime())
                 .le(ReportProductCount::getCalcDay,productReportCountQueryDTO.getEndTime());
         List<ReportProductCount> reportProductCountList = baseMapper.selectList(queryWrapper);
+        log.info("[ReportProductCountServiceImpl][queryProductReportCount]reportProductCountList is {}",JSON.toJSONString(reportProductCountList));
         ReportProductCountVO productCountVO = new ReportProductCountVO();
         if (CollectionUtils.isEmpty(reportProductCountList)) {
             return productCountVO;
@@ -63,7 +80,7 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
         // 工序类型集合
         Set<String> craftIdSet = new HashSet<>();
         reportProductCountList.forEach(reportProductCount -> {
-            Object craftProductInfo = reportProductCount.getCraftProductInfo();
+            Object craftProductInfo = caleType == 1 ? reportProductCount.getCraftProductInfo() : reportProductCount.getProductLevelInfo();
             if (Objects.isNull(craftProductInfo)) {
                 return;
             }
@@ -75,11 +92,11 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
         List<ReportProductCaleDateCountVO> reportProductCaleDateCountVOList = new ArrayList<>();
         // 按照 日期+机台 维度进行汇总
         if (Objects.equals(1,productReportCountQueryDTO.getTimeType())) {
-            queryByDay(productReportCountQueryDTO,reportProductCountList,craftIdList,reportProductCaleDateCountVOList);
+            queryByDay(productReportCountQueryDTO,reportProductCountList,craftIdList,reportProductCaleDateCountVOList,caleType);
         } else if (Objects.equals(2,productReportCountQueryDTO.getTimeType())) {
-            queryByWeek(productReportCountQueryDTO,reportProductCountList,craftIdList,reportProductCaleDateCountVOList);
+            queryByWeek(productReportCountQueryDTO,reportProductCountList,craftIdList,reportProductCaleDateCountVOList,caleType);
         } else {
-            queryByMonth(productReportCountQueryDTO,reportProductCountList,craftIdList,reportProductCaleDateCountVOList);
+            queryByMonth(productReportCountQueryDTO,reportProductCountList,craftIdList,reportProductCaleDateCountVOList,caleType);
         }
         // 总计
         List<ProductReportProductCountDTO> totalReportProductCountDTOList = new ArrayList<>();
@@ -106,7 +123,149 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
         return productCountVO;
     }
 
-    private void queryByDay(ProductReportCountQueryDTO productReportCountQueryDTO,List<ReportProductCount> reportProductCountList,List<Long> craftIdList,List<ReportProductCaleDateCountVO> reportProductCaleDateCountVOList) {
+    @Override
+    public void exportProductReportCount(ProductReportCountQueryDTO productReportCountQueryDTO, HttpServletResponse response) throws IOException {
+        ReportProductCountVO productCountVO = queryProductReportCount(productReportCountQueryDTO);
+        List<String> craftNameList = productCountVO.getCraftNameList();
+
+        //创建HSSFWorkbook对象(excel的文档对象)
+        SXSSFWorkbook workbook = new SXSSFWorkbook(200);
+        //建立新的sheet对象（excel的表单）
+        SXSSFSheet sheet = workbook.createSheet("定型产量统计");
+
+        CellStyle cellStyle = getStyleWithWrapText(workbook);
+        int rowNum = 0;
+        int titleCell = 0;
+        SXSSFRow titleRow = sheet.createRow(rowNum ++);
+        SXSSFRow secondTitleRow = sheet.createRow(rowNum ++);
+
+        titleRow.createCell(titleCell++).setCellValue("统计日期");
+        titleRow.createCell(titleCell++).setCellValue("机台");
+        titleRow.createCell(titleCell++).setCellValue("生产记录数");
+        titleRow.createCell(titleCell++).setCellValue("产量");
+
+        SXSSFCell wightCell = titleRow.createCell(titleCell);
+        wightCell.setCellStyle(cellStyle);
+        wightCell.setCellValue("白班");
+        SXSSFCell blackCell = titleRow.createCell(titleCell + 3);
+        blackCell.setCellStyle(cellStyle);
+        blackCell.setCellValue("晚班");
+        // 起始行，结束行，起始列，结束列
+        CellRangeAddress caleRegion = new CellRangeAddress(0, 1, 0, 0);
+        CellRangeAddress deviceRegion = new CellRangeAddress(0, 1, 1, 1);
+        CellRangeAddress productNumRegion = new CellRangeAddress(0, 1, 2, 2);
+        CellRangeAddress productQuantityRegion = new CellRangeAddress(0, 1, 3, 3);
+
+        CellRangeAddress whiteRegion = new CellRangeAddress(0, 0, 4, 6);
+        CellRangeAddress blackRegion = new CellRangeAddress(0, 0, 7, 9);
+        sheet.addMergedRegion(caleRegion);
+        sheet.addMergedRegion(deviceRegion);
+        sheet.addMergedRegion(productNumRegion);
+        sheet.addMergedRegion(productQuantityRegion);
+        sheet.addMergedRegion(whiteRegion);
+        sheet.addMergedRegion(blackRegion);
+
+        if (CollectionUtils.isNotEmpty(craftNameList)) {
+            int index = 10;
+            int titleSecondCell = 4;
+            for (String craftName : craftNameList) {
+                CellRangeAddress cellRangeAddress = new CellRangeAddress(0, 0, index, index + 8);
+                sheet.addMergedRegion(cellRangeAddress);
+                SXSSFCell cell = titleRow.createCell(index);
+                cell.setCellStyle(cellStyle);
+                cell.setCellValue(craftName);
+
+                index += 9;
+
+                // 表头第二列
+                secondTitleRow.createCell(titleSecondCell++).setCellValue("生产记录数");
+                secondTitleRow.createCell(titleSecondCell++).setCellValue("产量");
+                secondTitleRow.createCell(titleSecondCell++).setCellValue("产量占比");
+                secondTitleRow.createCell(titleSecondCell++).setCellValue("生产记录数");
+                secondTitleRow.createCell(titleSecondCell++).setCellValue("产量");
+                secondTitleRow.createCell(titleSecondCell++).setCellValue("产量占比");
+                secondTitleRow.createCell(titleSecondCell++).setCellValue("白班生产记录数");
+                secondTitleRow.createCell(titleSecondCell++).setCellValue("白班产量");
+                secondTitleRow.createCell(titleSecondCell++).setCellValue("白班产量占比");
+                secondTitleRow.createCell(titleSecondCell++).setCellValue("晚班生产记录数");
+                secondTitleRow.createCell(titleSecondCell++).setCellValue("晚班产量");
+                secondTitleRow.createCell(titleSecondCell++).setCellValue("晚班产量占比");
+
+            }
+        }
+        List<ReportProductCaleDateCountVO> caleDateCountVOList = productCountVO.getReportProductCaleDateCountVOList();
+        if (CollectionUtils.isNotEmpty(caleDateCountVOList)) {
+            for (ReportProductCaleDateCountVO caleDateCountVO : caleDateCountVOList) {
+                SXSSFRow row = sheet.createRow(rowNum ++);
+                int cell = 0;
+                // 换行 \n
+                SXSSFCell cell1 = row.createCell(cell++);
+                cell1.setCellValue(caleDateCountVO.getCaleDateStr().replaceAll(":","\n"));
+                CellStyle style = workbook.createCellStyle();
+                style.setWrapText(true);
+                cell1.setCellStyle(style);
+                if (StringUtils.equals("总计",caleDateCountVO.getCaleDateStr())) {
+                    CellRangeAddress cellRangeAddress = new CellRangeAddress(rowNum - 1, rowNum - 1, 0, 1);
+                    sheet.addMergedRegion(cellRangeAddress);
+                    cell++;
+                }
+                List<ProductReportProductCountDTO> reportProductCountDTOList = caleDateCountVO.getReportProductCountDTOList();
+                boolean first = true;
+                for (ProductReportProductCountDTO productCountDTO : reportProductCountDTOList) {
+                    if (first) {
+                        first = false;
+                        if (!StringUtils.equals("总计",caleDateCountVO.getCaleDateStr())) {
+                            CellRangeAddress cellRangeAddress = new CellRangeAddress(rowNum-1 , rowNum + reportProductCountDTOList.size() -2, 0, 0);
+                            sheet.addMergedRegion(cellRangeAddress);
+                        }
+                    } else {
+                        row = sheet.createRow(rowNum ++);
+                        cell = 1;
+                    }
+                    String deviceName = productCountDTO.getDeviceName();
+                    if (!StringUtils.equals("总计",caleDateCountVO.getCaleDateStr())) {
+                        row.createCell(cell++).setCellValue(deviceName);
+                    }
+                    row.createCell(cell++).setCellValue(productCountDTO.getProductNum());
+                    fillBigDecimalCell(productCountDTO.getProductQuantity(),row,cell++,true);
+
+                    row.createCell(cell++).setCellValue(productCountDTO.getWhiteProductNum());
+                    fillBigDecimalCell(productCountDTO.getWhiteProductQuantity(),row,cell++,true);
+                    fillBigDecimalCell(productCountDTO.getWhiteProductQuantityRate(),row,cell++,false);
+
+                    row.createCell(cell++).setCellValue(productCountDTO.getBlackProductNum());
+                    fillBigDecimalCell(productCountDTO.getBlackProductQuantity(),row,cell++,true);
+                    fillBigDecimalCell(productCountDTO.getBlackProductQuantityRate(),row,cell++,false);
+
+                    List<ProductReportCraftCountDTO> craftCountDTOList = productCountDTO.getCraftCountDTOList();
+                    if (CollectionUtils.isEmpty(craftCountDTOList)) {
+                        continue;
+                    }
+                    for (ProductReportCraftCountDTO productReportCraftCountDTO : craftCountDTOList) {
+                        row.createCell(cell++).setCellValue(productReportCraftCountDTO.getProductNum());
+                        fillBigDecimalCell(productReportCraftCountDTO.getProductQuantity(),row,cell++,true);
+                        fillBigDecimalCell(productReportCraftCountDTO.getProductQuantityRate(),row,cell++,false);
+
+                        row.createCell(cell++).setCellValue(productReportCraftCountDTO.getWhiteProductNum());
+                        fillBigDecimalCell(productReportCraftCountDTO.getWhiteProductQuantity(),row,cell++,true);
+                        fillBigDecimalCell(productReportCraftCountDTO.getWhiteProductQuantityRate(),row,cell++,false);
+
+                        row.createCell(cell++).setCellValue(productReportCraftCountDTO.getBlackProductNum());
+                        fillBigDecimalCell(productReportCraftCountDTO.getBlackProductQuantity(),row,cell++,true);
+                        fillBigDecimalCell(productReportCraftCountDTO.getBlackProductQuantityRate(),row,cell++,false);
+                    }
+                }
+            }
+        }
+
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("content-Type", "application/vnd.ms-excel");
+        response.setHeader("Content-Disposition",
+                "attachment;filename=" + URLEncoder.encode("product_count.xlsx", String.valueOf(StandardCharsets.UTF_8)));
+        workbook.write(response.getOutputStream());
+    }
+
+    private void queryByDay(ProductReportCountQueryDTO productReportCountQueryDTO,List<ReportProductCount> reportProductCountList,List<Long> craftIdList,List<ReportProductCaleDateCountVO> reportProductCaleDateCountVOList,Integer caleType) {
 
         LocalDate endTime = productReportCountQueryDTO.getEndTime();
         LocalDate startCalcTime = productReportCountQueryDTO.getStartTime();
@@ -117,7 +276,7 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
             if (CollectionUtils.isNotEmpty(caleDataList)) {
                 ReportProductCaleDateCountVO caleDateCountVO = new ReportProductCaleDateCountVO();
                 caleDateCountVO.setCaleDateStr(DateTimeUtils.parse2Str(finalStartCalcTime, null));
-                parseReportProduct(caleDataList, caleDateCountVO, craftIdList);
+                parseReportProduct(caleDataList, caleDateCountVO, craftIdList,caleType);
                 reportProductCaleDateCountVOList.add(caleDateCountVO);
             }
 
@@ -126,7 +285,7 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
 
     }
 
-    private void queryByWeek(ProductReportCountQueryDTO productReportCountQueryDTO,List<ReportProductCount> reportProductCountList,List<Long> craftIdList,List<ReportProductCaleDateCountVO> reportProductCaleDateCountVOList) {
+    private void queryByWeek(ProductReportCountQueryDTO productReportCountQueryDTO,List<ReportProductCount> reportProductCountList,List<Long> craftIdList,List<ReportProductCaleDateCountVO> reportProductCaleDateCountVOList,Integer caleType) {
         LocalDate startCalcTime = productReportCountQueryDTO.getStartTime();
         List<LocalDateDTO> weekPeriodsByMonth = DateTimeUtils.getWeekPeriodsByMonth(startCalcTime);
         for (LocalDateDTO localDateDTO : weekPeriodsByMonth) {
@@ -135,13 +294,13 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
             if (CollectionUtils.isNotEmpty(caleDataList)) {
                 ReportProductCaleDateCountVO caleDateCountVO = new ReportProductCaleDateCountVO();
                 caleDateCountVO.setCaleDateStr(localDateDTO.getDateStr());
-                parseReportProduct(caleDataList, caleDateCountVO, craftIdList);
+                parseReportProduct(caleDataList, caleDateCountVO, craftIdList,caleType);
                 reportProductCaleDateCountVOList.add(caleDateCountVO);
             }
         }
     }
 
-    private void queryByMonth(ProductReportCountQueryDTO productReportCountQueryDTO,List<ReportProductCount> reportProductCountList,List<Long> craftIdList,List<ReportProductCaleDateCountVO> reportProductCaleDateCountVOList) {
+    private void queryByMonth(ProductReportCountQueryDTO productReportCountQueryDTO,List<ReportProductCount> reportProductCountList,List<Long> craftIdList,List<ReportProductCaleDateCountVO> reportProductCaleDateCountVOList,Integer caleType) {
 
         LocalDate endTime = productReportCountQueryDTO.getEndTime();
         LocalDate startCalcTime = productReportCountQueryDTO.getStartTime();
@@ -154,7 +313,7 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
             if (CollectionUtils.isNotEmpty(caleDataList)) {
                 ReportProductCaleDateCountVO caleDateCountVO = new ReportProductCaleDateCountVO();
                 caleDateCountVO.setCaleDateStr(DateTimeUtils.parseMonth2Str(finalStartCalcTime, null) + "月");
-                parseReportProduct(caleDataList, caleDateCountVO, craftIdList);
+                parseReportProduct(caleDataList, caleDateCountVO, craftIdList,caleType);
                 reportProductCaleDateCountVOList.add(caleDateCountVO);
             }
 
@@ -163,7 +322,7 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
 
     }
 
-    private void parseReportProduct(List<ReportProductCount> reportProductCountList,ReportProductCaleDateCountVO caleDateCountVO,List<Long> craftIdList) {
+    private void parseReportProduct(List<ReportProductCount> reportProductCountList,ReportProductCaleDateCountVO caleDateCountVO,List<Long> craftIdList,Integer caleType) {
         Map<Long, List<ReportProductCount>> deviceMap = reportProductCountList.stream().collect(Collectors.groupingBy(ReportProductCount::getDeviceId));
         List<ProductReportProductCountDTO> reportProductCountDTOList = new ArrayList<>();
         deviceMap.forEach((k,v) -> {
@@ -199,7 +358,7 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
                 blackProductQuantity = blackProductQuantity.add(Optional.ofNullable(productCount.getBlackProductQuantity()).orElse(BigDecimal.ZERO));
 
                 // 工序类型计算
-                Object craftProductInfo = productCount.getCraftProductInfo();
+                Object craftProductInfo = caleType == 1 ? reportProductCount.getCraftProductInfo() : reportProductCount.getProductLevelInfo();
                 if (Objects.nonNull(craftProductInfo)) {
                     Map<String, ProductReportCraftCountDTO> craftMap = JSON.parseObject(JSON.toJSONString(craftProductInfo),new TypeReference<Map<String, ProductReportCraftCountDTO>>() {});
 
@@ -373,5 +532,27 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
             caleCraftCount(craftProductReportCraftCountDTOList,productReportCraftCountDTO,productQuantity);
         }
         sumProductCountDTO.setCraftCountDTOList(deviceCraftCountDTOList);
+    }
+
+    private void fillBigDecimalCell(BigDecimal value,SXSSFRow row,int cellNum,boolean needStripTrailingZeros) {
+        if (Objects.nonNull(value)) {
+            if (needStripTrailingZeros) {
+                row.createCell(cellNum).setCellValue(value.stripTrailingZeros().toPlainString());
+                return;
+            }
+            row.createCell(cellNum).setCellValue(value.toPlainString());
+            return;
+        }
+        row.createCell(cellNum).setCellValue("");
+    }
+
+    private CellStyle getStyleWithWrapText(SXSSFWorkbook wb) {
+        //创建样式对象
+        CellStyle style = wb.createCellStyle();
+        //设置样式对齐方式：水平\垂直居中
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+        style.setWrapText(true);
+        return style;
     }
 }

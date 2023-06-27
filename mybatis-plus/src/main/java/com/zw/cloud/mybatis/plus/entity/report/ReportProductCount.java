@@ -106,6 +106,12 @@ public class ReportProductCount implements Serializable {
     private Object craftProductInfo;
 
     /**
+     * 按产量等级统计的生产信息
+     */
+    @TableField(typeHandler = JsonTypeHandler.class)
+    private Object productLevelInfo;
+
+    /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)

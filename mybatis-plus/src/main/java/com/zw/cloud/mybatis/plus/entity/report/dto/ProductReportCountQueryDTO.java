@@ -25,6 +25,13 @@ public class ProductReportCountQueryDTO implements Serializable {
     private Integer timeType;
 
     /**
+     * 统计维度 1:按工序类型 2:按产量等级
+     */
+    @NotNull(message = "统计维度不能为空")
+    @Range(max = 2,min = 1)
+    private Integer caleType;
+
+    /**
      * 开始时间
      */
     @NotNull(message = "开始时间不能为空")

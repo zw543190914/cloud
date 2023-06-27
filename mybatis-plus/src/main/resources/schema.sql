@@ -362,6 +362,7 @@ CREATE TABLE `report_product_count` (
                                         `black_product_num` int DEFAULT NULL COMMENT '晚班生产记录数',
                                         `black_product_quantity_rate` decimal(5,2) DEFAULT NULL COMMENT '晚班产量占比',
                                         `craft_product_info` json DEFAULT NULL COMMENT '按工序统计的生产信息',
+                                        `product_level_info` json DEFAULT NULL COMMENT '按产量等级统计的生产信息',
                                         `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                         `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
                                         `create_user` varchar(32) DEFAULT '' COMMENT '创建用户',
@@ -370,4 +371,4 @@ CREATE TABLE `report_product_count` (
                                         `update_system` varchar(32) DEFAULT NULL COMMENT '更新系统',
                                         PRIMARY KEY (`id`),
                                         UNIQUE KEY `uk_org_code_w_d_c_t` (`org_code`,`calc_day`,`workshop_id`,`device_id`) USING BTREE
-) ENGINE=InnoDB COMMENT='定型产量统计报表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='定型产量统计报表';
