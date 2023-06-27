@@ -4,9 +4,8 @@ import com.zw.cloud.mybatis.plus.entity.report.ReportProductCount;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zw.cloud.mybatis.plus.entity.report.dto.ProductReportCountQueryDTO;
 import com.zw.cloud.mybatis.plus.entity.report.vo.ReportProductCountVO;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * <p>
@@ -20,5 +19,5 @@ public interface IReportProductCountService extends IService<ReportProductCount>
 
     ReportProductCountVO queryProductReportCount(ProductReportCountQueryDTO productReportCountQueryDTO);
 
-    void exportProductReportCount(ProductReportCountQueryDTO productReportCountQueryDTO, HttpServletResponse response) throws IOException;
+    SXSSFWorkbook exportProductReportCount(ProductReportCountQueryDTO productReportCountQueryDTO);
 }

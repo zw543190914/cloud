@@ -62,7 +62,12 @@ public class ReportProductCountController {
     @PostMapping("/exportProductReportCount")
     //http://127.0.0.1:8082/report/report-product-count/exportProductReportCount
     public void exportProductReportCount(@Validated @RequestBody ProductReportCountQueryDTO productReportCountQueryDTO, HttpServletResponse response) throws IOException {
-        reportProductCountService.exportProductReportCount(productReportCountQueryDTO, response);
+        SXSSFWorkbook workbook = reportProductCountService.exportProductReportCount(productReportCountQueryDTO);
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("content-Type", "application/vnd.ms-excel");
+        response.setHeader("Content-Disposition",
+                "attachment;filename=" + URLEncoder.encode("product_count.xlsx", String.valueOf(StandardCharsets.UTF_8)));
+        workbook.write(response.getOutputStream());
     }
 
 

@@ -56,9 +56,6 @@ public class ReportProductCountServiceImplTest {
         productReportCountQueryDTO.setTimeType(1);
         productReportCountQueryDTO.setCaleType(1);
         productReportCountQueryDTO.setTimeType(3);
-        try {
-            reportProductCountService.exportProductReportCount(productReportCountQueryDTO,null);
-        } catch (Exception e) {
-        }
+        Assertions.assertDoesNotThrow(() -> reportProductCountService.exportProductReportCount(productReportCountQueryDTO));
     }
 }

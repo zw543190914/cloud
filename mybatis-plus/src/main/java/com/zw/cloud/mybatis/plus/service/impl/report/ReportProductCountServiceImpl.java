@@ -29,12 +29,8 @@ import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
@@ -124,7 +120,7 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
     }
 
     @Override
-    public void exportProductReportCount(ProductReportCountQueryDTO productReportCountQueryDTO, HttpServletResponse response) throws IOException {
+    public SXSSFWorkbook exportProductReportCount(ProductReportCountQueryDTO productReportCountQueryDTO) {
         ReportProductCountVO productCountVO = queryProductReportCount(productReportCountQueryDTO);
         List<String> craftNameList = productCountVO.getCraftNameList();
 
@@ -258,11 +254,7 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
             }
         }
 
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("content-Type", "application/vnd.ms-excel");
-        response.setHeader("Content-Disposition",
-                "attachment;filename=" + URLEncoder.encode("product_count.xlsx", String.valueOf(StandardCharsets.UTF_8)));
-        workbook.write(response.getOutputStream());
+        return workbook;
     }
 
     private void queryByDay(ProductReportCountQueryDTO productReportCountQueryDTO,List<ReportProductCount> reportProductCountList,List<Long> craftIdList,List<ReportProductCaleDateCountVO> reportProductCaleDateCountVOList,Integer caleType) {
