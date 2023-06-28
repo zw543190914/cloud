@@ -230,14 +230,14 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
                     if (!StringUtils.equals("总计",caleDateCountVO.getCaleDateStr())) {
                         row.createCell(cell++).setCellValue(deviceName);
                     }
-                    row.createCell(cell++).setCellValue(productCountDTO.getProductNum());
+                    fillIntegerCell(productCountDTO.getProductNum(),row,cell++);
                     fillBigDecimalCell(productCountDTO.getProductQuantity(),row,cell++,true);
 
-                    row.createCell(cell++).setCellValue(productCountDTO.getWhiteProductNum());
+                    fillIntegerCell(productCountDTO.getWhiteProductNum(),row,cell++);
                     fillBigDecimalCell(productCountDTO.getWhiteProductQuantity(),row,cell++,true);
                     fillBigDecimalCell(productCountDTO.getWhiteProductQuantityRate(),row,cell++,false);
 
-                    row.createCell(cell++).setCellValue(productCountDTO.getBlackProductNum());
+                    fillIntegerCell(productCountDTO.getBlackProductNum(),row,cell++);
                     fillBigDecimalCell(productCountDTO.getBlackProductQuantity(),row,cell++,true);
                     fillBigDecimalCell(productCountDTO.getBlackProductQuantityRate(),row,cell++,false);
 
@@ -246,15 +246,16 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
                         continue;
                     }
                     for (ProductReportCraftCountDTO productReportCraftCountDTO : craftCountDTOList) {
-                        row.createCell(cell++).setCellValue(productReportCraftCountDTO.getProductNum());
+
+                        fillIntegerCell(productReportCraftCountDTO.getProductNum(),row,cell++);
                         fillBigDecimalCell(productReportCraftCountDTO.getProductQuantity(),row,cell++,true);
                         fillBigDecimalCell(productReportCraftCountDTO.getProductQuantityRate(),row,cell++,false);
 
-                        row.createCell(cell++).setCellValue(productReportCraftCountDTO.getWhiteProductNum());
+                        fillIntegerCell(productReportCraftCountDTO.getWhiteProductNum(),row,cell++);
                         fillBigDecimalCell(productReportCraftCountDTO.getWhiteProductQuantity(),row,cell++,true);
                         fillBigDecimalCell(productReportCraftCountDTO.getWhiteProductQuantityRate(),row,cell++,false);
 
-                        row.createCell(cell++).setCellValue(productReportCraftCountDTO.getBlackProductNum());
+                        fillIntegerCell(productReportCraftCountDTO.getBlackProductNum(),row,cell++);
                         fillBigDecimalCell(productReportCraftCountDTO.getBlackProductQuantity(),row,cell++,true);
                         fillBigDecimalCell(productReportCraftCountDTO.getBlackProductQuantityRate(),row,cell++,false);
                     }
@@ -499,7 +500,10 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
 
             List<ProductReportCraftCountDTO> craftCountDTOList = productCount.getCraftCountDTOList();
             if (CollectionUtils.isNotEmpty(craftCountDTOList)) {
-                allCraftCountDTOList.addAll(craftCountDTOList);
+                List<ProductReportCraftCountDTO> notNullCraftCountDTOList = craftCountDTOList.stream().filter(craftCountDTO -> Objects.nonNull(craftCountDTO.getProductNum())).collect(Collectors.toList());
+                if (CollectionUtils.isNotEmpty(notNullCraftCountDTOList)) {
+                    allCraftCountDTOList.addAll(notNullCraftCountDTOList);
+                }
             }
         }
         if (productQuantity.compareTo(BigDecimal.ZERO) > 0) {
@@ -543,7 +547,15 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
             row.createCell(cellNum).setCellValue(value.toPlainString() + "%");
             return;
         }
-        row.createCell(cellNum).setCellValue("");
+        row.createCell(cellNum).setCellValue("-");
+    }
+
+    private void fillIntegerCell(Integer value,SXSSFRow row,int cellNum) {
+        if (Objects.nonNull(value)) {
+            row.createCell(cellNum).setCellValue(value);
+            return;
+        }
+        row.createCell(cellNum).setCellValue("-");
     }
 
     private CellStyle getStyleWithWrapText(SXSSFWorkbook wb) {
