@@ -5,7 +5,6 @@ import com.alibaba.fastjson2.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Lists;
 import com.zw.cloud.common.entity.dto.LocalDateDTO;
-import com.zw.cloud.common.entity.vo.LocationVO;
 import com.zw.cloud.common.utils.DateTimeUtils;
 import com.zw.cloud.mybatis.plus.entity.report.ReportProductCount;
 import com.zw.cloud.mybatis.plus.entity.report.dto.ProductReportCountQueryDTO;
@@ -48,6 +47,9 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCountMapper, ReportProductCount> implements IReportProductCountService {
 
+    /**
+     * 定型产量统计
+     */
     @Override
     public ReportProductCountVO queryProductReportCount(ProductReportCountQueryDTO productReportCountQueryDTO) {
         if (Objects.equals(2,productReportCountQueryDTO.getTimeType())) {
@@ -119,6 +121,9 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
         return productCountVO;
     }
 
+    /**
+     * 定型产量统计导出
+     */
     @Override
     public SXSSFWorkbook exportProductReportCount(ProductReportCountQueryDTO productReportCountQueryDTO) {
         ReportProductCountVO productCountVO = queryProductReportCount(productReportCountQueryDTO);
@@ -161,9 +166,16 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
         sheet.addMergedRegion(whiteRegion);
         sheet.addMergedRegion(blackRegion);
 
+        int titleSecondCell = 4;
+        secondTitleRow.createCell(titleSecondCell++).setCellValue("生产记录数");
+        secondTitleRow.createCell(titleSecondCell++).setCellValue("产量");
+        secondTitleRow.createCell(titleSecondCell++).setCellValue("产量占比");
+        secondTitleRow.createCell(titleSecondCell++).setCellValue("生产记录数");
+        secondTitleRow.createCell(titleSecondCell++).setCellValue("产量");
+        secondTitleRow.createCell(titleSecondCell++).setCellValue("产量占比");
         if (CollectionUtils.isNotEmpty(craftNameList)) {
             int index = 10;
-            int titleSecondCell = 4;
+
             for (String craftName : craftNameList) {
                 CellRangeAddress cellRangeAddress = new CellRangeAddress(0, 0, index, index + 8);
                 sheet.addMergedRegion(cellRangeAddress);
@@ -172,11 +184,7 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
                 cell.setCellValue(craftName);
 
                 index += 9;
-
                 // 表头第二列
-                secondTitleRow.createCell(titleSecondCell++).setCellValue("生产记录数");
-                secondTitleRow.createCell(titleSecondCell++).setCellValue("产量");
-                secondTitleRow.createCell(titleSecondCell++).setCellValue("产量占比");
                 secondTitleRow.createCell(titleSecondCell++).setCellValue("生产记录数");
                 secondTitleRow.createCell(titleSecondCell++).setCellValue("产量");
                 secondTitleRow.createCell(titleSecondCell++).setCellValue("产量占比");
@@ -368,12 +376,12 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
 
             if (productQuantity.compareTo(BigDecimal.ZERO) > 0) {
                 // 白班产量占比
-                BigDecimal whiteProductQuantityRate = whiteProductQuantity.divide(productQuantity,2, RoundingMode.HALF_UP);
+                BigDecimal whiteProductQuantityRate = whiteProductQuantity.divide(productQuantity,4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).setScale(2,RoundingMode.HALF_UP);
                 productCountDTO.setWhiteProductQuantityRate(whiteProductQuantityRate);
 
                 // 晚班产量占比
-                BigDecimal blackProductQuantityRate = blackProductQuantity.divide(productQuantity,2, RoundingMode.HALF_UP);
-                productCountDTO.setBlackProductQuantityRate(blackProductQuantityRate);
+                //BigDecimal blackProductQuantityRate = blackProductQuantity.divide(productQuantity,4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100);
+                productCountDTO.setBlackProductQuantityRate(BigDecimal.valueOf(100).subtract(whiteProductQuantityRate).setScale(2,RoundingMode.HALF_UP));
 
             }
             productCountDTO.setProductNum(productNum);
@@ -444,18 +452,18 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
         productReportCraftCountDTO.setBlackProductNum(blackProductNum);
         if (deviceProductQuantity.compareTo(BigDecimal.ZERO) > 0) {
             // 产量占比
-            BigDecimal productQuantityRate = productQuantity.divide(deviceProductQuantity,2,RoundingMode.HALF_UP);
+            BigDecimal productQuantityRate = productQuantity.divide(deviceProductQuantity,4,RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).setScale(2,RoundingMode.HALF_UP);
             productReportCraftCountDTO.setProductQuantityRate(productQuantityRate);
         }
 
 
         if (productQuantity.compareTo(BigDecimal.ZERO) > 0) {
             // 白班产量占比
-            BigDecimal whiteProductQuantityRate = whiteProductQuantity.divide(productQuantity,2, RoundingMode.HALF_UP);
+            BigDecimal whiteProductQuantityRate = whiteProductQuantity.divide(productQuantity,4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).setScale(2,RoundingMode.HALF_UP);
             productReportCraftCountDTO.setWhiteProductQuantityRate(whiteProductQuantityRate);
 
             // 晚班产量占比
-            BigDecimal blackProductQuantityRate = blackProductQuantity.divide(productQuantity,2, RoundingMode.HALF_UP);
+            BigDecimal blackProductQuantityRate = blackProductQuantity.divide(productQuantity,4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).setScale(2,RoundingMode.HALF_UP);
             productReportCraftCountDTO.setBlackProductQuantityRate(blackProductQuantityRate);
 
         }
@@ -496,11 +504,11 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
         }
         if (productQuantity.compareTo(BigDecimal.ZERO) > 0) {
             // 白班产量占比
-            BigDecimal whiteProductQuantityRate = whiteProductQuantity.divide(productQuantity,2, RoundingMode.HALF_UP);
+            BigDecimal whiteProductQuantityRate = whiteProductQuantity.divide(productQuantity,4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).setScale(2,RoundingMode.HALF_UP);
             sumProductCountDTO.setWhiteProductQuantityRate(whiteProductQuantityRate);
 
             // 晚班产量占比
-            BigDecimal blackProductQuantityRate = blackProductQuantity.divide(productQuantity,2, RoundingMode.HALF_UP);
+            BigDecimal blackProductQuantityRate = blackProductQuantity.divide(productQuantity,4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).setScale(2,RoundingMode.HALF_UP);
             sumProductCountDTO.setBlackProductQuantityRate(blackProductQuantityRate);
 
         }
@@ -532,7 +540,7 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
                 row.createCell(cellNum).setCellValue(value.stripTrailingZeros().toPlainString());
                 return;
             }
-            row.createCell(cellNum).setCellValue(value.toPlainString());
+            row.createCell(cellNum).setCellValue(value.toPlainString() + "%");
             return;
         }
         row.createCell(cellNum).setCellValue("");

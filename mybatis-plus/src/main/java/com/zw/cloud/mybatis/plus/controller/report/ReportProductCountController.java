@@ -59,6 +59,9 @@ public class ReportProductCountController {
         return reportProductCountService.queryProductReportCount(productReportCountQueryDTO);
     }
 
+    /**
+     * 定型产量统计导出
+     */
     @PostMapping("/exportProductReportCount")
     //http://127.0.0.1:8082/report/report-product-count/exportProductReportCount
     public void exportProductReportCount(@Validated @RequestBody ProductReportCountQueryDTO productReportCountQueryDTO, HttpServletResponse response) throws IOException {

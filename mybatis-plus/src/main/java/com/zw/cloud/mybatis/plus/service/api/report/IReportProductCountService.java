@@ -17,7 +17,13 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
  */
 public interface IReportProductCountService extends IService<ReportProductCount> {
 
+    /**
+     * 定型产量统计
+     */
     ReportProductCountVO queryProductReportCount(ProductReportCountQueryDTO productReportCountQueryDTO);
 
+    /**
+     * 定型产量统计导出
+     */
     SXSSFWorkbook exportProductReportCount(ProductReportCountQueryDTO productReportCountQueryDTO);
 }
