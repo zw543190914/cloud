@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.zw.cloud.common.config.thread.pool.ThreadPoolTaskExecutorAutoConfig
+com.zw.cloud.common.config.thread.pool.ThreadPoolTaskExecutorAutoConfig,\
+com.zw.cloud.common.config.asyn.AsyncExecutorAutoConfig

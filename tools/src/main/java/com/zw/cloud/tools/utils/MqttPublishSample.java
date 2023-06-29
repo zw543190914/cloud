@@ -28,8 +28,8 @@ public class MqttPublishSample {
         String clientId = "subscribe_test_device01";
         boolean isStenter = true;
 
-       /* // test_定型机#cqk
-        String host = "tcp://axdkagn.iot.gz.baidubce.com";
+        // test_定型机#cqk
+        /*String host = "tcp://axdkagn.iot.gz.baidubce.com";
         String userName = "thingidp@axdkagn|cqk_zy|0|MD5";
         String password = "668eeb0a7fa18dab53a805b317b45976";
         String topic = "d/cqk_zy/report";
@@ -37,7 +37,7 @@ public class MqttPublishSample {
         boolean isStenter = true;*/
 
         // 其他工厂 dev 大栋  321
-        /*String host = "tcp://axdkagn.iot.gz.baidubce.com";
+       /* String host = "tcp://axdkagn.iot.gz.baidubce.com";
         String userName = "thingidp@axdkagn|1211|0|MD5";
         String password = "5e0b273cdf52f75570b3710574af3ea0";
         String topic = "d/1211/report";
@@ -93,7 +93,7 @@ public class MqttPublishSample {
         // 建立连接
         sampleClient.connect(connOpts);
         //long second = 1658383250;
-        int stop = 7;
+        int stop = 4;
         int actValue = 75 ;
         long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
 

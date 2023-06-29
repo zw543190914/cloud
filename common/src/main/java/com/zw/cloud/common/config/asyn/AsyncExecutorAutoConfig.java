@@ -1,21 +1,24 @@
-package com.zw.cloud.tools.config.asyn;
+package com.zw.cloud.common.config.asyn;
 
 import com.zw.cloud.common.thread.pool.TIDThreadPoolTaskExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
-
-@Slf4j
-@EnableAsync
+@ConditionalOnExpression("${com.zw.cloud.default.asyn.config.enable:true}")
 @Configuration
-public class AsyncExecutorConfig implements AsyncConfigurer {
+@EnableAsync
+@Slf4j
+public class AsyncExecutorAutoConfig implements AsyncConfigurer {
+
     @Bean("asyncTaskExecutor")
     public ThreadPoolTaskExecutor asyncServiceExecutor() {
         //返回可用处理器的虚拟机的最大数量不小于1

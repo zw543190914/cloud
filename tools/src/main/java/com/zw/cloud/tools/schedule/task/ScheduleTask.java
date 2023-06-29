@@ -17,10 +17,9 @@ public class ScheduleTask {
 
     @Async("asyncTaskExecutor")
     //@Scheduled(cron = "35 0/2 * * * ? ")
-    public void task() throws InterruptedException {
+    public void task() {
         log.info("[ScheduleTask][task] start");
         int increment = count.getAndIncrement();
-        TimeUnit.SECONDS.sleep(50);
         log.info("[ScheduleTask][task] {}",Thread.currentThread().getName() + ":" +increment);
     }
 

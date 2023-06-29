@@ -62,10 +62,11 @@ public class WebScoketScheduleTask {
                         log.info("[WebScoketScheduleTask][refreshHeartBeat] connectFailureCountNum is {},config failureCountNum is {}", connnetFailureCountNum,failureCountNum);
                         if (connnetFailureCountNum >= failureCountNum) {
                             log.info("[WebScoketScheduleTask][refreshHeartBeat]服务器 {} 无法连接 ， 客户端关闭 ", webSocketClient.getAddr());
-                            webSocketClient.getChannel().close();
+                            webSocketClient.close();
                             WebSocketClientFactory.getWebsocketClientList().remove(webSocketClient);
                         }
                     } else {
+                        webSocketClient.close();
                         WebSocketClientFactory.getWebsocketClientList().remove(webSocketClient);
                     }
                 } catch (Exception e) {
