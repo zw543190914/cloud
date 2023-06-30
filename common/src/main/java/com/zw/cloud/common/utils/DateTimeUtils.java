@@ -98,7 +98,7 @@ public class DateTimeUtils {
         LocalDate sunday = firstDayOfMonth.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
         System.out.println("指定日期的本周日为:" + sunday);
 
-        List<LocalDateDTO> weekPeriodsByMonth = getWeekPeriodsByMonth(parse2date("2023-06-24"));
+        List<LocalDateDTO> weekPeriodsByMonth = getWeekPeriodsByMonth(parse2date("2023-06-30"));
         System.out.println("按 自然周 拆分指定月份:" + JSON.toJSONString(weekPeriodsByMonth));
 
     }
@@ -480,25 +480,22 @@ public class DateTimeUtils {
     }
 
     private static String convertNumToCN(int num) {
-        if (num == 1) {
-            return "一";
+        switch (num) {
+            case 1:
+                return "一";
+            case 2:
+                return "二";
+            case 3:
+                return "三";
+            case 4:
+                return "四";
+            case 5:
+                return "五";
+            case 6:
+                return "六";
+            default:
+                return "七";
         }
-        if (num == 2) {
-            return "二";
-        }
-        if (num == 3) {
-            return "三";
-        }
-        if (num == 4) {
-            return "四";
-        }
-        if (num == 5) {
-            return "五";
-        }
-        if (num == 6) {
-            return "六";
-        }
-        return "";
     }
 
     private LocalDate getLocalDateDTO(LocalDate firstLocalDate) {
