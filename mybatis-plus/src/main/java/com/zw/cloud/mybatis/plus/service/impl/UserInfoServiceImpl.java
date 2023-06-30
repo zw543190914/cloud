@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
@@ -149,7 +149,14 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
      */
     @Override
     public void asynUpdate(Long id) {
-        ioThreadPoolTaskExecutor.submit(() -> asynUpdateTask(id));
+        CompletableFuture.supplyAsync(() -> {
+            asynUpdateTask(id);
+            return 1;
+        },ioThreadPoolTaskExecutor).whenComplete((result,ex) -> {
+            if (Objects.nonNull(ex)) {
+                log.error("[asynUpdate]id is {],ex is ",id,ex);
+            }
+        });
     }
 
     private void asynUpdateTask(Long id) {

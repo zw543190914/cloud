@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.mockito.invocation.InvocationOnMock;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -24,7 +25,7 @@ public class UserInfoServiceImplTest {
     @Mock
     private UserInfoMapper baseMapper;
     @Mock
-    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+    private ThreadPoolTaskExecutor ioThreadPoolTaskExecutor;
     @Mock
     private PlatformTransactionManager transactionManager;
 
@@ -52,6 +53,10 @@ public class UserInfoServiceImplTest {
 
     @Test
     void asynUpdate(){
+        Mockito.doAnswer((InvocationOnMock invocation) -> {
+            ((Runnable) invocation.getArguments()[0]).run();
+            return null;
+        }).when(ioThreadPoolTaskExecutor).execute(Mockito.any(Runnable.class));
         userInfoService.asynUpdate(2L);
     }
 

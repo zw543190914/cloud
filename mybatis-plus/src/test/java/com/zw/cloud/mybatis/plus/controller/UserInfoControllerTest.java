@@ -11,7 +11,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.transaction.PlatformTransactionManager;
 
 public class UserInfoControllerTest {
 
@@ -19,6 +23,10 @@ public class UserInfoControllerTest {
     UserInfoController userInfoController;
     @Mock
     IUserInfoService userService;
+    @Mock
+    ThreadPoolTaskExecutor ioThreadPoolTaskExecutor;
+    @Mock
+    PlatformTransactionManager transactionManager;
 
     @BeforeEach
     void before() {
@@ -34,4 +42,13 @@ public class UserInfoControllerTest {
         Assertions.assertDoesNotThrow(() -> userInfoController.pageQuery(userInfo));
     }
 
+    @Test
+    void asynTest() {
+        Mockito.doAnswer((InvocationOnMock invocation) -> {
+            ((Runnable) invocation.getArguments()[0]).run();
+            return null;
+        }).when(ioThreadPoolTaskExecutor).submit(Mockito.any(Runnable.class));
+        Assertions.assertDoesNotThrow(() -> userInfoController.asynTest(false));
+
+    }
 }
