@@ -96,7 +96,7 @@ public class BigDecimalUtils {
         jsonMap.put("test7","13");
         jsonMap.put("test4",null);
         System.out.println("JSON 中最大值:" + findMaxValueFromJsonObject(jsonMap));
-        Map<String, Object> testMap = fillEveryOneJsonValue(jsonMap, BigDecimal.valueOf(20), "test", 10);
+        Map<String, Object> testMap = fillEveryOneJsonValue(jsonMap, 20, "test", 10);
         System.out.println("为JSON 中每一节赋值:" + JSON.toJSONString(testMap));
         System.out.println(JSON.toJSONString(buildJsonForRecommendCraft(testMap,BigDecimal.valueOf(40),"test",12)));
     }
@@ -348,7 +348,10 @@ public class BigDecimalUtils {
     /**
      * 为JSON 中每一节赋值
      */
-    public static Map<String,Object> fillEveryOneJsonValue(Object jsonValue,BigDecimal totalValue,String prefix,Integer tempCount) {
+    public static Map<String,Object> fillEveryOneJsonValue(Object jsonValue,Object totalValue,String prefix,Integer tempCount) {
+        if (Objects.isNull(totalValue)) {
+            return null;
+        }
         // 每一节赋值
         Map<String,Object> jsonMap = new LinkedHashMap<>();
         Map<String,Object> oldMap = new LinkedHashMap<>();
