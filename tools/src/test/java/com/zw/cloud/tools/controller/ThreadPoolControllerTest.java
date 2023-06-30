@@ -28,6 +28,6 @@ public class ThreadPoolControllerTest {
             ((Runnable) invocation.getArguments()[0]).run();
             return null;
         }).when(ioThreadPoolTaskExecutor).execute(Mockito.any(Runnable.class));
-        Assertions.assertDoesNotThrow(() -> threadPoolController.query("1"));
+        Assertions.assertDoesNotThrow(() -> threadPoolController.query(1));
     }
 }

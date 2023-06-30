@@ -30,12 +30,15 @@ public class ThreadPoolController {
 
     @GetMapping("/query")
     //http://localhost:9040/tools/test/query?id=1
-    public void query(@RequestParam("id") String id) {
+    public void query(@RequestParam("id") Integer id) {
         logger.info("[query]id is {}, thread name is {}", id,Thread.currentThread().getName());
         //Future<String> future = CustomerExecutorService.pool.submit(() -> queryData(id));
         CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
             String result = queryData(id);
             logger.info("[query]id is {}, thread name is {},result is {}", id, Thread.currentThread().getName(), result);
+            if (Objects.equals(0,id)) {
+                int num = 1/0;
+            }
             return result;
         }, ioThreadPoolTaskExecutor).whenComplete((result, ex) -> {
             if (Objects.nonNull(ex)) {
@@ -51,7 +54,7 @@ public class ThreadPoolController {
     }
 
 
-    private String queryData(String id){
+    private String queryData(Integer id){
         logger.info("[queryData]id is {}, thread name is {}", id,Thread.currentThread().getName());
         return "test:" + id;
     }
