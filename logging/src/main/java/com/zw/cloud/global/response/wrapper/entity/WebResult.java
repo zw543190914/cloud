@@ -36,10 +36,10 @@ public class WebResult<T> implements Serializable {
         return this;
     }
     public static <T> WebResult<T> fail(){
-        return new WebResult<T>(HttpStatus.HTTP_BAD_REQUEST);
+        return new WebResult<T>(HttpStatus.HTTP_INTERNAL_ERROR);
     }
     public static <T> WebResult<T> fail(String message){
-        return fail(HttpStatus.HTTP_BAD_REQUEST,message);
+        return fail(HttpStatus.HTTP_INTERNAL_ERROR,message);
     }
     public static <T> WebResult<T> fail(Integer code,String message){
         WebResult<T> webResult = new WebResult<T>(code);
