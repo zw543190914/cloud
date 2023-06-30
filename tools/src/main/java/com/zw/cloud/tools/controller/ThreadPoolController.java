@@ -1,8 +1,7 @@
 package com.zw.cloud.tools.controller;
 
 
-import com.zw.cloud.tools.service.impl.ScheduleService;
-import com.zw.cloud.tools.utils.CustomerExecutorService;
+import com.zw.cloud.tools.service.impl.AsyncService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping("/tools/test")
 public class ThreadPoolController {
 
     @Autowired
-    private ScheduleService scheduleService;
+    private AsyncService asyncService;
 
     @Resource(name = "ioThreadPoolTaskExecutor")
     private ThreadPoolTaskExecutor ioThreadPoolTaskExecutor;
@@ -47,10 +44,10 @@ public class ThreadPoolController {
         });
     }
 
-    @GetMapping("/testAsync1")
-    //http://localhost:9040/tools/test/testAsync1
-    public void testAsync1() throws Exception{
-        scheduleService.test();
+    @GetMapping("/asyncTask")
+    //http://localhost:9040/tools/test/asyncTask
+    public void asyncTask() {
+        asyncService.asyncTask();
     }
 
 
