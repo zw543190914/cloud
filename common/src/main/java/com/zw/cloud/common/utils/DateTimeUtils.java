@@ -445,7 +445,7 @@ public class DateTimeUtils {
         if (Objects.isNull(localDate)) {
             return Collections.emptyList();
         }
-        String month2Str = parseMonth2Str(localDate, null);
+        String month2Str = parseMonth2Str(localDate, "yyyy-MM");
         LocalDate firstDayOfMonth = localDate.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate lastDayOfMonth = localDate.with(TemporalAdjusters.lastDayOfMonth());
         if (lastDayOfMonth.isAfter(LocalDate.now())) {
@@ -456,7 +456,9 @@ public class DateTimeUtils {
         // 第一个周日
         LocalDate firstSunday = firstDayOfMonth.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
         first.setEndTime(firstSunday);
-        first.setDateStr(month2Str + "月:第一周:(" + parse2Str(firstDayOfMonth,"MM/dd") + "-" +  parse2Str(firstSunday,"MM/dd") + ")");
+        StringBuilder firstDateStr = new StringBuilder(month2Str);
+        firstDateStr.append("月:第一周:(").append(parse2Str(firstDayOfMonth,"MM/dd")).append("-").append(parse2Str(firstSunday,"MM/dd")).append(")");
+        first.setDateStr(firstDateStr.toString());
         List<LocalDateDTO> localDateDTOList = new ArrayList<>();
         localDateDTOList.add(first);
         if (firstSunday.isAfter(lastDayOfMonth)) {
@@ -473,7 +475,9 @@ public class DateTimeUtils {
             } else {
                 localDateDTO.setEndTime(sunday);
             }
-            localDateDTO.setDateStr(parseMonth2Str(localDate, null) + ":第" + convertNumToCN(num ++) + "周:("  + parse2Str(localDateDTO.getStartTime(),"MM/dd") + "-" +  parse2Str(localDateDTO.getEndTime(),"MM/dd") + ")");
+            StringBuilder dateStr = new StringBuilder(parseMonth2Str(localDate, "yyyy-MM"));
+            dateStr.append("月:第").append(convertNumToCN(num ++)).append("周:(").append(parse2Str(localDateDTO.getStartTime(),"MM/dd")).append( "-").append(parse2Str(localDateDTO.getEndTime(),"MM/dd")).append(")");
+            localDateDTO.setDateStr(dateStr.toString());
             localDateDTOList.add(localDateDTO);
         }
         return localDateDTOList;
