@@ -1,5 +1,6 @@
 package com.zw.cloud.tools.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -14,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 /**
  *发布端
  */
+@Slf4j
 public class MqttPublishSample {
     public static void main(String[] args) throws Exception{
 
@@ -24,32 +26,57 @@ public class MqttPublishSample {
         String password = "20f582bfab251a639a8893d13d90bdc1";
         String topic = "d/rr/report";
         String clientId = "subscribe_test_device01";
+        boolean isStenter = true;
+
+        // test_定型机#cqk
+        /*String host = "tcp://axdkagn.iot.gz.baidubce.com";
+        String userName = "thingidp@axdkagn|cqk_zy|0|MD5";
+        String password = "668eeb0a7fa18dab53a805b317b45976";
+        String topic = "d/cqk_zy/report";
+        String clientId = "subscribe_test_device01";
+        boolean isStenter = true;*/
+
+        // 其他工厂 dev 大栋  321
+       /* String host = "tcp://axdkagn.iot.gz.baidubce.com";
+        String userName = "thingidp@axdkagn|1211|0|MD5";
+        String password = "5e0b273cdf52f75570b3710574af3ea0";
+        String topic = "d/1211/report";
+        String clientId = "subscribe_test";
+        boolean isStenter = true;*/
+
         // qa
         // 定型机#02
         /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|qa_test_device_stenter_02|0|MD5";
         String password = "3509803995f1748b7d4c5f1ad9dfb615";
         String topic = "d/qa_test_device_stenter_02/report";
-        String clientId = "subscribe_test";*/
-        // 定型机17
-       /* String host = "tcp://amgjjzk.iot.gz.baidubce.com";
-        String userName = "thingidp@amgjjzk|test_qa_17|0|MD5";
-        String password = "5ce6946268fc3acbccd0e2b53790bd0e";
-        String topic = "d/test_qa_17/report";
-        String clientId = "subscribe_test";*/
-        // 定型机16
+        String clientId = "subscribe_test";
+        boolean isStenter = true;*/
+
+
+        // 定型机2
         /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
-        String userName = "thingidp@amgjjzk|test_device_16|0|MD5";
-        String password = "20ea5758be5e367d606287b8eeca8539";
-        String topic = "d/test_device_16/report";
-        String clientId = "subscribe_test001";*/
+        String userName = "thingidp@amgjjzk|8888|0|MD5";
+        String password = "bdf6a12cb4d85d36954a9759e24b12d4";
+        String topic = "d/8888/report";
+        String clientId = "subscribe_test001";
+        boolean isStenter = true;*/
 
         // 线上
         /*String host = "tcp://afswjqe.iot.gz.baidubce.com";
         String userName = "thingidp@afswjqe|xnbh06|0|MD5";
         String password = "885c1c1ba9c32c96f2c0e4f5dd0b4e01";
         String topic = "d/xnbh06/report";
-        String clientId = "subscribe_test";*/
+        String clientId = "subscribe_test";
+        boolean isStenter = true;*/
+
+        // qa通用设备 device1651719933  2342701
+       /* String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+        String userName = "thingidp@amgjjzk|2342701|0|MD5";
+        String password = "25249998d919796775bb61fbc1559fe7";
+        String topic = "d/2342701/report";
+        String clientId = "subscribe_test_device01";
+        boolean isStenter = false;*/
 
         int qos = 1;
         // 内存存储
@@ -66,35 +93,20 @@ public class MqttPublishSample {
         // 建立连接
         sampleClient.connect(connOpts);
         //long second = 1658383250;
-        int stop = 66;
-        Random random = new Random();
+        int stop = 4;
         int actValue = 75 ;
         long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
 
-        for (int i = 0; i < 120; i++) {
+        for (int i = 0; i < 44640; i++) {
 
             second = second + 30;
-            String content = null;
-            if (i == 0) {
+            String content;
+            if (isStenter) {
                 content = buildContent(181,actValue ,130.4,180.56,100 ,stop,second);
-            } else if (i == 1){
-                stop = 66;
-                content = buildContent(181,actValue ,130.4,180.56,200 ,stop,second);
-            } else if (i == 2){
-                stop = 66;
-                content = buildContent(181,actValue ,130.4,180.56,300.1 ,stop,second);
-            }else if (i == 3){
-                stop = 66;
-                content = buildContent(181,actValue ,160,179.6,400 ,stop,second);
-            }else if (i == 4){
-                stop = 66;
-                content = buildContent(181,actValue ,160,179.6,500 ,stop,second);
-            }else if (i == 5){
-                stop = 66;
-                content = buildContent(181,actValue ,170,179.6,600 ,stop,second);
             } else {
-                content = buildContent(181,actValue ,170,179.6,600 ,stop,second);
+                content = buildCommonContent(99,120,second);
             }
+
             try {
 
                 // 创建消息
@@ -105,15 +117,9 @@ public class MqttPublishSample {
                 sampleClient.publish(topic, message);
 
             } catch (MqttException me) {
-                System.out.println("reason " + me.getReasonCode());
-                System.out.println("msg " + me.getMessage());
-                System.out.println("loc " + me.getLocalizedMessage());
-                System.out.println("cause " + me.getCause());
-                System.out.println("excep " + me);
-                me.printStackTrace();
+                log.error("sampleClient.publish error is ",me);
             }
-            System.out.println("finish " + second);
-            //System.out.println(content);
+            log.info("sampleClient.publish finish {}, i is {}",second,i);
             TimeUnit.SECONDS.sleep(30);
         }
         // 断开连接
@@ -124,6 +130,9 @@ public class MqttPublishSample {
     }
 
     public static String buildContent(int setValue,int actValue,double actValue01,double actValue02,double actValue03,int speed,Long second){
+        Random random = new Random();
+        int nextInt = random.nextInt(20);
+        actValue = actValue + nextInt;
         return "{\n" +
                 "\"stenterStatus\":{\n" +
                 "    \"rtime\": "+ second +",     \n" +
@@ -153,7 +162,8 @@ public class MqttPublishSample {
                 "    \"d21\": " + actValue +",\n" +
                 "    \"d22\": " + setValue +",\n" +
                 "    \"d23\": " + actValue +",\n" +
-                "    \"d24\": " + actValue +",\n" +
+                // d24	totalAmplitude 总门幅
+                "    \"d24\": " + 12 +",\n" +
                 "    \"d25\": " + actValue +",\n" +
                 "    \"d26\": " + actValue +",\n" +
                 "    \"d27\": " + actValue +",\n" +
@@ -209,6 +219,7 @@ public class MqttPublishSample {
                 "    \"d80\": " + actValue +",\n" +
                 "    \"d81\": " + setValue +",\n" +
                 "    \"d82\": " + actValue +",\n" +
+                // 排风设定转速百分比1
                 "    \"d83\": " + 80 +",\n" +
                 "    \"d84\": " + 80 +",\n" +
                 "    \"d85\": " + 80 +",\n" +
@@ -227,8 +238,10 @@ public class MqttPublishSample {
                 "    \"d98\": " + 80 +",\n" +
                 "    \"d99\": " + 80 +",\n" +
                 "    \"d100\": " + 80 +",\n" +
+                // 循环风设定转速百分比12
                 "    \"d101\": " + 80 +", \n" +
-                "    \"d150\": " + 60 +",\n" +
+                // 协议版本号（固定为1.6）
+                "    \"d150\": " + 1.6 +",\n" +
                 "    \"d400\": " + setValue +",\n" +
                 "    \"d401\": " + actValue +",\n" +
                 "    \"d500\": " + actValue +",\n" +
@@ -239,8 +252,10 @@ public class MqttPublishSample {
                 "    \"d602\": " + actValue +",\n" +
                 "    \"d603\": " + actValue +",\n" +
                 "    \"d604\": " + setValue +",\n" +
+                // 后门幅实际
                 "    \"d605\": " + actValue +",\n" +
                 "    \"d606\": " + setValue +",\n" +
+                // 门幅1实际
                 "    \"d607\": " + actValue +",\n" +
                 "    \"d608\": " + setValue +",\n" +
                 "    \"d609\": " + actValue +",\n" +
@@ -261,8 +276,10 @@ public class MqttPublishSample {
                 "    \"d624\": " + setValue +",\n" +
                 "    \"d625\": " + actValue +",\n" +
                 "    \"d626\": " + setValue +",\n" +
-                "    \"d627\": " + actValue +",\n" +
+                // 门幅11实际
+                "    \"d627\": " + 120 +",\n" +
                 "    \"d628\": " + setValue +",\n" +
+                // 门幅12实际
                 "    \"d629\": " + 110 +",\n" +
                 "    \"d700\": " + actValue +",\n" +
                 "    \"d701\": " + actValue +",\n" +
@@ -275,5 +292,84 @@ public class MqttPublishSample {
                 "    \"d708\": " + actValue +"\n" +
                 "  }\n" +
                 "}";
+    }
+
+    public static String buildCommonContent(int setValue,int actValue,Long second){
+        Random random = new Random();
+        int nextInt = random.nextInt(20);
+        actValue = actValue + nextInt;
+        return  "{\n" +
+                "    \"generalReport\":{\n" +
+                "        \"ctime\":" + second + ",\n" +
+                "        \"rtime\":" + second + ",\n" +
+                "        \"mt\":1,\n" +
+                "        \"ec\":8830,\n" +
+                "        \"e01\":"+ setValue +",\n" +
+                "        \"e02\":"+ actValue +",\n" +
+                "        \"e03\":"+ actValue +",\n" +
+                "        \"e04\":"+ setValue +",\n" +
+                "        \"e05\":"+ actValue +",\n" +
+                "        \"e06\":"+ setValue +",\n" +
+                "        \"e07\":"+ actValue +",\n" +
+                "        \"e08\":"+ setValue +",\n" +
+                "        \"e09\":"+ actValue +",\n" +
+                "        \"e10\":"+ setValue +",\n" +
+                "        \"e11\":"+ actValue +",\n" +
+                "        \"e12\":"+ setValue +",\n" +
+                "        \"e13\":"+ actValue +",\n" +
+                "        \"e14\":"+ setValue +",\n" +
+                "        \"e15\":"+ actValue +",\n" +
+                "        \"e16\":"+ setValue +",\n" +
+                "        \"e17\":"+ actValue +",\n" +
+                "        \"e18\":"+ setValue +",\n" +
+                "        \"e19\":"+ actValue +",\n" +
+                "        \"e20\":"+ setValue +",\n" +
+                "        \"e21\":"+ actValue +",\n" +
+                "        \"e22\":"+ setValue +",\n" +
+                "        \"e23\":"+ actValue +",\n" +
+                "        \"e24\":"+ setValue +",\n" +
+                "        \"e25\":"+ actValue +",\n" +
+                "        \"e27\":"+ actValue +",\n" +
+                "        \"e28\":"+ setValue +",\n" +
+                "        \"e29\":"+ actValue +",\n" +
+                "        \"e30\":"+ actValue +",\n" +
+                "        \"e31\":"+ setValue +",\n" +
+                "        \"e32\":"+ actValue +",\n" +
+                "        \"e33\":"+ setValue +",\n" +
+                "        \"e34\":"+ actValue +",\n" +
+                "        \"e35\":"+ setValue +",\n" +
+                "        \"e36\":"+ actValue +",\n" +
+                "        \"e37\":"+ setValue +",\n" +
+                "        \"e38\":"+ actValue +",\n" +
+                "        \"e39\":"+ setValue +",\n" +
+                "        \"e40\":"+ actValue +",\n" +
+                "        \"e41\":"+ setValue +",\n" +
+                "        \"e42\":"+ actValue +",\n" +
+                "        \"e43\":"+ setValue +",\n" +
+                "        \"e44\":"+ actValue +",\n" +
+                "        \"e45\":"+ setValue +",\n" +
+                "        \"e46\":"+ actValue +",\n" +
+                "        \"e47\":"+ setValue +",\n" +
+                "        \"e48\":"+ actValue +",\n" +
+                "        \"e49\":"+ setValue +",\n" +
+                "        \"e50\":"+ actValue +",\n" +
+                "        \"e51\":"+ setValue +",\n" +
+                "        \"e52\":"+ actValue +",\n" +
+                "        \"e53\":"+ setValue +",\n" +
+                "        \"e54\":"+ actValue +",\n" +
+                "        \"e55\":"+ actValue +",\n" +
+                "        \"e56\":"+ setValue +",\n" +
+                "        \"e57\":"+ actValue +",\n" +
+                "        \"e58\":"+ setValue +",\n" +
+                "        \"e59\":"+ actValue +",\n" +
+                "        \"e60\":"+ setValue +",\n" +
+                "        \"e61\":"+ actValue +",\n" +
+                "        \"e62\":"+ setValue +",\n" +
+                "        \"e63\":"+ actValue +",\n" +
+                "        \"e64\":"+ setValue +",\n" +
+                "        \"e65\":"+ actValue +"\n" +
+                "    }\n" +
+                "}";
+
     }
 }

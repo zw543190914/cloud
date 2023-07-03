@@ -13,4 +13,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IUserRoleService extends IService<UserRole> {
 
+    void testPropagationRequiresNew(UserRole role);
+
+    void testPropagationRequires(UserRole role);
+
+    void testPropagationNested(UserRole role);
+
+    void testPropagationDefault(UserRole role);
 }

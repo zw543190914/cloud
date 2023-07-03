@@ -21,15 +21,15 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!--Property 'sqlSessionFactory' or 'sqlSessionTemplate' are required-->
-       <!-- <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-        </dependency>-->
+        <!--sharding-jdbc 整合时 Property 'sqlSessionFactory' or 'sqlSessionTemplate' are required-->
         <dependency>
             <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
+            <artifactId>druid-spring-boot-starter</artifactId>
         </dependency>
+        <!--<dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+        </dependency>-->
 
         <dependency>
             <groupId>mysql</groupId>
@@ -58,7 +58,6 @@
         <dependency>
             <groupId>cn.smallbun.screw</groupId>
             <artifactId>screw-core</artifactId>
-            <version>1.0.5</version>
         </dependency>
         <!--datatime -format-->
         <dependency>
@@ -68,33 +67,29 @@
         <dependency>
             <groupId>com.zw.cloud</groupId>
             <artifactId>common</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <!--sharding-jdbc-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.shardingsphere</groupId>-->
+<!--            <artifactId>sharding-jdbc-spring-boot-starter</artifactId>-->
+<!--        </dependency>-->
+
         <dependency>
-            <groupId>org.apache.shardingsphere</groupId>
-            <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>cn.afterturn</groupId>
-            <artifactId>easypoi-annotation</artifactId>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>cn.afterturn</groupId>
-            <artifactId>easypoi-base</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
-
-        <!--<dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </dependency>-->
 
     </dependencies>
 
@@ -128,7 +123,7 @@
                     <!--jdbc url-->
                     <jdbcUrl>jdbc:mysql://127.0.0.1:3306/test</jdbcUrl>
                     <!--生成文件类型-->
-                   <!-- <fileType>HTML</fileType>-->
+                    <!-- <fileType>HTML</fileType>-->
                     <fileType>WORD</fileType>
                     <!--打开文件输出目录-->
                     <openOutputDir>false</openOutputDir>

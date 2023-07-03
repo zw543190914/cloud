@@ -1,8 +1,10 @@
 package com.zw.cloud.common.utils;
 
-import com.alibaba.fastjson.JSON;
-import com.google.common.base.Preconditions;
+import com.alibaba.fastjson2.JSON;
+import com.zw.cloud.common.entity.dto.LocalDateDTO;
 import com.zw.cloud.common.entity.dto.LocalDateTimeDTO;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Assert;
 
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -11,6 +13,10 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 public class DateTimeUtils {
+
+    public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_PATTERN = "yyyy-MM-dd";
+    public static final String MONTH_PATTERN = "yyyy-MM";
 
     public static void main(String[] args) throws Exception{
         //获取秒数
@@ -23,13 +29,14 @@ public class DateTimeUtils {
         System.out.println("=========毫秒数===========");
         System.out.println(milliSecond);
         System.out.println(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        System.out.println("=========毫秒数转为LocalDateTime===========");
         System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(milliSecond), ZoneId.systemDefault()));
 
         System.out.println("=========LocalDateTime 转为 Instant===========");
         System.out.println(now.atZone(ZoneId.systemDefault()).toInstant());
         System.out.println("=========Instant 转为 LocalDateTime===========");
-        System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(milliSecond), ZoneId.systemDefault()));
-
+        System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(milliSecond), ZoneId.of("UTC+8")));
+        System.out.println("=========Instant===========");
         Instant instant = Instant.ofEpochSecond(second);
         System.out.println(instant);
         System.out.println(instant.atZone(ZoneId.systemDefault()));
@@ -62,19 +69,37 @@ public class DateTimeUtils {
         String config = "2022-05-19T23:50:00";
         LocalDateTime configTime = LocalDateTime.parse(config);
         List<LocalDateTimeDTO> localDateTimeDTOS = calBetweenTime(startTime, endTime, configTime);
-        System.out.println(JSON.toJSONString(localDateTimeDTOS));
+        System.out.println("根据指定时间 切分时间:" + JSON.toJSONString(localDateTimeDTOS));
         System.out.println(LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8")));
         System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(1656915925000L), ZoneId.systemDefault()));
         Instant instant1 = Instant.ofEpochSecond(System.currentTimeMillis()/1000);
         System.out.println(instant1);
 
         System.out.println("=========时间间隔===========");
-        Duration duration = Duration.between(LocalDateTime.parse("2022-05-18T23:58:00"), LocalDateTime.parse("2022-05-18T23:59:00"));
+        Duration duration = Duration.between(LocalDateTime.parse("2022-05-18T23:58:20"), LocalDateTime.parse("2022-05-18T23:59:00"));
         System.out.println(duration.toMinutes());
         System.out.println("instant = " + instant + ",instant + 60s = " + instant.plusSeconds(60));
         Duration between1 = Duration.between(instant, instant.plusSeconds(60));
         System.out.println(between1.toMinutes());
         System.out.println(Duration.between(instant.plusSeconds(60), now.atZone(ZoneId.systemDefault()).toInstant()).toMinutes());
+
+        between(LocalDateTime.parse("2023-04-03T18:47:00"),LocalDateTime.parse("2023-04-04T14:28:00"));
+        System.out.println("zero:" + transferTimeToZero(LocalDateTime.now()));
+
+        System.out.println(parse2datetime("2023-04-03 18:47:02",null));
+        System.out.println(parse2Str(LocalDateTime.now(),null));
+        System.out.println(parse2date("2023-04-03"));
+        System.out.println(LocalDateTime.parse("2023-04-03T18:47:00").compareTo(LocalDateTime.parse("2023-04-03T18:47:00")));
+        System.out.println("=========将时间按照每7天进行截取===========");
+        System.out.println(getTimePeriods(now.minusDays(21),now.minusDays(1)));
+
+        LocalDate firstDayOfMonth = parse2date("2023-06-04").with(TemporalAdjusters.firstDayOfMonth());
+        System.out.println("指定日期月份的第一天:" + firstDayOfMonth);
+        LocalDate sunday = firstDayOfMonth.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        System.out.println("指定日期的本周日为:" + sunday);
+
+        List<LocalDateDTO> weekPeriodsByMonth = getWeekPeriodsByMonth(parse2date("2023-06-30"));
+        System.out.println("按 自然周 拆分指定月份:" + JSON.toJSONString(weekPeriodsByMonth));
 
     }
 
@@ -230,6 +255,9 @@ public class DateTimeUtils {
     }
 
 
+    /**
+     * 获取每季度 第一天或者最后一天
+     */
     public static Date getStartOrEndDayOfQuarter(LocalDate today, Boolean isFirst){
         LocalDate resDate = LocalDate.now();
         if (today == null) {
@@ -247,6 +275,9 @@ public class DateTimeUtils {
         return Date.from(instant);
     }
 
+    /**
+     * 获取每年 第一天或者最后一天
+     */
     public static Date getStartOrEndDayOfYear(LocalDate today, Boolean isFirst){
         LocalDate resDate = LocalDate.now();
         if (today == null) {
@@ -265,7 +296,7 @@ public class DateTimeUtils {
     public static List<String> getMonthBetween(Date start, Date endTime){
         ArrayList<String> result = new ArrayList<>();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        SimpleDateFormat sdf = new SimpleDateFormat(MONTH_PATTERN);
         String lastMonth = sdf.format(endTime);
 
         Calendar calendar = Calendar.getInstance();
@@ -288,7 +319,7 @@ public class DateTimeUtils {
      * @return 返回天数
      */
     public static int getTheNumberOfDaysBetweenTwoDates(Date start, Date end) {
-        Preconditions.checkArgument(start != null && end != null, "start and end is not null");
+        Assert.isTrue(start != null && end != null, "start and end is not null");
         LocalDate startDate = dateToLocalDate(start);
         LocalDate endDate = dateToLocalDate(end);
         return (int) (endDate.toEpochDay() - startDate.toEpochDay());
@@ -339,7 +370,7 @@ public class DateTimeUtils {
      * 根据指定时间 切分时间
      */
     public static List<LocalDateTimeDTO> calBetweenTime(LocalDateTime startTime, LocalDateTime endTime, LocalDateTime configTime) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
         // 日开始统计时间
         List<LocalDateTimeDTO> result = new ArrayList<>();
         // 开始时间和结束时间都在配置时间之前
@@ -385,6 +416,174 @@ public class DateTimeUtils {
             last.setEndTime(endTime);
         }
         return result;
+    }
+
+    /**
+     * 将时间按照每7天进行截取
+     */
+    public static List<LocalDateTimeDTO> getTimePeriods(LocalDateTime startDate, LocalDateTime endDate) {
+        List<LocalDateTimeDTO> timePeriods = new ArrayList<>();
+        LocalDateTime periodStart = startDate;
+        while (periodStart.isBefore(endDate)) {
+            LocalDateTime periodEnd = periodStart.plusDays(7);
+            if (periodEnd.isAfter(endDate)) {
+                periodEnd = endDate;
+            }
+            LocalDateTimeDTO timePeriod = new LocalDateTimeDTO();
+            timePeriod.setStartTime(periodStart);
+            timePeriod.setEndTime(periodEnd);
+            timePeriods.add(timePeriod);
+            periodStart = periodEnd;
+        }
+        return timePeriods;
+    }
+
+    /**
+     * 按 自然周 拆分指定月份
+     */
+    public static List<LocalDateDTO> getWeekPeriodsByMonth(LocalDate localDate) {
+        if (Objects.isNull(localDate)) {
+            return Collections.emptyList();
+        }
+        String month2Str = parseMonth2Str(localDate, null);
+        LocalDate firstDayOfMonth = localDate.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate lastDayOfMonth = localDate.with(TemporalAdjusters.lastDayOfMonth());
+        if (lastDayOfMonth.isAfter(LocalDate.now())) {
+            lastDayOfMonth = LocalDate.now();
+        }
+        LocalDateDTO first = new LocalDateDTO();
+        first.setStartTime(firstDayOfMonth);
+        // 第一个周日
+        LocalDate firstSunday = firstDayOfMonth.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        first.setEndTime(firstSunday);
+        first.setDateStr(month2Str + "月:第一周:(" + parse2Str(firstDayOfMonth,"MM/dd") + "-" +  parse2Str(firstSunday,"MM/dd") + ")");
+        List<LocalDateDTO> localDateDTOList = new ArrayList<>();
+        localDateDTOList.add(first);
+        if (firstSunday.isAfter(lastDayOfMonth)) {
+            return localDateDTOList;
+        }
+        LocalDate sunday = firstSunday;
+        int num = 2;
+        while (sunday.isBefore(lastDayOfMonth)) {
+            LocalDateDTO localDateDTO = new LocalDateDTO();
+            localDateDTO.setStartTime(sunday.plusDays(1));
+            sunday = sunday.plusDays(7);
+            if (sunday.isAfter(lastDayOfMonth)) {
+                localDateDTO.setEndTime(lastDayOfMonth);
+            } else {
+                localDateDTO.setEndTime(sunday);
+            }
+            localDateDTO.setDateStr(parseMonth2Str(localDate, null) + ":第" + convertNumToCN(num ++) + "周:("  + parse2Str(localDateDTO.getStartTime(),"MM/dd") + "-" +  parse2Str(localDateDTO.getEndTime(),"MM/dd") + ")");
+            localDateDTOList.add(localDateDTO);
+        }
+        return localDateDTOList;
+    }
+
+    private static String convertNumToCN(int num) {
+        switch (num) {
+            case 1:
+                return "一";
+            case 2:
+                return "二";
+            case 3:
+                return "三";
+            case 4:
+                return "四";
+            case 5:
+                return "五";
+            case 6:
+                return "六";
+            default:
+                return "七";
+        }
+    }
+
+    private LocalDate getLocalDateDTO(LocalDate firstLocalDate) {
+        return firstLocalDate.plusDays(7);
+    }
+
+    public static String parse2Str(LocalDateTime localDateTime, String pattern) {
+        if (Objects.isNull(localDateTime)) {
+            return "";
+        }
+        if (StringUtils.isBlank(pattern)) {
+            pattern = DATE_TIME_PATTERN;
+        }
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
+        return localDateTime.format(dateTimeFormatter);
+    }
+
+    public static String parse2Str(LocalDate localDate, String pattern) {
+        if (Objects.isNull(localDate)) {
+            return "";
+        }
+        if (StringUtils.isBlank(pattern)) {
+            pattern = DATE_PATTERN;
+        }
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
+        return localDate.format(dateTimeFormatter);
+    }
+
+    public static String parseMonth2Str(LocalDate localDate, String pattern) {
+        if (Objects.isNull(localDate)) {
+            return "";
+        }
+        if (StringUtils.isBlank(pattern)) {
+            pattern = MONTH_PATTERN;
+        }
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
+        return localDate.format(dateTimeFormatter);
+    }
+
+    public static LocalDateTime parse2datetime(String date, String pattern) {
+        if (StringUtils.isBlank(date)) {
+            return null;
+        }
+        if (StringUtils.isBlank(pattern)) {
+            pattern = DATE_TIME_PATTERN;
+        }
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
+        return LocalDateTime.parse(date, dateTimeFormatter);
+    }
+
+    public static LocalDate parse2date(String date) {
+        if (StringUtils.isBlank(date)) {
+            return null;
+        }
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+        return LocalDate.parse(date, dateTimeFormatter);
+    }
+
+    public static void between(LocalDateTime start,LocalDateTime end) {
+        Duration duration = Duration.between(start,end);
+        long days = duration.toDays(); //相差的天数
+        long hours = duration.toHours();//相差的小时数
+        long minutes = duration.toMinutes();//相差的分钟数
+        System.out.println("between:" + minutes);
+        long millis = duration.toMillis();//相差毫秒数
+        long nanos = duration.toNanos();//相差的纳秒数
+    }
+
+    /**
+     * 秒转为 LocalDateTime
+     */
+    public LocalDateTime secondToLocalDateTime(Long second) {
+        return LocalDateTime.ofEpochSecond(second, 0, ZoneOffset.of("+8"));
+    }
+
+    /**
+     * 毫秒转为 LocalDateTime
+     */
+    public LocalDateTime milliSecondToLocalDateTime(Long milliSecond) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(milliSecond), ZoneId.systemDefault());
+    }
+
+    /**
+     * 时分秒 置为0
+     */
+    public static LocalDateTime transferTimeToZero(LocalDateTime localDateTime) {
+        return LocalDateTime.of(localDateTime.getYear(), localDateTime.getMonth(), localDateTime.getDayOfMonth(), 0, 0, 0);
+        //return localDateTime.withHour(0).withMinute(0).withSecond(0).withNano(0);
     }
 
 }

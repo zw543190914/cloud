@@ -1,6 +1,6 @@
 package com.zw.cloud.tools.test;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.google.common.collect.Lists;
 import com.zw.cloud.tools.entity.User;
 
@@ -49,12 +49,7 @@ public class SortedTest {
         System.out.println(JSON.toJSONString(map2));
         Map<String, Integer> map3 = fillValue(12, 600);
         System.out.println(JSON.toJSONString(map3));
-        String str1= "abc";
-        String str2= new String("abc");
-        String str3= str2.intern();
-        System.out.println((str1 == str2));
-        System.out.println(str2==str3);
-        System.out.println(str1==str3);
+
     }
     public static int compare(User user){
         if (Objects.equals(user.getName(),"zw4")){

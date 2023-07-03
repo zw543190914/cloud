@@ -5,7 +5,7 @@ import com.google.common.base.Splitter;
 import com.zw.cloud.activiti.business.service.api.IActivitiProcessService;
 import com.zw.cloud.activiti.common.service.api.IActivitiCommonProcessService;
 import com.zw.cloud.activiti.entity.ActHiProcinst;
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;

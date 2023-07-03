@@ -1,6 +1,6 @@
 package com.zw.cloud.tools.controller.ai;
 /*
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import com.zw.cloud.tools.service.impl.FaceLoginServiceImpl;
 import com.zw.cloud.tools.utils.BaiduAiUtil;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -18,12 +18,15 @@ public class RedissonConfig {
     @Value("${spring.redis.port}")
     private String port;
 
+    @Value("${spring.redis.database}")
+    private Integer database;
+
 
     @Bean
     public RedissonClient getRedisson(){
 
         Config config = new Config();
-        config.useSingleServer().setAddress("redis://" + host + ":" + port).setConnectionPoolSize(100).setDatabase(6);
+        config.useSingleServer().setAddress("redis://" + host + ":" + port).setConnectionPoolSize(100).setDatabase(database);
         config.setLockWatchdogTimeout(30000);
         //添加主从配置
 //        config.useMasterSlaveServers().setMasterAddress("").setPassword("").addSlaveAddress(new String[]{"",""});

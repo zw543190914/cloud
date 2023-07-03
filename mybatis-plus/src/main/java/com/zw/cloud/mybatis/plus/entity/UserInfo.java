@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,10 +12,8 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@TableName(value = "user_info", autoResultMap = true)
+@Accessors(chain = true)
+@TableName(value = "user_info_0", autoResultMap = true)
 public class UserInfo implements Serializable {
     private static final long serialVersionUID = 464505629765578240L;
     
@@ -23,8 +22,10 @@ public class UserInfo implements Serializable {
 
     private String name;
 
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private LocalDate bir;
 
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private Integer age;
 
 
@@ -34,9 +35,10 @@ public class UserInfo implements Serializable {
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String description;
 
-    @TableField(typeHandler = JsonTypeHandler.class)
+    @TableField(typeHandler = JsonTypeHandler.class,updateStrategy = FieldStrategy.IGNORED)
     private Object other;
 
     @TableLogic

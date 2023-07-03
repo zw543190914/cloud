@@ -37,10 +37,10 @@ public class MqttConfig {
     /**
      * 在bean初始化后连接到服务器
      */
-    @PostConstruct
+    /*@PostConstruct
     public void init(){
         connect();
-    }
+    }*/
 
     /**
      * 客户端连接服务端

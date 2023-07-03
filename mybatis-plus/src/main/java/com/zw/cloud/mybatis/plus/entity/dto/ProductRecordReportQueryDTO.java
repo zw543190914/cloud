@@ -158,4 +158,9 @@ public class ProductRecordReportQueryDTO extends Page {
 
     private List<Long> idList;
 
+    /**
+     * 导出的列
+     */
+    private List<RowTitleDTO>  rowTitleDTOList;
+
 }

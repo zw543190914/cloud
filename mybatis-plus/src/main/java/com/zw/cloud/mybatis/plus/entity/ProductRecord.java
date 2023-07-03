@@ -20,7 +20,7 @@ import lombok.Data;
  * @since 2022-09-29
  */
 @Data
-@TableName(value = "base_product_record", autoResultMap = true)
+@TableName(value = "product_record", autoResultMap = true)
 public class ProductRecord implements Serializable {
 
 

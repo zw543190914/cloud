@@ -1,6 +1,6 @@
 package com.zw.cloud.netty.entity.dto;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import io.netty.handler.codec.http.multipart.FileUpload;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,5 +1,6 @@
 package com.zw.cloud.tools.utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.springframework.util.Assert;
 
 /**
  * 通过word模板生成新的word工具类
@@ -27,6 +29,23 @@ import org.apache.poi.xwpf.usermodel.XWPFTableRow;
  *
  */
 public class WorderToNewWordUtils {
+
+    public static byte[] generateDocument(String text) throws IOException {
+        Assert.hasText(text,"text is blank");
+        XWPFDocument document = new XWPFDocument();
+        XWPFParagraph paragraph = document.createParagraph();
+        String[] segments = text.split("\n");
+        // Add each segment to the paragraph
+        for (String segment : segments) {
+            XWPFRun run = paragraph.createRun();
+            run.setText(segment);
+            run.addCarriageReturn();
+        }
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        document.write(out);
+        document.close();
+        return out.toByteArray();
+    }
 
     /**
      * 根据模板生成新word文档

@@ -16,6 +16,7 @@
     <description>Demo project for Spring Boot</description>
 
     <modules>
+        <module>admin</module>
         <module>dubbo-provider</module>
         <module>dubbo-provider-api</module>
         <module>dubbo-consumer</module>
@@ -28,7 +29,7 @@
         <module>feign-provider02</module>
         <module>feign-provider-api</module>
         <module>feign-consumer</module>
-        <module>db</module>
+        <module>mybatis</module>
         <module>common</module>
         <module>xxl-job</module>
         <module>activiti</module>
@@ -36,7 +37,7 @@
         <module>tools</module>
         <module>xxl-sso</module>
         <module>xxl-sso-server</module>
-        <module>xxl-job-server</module>
+        <module>xxl-job-admin</module>
         <module>elasticsearch</module>
         <module>shop</module>
         <module>spring-security</module>
@@ -49,18 +50,20 @@
         <module>rocketMq</module>
         <module>influxdb</module>
         <module>kafka</module>
+<!--        <module>logging</module>-->
 
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.9</maven.compiler.source>
-        <maven.compiler.target>1.9</maven.compiler.target>
-        <java.version>1.9</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <java.version>11</java.version>
         <cloud.alibaba.version>2021.1</cloud.alibaba.version>
         <spring.cloud.version>2021.0.3</spring.cloud.version>
         <ribbon.version>1.4.7.RELEASE</ribbon.version>
         <spring-cloud-starter.version>3.1.3</spring-cloud-starter.version>
         <zipkin.version>2.2.8.RELEASE</zipkin.version>
+        <spring.boot.version>2.6.7</spring.boot.version>
         <feign-okhttp.version>11.9.1</feign-okhttp.version>
 <!--        <dubbo.version>2.6.8</dubbo.version>-->
 <!--        <dubbo-registry-nacos.version>2.7.7</dubbo-registry-nacos.version>-->
@@ -68,12 +71,13 @@
 <!--        <alibaba.spring-context-support.version>1.0.6</alibaba.spring-context-support.version>-->
         <mybatis-spring-boot-starter.version>2.2.2</mybatis-spring-boot-starter.version>
         <pagehelper-spring-boot-starter.version>1.2.13</pagehelper-spring-boot-starter.version>
+        <mysql-connector-j.version>8.0.32</mysql-connector-j.version>
         <logback.version>1.2.0</logback.version>
         <slf4j.version>1.7.21</slf4j.version>
         <zing-core.version>3.3.0</zing-core.version>
         <zing-javase.version>3.3.3</zing-javase.version>
         <commons-collections4.version>4.4</commons-collections4.version>
-        <druid.version>1.2.6</druid.version>
+        <druid.version>1.2.15</druid.version>
         <dubbo-serialization-kryo.version>2.7.7</dubbo-serialization-kryo.version>
         <curator.version>5.3.0</curator.version>
         <zookeeper.version>3.8.0</zookeeper.version>
@@ -81,11 +85,12 @@
         <jjwt.version>0.9.1</jjwt.version>
         <pinyin4j.version>2.5.1</pinyin4j.version>
         <jsoup.version>1.14.2</jsoup.version>
+        <selenium-java.version>3.141.59</selenium-java.version>
         <JsoupXpath.version>2.3.2</JsoupXpath.version>
         <hanlp.version>portable-1.7.5</hanlp.version>
         <hutool-all.version>5.7.22</hutool-all.version>
         <ikanalyzer.version>2012_u6</ikanalyzer.version>
-        <fastjson.version>1.2.78</fastjson.version>
+        <fastjson2.version>2.0.29</fastjson2.version>
         <guava.version>30.0-jre</guava.version>
         <httpclient.version>4.5.13</httpclient.version>
         <shiro-spring.version>1.8.0</shiro-spring.version>
@@ -93,7 +98,8 @@
         <commons-codec.version>1.14</commons-codec.version>
         <commons-pool2.version>2.11.1</commons-pool2.version>
         <shiro-redis.version>3.0.0</shiro-redis.version>
-        <redisson.version>3.17.5</redisson.version>
+        <redisson.version>2.15.2</redisson.version>
+        <redis.version>3.0.2</redis.version>
         <poi.version>4.1.2</poi.version>
         <easyexcel.version>3.0.5</easyexcel.version>
         <easypoi.version>4.1.2</easypoi.version>
@@ -104,9 +110,9 @@
         <aliyun-java-sdk-core.version>4.1.1</aliyun-java-sdk-core.version>
         <ST4.version>4.3.1</ST4.version>
         <xxl-sso-core.version>1.1.0</xxl-sso-core.version>
-        <xxl-job-core.version>2.2.0</xxl-job-core.version>
+        <xxl-job-core.version>2.4.0</xxl-job-core.version>
         <webcam-capture.version>0.3.12</webcam-capture.version>
-        <webmagic.version>0.7.3</webmagic.version>
+        <webmagic.version>0.7.6</webmagic.version>
         <swagger.version>2.10.5</swagger.version>
         <swagger-annotations.version>1.6.2</swagger-annotations.version>
         <easy-captcha.version>1.6.2</easy-captcha.version>
@@ -119,14 +125,18 @@
         <mqtt-client.version>0.4.0</mqtt-client.version>
         <dingtalk.version>1.0.1</dingtalk.version>
         <kafka.version>2.8.0</kafka.version>
-        <jjwt.version>0.9.1</jjwt.version>
         <freemarker.version>2.3.31</freemarker.version>
         <kryo-serializers.version>0.45</kryo-serializers.version>
-        <esotericsoftware.version>4.0.2</esotericsoftware.version>
+        <esotericsoftware.version>5.4.0</esotericsoftware.version>
         <seata-spring-boot-starter.version>1.5.2</seata-spring-boot-starter.version>
         <sentinel-apache-dubbo-adapter.vwesion>1.8.5</sentinel-apache-dubbo-adapter.vwesion>
         <skywalking.toolkit.version>8.9.0</skywalking.toolkit.version>
         <sharding-jdbc.version>4.1.1</sharding-jdbc.version>
+        <metadata-extractor.version>2.18.0</metadata-extractor.version>
+        <screw.version>1.0.5</screw.version>
+        <rocketmq.version>2.2.3</rocketmq.version>
+        <zip4j.version>2.11.5</zip4j.version>
+        <mockito-inline.version>3.11.2</mockito-inline.version>
     </properties>
 
     <dependencyManagement>
@@ -202,9 +212,21 @@
             </dependency>
 
             <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocketmq.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis-spring-boot-starter.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
+            <dependency>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
+                <version>${mysql-connector-j.version}</version>
             </dependency>
 
             <!-- https://mvnrepository.com/artifact/com.alibaba.csp/sentinel-apache-dubbo-adapter -->
@@ -232,16 +254,19 @@
                 <version>${druid.version}</version>
             </dependency>
 
+            <!-- screw 库，简洁好用的数据库表结构文档生成器 -->
+            <dependency>
+                <groupId>cn.smallbun.screw</groupId>
+                <artifactId>screw-core</artifactId>
+                <version>${screw.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.zw.cloud</groupId>
                 <artifactId>common</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.zw.cloud</groupId>
-                <artifactId>db</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+
             <!--二维码-->
             <dependency>
                 <groupId>com.google.zxing</groupId>
@@ -317,6 +342,13 @@
                 <artifactId>jsoup</artifactId>
                 <version>${jsoup.version}</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <version>${selenium-java.version}</version>
+            </dependency>
+
             <!-- https://mvnrepository.com/artifact/cn.wanghaomiao/JsoupXpath -->
             <dependency>
                 <groupId>cn.wanghaomiao</groupId>
@@ -342,13 +374,6 @@
                 <groupId>org.activiti</groupId>
                 <artifactId>activiti-image-generator</artifactId>
                 <version>${activiti.version}</version>
-            </dependency>
-
-            <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
-            <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt</artifactId>
-                <version>${jjwt.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
@@ -379,6 +404,13 @@
                 <groupId>org.crazycake</groupId>
                 <artifactId>shiro-redis</artifactId>
                 <version>${shiro-redis.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-redis</artifactId>
+                <version>${redis.version}</version>
             </dependency>
 
             <!-- https://mvnrepository.com/artifact/org.redisson/redisson-spring-boot-starter -->
@@ -481,6 +513,11 @@
             <dependency>
                 <groupId>us.codecraft</groupId>
                 <artifactId>webmagic-extension</artifactId>
+                <version>${webmagic.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>us.codecraft</groupId>
+                <artifactId>webmagic-selenium</artifactId>
                 <version>${webmagic.version}</version>
             </dependency>
 
@@ -601,12 +638,6 @@
                 <artifactId>kryo-serializers</artifactId>
                 <version>${kryo-serializers.version}</version>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/de.javakaffee/kryo-serializers -->
-            <dependency>
-                <groupId>de.javakaffee</groupId>
-                <artifactId>kryo-serializers</artifactId>
-                <version>${kryo-serializers.version}</version>
-            </dependency>
             <!-- https://mvnrepository.com/artifact/com.esotericsoftware.kryo/kryo -->
             <!--<dependency>
                 <groupId>com.esotericsoftware.kryo</groupId>
@@ -618,6 +649,7 @@
                 <artifactId>kryo</artifactId>
                 <version>${esotericsoftware.version}</version>
             </dependency>
+
             <!-- https://mvnrepository.com/artifact/io.seata/seata-spring-boot-starter -->
             <dependency>
                 <groupId>io.seata</groupId>
@@ -643,6 +675,38 @@
                 <version>${sharding-jdbc.version}</version>
             </dependency>
 
+            <!-- 元数据提取 -->
+            <dependency>
+                <groupId>com.drewnoakes</groupId>
+                <artifactId>metadata-extractor</artifactId>
+                <version>${metadata-extractor.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/net.lingala.zip4j/zip4j -->
+            <dependency>
+                <groupId>net.lingala.zip4j</groupId>
+                <artifactId>zip4j</artifactId>
+                <version>${zip4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-inline</artifactId>
+                <version>${mockito-inline.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/de.codecentric/spring-boot-admin-starter-server -->
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-server</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-client</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -656,12 +720,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <!-- https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2 -->
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${fastjson2.version}</version>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -695,6 +760,13 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.zw.cloud</groupId>
+            <artifactId>logging</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
     </dependencies>
 
     <!--自己  nexus 私服配置-->
@@ -714,15 +786,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.6.7</version>
                 <configuration>
-                    <mainClass>none</mainClass>     <!-- 取消查找本项目下的Main方法：为了解决Unable to find main class的问题 -->
-                    <classifier>execute</classifier>    <!-- 为了解决依赖模块找不到此模块中的类或属性 -->
+                    <classifier>execute</classifier>
                 </configuration>
                 <executions>
                     <execution>
                         <goals>
                             <goal>repackage</goal>
+                            <goal>build-info</goal>
                         </goals>
                     </execution>
                 </executions>

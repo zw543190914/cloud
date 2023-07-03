@@ -13,4 +13,10 @@ public class PageController {
     public String testPage(){
         return "ajaxIndex";
     }
+
+    @GetMapping("/chatGPT")
+    //http://localhost:9040/chatGPT
+    public String chatGPT(){
+        return "index3";
+    }
 }

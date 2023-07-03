@@ -1,6 +1,6 @@
 package com.zw.cloud.netty.client.util;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.zw.cloud.netty.client.factory.WebSocketClient;
 import com.zw.cloud.netty.client.dto.NettyMsgDTO;
 import com.zw.cloud.netty.client.enums.EnumNettyMsgTag;
@@ -16,16 +16,16 @@ public class NettyActiveMsgUtil {
      */
     public static synchronized void dealClientActive(NettyMsgDTO nettyMsgDTO, WebSocketClient websocketClient) {
         //获取当前客户端连接当前服务端的channel信息
-        if (EnumNettyMsgTag.CONNECT.getKey().equals(nettyMsgDTO.getTag())) {
+        if (EnumNettyMsgTag.CONNECT.getType().equals(nettyMsgDTO.getTag())) {
             log.info("[NettyHeartUtil][dealClientActive]收到 {} CONNECT 消息 , nettyMsgDTO = {}", nettyMsgDTO.getUserId(),JSON.toJSONString(nettyMsgDTO));
             return;
         }
-        if (EnumNettyMsgTag.HEART.getKey().equals(nettyMsgDTO.getTag())) {
+        if (EnumNettyMsgTag.HEART.getType().equals(nettyMsgDTO.getTag())) {
             log.info("[NettyHeartUtil][dealClientActive]收到 {} HEART 消息 , nettyMsgDTO = {}", nettyMsgDTO.getUserId(),JSON.toJSONString(nettyMsgDTO));
             return;
         }
-        if (EnumNettyMsgTag.CONNECT_FAIL.getKey().equals(nettyMsgDTO.getTag())) {
-            log.info("[NettyHeartUtil][dealClientActive]收到 {} CONNECT_FAIL 消息 , nettyMsgDTO = {}",nettyMsgDTO.getUserId(), JSON.toJSONString(nettyMsgDTO));
+        if (EnumNettyMsgTag.CLOSE_WS.getType().equals(nettyMsgDTO.getTag())) {
+            log.info("[NettyHeartUtil][dealClientActive]收到 {} CLOSE_WS 消息 , nettyMsgDTO = {}",nettyMsgDTO.getUserId(), JSON.toJSONString(nettyMsgDTO));
             websocketClient.close();
         }
     }

@@ -18,30 +18,30 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class NettyServerInitializer extends ChannelInitializer<SocketChannel> {
     @Override
-    protected void initChannel(SocketChannel socketChannel) throws Exception {
+    protected void initChannel(SocketChannel socketChannel) {
         log.info("[NettyServerInitializer][initChannel] 收到新连接");
         ChannelPipeline pipeline= socketChannel.pipeline();
         //以下三个是Http的支持
         //http解码器
         pipeline.addLast(new HttpServerCodec());
-        //http聚合器
-        pipeline.addLast(new HttpObjectAggregator(1024*1024));
+        //http聚合器 聚合 websocket 的数据帧，因为客户端可能分段向服务器端发送数据
+        pipeline.addLast(new HttpObjectAggregator(1024 * 1024 * 10));
         //支持写大数据流 以块的方式来写的处理器
         pipeline.addLast(new ChunkedWriteHandler());
         // webSocket 数据压缩扩展，当添加这个的时候WebSocketServerProtocolHandler的第三个参数需要设置成true
         pipeline.addLast(new WebSocketServerCompressionHandler());
         // ====================== 增加心跳支持 start    ======================
         // 针对客户端，如果在30秒没有向服务端发送读写心跳(ALL)，则主动断开
-        // 如果是读空闲或者写空闲，不处理,读写空闲超过300秒，则断开连接
-        pipeline.addLast(new IdleStateHandler(0, 0, 300, TimeUnit.SECONDS));
+        // 读或者写空闲以及读写空闲
+        pipeline.addLast(new IdleStateHandler(5, 8, 10, TimeUnit.MINUTES));
         // 自定义的空闲状态检测
         pipeline.addLast(new HeartBeatHandler());
         // ====================== 增加心跳支持 end    ======================
 
         //添加自定义的助手类
         pipeline.addLast(new ServerHandler());
-        //websocket支持,设置路由
-        pipeline.addLast(new WebSocketServerProtocolHandler("/ws",null,true,65535));
+        // 服务器端向外暴露的 web socket 端点，当客户端传递比较大的对象时，maxFrameSize参数的值需要调大
+        pipeline.addLast(new WebSocketServerProtocolHandler("/ws",null,true,10485760));
 
     }
 }

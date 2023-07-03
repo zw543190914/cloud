@@ -26,7 +26,7 @@ public class GeneratorCodeUtils {
         gc.setOutputDir(projectPath + "/tools/src/main/java");
         gc.setAuthor("zw");
         gc.setOpen(false);
-        gc.setIdType(IdType.ASSIGN_ID);
+        gc.setIdType(IdType.AUTO);
         //gc.setDateType(DateType.ONLY_DATE);
         gc.setFileOverride(true);
         // gc.setSwagger2(true); 实体属性 Swagger2 注解
@@ -45,12 +45,12 @@ public class GeneratorCodeUtils {
         PackageConfig pc = new PackageConfig();
         //pc.setModuleName("模块名");
         pc.setParent("com.zw.cloud.tools");
-        pc.setController("controller.poem");
-        pc.setService("service.api.poem");
-        pc.setServiceImpl("service.impl.poem");
-        pc.setMapper("dao.poem");
-        pc.setEntity("entity.poem");
-        pc.setXml("dao.poem");
+        pc.setController("controller.img");
+        pc.setService("service.api.img");
+        pc.setServiceImpl("service.impl.img");
+        pc.setMapper("dao.img");
+        pc.setEntity("entity.img");
+        pc.setXml("dao.img");
         mpg.setPackageInfo(pc);
 
         // 策略配置
@@ -58,7 +58,7 @@ public class GeneratorCodeUtils {
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         //表名，多个英文逗号分割
-        strategy.setInclude("poem");
+        strategy.setInclude("img_attachment");
         // 逻辑删除
         strategy.setLogicDeleteFieldName("deleted");
         //strategy.setSuperEntityClass("你自己的父类实体,没有就不用设置!");

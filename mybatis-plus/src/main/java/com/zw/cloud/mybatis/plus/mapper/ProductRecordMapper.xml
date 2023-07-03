@@ -93,6 +93,170 @@
 
     </resultMap>
 
+    <sql id="queryProductForReportParam">
+        <if test="record.historyProductInfoIdList != null and record.historyProductInfoIdList.size &gt; 0">
+            and product_info_id in
+            <foreach collection="record.historyProductInfoIdList" item="listItem" open="(" close=")" separator="," >
+                #{listItem}
+            </foreach>
+        </if>
+        <if test="record.startTime != null and record.endTime != null">
+            and end_time > #{record.startTime} and end_time &lt;= #{record.endTime}
+        </if>
+        <!-- <if test="record.productCardCode != null and record.productCardCode !='' ">
+             and product_card_code = #{record.productCardCode,jdbcType=VARCHAR}
+         </if>-->
+        <if test="record.productCardCode != null and record.productCardCode !='' ">
+            and product_card_code like concat('%', #{record.productCardCode,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="record.deviceIdList != null and record.deviceIdList.size() &gt; 0">
+            and device_id in
+            <foreach collection="record.deviceIdList" item="listItem" open="(" close=")" separator="," >
+                #{listItem}
+            </foreach>
+        </if>
+        <if test="record.sqlExceptionType == 1" >
+            and (exception_type in
+            <foreach collection="record.exceptionConvertList" item="listItem" open="(" close=")" separator=",">
+                #{listItem}
+            </foreach>
+            <if test="record.convertAssistantList != null and record.convertAssistantList.size() &gt; 0">
+                or assistant_exception_type in
+                <foreach collection="record.convertAssistantList" item="listItem" open="(" close=")" separator=",">
+                    #{listItem}
+                </foreach>
+            </if>
+            <if test="record.craftExceptionType != null" >
+                or craft_exception_type = #{record.craftExceptionType}
+            </if>
+            )
+        </if>
+        <if test="record.sqlExceptionType == 2" >
+            and (assistant_exception_type in
+            <foreach collection="record.convertAssistantList" item="listItem" open="(" close=")" separator=",">
+                #{listItem}
+            </foreach>
+            <if test="record.exceptionConvertList != null and record.exceptionConvertList.size() &gt; 0">
+                or exception_type in
+                <foreach collection="record.exceptionConvertList" item="listItem" open="(" close=")" separator=",">
+                    #{listItem}
+                </foreach>
+            </if>
+            <if test="record.craftExceptionType != null" >
+                or craft_exception_type = #{record.craftExceptionType}
+            </if>
+
+            )
+        </if>
+
+        <if test="record.sqlExceptionType == 3" >
+            and (craft_exception_type = #{record.craftExceptionType}
+            <if test="record.exceptionConvertList != null and record.exceptionConvertList.size() &gt; 0">
+                or exception_type in
+                <foreach collection="record.exceptionConvertList" item="listItem" open="(" close=")" separator=",">
+                    #{listItem}
+                </foreach>
+            </if>
+            <if test="record.convertAssistantList != null and record.convertAssistantList.size() &gt; 0">
+                or assistant_exception_type in
+                <foreach collection="record.convertAssistantList" item="listItem" open="(" close=")" separator=",">
+                    #{listItem}
+                </foreach>
+            </if>
+            )
+        </if>
+        <if test="record.customerName != null and record.customerName.size() &gt; 0">
+            and customer_name in
+            <foreach collection="record.customerName" item="listItem" open="(" close=")" separator="," >
+                #{listItem}
+            </foreach>
+        </if>
+
+        <if test="record.fabricName != null and record.fabricName.size() &gt; 0">
+            and fabric_name in
+            <foreach collection="record.fabricName" item="listItem" open="(" close=")" separator="," >
+                #{listItem}
+            </foreach>
+        </if>
+
+        <if test="record.fabricNo != null and record.fabricNo.size() &gt; 0">
+            and fabric_no in
+            <foreach collection="record.fabricNo" item="listItem" open="(" close=")" separator="," >
+                #{listItem}
+            </foreach>
+        </if>
+
+
+        <if test="record.result != null and record.result.size() &gt; 0">
+            and result in
+            <foreach collection="record.result" item="listItem" open="(" close=")" separator="," >
+                #{listItem}
+            </foreach>
+
+        </if>
+
+
+        <if test="record.markupCraft != null and record.markupCraft.size() &gt; 0">
+            and markup_craft in
+            <foreach collection="record.markupCraft" item="listItem" open="(" close=")" separator="," >
+                #{listItem}
+            </foreach>
+        </if>
+        <if test="record.teamGroup != null and record.teamGroup.size() &gt; 0">
+            and team_group in
+            <foreach collection="record.teamGroup" item="listItem" open="(" close=")" separator="," >
+                #{listItem}
+            </foreach>
+        </if>
+
+        <if test="record.craftTypeList != null and record.craftTypeList.size() &gt; 0">
+            and craft_type in
+            <foreach collection="record.craftTypeList" item="listItem" open="(" close=")" separator="," >
+                #{listItem}
+            </foreach>
+        </if>
+
+        <if test="record.sourceConvertList != null and record.sourceConvertList.size() &gt; 0">
+            and source in
+            <foreach collection="record.sourceConvertList" item="listItem" open="(" close=")" separator="," >
+                #{listItem}
+            </foreach>
+        </if>
+
+
+        <if test="record.defect != null and record.defect.size() &gt; 0" >
+            and
+            <foreach collection="record.defect" item="listItem" open="(" close=")" separator=" or " >
+                JSON_CONTAINS(defect,JSON_OBJECT('name', #{listItem}))
+            </foreach>
+        </if>
+        <if test="record.assistant != null and record.assistant.size() &gt; 0">
+            and
+            <foreach collection="record.assistant" item="listItem" open="(" close=")" separator=" or " >
+                JSON_CONTAINS(assistant,JSON_OBJECT('name', #{listItem}))
+            </foreach>
+        </if>
+        <if test="record.operator != null and record.operator.size() &gt; 0">
+            and
+            <foreach collection="record.operator" item="listItem" open="(" close=")" separator=" or " >
+                JSON_CONTAINS(operator_info,JSON_OBJECT('userName', #{listItem}))
+            </foreach>
+        </if>
+
+        <if test="record.preOperator != null and record.preOperator.size() &gt; 0">
+            and pre_operator in
+            <foreach collection="record.preOperator" item="listItem" open="(" close=")" separator="," >
+                #{listItem}
+            </foreach>
+        </if>
+        <if test="record.frontOperator != null and record.frontOperator.size() &gt; 0">
+            and front_operator in
+            <foreach collection="record.frontOperator" item="listItem" open="(" close=")" separator="," >
+                #{listItem}
+            </foreach>
+        </if>
+    </sql>
+
     <select id="queryAllFinishedProductForReportById" resultMap="BaseResultMap">
         select id,device_id,device_name,customer_name,fabric_name,fabric_no,color,employee_name,batch_no,product_card_code,workshop_name,
                pt_quantity,gram_weight,gram_heft,product_weight,lower_door_width,avg_temperature,avg_car_speed,defect,car_number,
@@ -106,180 +270,10 @@
     </select>
     <select id="queryAllFinishedProductIdListForReport" resultType="long">
         select id
-        from base_product_record
+        from product_record
         where org_code = #{record.orgCode,jdbcType=VARCHAR}  and platform = 0
-        <if test="record.historyProductInfoIdList != null and record.historyProductInfoIdList.size &gt; 0">
-            and product_info_id in
-            <foreach collection="record.historyProductInfoIdList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-        <if test="record.startTime != null and record.endTime != null">
-            and end_time > #{record.startTime} and end_time &lt;= #{record.endTime}
-        </if>
-        <!-- <if test="record.productCardCode != null and record.productCardCode !='' ">
-             and product_card_code = #{record.productCardCode,jdbcType=VARCHAR}
-         </if>-->
-        <if test="record.productCardCode != null and record.productCardCode !='' ">
-            and product_card_code like concat('%', #{record.productCardCode,jdbcType=VARCHAR}, '%')
-        </if>
+        <include refid="queryProductForReportParam" />
         and pre_status = 2
-        <if test="record.deviceIdList != null and record.deviceIdList.size() &gt; 0">
-            and device_id in
-            <foreach collection="record.deviceIdList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-
-        </if>
-        <if test="record.sqlExceptionType == 1" >
-            and (exception_type in
-            <foreach collection="record.exceptionConvertList" item="listItem" open="(" close=")" separator=",">
-                #{listItem}
-            </foreach>
-            <if test="record.convertAssistantList != null and record.convertAssistantList.size() &gt; 0">
-                or assistant_exception_type in
-                <foreach collection="record.convertAssistantList" item="listItem" open="(" close=")" separator=",">
-                    #{listItem}
-                </foreach>
-            </if>
-            <if test="record.craftExceptionType != null" >
-                or craft_exception_type = #{record.craftExceptionType}
-            </if>
-
-            )
-        </if>
-
-        <if test="record.sqlExceptionType == 2" >
-            and (assistant_exception_type in
-            <foreach collection="record.convertAssistantList" item="listItem" open="(" close=")" separator=",">
-                #{listItem}
-            </foreach>
-            <if test="record.exceptionConvertList != null and record.exceptionConvertList.size() &gt; 0">
-                or exception_type in
-                <foreach collection="record.exceptionConvertList" item="listItem" open="(" close=")" separator=",">
-                    #{listItem}
-                </foreach>
-            </if>
-            <if test="record.craftExceptionType != null" >
-                or craft_exception_type = #{record.craftExceptionType}
-            </if>
-
-            )
-        </if>
-
-        <if test="record.sqlExceptionType == 3" >
-            and (craft_exception_type = #{record.craftExceptionType}
-            <if test="record.exceptionConvertList != null and record.exceptionConvertList.size() &gt; 0">
-                or exception_type in
-                <foreach collection="record.exceptionConvertList" item="listItem" open="(" close=")" separator=",">
-                    #{listItem}
-                </foreach>
-            </if>
-            <if test="record.convertAssistantList != null and record.convertAssistantList.size() &gt; 0">
-                or assistant_exception_type in
-                <foreach collection="record.convertAssistantList" item="listItem" open="(" close=")" separator=",">
-                    #{listItem}
-                </foreach>
-            </if>
-            )
-        </if>
-
-        <if test="record.customerName != null and record.customerName.size() &gt; 0">
-            and customer_name in
-            <foreach collection="record.customerName" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.fabricName != null and record.fabricName.size() &gt; 0">
-            and fabric_name in
-            <foreach collection="record.fabricName" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.fabricNo != null and record.fabricNo.size() &gt; 0">
-            and fabric_no in
-            <foreach collection="record.fabricNo" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-
-        <if test="record.result != null and record.result.size() &gt; 0">
-            and result in
-            <foreach collection="record.result" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-
-        </if>
-
-
-        <if test="record.markupCraft != null and record.markupCraft.size() &gt; 0">
-            and markup_craft in
-            <foreach collection="record.markupCraft" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-        <if test="record.teamGroup != null and record.teamGroup.size() &gt; 0">
-            and team_group in
-            <foreach collection="record.teamGroup" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.craftTypeList != null and record.craftTypeList.size() &gt; 0">
-            and craft_type in
-            <foreach collection="record.craftTypeList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.sourceConvertList != null and record.sourceConvertList.size() &gt; 0">
-            and source in
-            <foreach collection="record.sourceConvertList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <!--<if test="record.exceptionConvertList != null and record.exceptionConvertList.size() &gt; 0">
-            and exception_type in
-            <foreach collection="record.exceptionConvertList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>-->
-
-        <if test="record.defect != null and record.defect.size() &gt; 0" >
-            and
-            <foreach collection="record.defect" item="listItem" open="(" close=")" separator=" or " >
-                JSON_CONTAINS(defect,JSON_OBJECT('name', #{listItem}))
-            </foreach>
-        </if>
-        <if test="record.assistant != null and record.assistant.size() &gt; 0">
-            and
-            <foreach collection="record.assistant" item="listItem" open="(" close=")" separator=" or " >
-                JSON_CONTAINS(assistant,JSON_OBJECT('name', #{listItem}))
-            </foreach>
-        </if>
-        <if test="record.operator != null and record.operator.size() &gt; 0">
-            and
-            <foreach collection="record.operator" item="listItem" open="(" close=")" separator=" or " >
-                JSON_CONTAINS(operator_info,JSON_OBJECT('userName', #{listItem}))
-            </foreach>
-        </if>
-
-        <if test="record.preOperator != null and record.preOperator.size() &gt; 0">
-            and pre_operator in
-            <foreach collection="record.preOperator" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-        <if test="record.frontOperator != null and record.frontOperator.size() &gt; 0">
-            and front_operator in
-            <foreach collection="record.frontOperator" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
         and is_deleted = 0 order by id
     </select>
 
@@ -287,642 +281,114 @@
         select id,device_id,device_name,customer_name,fabric_name,fabric_no,color,employee_name,batch_no,product_card_code,workshop_name,
         pt_quantity,gram_weight,gram_heft,product_weight,lower_door_width,avg_temperature,avg_car_speed,defect,car_number,
         markup_craft,result,craft_type,operator,end_time
-        from base_product_record
+        from product_record
         where org_code = #{record.orgCode,jdbcType=VARCHAR}
 
-        <if test="record.startTime != null and record.endTime != null">
-            and end_time > #{record.startTime} and end_time &lt;= #{record.endTime}
-        </if>
-        <if test="record.historyProductInfoIdList != null and record.historyProductInfoIdList.size &gt; 0">
-            and product_info_id in
-            <foreach collection="record.historyProductInfoIdList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-        <!-- <if test="record.productCardCode != null and record.productCardCode !='' ">
-             and product_card_code = #{record.productCardCode,jdbcType=VARCHAR}
-         </if>-->
-        <if test="record.productCardCode != null and record.productCardCode !='' ">
-            and product_card_code like concat('%', #{record.productCardCode,jdbcType=VARCHAR}, '%')
-        </if>
+        <include refid="queryProductForReportParam" />
         and pre_status = 2 and platform = 0
-        <if test="record.deviceIdList != null and record.deviceIdList.size() &gt; 0">
-            and device_id in
-            <foreach collection="record.deviceIdList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-
-        </if>
-        <if test="record.sqlExceptionType == 1" >
-            and (exception_type in
-            <foreach collection="record.exceptionConvertList" item="listItem" open="(" close=")" separator=",">
-                #{listItem}
-            </foreach>
-            <if test="record.convertAssistantList != null and record.convertAssistantList.size() &gt; 0">
-                or assistant_exception_type in
-                <foreach collection="record.convertAssistantList" item="listItem" open="(" close=")" separator=",">
-                    #{listItem}
-                </foreach>
-            </if>
-            <if test="record.craftExceptionType != null" >
-                or craft_exception_type = #{record.craftExceptionType}
-            </if>
-
-            )
-        </if>
-
-        <if test="record.sqlExceptionType == 2" >
-            and (assistant_exception_type in
-            <foreach collection="record.convertAssistantList" item="listItem" open="(" close=")" separator=",">
-                #{listItem}
-            </foreach>
-            <if test="record.exceptionConvertList != null and record.exceptionConvertList.size() &gt; 0">
-                or exception_type in
-                <foreach collection="record.exceptionConvertList" item="listItem" open="(" close=")" separator=",">
-                    #{listItem}
-                </foreach>
-            </if>
-            <if test="record.craftExceptionType != null" >
-                or craft_exception_type = #{record.craftExceptionType}
-            </if>
-
-            )
-        </if>
-
-        <if test="record.sqlExceptionType == 3" >
-            and (craft_exception_type = #{record.craftExceptionType}
-            <if test="record.exceptionConvertList != null and record.exceptionConvertList.size() &gt; 0">
-                or exception_type in
-                <foreach collection="record.exceptionConvertList" item="listItem" open="(" close=")" separator=",">
-                    #{listItem}
-                </foreach>
-            </if>
-            <if test="record.convertAssistantList != null and record.convertAssistantList.size() &gt; 0">
-                or assistant_exception_type in
-                <foreach collection="record.convertAssistantList" item="listItem" open="(" close=")" separator=",">
-                    #{listItem}
-                </foreach>
-            </if>
-            )
-        </if>
-
-        <if test="record.customerName != null and record.customerName.size() &gt; 0">
-            and customer_name in
-            <foreach collection="record.customerName" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.fabricName != null and record.fabricName.size() &gt; 0">
-            and fabric_name in
-            <foreach collection="record.fabricName" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.fabricNo != null and record.fabricNo.size() &gt; 0">
-            and fabric_no in
-            <foreach collection="record.fabricNo" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-
-        <if test="record.result != null and record.result.size() &gt; 0">
-            and result in
-            <foreach collection="record.result" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-
-        </if>
-
-
-        <if test="record.markupCraft != null and record.markupCraft.size() &gt; 0">
-            and markup_craft in
-            <foreach collection="record.markupCraft" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-        <if test="record.teamGroup != null and record.teamGroup.size() &gt; 0">
-            and team_group in
-            <foreach collection="record.teamGroup" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.craftTypeList != null and record.craftTypeList.size() &gt; 0">
-            and craft_type in
-            <foreach collection="record.craftTypeList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.sourceConvertList != null and record.sourceConvertList.size() &gt; 0">
-            and source in
-            <foreach collection="record.sourceConvertList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <!--<if test="record.exceptionConvertList != null and record.exceptionConvertList.size() &gt; 0">
-            and exception_type in
-            <foreach collection="record.exceptionConvertList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>-->
-
-        <if test="record.defect != null and record.defect.size() &gt; 0" >
-            and
-            <foreach collection="record.defect" item="listItem" open="(" close=")" separator=" or " >
-                JSON_CONTAINS(defect,JSON_OBJECT('name', #{listItem}))
-            </foreach>
-        </if>
-        <if test="record.assistant != null and record.assistant.size() &gt; 0">
-            and
-            <foreach collection="record.assistant" item="listItem" open="(" close=")" separator=" or " >
-                JSON_CONTAINS(assistant,JSON_OBJECT('name', #{listItem}))
-            </foreach>
-        </if>
-        <if test="record.operator != null and record.operator.size() &gt; 0">
-            and
-            <foreach collection="record.operator" item="listItem" open="(" close=")" separator=" or " >
-                JSON_CONTAINS(operator_info,JSON_OBJECT('userName', #{listItem}))
-            </foreach>
-        </if>
-
-        <if test="record.preOperator != null and record.preOperator.size() &gt; 0">
-            and pre_operator in
-            <foreach collection="record.preOperator" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-        <if test="record.frontOperator != null and record.frontOperator.size() &gt; 0">
-            and front_operator in
-            <foreach collection="record.frontOperator" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
         and is_deleted = 0 order by id
     </select>
     
     <select id="pageQueryAllFinishedProductForReport" resultMap="BaseResultMap">
         select *
-        from base_product_record
+        from product_record
         where org_code = #{record.orgCode,jdbcType=VARCHAR}  and platform = 0
-        <if test="record.historyProductInfoIdList != null and record.historyProductInfoIdList.size &gt; 0">
-            and product_info_id in
-            <foreach collection="record.historyProductInfoIdList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-        <if test="record.startTime != null and record.endTime != null">
-            and end_time > #{record.startTime} and end_time &lt;= #{record.endTime}
-        </if>
-        <!-- <if test="record.productCardCode != null and record.productCardCode !='' ">
-             and product_card_code = #{record.productCardCode,jdbcType=VARCHAR}
-         </if>-->
 
-        <if test="record.productCardCode != null and record.productCardCode !='' ">
-            and product_card_code like concat('%', #{record.productCardCode,jdbcType=VARCHAR}, '%')
-        </if>
+        <include refid="queryProductForReportParam" />
         and pre_status = 2
-        <if test="record.deviceIdList != null and record.deviceIdList.size() &gt; 0">
-            and device_id in
-            <foreach collection="record.deviceIdList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-
-        </if>
-        <if test="record.customerName != null and record.customerName.size() &gt; 0">
-            and customer_name in
-            <foreach collection="record.customerName" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.fabricName != null and record.fabricName.size() &gt; 0">
-            and fabric_name in
-            <foreach collection="record.fabricName" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.fabricNo != null and record.fabricNo.size() &gt; 0">
-            and fabric_no in
-            <foreach collection="record.fabricNo" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-
-        <if test="record.result != null and record.result.size() &gt; 0">
-            and result in
-            <foreach collection="record.result" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-
-        </if>
-
-
-        <if test="record.markupCraft != null and record.markupCraft.size() &gt; 0">
-            and markup_craft in
-            <foreach collection="record.markupCraft" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-        <if test="record.teamGroup != null and record.teamGroup.size() &gt; 0">
-            and team_group in
-            <foreach collection="record.teamGroup" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.craftTypeList != null and record.craftTypeList.size() &gt; 0">
-            and craft_type in
-            <foreach collection="record.craftTypeList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.sourceConvertList != null and record.sourceConvertList.size() &gt; 0">
-            and source in
-            <foreach collection="record.sourceConvertList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-        <if test="record.sqlExceptionType == 1" >
-            and (exception_type in
-            <foreach collection="record.exceptionConvertList" item="listItem" open="(" close=")" separator=",">
-                #{listItem}
-            </foreach>
-            <if test="record.convertAssistantList != null and record.convertAssistantList.size() &gt; 0">
-                or assistant_exception_type in
-                <foreach collection="record.convertAssistantList" item="listItem" open="(" close=")" separator=",">
-                    #{listItem}
-                </foreach>
-            </if>
-            <if test="record.craftExceptionType != null" >
-                or craft_exception_type = #{record.craftExceptionType}
-            </if>
-
-            )
-        </if>
-
-        <if test="record.sqlExceptionType == 2" >
-            and (assistant_exception_type in
-            <foreach collection="record.convertAssistantList" item="listItem" open="(" close=")" separator=",">
-                #{listItem}
-            </foreach>
-            <if test="record.exceptionConvertList != null and record.exceptionConvertList.size() &gt; 0">
-                or exception_type in
-                <foreach collection="record.exceptionConvertList" item="listItem" open="(" close=")" separator=",">
-                    #{listItem}
-                </foreach>
-            </if>
-            <if test="record.craftExceptionType != null" >
-                or craft_exception_type = #{record.craftExceptionType}
-            </if>
-
-            )
-        </if>
-
-        <if test="record.sqlExceptionType == 3" >
-            and (craft_exception_type = #{record.craftExceptionType}
-            <if test="record.exceptionConvertList != null and record.exceptionConvertList.size() &gt; 0">
-                or exception_type in
-                <foreach collection="record.exceptionConvertList" item="listItem" open="(" close=")" separator=",">
-                    #{listItem}
-                </foreach>
-            </if>
-            <if test="record.convertAssistantList != null and record.convertAssistantList.size() &gt; 0">
-                or assistant_exception_type in
-                <foreach collection="record.convertAssistantList" item="listItem" open="(" close=")" separator=",">
-                    #{listItem}
-                </foreach>
-            </if>
-            )
-        </if>
-
-
-        <if test="record.defect != null and record.defect.size() &gt; 0" >
-            and
-            <foreach collection="record.defect" item="listItem" open="(" close=")" separator=" or " >
-                JSON_CONTAINS(defect,JSON_OBJECT('name', #{listItem}))
-            </foreach>
-        </if>
-        <if test="record.assistant != null and record.assistant.size() &gt; 0">
-            and
-            <foreach collection="record.assistant" item="listItem" open="(" close=")" separator=" or " >
-                JSON_CONTAINS(assistant,JSON_OBJECT('name', #{listItem}))
-            </foreach>
-        </if>
-        <if test="record.operator != null and record.operator.size() &gt; 0">
-            and
-            <foreach collection="record.operator" item="listItem" open="(" close=")" separator=" or " >
-                JSON_CONTAINS(operator_info,JSON_OBJECT('userName', #{listItem}))
-            </foreach>
-        </if>
-
-        <if test="record.preOperator != null and record.preOperator.size() &gt; 0">
-            and pre_operator in
-            <foreach collection="record.preOperator" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-        <if test="record.frontOperator != null and record.frontOperator.size() &gt; 0">
-            and front_operator in
-            <foreach collection="record.frontOperator" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
         and is_deleted = 0 order by id limit #{record.start} , #{record.pageSize}
     </select>
 
     <select id="countAllFinishedProductForReport" resultType="int">
         select count(*)
-        from base_product_record
+        from product_record
         where org_code = #{record.orgCode,jdbcType=VARCHAR}  and platform = 0
-        <if test="record.historyProductInfoIdList != null and record.historyProductInfoIdList.size &gt; 0">
-            and product_info_id in
-            <foreach collection="record.historyProductInfoIdList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-        <if test="record.startTime != null and record.endTime != null">
-            and end_time > #{record.startTime} and end_time &lt;= #{record.endTime}
-        </if>
 
-        <if test="record.productCardCode != null and record.productCardCode !='' ">
-            and product_card_code like concat('%', #{record.productCardCode,jdbcType=VARCHAR}, '%')
-        </if>
+        <include refid="queryProductForReportParam" />
         and pre_status = 2
-        <if test="record.deviceIdList != null and record.deviceIdList.size() &gt; 0">
-            and device_id in
-            <foreach collection="record.deviceIdList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-
-        </if>
-        <if test="record.sqlExceptionType == 1" >
-            and (exception_type in
-            <foreach collection="record.exceptionConvertList" item="listItem" open="(" close=")" separator=",">
-                #{listItem}
-            </foreach>
-            <if test="record.convertAssistantList != null and record.convertAssistantList.size() &gt; 0">
-                or assistant_exception_type in
-                <foreach collection="record.convertAssistantList" item="listItem" open="(" close=")" separator=",">
-                    #{listItem}
-                </foreach>
-            </if>
-            <if test="record.craftExceptionType != null" >
-                or craft_exception_type = #{record.craftExceptionType}
-            </if>
-
-            )
-        </if>
-
-        <if test="record.sqlExceptionType == 2" >
-            and (assistant_exception_type in
-            <foreach collection="record.convertAssistantList" item="listItem" open="(" close=")" separator=",">
-                #{listItem}
-            </foreach>
-            <if test="record.exceptionConvertList != null and record.exceptionConvertList.size() &gt; 0">
-                or exception_type in
-                <foreach collection="record.exceptionConvertList" item="listItem" open="(" close=")" separator=",">
-                    #{listItem}
-                </foreach>
-            </if>
-            <if test="record.craftExceptionType != null" >
-                or craft_exception_type = #{record.craftExceptionType}
-            </if>
-
-            )
-        </if>
-
-        <if test="record.sqlExceptionType == 3" >
-            and (craft_exception_type = #{record.craftExceptionType}
-            <if test="record.exceptionConvertList != null and record.exceptionConvertList.size() &gt; 0">
-                or exception_type in
-                <foreach collection="record.exceptionConvertList" item="listItem" open="(" close=")" separator=",">
-                    #{listItem}
-                </foreach>
-            </if>
-            <if test="record.convertAssistantList != null and record.convertAssistantList.size() &gt; 0">
-                or assistant_exception_type in
-                <foreach collection="record.convertAssistantList" item="listItem" open="(" close=")" separator=",">
-                    #{listItem}
-                </foreach>
-            </if>
-            )
-        </if>
-
-        <if test="record.customerName != null and record.customerName.size() &gt; 0">
-            and customer_name in
-            <foreach collection="record.customerName" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.fabricName != null and record.fabricName.size() &gt; 0">
-            and fabric_name in
-            <foreach collection="record.fabricName" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.fabricNo != null and record.fabricNo.size() &gt; 0">
-            and fabric_no in
-            <foreach collection="record.fabricNo" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-
-        <if test="record.result != null and record.result.size() &gt; 0">
-            and result in
-            <foreach collection="record.result" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-
-        </if>
-
-        <if test="record.markupCraft != null and record.markupCraft.size() &gt; 0">
-            and markup_craft in
-            <foreach collection="record.markupCraft" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-        <if test="record.teamGroup != null and record.teamGroup.size() &gt; 0">
-            and team_group in
-            <foreach collection="record.teamGroup" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.craftTypeList != null and record.craftTypeList.size() &gt; 0">
-            and craft_type in
-            <foreach collection="record.craftTypeList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.sourceConvertList != null and record.sourceConvertList.size() &gt; 0">
-            and source in
-            <foreach collection="record.sourceConvertList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-        <if test="record.defect != null and record.defect.size() &gt; 0" >
-            and
-            <foreach collection="record.defect" item="listItem" open="(" close=")" separator=" or " >
-                JSON_CONTAINS(defect,JSON_OBJECT('name', #{listItem}))
-            </foreach>
-        </if>
-        <if test="record.assistant != null and record.assistant.size() &gt; 0">
-            and
-            <foreach collection="record.assistant" item="listItem" open="(" close=")" separator=" or " >
-                JSON_CONTAINS(assistant,JSON_OBJECT('name', #{listItem}))
-            </foreach>
-        </if>
-        <if test="record.operator != null and record.operator.size() &gt; 0">
-            and
-            <foreach collection="record.operator" item="listItem" open="(" close=")" separator=" or " >
-                JSON_CONTAINS(operator_info,JSON_OBJECT('userName', #{listItem}))
-            </foreach>
-        </if>
-
-
-        <if test="record.preOperator != null and record.preOperator.size() &gt; 0">
-            and pre_operator in
-            <foreach collection="record.preOperator" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-        <if test="record.frontOperator != null and record.frontOperator.size() &gt; 0">
-            and front_operator in
-            <foreach collection="record.frontOperator" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
         and is_deleted = 0
     </select>
 
     <select id="queryProductRecordExceptionList" resultMap="BaseResultMap">
         select exception_type,assistant_exception_type,craft_exception_type
-        from base_product_record
+        from product_record
         where org_code = #{record.orgCode,jdbcType=VARCHAR}
-        <if test="record.historyProductInfoIdList != null and record.historyProductInfoIdList.size &gt; 0">
-            and product_info_id in
-            <foreach collection="record.historyProductInfoIdList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-        <if test="record.startTime != null and record.endTime != null">
-            and end_time > #{record.startTime} and end_time &lt;= #{record.endTime}
-        </if>
-
-        <if test="record.productCardCode != null and record.productCardCode !='' ">
-            and product_card_code = #{record.productCardCode,jdbcType=VARCHAR}
-        </if>
+        <include refid="queryProductForReportParam" />
         and pre_status = 2
-        <if test="record.deviceIdList != null and record.deviceIdList.size() &gt; 0">
-            and device_id in
-            <foreach collection="record.deviceIdList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-
-        </if>
         and (exception_type in (1,2,3) or assistant_exception_type = 1 or craft_exception_type = 1)
         and platform = 0
-        <if test="record.customerName != null and record.customerName.size() &gt; 0">
-            and customer_name in
-            <foreach collection="record.customerName" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.fabricName != null and record.fabricName.size() &gt; 0">
-            and fabric_name in
-            <foreach collection="record.fabricName" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.fabricNo != null and record.fabricNo.size() &gt; 0">
-            and fabric_no in
-            <foreach collection="record.fabricNo" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.result != null and record.result.size() &gt; 0">
-            and result in
-            <foreach collection="record.result" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-
-        </if>
-
-
-        <if test="record.markupCraft != null and record.markupCraft.size() &gt; 0">
-            and markup_craft in
-            <foreach collection="record.markupCraft" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-        <if test="record.teamGroup != null and record.teamGroup.size() &gt; 0">
-            and team_group in
-            <foreach collection="record.teamGroup" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.craftTypeList != null and record.craftTypeList.size() &gt; 0">
-            and craft_type in
-            <foreach collection="record.craftTypeList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-
-        <if test="record.sourceConvertList != null and record.sourceConvertList.size() &gt; 0">
-            and source in
-            <foreach collection="record.sourceConvertList" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-        <if test="record.defect != null and record.defect.size() &gt; 0" >
-            and
-            <foreach collection="record.defect" item="listItem" open="(" close=")" separator=" or " >
-                JSON_CONTAINS(defect,JSON_OBJECT('name', #{listItem}))
-            </foreach>
-        </if>
-        <if test="record.assistant != null and record.assistant.size() &gt; 0">
-            and
-            <foreach collection="record.assistant" item="listItem" open="(" close=")" separator=" or " >
-                JSON_CONTAINS(assistant,JSON_OBJECT('name', #{listItem}))
-            </foreach>
-        </if>
-        <if test="record.operator != null and record.operator.size() &gt; 0">
-            and
-            <foreach collection="record.operator" item="listItem" open="(" close=")" separator=" or " >
-                JSON_CONTAINS(operator_info,JSON_OBJECT('userName', #{listItem}))
-            </foreach>
-        </if>
-
-
-        <if test="record.preOperator != null and record.preOperator.size() &gt; 0">
-            and pre_operator in
-            <foreach collection="record.preOperator" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
-        <if test="record.frontOperator != null and record.frontOperator.size() &gt; 0">
-            and front_operator in
-            <foreach collection="record.frontOperator" item="listItem" open="(" close=")" separator="," >
-                #{listItem}
-            </foreach>
-        </if>
         and is_deleted = 0
     </select>
+
+    <insert id="insertProductRecord" parameterType="com.zw.cloud.mybatis.plus.entity.ProductRecord">
+        insert into product_record (id, product_info_id, org_code,
+        device_id, device_name, product_card_code,
+        order_id, customer_no, customer_name,
+        color_no, color, fabric_no,
+        fabric_name, batch_no, fabric_width,
+        gram_weight, gram_heft, weft_density,
+        plan_meters, defects_number, severity,
+        result, car_number, upper_door_width,
+        lower_door_width, scan_time, pre_status,
+        after_status, handle_time, save_time,
+        operator, create_time, create_user,
+        create_system, update_time, update_user,
+        update_system, is_deleted, source,
+        sort, pt_quantity, product_no,
+        product_sort, employee_name, markup_craft,
+        team_group, avg_car_speed, avg_temperature,
+        avg_wind_speed, avg_top_feed, dept_name,
+        schedule_date, team_group_id, team_group_name,
+        team_shift_id, team_shift_name, workshop_id,
+        workshop_name, schedule_start_time, schedule_end_time,
+        calc_day, pre_car_number, craft_type,
+        pre_sort, specification, style,
+        pre_operator, start_time, end_time,
+        front_operator, actual_meters, matches,
+        expected_time, actual_time, exception_type,
+        product_weight_min, product_weight_max, remark,
+        is_batch, process_name, schedule_import,
+        quality_status, process_code, product_code,
+        platform, task_no, assistant_exception_type,
+        customer_request, stereotype_requirement,
+        craft_suitability, shrinkage, craft_exception_type,
+        is_have_craft, product_weight, thickness,
+        process_report_type, defect, assistant,
+        operator_info)
+        values (#{id,jdbcType=BIGINT}, #{productInfoId,jdbcType=BIGINT}, #{orgCode,jdbcType=VARCHAR},
+        #{deviceId,jdbcType=BIGINT}, #{deviceName,jdbcType=VARCHAR}, #{productCardCode,jdbcType=VARCHAR},
+        #{orderId,jdbcType=VARCHAR}, #{customerNo,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR},
+        #{colorNo,jdbcType=VARCHAR}, #{color,jdbcType=VARCHAR}, #{fabricNo,jdbcType=VARCHAR},
+        #{fabricName,jdbcType=VARCHAR}, #{batchNo,jdbcType=VARCHAR}, #{fabricWidth,jdbcType=VARCHAR},
+        #{gramWeight,jdbcType=DECIMAL}, #{gramHeft,jdbcType=INTEGER}, #{weftDensity,jdbcType=VARCHAR},
+        #{planMeters,jdbcType=DECIMAL}, #{defectsNumber,jdbcType=INTEGER}, #{severity,jdbcType=VARCHAR},
+        #{result,jdbcType=VARCHAR}, #{carNumber,jdbcType=VARCHAR}, #{upperDoorWidth,jdbcType=DOUBLE},
+        #{lowerDoorWidth,jdbcType=DOUBLE}, #{scanTime,jdbcType=TIMESTAMP}, #{preStatus,jdbcType=VARCHAR},
+        #{afterStatus,jdbcType=VARCHAR}, #{handleTime,jdbcType=TIMESTAMP}, #{saveTime,jdbcType=TIMESTAMP},
+        #{operator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR},
+        #{createSystem,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR},
+        #{updateSystem,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{source,jdbcType=TINYINT},
+        #{sort,jdbcType=INTEGER}, #{ptQuantity,jdbcType=DECIMAL}, #{productNo,jdbcType=BIGINT},
+        #{productSort,jdbcType=BIGINT}, #{employeeName,jdbcType=VARCHAR}, #{markupCraft,jdbcType=VARCHAR},
+        #{teamGroup,jdbcType=VARCHAR}, #{avgCarSpeed,jdbcType=DECIMAL}, #{avgTemperature,jdbcType=DECIMAL},
+        #{avgWindSpeed,jdbcType=DECIMAL}, #{avgTopFeed,jdbcType=DECIMAL}, #{deptName,jdbcType=VARCHAR},
+        #{scheduleDate,jdbcType=DATE}, #{teamGroupId,jdbcType=BIGINT}, #{teamGroupName,jdbcType=VARCHAR},
+        #{teamShiftId,jdbcType=BIGINT}, #{teamShiftName,jdbcType=VARCHAR}, #{workshopId,jdbcType=BIGINT},
+        #{workshopName,jdbcType=VARCHAR}, #{scheduleStartTime,jdbcType=TIMESTAMP}, #{scheduleEndTime,jdbcType=TIMESTAMP},
+        #{calcDay,jdbcType=DATE}, #{preCarNumber,jdbcType=VARCHAR}, #{craftType,jdbcType=BIGINT},
+        #{preSort,jdbcType=INTEGER}, #{specification,jdbcType=VARCHAR}, #{style,jdbcType=VARCHAR},
+        #{preOperator,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
+        #{frontOperator,jdbcType=VARCHAR}, #{actualMeters,jdbcType=DECIMAL}, #{matches,jdbcType=VARCHAR},
+        #{expectedTime,jdbcType=VARCHAR}, #{actualTime,jdbcType=VARCHAR}, #{exceptionType,jdbcType=INTEGER},
+        #{productWeightMin,jdbcType=VARCHAR}, #{productWeightMax,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+        #{isBatch,jdbcType=TINYINT}, #{processName,jdbcType=VARCHAR}, #{scheduleImport,jdbcType=TINYINT},
+        #{qualityStatus,jdbcType=VARCHAR}, #{processCode,jdbcType=VARCHAR}, #{productCode,jdbcType=VARCHAR},
+        #{platform,jdbcType=INTEGER}, #{taskNo,jdbcType=VARCHAR}, #{assistantExceptionType,jdbcType=INTEGER},
+        #{customerRequest,jdbcType=VARCHAR}, #{stereotypeRequirement,jdbcType=VARCHAR},
+        #{craftSuitability,jdbcType=DECIMAL}, #{shrinkage,jdbcType=DECIMAL}, #{craftExceptionType,jdbcType=INTEGER},
+        #{isHaveCraft,jdbcType=TINYINT}, #{productWeight,jdbcType=VARCHAR}, #{thickness,jdbcType=VARCHAR},
+        #{processReportType,jdbcType=TINYINT}, #{defect,typeHandler=com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler}, #{assistant,typeHandler=com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler},
+        #{operatorInfo,typeHandler=com.zw.cloud.mybatis.plus.db.typehandlers.JsonTypeHandler})
+    </insert>
 
 </mapper>

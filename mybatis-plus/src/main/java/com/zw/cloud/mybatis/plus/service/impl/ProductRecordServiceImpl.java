@@ -1,6 +1,6 @@
 package com.zw.cloud.mybatis.plus.service.impl;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zw.cloud.common.exception.BizException;
@@ -14,6 +14,9 @@ import com.zw.cloud.mybatis.plus.service.api.IProductRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +38,8 @@ public class ProductRecordServiceImpl extends ServiceImpl<ProductRecordMapper, P
 
     @Autowired
     private ProductRecordServiceImpl productRecordService;
+    @Autowired
+    private SqlSessionFactory sqlSessionFactory;
 
     /**
      * 查询已完成记录
@@ -201,6 +206,28 @@ public class ProductRecordServiceImpl extends ServiceImpl<ProductRecordMapper, P
     public void insertProductRecord(ProductRecord productRecord) {
         // 注入自身，调用本类方法使事务生效
         productRecordService.insert(productRecord);
+    }
+
+    @Override
+    public void batchInsertProductRecord(List<ProductRecord> productRecordList) {
+        long start = System.currentTimeMillis();
+        SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);
+        try {
+            ProductRecordMapper mapper = sqlSession.getMapper(ProductRecordMapper.class);
+            // 2万 28274 15362
+            //productRecordList.forEach(mapper::insert);
+            // 2万 12036
+            productRecordList.forEach(mapper::insertProductRecord);
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+            throw e;
+        } finally {
+            sqlSession.close();
+        }
+
+        // 2万 12036( mapper.insert 46745)    (去除 rewriteBatchedStatements=true)
+        log.info("[ProductRecordServiceImpl][batchInsertProductRecord] use time is {}",System.currentTimeMillis() - start);
     }
 
     @Override

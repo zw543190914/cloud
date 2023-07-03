@@ -1,29 +1,29 @@
 package com.zw.cloud.rocketmq.consumer;
 
-import com.alibaba.fastjson.JSON;
 import com.zw.cloud.rocketmq.consumer.handler.ConsumerHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.spring.annotation.ConsumeMode;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
-import org.apache.rocketmq.spring.core.RocketMQPushConsumerLifecycleListener;
-import org.apache.rocketmq.spring.support.RocketMQConsumerLifecycleListener;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
+/**
+ *  同步顺序发送，使用orderly可以顺序消费 有异常，maxReconsumeTimes不设置，阻塞后续消费,不断重试
+ *  异步发送无法，使用orderly无法保证顺序消息
+ */
 @Component
 @Slf4j
-@RocketMQMessageListener(topic = "topicA", consumerGroup = "group1",consumeMode = ConsumeMode.ORDERLY)
-public class RocketOrderlyConsumer implements RocketMQPushConsumerLifecycleListener, RocketMQListener<MessageExt> {
+@RocketMQMessageListener(topic = "topicB", consumerGroup = "group2", consumeThreadNumber = 5,maxReconsumeTimes = 4,
+        selectorExpression = "tag1 || tag2",consumeMode = ConsumeMode.ORDERLY)
+public class RocketOrderlyConsumer implements RocketMQListener<MessageExt> {
 
     @Override
     public void onMessage(MessageExt messageExt) {
-        log.info("[RocketOrderlyConsumer][onMessage] thread is {},messageExt is {}", Thread.currentThread().getName() ,JSON.toJSONString(messageExt));
         if (Objects.isNull(messageExt)) {
             log.info("[RocketOrderlyConsumer][onMessage] messageExt is null");
             return;
@@ -40,16 +40,10 @@ public class RocketOrderlyConsumer implements RocketMQPushConsumerLifecycleListe
         log.info("[RocketOrderlyConsumer][onMessage] tag is {},receive messageBody is {}", tag, messageBody);
         ConsumerHandler handlerInstance = ConsumerHandler.getConsumerHandlerInstance(topic,tag);
         if (Objects.isNull(handlerInstance)) {
-            log.error("[RocketOrderlyConsumer][onMessage] tag is {},receive messageBody is {},handlerInstance is null", tag, messageBody);
+            log.warn("[RocketOrderlyConsumer][onMessage] tag is {},receive messageBody is {},handlerInstance is null", tag, messageBody);
             return;
         }
         handlerInstance.handleRocketMQMsg(messageBody);
     }
 
-
-    @Override
-    public void prepareStart(DefaultMQPushConsumer consumer) {
-        consumer.setConsumeThreadMax(30);
-        consumer.setConsumeThreadMin(10);
-    }
 }

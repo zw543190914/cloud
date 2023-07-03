@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>chatGPT</title>
+</head>
+
+<body>
+
+<form action="">
+    <input id="name" type="text" autocomplete="off" placeholder="请输入聊天内容" />
+    <button type="button" class="nameBtn">Send</button>
+</form>
+<div id="message"></div>
+</body>
+
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script>
+    $(function () {
+        $('.nameBtn').click(function () {
+            var msg = $('#name').val();
+            console.log(msg);
+            if (msg === "") {
+                window.alert("请输入聊天内容！")
+            } else {
+                $.ajax({
+                    type: "get",
+                    url: '/chatGPT/chat?msg=' + msg,
+                    //data: data,
+                    cache: "false",
+                    timeout : 60000,
+                    contentType: 'application/json',
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        console.log(data);
+                        console.log(data.data);
+                        document.getElementById('message').innerHTML += data.data + '<br/>';
+                        document.getElementById('name').value = '';
+                    },
+                    error: function () {
+                        alert('请求数据错误，请稍后再试');
+                    }
+                });
+            }
+        });
+    });
+
+</script>
+
+</html>

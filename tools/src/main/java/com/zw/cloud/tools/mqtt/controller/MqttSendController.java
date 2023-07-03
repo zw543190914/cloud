@@ -1,6 +1,6 @@
 package com.zw.cloud.tools.mqtt.controller;
 
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import com.zw.cloud.tools.mqtt.config.MqttConfig;
 import com.zw.cloud.tools.utils.CustomerExecutorService;
 import com.zw.cloud.tools.utils.MqttPublishSample;
@@ -29,25 +29,26 @@ public class MqttSendController {
     @Autowired
     private MqttConfig mqttClient;
 
-    @RequestMapping("/sendMessage/{setValue}/{actValue}")
-    //http://localhost:9040/mqtt/sendMessage/80/96
-    public WebResult<Boolean> sendMessage(@PathVariable Integer setValue,@PathVariable Integer actValue) throws Exception{
+    @RequestMapping("/sendMessage/{setValue}/{actValue}/{times}")
+    //http://localhost:9040/mqtt/sendMessage/80/96/10
+    public WebResult<Boolean> sendMessage(@PathVariable Integer setValue, @PathVariable Integer actValue, @PathVariable Integer times) throws Exception{
         AtomicInteger count = new AtomicInteger(0);
-        CountDownLatch countDownLatch = new CountDownLatch(20);
+        CountDownLatch countDownLatch = new CountDownLatch(times);
         ScheduledFuture<?> scheduledFuture = CustomerExecutorService.scheduledExecutorService.scheduleAtFixedRate(() -> {
             long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
             int incrementAndGet = count.incrementAndGet();
-            String message = MqttPublishSample.buildContent(setValue, actValue + incrementAndGet,170,179.6,600 ,actValue + incrementAndGet, second);
+            String message = MqttPublishSample.buildContent(setValue, actValue + incrementAndGet,170,179.6,100 ,actValue , second);
             try {
                 mqttClient.publish(message);
-                log.info("[MqttSendController][sendMessage] count  is {}", incrementAndGet);
-                countDownLatch.countDown();
+                log.info("[MqttSendController][sendMessage] count is {}", incrementAndGet);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.info("[MqttSendController][sendMessage] count is {},error is ", incrementAndGet,e);
+            } finally {
+                countDownLatch.countDown();
             }
-        }, 0, 15, TimeUnit.SECONDS);
+        }, 0, 30, TimeUnit.SECONDS);
         countDownLatch.await();
         scheduledFuture.cancel(false);
-        return WebResult.build(true);
+        return WebResult.success(true);
     }
 }

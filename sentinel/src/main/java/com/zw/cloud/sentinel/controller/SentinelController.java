@@ -2,7 +2,7 @@ package com.zw.cloud.sentinel.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -26,7 +26,7 @@ public class SentinelController {
     }
 
     public WebResult dealHotKey(String name, String value, BlockException exception) {
-        return WebResult.failed().withErrorMsg("热点被限流:" + exception.getClass().getCanonicalName());
+        return WebResult.fail("热点被限流:" + exception.getClass().getCanonicalName());
     }
 
     /**
@@ -57,7 +57,7 @@ public class SentinelController {
     }
 
     public WebResult fallback(int age,Throwable throwable) {
-        return WebResult.failed().withErrorMsg("自定义异常：" + throwable.getMessage());
+        return WebResult.fail("自定义异常：" + throwable.getMessage());
     }
 
 }

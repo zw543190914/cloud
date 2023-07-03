@@ -27,14 +27,14 @@ public class GeneratorCodeUtils {
         gc.setAuthor("zw");
         gc.setOpen(false);
         gc.setIdType(IdType.ASSIGN_ID);
-        gc.setDateType(DateType.ONLY_DATE);
+        //gc.setDateType(DateType.ONLY_DATE);
         gc.setFileOverride(true);
         // gc.setSwagger2(true); 实体属性 Swagger2 注解
         mpg.setGlobalConfig(gc);
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull");
+        dsc.setUrl("jdbc:mysql://localhost:3306/chat?serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull");
         // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
@@ -45,12 +45,12 @@ public class GeneratorCodeUtils {
         PackageConfig pc = new PackageConfig();
         //pc.setModuleName("模块名");
         pc.setParent("com.zw.cloud.netty.web");
-        pc.setController("controller.tc");
-        pc.setService("service.api.tc");
-        pc.setServiceImpl("service.impl.tc");
-        pc.setMapper("dao.tc");
-        pc.setEntity("entity.tc");
-        pc.setXml("dao.tc");
+        pc.setController("controller.chat");
+        pc.setService("service.api.chat");
+        pc.setServiceImpl("service.impl.chat");
+        pc.setMapper("dao.chat");
+        pc.setEntity("entity.chat");
+        pc.setXml("dao.chat");
         mpg.setPackageInfo(pc);
 
         // 策略配置
@@ -58,7 +58,7 @@ public class GeneratorCodeUtils {
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         //表名，多个英文逗号分割
-        strategy.setInclude("tc");
+        strategy.setInclude("img_attachment");
         // 逻辑删除
         strategy.setLogicDeleteFieldName("deleted");
         //strategy.setSuperEntityClass("你自己的父类实体,没有就不用设置!");

@@ -1,11 +1,11 @@
 package com.zw.cloud.tools.controller;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
-import com.zw.cloud.common.utils.HttpClientUtils;
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.common.utils.http.HttpClientUtils;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import com.zw.cloud.tools.dao.TcMapper;
 import com.zw.cloud.tools.entity.Tc;
 import com.zw.cloud.tools.entity.TcExample;
@@ -52,7 +52,7 @@ public class TcController {
     //http://localhost:9040/tc/pageQuery
     public WebResult<PageInfo<Tc>> pageQuery(@RequestBody QueryDTO queryDTO) {
         //int offset = (queryDTO.getPageNo() - 1) * queryDTO.getPageSize();
-        return WebResult.build(this.tcService.pageQuery(queryDTO));
+        return WebResult.success(this.tcService.pageQuery(queryDTO));
     }
 
     @GetMapping("/add")

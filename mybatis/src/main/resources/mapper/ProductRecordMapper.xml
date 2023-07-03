@@ -1,0 +1,2038 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zw.cloud.mybatis.mapper.ProductRecordMapper">
+  <resultMap id="BaseResultMap" type="com.zw.cloud.mybatis.entity.ProductRecord">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_info_id" jdbcType="BIGINT" property="productInfoId" />
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="device_id" jdbcType="BIGINT" property="deviceId" />
+    <result column="device_name" jdbcType="VARCHAR" property="deviceName" />
+    <result column="product_card_code" jdbcType="VARCHAR" property="productCardCode" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="customer_no" jdbcType="VARCHAR" property="customerNo" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+    <result column="color_no" jdbcType="VARCHAR" property="colorNo" />
+    <result column="color" jdbcType="VARCHAR" property="color" />
+    <result column="fabric_no" jdbcType="VARCHAR" property="fabricNo" />
+    <result column="fabric_name" jdbcType="VARCHAR" property="fabricName" />
+    <result column="batch_no" jdbcType="VARCHAR" property="batchNo" />
+    <result column="fabric_width" jdbcType="VARCHAR" property="fabricWidth" />
+    <result column="gram_weight" jdbcType="DECIMAL" property="gramWeight" />
+    <result column="gram_heft" jdbcType="INTEGER" property="gramHeft" />
+    <result column="weft_density" jdbcType="VARCHAR" property="weftDensity" />
+    <result column="plan_meters" jdbcType="DECIMAL" property="planMeters" />
+    <result column="defects_number" jdbcType="INTEGER" property="defectsNumber" />
+    <result column="severity" jdbcType="VARCHAR" property="severity" />
+    <result column="result" jdbcType="VARCHAR" property="result" />
+    <result column="car_number" jdbcType="VARCHAR" property="carNumber" />
+    <result column="upper_door_width" jdbcType="DOUBLE" property="upperDoorWidth" />
+    <result column="lower_door_width" jdbcType="DOUBLE" property="lowerDoorWidth" />
+    <result column="scan_time" jdbcType="TIMESTAMP" property="scanTime" />
+    <result column="pre_status" jdbcType="VARCHAR" property="preStatus" />
+    <result column="after_status" jdbcType="VARCHAR" property="afterStatus" />
+    <result column="handle_time" jdbcType="TIMESTAMP" property="handleTime" />
+    <result column="save_time" jdbcType="TIMESTAMP" property="saveTime" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="create_time" jdbcType="OTHER" property="createTime" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_system" jdbcType="VARCHAR" property="createSystem" />
+    <result column="update_time" jdbcType="OTHER" property="updateTime" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="update_system" jdbcType="VARCHAR" property="updateSystem" />
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
+    <result column="source" jdbcType="TINYINT" property="source" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="pt_quantity" jdbcType="DECIMAL" property="ptQuantity" />
+    <result column="product_no" jdbcType="BIGINT" property="productNo" />
+    <result column="product_sort" jdbcType="BIGINT" property="productSort" />
+    <result column="employee_name" jdbcType="VARCHAR" property="employeeName" />
+    <result column="markup_craft" jdbcType="VARCHAR" property="markupCraft" />
+    <result column="team_group" jdbcType="VARCHAR" property="teamGroup" />
+    <result column="avg_car_speed" jdbcType="DECIMAL" property="avgCarSpeed" />
+    <result column="avg_temperature" jdbcType="DECIMAL" property="avgTemperature" />
+    <result column="avg_wind_speed" jdbcType="DECIMAL" property="avgWindSpeed" />
+    <result column="avg_top_feed" jdbcType="DECIMAL" property="avgTopFeed" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="schedule_date" jdbcType="DATE" property="scheduleDate" />
+    <result column="team_group_id" jdbcType="BIGINT" property="teamGroupId" />
+    <result column="team_group_name" jdbcType="VARCHAR" property="teamGroupName" />
+    <result column="team_shift_id" jdbcType="BIGINT" property="teamShiftId" />
+    <result column="team_shift_name" jdbcType="VARCHAR" property="teamShiftName" />
+    <result column="workshop_id" jdbcType="BIGINT" property="workshopId" />
+    <result column="workshop_name" jdbcType="VARCHAR" property="workshopName" />
+    <result column="schedule_start_time" jdbcType="TIMESTAMP" property="scheduleStartTime" />
+    <result column="schedule_end_time" jdbcType="TIMESTAMP" property="scheduleEndTime" />
+    <result column="calc_day" jdbcType="DATE" property="calcDay" />
+    <result column="pre_car_number" jdbcType="VARCHAR" property="preCarNumber" />
+    <result column="craft_type" jdbcType="BIGINT" property="craftType" />
+    <result column="pre_sort" jdbcType="INTEGER" property="preSort" />
+    <result column="specification" jdbcType="VARCHAR" property="specification" />
+    <result column="style" jdbcType="VARCHAR" property="style" />
+    <result column="pre_operator" jdbcType="VARCHAR" property="preOperator" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="front_operator" jdbcType="VARCHAR" property="frontOperator" />
+    <result column="actual_meters" jdbcType="DECIMAL" property="actualMeters" />
+    <result column="matches" jdbcType="VARCHAR" property="matches" />
+    <result column="expected_time" jdbcType="VARCHAR" property="expectedTime" />
+    <result column="actual_time" jdbcType="VARCHAR" property="actualTime" />
+    <result column="exception_type" jdbcType="INTEGER" property="exceptionType" />
+    <result column="product_weight_min" jdbcType="VARCHAR" property="productWeightMin" />
+    <result column="product_weight_max" jdbcType="VARCHAR" property="productWeightMax" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="is_batch" jdbcType="TINYINT" property="isBatch" />
+    <result column="process_name" jdbcType="VARCHAR" property="processName" />
+    <result column="schedule_import" jdbcType="TINYINT" property="scheduleImport" />
+    <result column="quality_status" jdbcType="VARCHAR" property="qualityStatus" />
+    <result column="process_code" jdbcType="VARCHAR" property="processCode" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="platform" jdbcType="INTEGER" property="platform" />
+    <result column="task_no" jdbcType="VARCHAR" property="taskNo" />
+    <result column="assistant_exception_type" jdbcType="INTEGER" property="assistantExceptionType" />
+    <result column="customer_request" jdbcType="VARCHAR" property="customerRequest" />
+    <result column="stereotype_requirement" jdbcType="VARCHAR" property="stereotypeRequirement" />
+    <result column="craft_suitability" jdbcType="DECIMAL" property="craftSuitability" />
+    <result column="shrinkage" jdbcType="DECIMAL" property="shrinkage" />
+    <result column="craft_exception_type" jdbcType="INTEGER" property="craftExceptionType" />
+    <result column="is_have_craft" jdbcType="TINYINT" property="isHaveCraft" />
+    <result column="product_weight" jdbcType="VARCHAR" property="productWeight" />
+    <result column="thickness" jdbcType="VARCHAR" property="thickness" />
+    <result column="process_report_type" jdbcType="TINYINT" property="processReportType" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.zw.cloud.mybatis.entity.ProductRecord">
+    <result column="defect"  property="defect" typeHandler="com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler" />
+    <result column="assistant"  property="assistant" typeHandler="com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler" />
+    <result column="operator_info"  property="operatorInfo" typeHandler="com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler" />
+
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.createTimeCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler} and #{criterion.secondValue,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.updateTimeCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler} and #{criterion.secondValue,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.createTimeCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler} and #{criterion.secondValue,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+            <foreach collection="criteria.updateTimeCriteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler} and #{criterion.secondValue,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, product_info_id, org_code, device_id, device_name, product_card_code, order_id, 
+    customer_no, customer_name, color_no, color, fabric_no, fabric_name, batch_no, fabric_width, 
+    gram_weight, gram_heft, weft_density, plan_meters, defects_number, severity, result, 
+    car_number, upper_door_width, lower_door_width, scan_time, pre_status, after_status, 
+    handle_time, save_time, operator, create_time, create_user, create_system, update_time, 
+    update_user, update_system, is_deleted, source, sort, pt_quantity, product_no, product_sort, 
+    employee_name, markup_craft, team_group, avg_car_speed, avg_temperature, avg_wind_speed, 
+    avg_top_feed, dept_name, schedule_date, team_group_id, team_group_name, team_shift_id, 
+    team_shift_name, workshop_id, workshop_name, schedule_start_time, schedule_end_time, 
+    calc_day, pre_car_number, craft_type, pre_sort, specification, style, pre_operator, 
+    start_time, end_time, front_operator, actual_meters, matches, expected_time, actual_time, 
+    exception_type, product_weight_min, product_weight_max, remark, is_batch, process_name, 
+    schedule_import, quality_status, process_code, product_code, platform, task_no, assistant_exception_type, 
+    customer_request, stereotype_requirement, craft_suitability, shrinkage, craft_exception_type, 
+    is_have_craft, product_weight, thickness, process_report_type
+  </sql>
+  <sql id="Blob_Column_List">
+    defect, assistant, operator_info
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.zw.cloud.mybatis.entity.ProductRecordExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from product_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.zw.cloud.mybatis.entity.ProductRecordExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from product_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from product_record
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from product_record
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zw.cloud.mybatis.entity.ProductRecordExample">
+    delete from product_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zw.cloud.mybatis.entity.ProductRecord">
+    insert into product_record (id, product_info_id, org_code, 
+      device_id, device_name, product_card_code, 
+      order_id, customer_no, customer_name, 
+      color_no, color, fabric_no, 
+      fabric_name, batch_no, fabric_width, 
+      gram_weight, gram_heft, weft_density, 
+      plan_meters, defects_number, severity, 
+      result, car_number, upper_door_width, 
+      lower_door_width, scan_time, pre_status, 
+      after_status, handle_time, save_time, 
+      operator, create_time, 
+      create_user, create_system, update_time, 
+      update_user, update_system, is_deleted, 
+      source, sort, pt_quantity, 
+      product_no, product_sort, employee_name, 
+      markup_craft, team_group, avg_car_speed, 
+      avg_temperature, avg_wind_speed, avg_top_feed, 
+      dept_name, schedule_date, team_group_id, 
+      team_group_name, team_shift_id, team_shift_name, 
+      workshop_id, workshop_name, schedule_start_time, 
+      schedule_end_time, calc_day, pre_car_number, 
+      craft_type, pre_sort, specification, 
+      style, pre_operator, start_time, 
+      end_time, front_operator, actual_meters, 
+      matches, expected_time, actual_time, 
+      exception_type, product_weight_min, product_weight_max, 
+      remark, is_batch, process_name, 
+      schedule_import, quality_status, process_code, 
+      product_code, platform, task_no, 
+      assistant_exception_type, customer_request, 
+      stereotype_requirement, craft_suitability, 
+      shrinkage, craft_exception_type, is_have_craft, 
+      product_weight, thickness, process_report_type, 
+      defect, assistant, operator_info
+      )
+    values (#{id,jdbcType=BIGINT}, #{productInfoId,jdbcType=BIGINT}, #{orgCode,jdbcType=VARCHAR}, 
+      #{deviceId,jdbcType=BIGINT}, #{deviceName,jdbcType=VARCHAR}, #{productCardCode,jdbcType=VARCHAR}, 
+      #{orderId,jdbcType=VARCHAR}, #{customerNo,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, 
+      #{colorNo,jdbcType=VARCHAR}, #{color,jdbcType=VARCHAR}, #{fabricNo,jdbcType=VARCHAR}, 
+      #{fabricName,jdbcType=VARCHAR}, #{batchNo,jdbcType=VARCHAR}, #{fabricWidth,jdbcType=VARCHAR}, 
+      #{gramWeight,jdbcType=DECIMAL}, #{gramHeft,jdbcType=INTEGER}, #{weftDensity,jdbcType=VARCHAR}, 
+      #{planMeters,jdbcType=DECIMAL}, #{defectsNumber,jdbcType=INTEGER}, #{severity,jdbcType=VARCHAR}, 
+      #{result,jdbcType=VARCHAR}, #{carNumber,jdbcType=VARCHAR}, #{upperDoorWidth,jdbcType=DOUBLE}, 
+      #{lowerDoorWidth,jdbcType=DOUBLE}, #{scanTime,jdbcType=TIMESTAMP}, #{preStatus,jdbcType=VARCHAR}, 
+      #{afterStatus,jdbcType=VARCHAR}, #{handleTime,jdbcType=TIMESTAMP}, #{saveTime,jdbcType=TIMESTAMP}, 
+      #{operator,jdbcType=VARCHAR}, #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}, 
+      #{createUser,jdbcType=VARCHAR}, #{createSystem,jdbcType=VARCHAR}, #{updateTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateSystem,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
+      #{source,jdbcType=TINYINT}, #{sort,jdbcType=INTEGER}, #{ptQuantity,jdbcType=DECIMAL}, 
+      #{productNo,jdbcType=BIGINT}, #{productSort,jdbcType=BIGINT}, #{employeeName,jdbcType=VARCHAR}, 
+      #{markupCraft,jdbcType=VARCHAR}, #{teamGroup,jdbcType=VARCHAR}, #{avgCarSpeed,jdbcType=DECIMAL}, 
+      #{avgTemperature,jdbcType=DECIMAL}, #{avgWindSpeed,jdbcType=DECIMAL}, #{avgTopFeed,jdbcType=DECIMAL}, 
+      #{deptName,jdbcType=VARCHAR}, #{scheduleDate,jdbcType=DATE}, #{teamGroupId,jdbcType=BIGINT}, 
+      #{teamGroupName,jdbcType=VARCHAR}, #{teamShiftId,jdbcType=BIGINT}, #{teamShiftName,jdbcType=VARCHAR}, 
+      #{workshopId,jdbcType=BIGINT}, #{workshopName,jdbcType=VARCHAR}, #{scheduleStartTime,jdbcType=TIMESTAMP}, 
+      #{scheduleEndTime,jdbcType=TIMESTAMP}, #{calcDay,jdbcType=DATE}, #{preCarNumber,jdbcType=VARCHAR}, 
+      #{craftType,jdbcType=BIGINT}, #{preSort,jdbcType=INTEGER}, #{specification,jdbcType=VARCHAR}, 
+      #{style,jdbcType=VARCHAR}, #{preOperator,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{frontOperator,jdbcType=VARCHAR}, #{actualMeters,jdbcType=DECIMAL}, 
+      #{matches,jdbcType=VARCHAR}, #{expectedTime,jdbcType=VARCHAR}, #{actualTime,jdbcType=VARCHAR}, 
+      #{exceptionType,jdbcType=INTEGER}, #{productWeightMin,jdbcType=VARCHAR}, #{productWeightMax,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{isBatch,jdbcType=TINYINT}, #{processName,jdbcType=VARCHAR}, 
+      #{scheduleImport,jdbcType=TINYINT}, #{qualityStatus,jdbcType=VARCHAR}, #{processCode,jdbcType=VARCHAR}, 
+      #{productCode,jdbcType=VARCHAR}, #{platform,jdbcType=INTEGER}, #{taskNo,jdbcType=VARCHAR}, 
+      #{assistantExceptionType,jdbcType=INTEGER}, #{customerRequest,jdbcType=VARCHAR}, 
+      #{stereotypeRequirement,jdbcType=VARCHAR}, #{craftSuitability,jdbcType=DECIMAL}, 
+      #{shrinkage,jdbcType=DECIMAL}, #{craftExceptionType,jdbcType=INTEGER}, #{isHaveCraft,jdbcType=TINYINT}, 
+      #{productWeight,jdbcType=VARCHAR}, #{thickness,jdbcType=VARCHAR}, #{processReportType,jdbcType=TINYINT}, 
+      #{defect,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler},
+      #{assistant,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler},
+      #{operatorInfo,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zw.cloud.mybatis.entity.ProductRecord">
+    insert into product_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="productInfoId != null">
+        product_info_id,
+      </if>
+      <if test="orgCode != null">
+        org_code,
+      </if>
+      <if test="deviceId != null">
+        device_id,
+      </if>
+      <if test="deviceName != null">
+        device_name,
+      </if>
+      <if test="productCardCode != null">
+        product_card_code,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="customerNo != null">
+        customer_no,
+      </if>
+      <if test="customerName != null">
+        customer_name,
+      </if>
+      <if test="colorNo != null">
+        color_no,
+      </if>
+      <if test="color != null">
+        color,
+      </if>
+      <if test="fabricNo != null">
+        fabric_no,
+      </if>
+      <if test="fabricName != null">
+        fabric_name,
+      </if>
+      <if test="batchNo != null">
+        batch_no,
+      </if>
+      <if test="fabricWidth != null">
+        fabric_width,
+      </if>
+      <if test="gramWeight != null">
+        gram_weight,
+      </if>
+      <if test="gramHeft != null">
+        gram_heft,
+      </if>
+      <if test="weftDensity != null">
+        weft_density,
+      </if>
+      <if test="planMeters != null">
+        plan_meters,
+      </if>
+      <if test="defectsNumber != null">
+        defects_number,
+      </if>
+      <if test="severity != null">
+        severity,
+      </if>
+      <if test="result != null">
+        result,
+      </if>
+      <if test="carNumber != null">
+        car_number,
+      </if>
+      <if test="upperDoorWidth != null">
+        upper_door_width,
+      </if>
+      <if test="lowerDoorWidth != null">
+        lower_door_width,
+      </if>
+      <if test="scanTime != null">
+        scan_time,
+      </if>
+      <if test="preStatus != null">
+        pre_status,
+      </if>
+      <if test="afterStatus != null">
+        after_status,
+      </if>
+      <if test="handleTime != null">
+        handle_time,
+      </if>
+      <if test="saveTime != null">
+        save_time,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createSystem != null">
+        create_system,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateSystem != null">
+        update_system,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="ptQuantity != null">
+        pt_quantity,
+      </if>
+      <if test="productNo != null">
+        product_no,
+      </if>
+      <if test="productSort != null">
+        product_sort,
+      </if>
+      <if test="employeeName != null">
+        employee_name,
+      </if>
+      <if test="markupCraft != null">
+        markup_craft,
+      </if>
+      <if test="teamGroup != null">
+        team_group,
+      </if>
+      <if test="avgCarSpeed != null">
+        avg_car_speed,
+      </if>
+      <if test="avgTemperature != null">
+        avg_temperature,
+      </if>
+      <if test="avgWindSpeed != null">
+        avg_wind_speed,
+      </if>
+      <if test="avgTopFeed != null">
+        avg_top_feed,
+      </if>
+      <if test="deptName != null">
+        dept_name,
+      </if>
+      <if test="scheduleDate != null">
+        schedule_date,
+      </if>
+      <if test="teamGroupId != null">
+        team_group_id,
+      </if>
+      <if test="teamGroupName != null">
+        team_group_name,
+      </if>
+      <if test="teamShiftId != null">
+        team_shift_id,
+      </if>
+      <if test="teamShiftName != null">
+        team_shift_name,
+      </if>
+      <if test="workshopId != null">
+        workshop_id,
+      </if>
+      <if test="workshopName != null">
+        workshop_name,
+      </if>
+      <if test="scheduleStartTime != null">
+        schedule_start_time,
+      </if>
+      <if test="scheduleEndTime != null">
+        schedule_end_time,
+      </if>
+      <if test="calcDay != null">
+        calc_day,
+      </if>
+      <if test="preCarNumber != null">
+        pre_car_number,
+      </if>
+      <if test="craftType != null">
+        craft_type,
+      </if>
+      <if test="preSort != null">
+        pre_sort,
+      </if>
+      <if test="specification != null">
+        specification,
+      </if>
+      <if test="style != null">
+        style,
+      </if>
+      <if test="preOperator != null">
+        pre_operator,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="frontOperator != null">
+        front_operator,
+      </if>
+      <if test="actualMeters != null">
+        actual_meters,
+      </if>
+      <if test="matches != null">
+        matches,
+      </if>
+      <if test="expectedTime != null">
+        expected_time,
+      </if>
+      <if test="actualTime != null">
+        actual_time,
+      </if>
+      <if test="exceptionType != null">
+        exception_type,
+      </if>
+      <if test="productWeightMin != null">
+        product_weight_min,
+      </if>
+      <if test="productWeightMax != null">
+        product_weight_max,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="isBatch != null">
+        is_batch,
+      </if>
+      <if test="processName != null">
+        process_name,
+      </if>
+      <if test="scheduleImport != null">
+        schedule_import,
+      </if>
+      <if test="qualityStatus != null">
+        quality_status,
+      </if>
+      <if test="processCode != null">
+        process_code,
+      </if>
+      <if test="productCode != null">
+        product_code,
+      </if>
+      <if test="platform != null">
+        platform,
+      </if>
+      <if test="taskNo != null">
+        task_no,
+      </if>
+      <if test="assistantExceptionType != null">
+        assistant_exception_type,
+      </if>
+      <if test="customerRequest != null">
+        customer_request,
+      </if>
+      <if test="stereotypeRequirement != null">
+        stereotype_requirement,
+      </if>
+      <if test="craftSuitability != null">
+        craft_suitability,
+      </if>
+      <if test="shrinkage != null">
+        shrinkage,
+      </if>
+      <if test="craftExceptionType != null">
+        craft_exception_type,
+      </if>
+      <if test="isHaveCraft != null">
+        is_have_craft,
+      </if>
+      <if test="productWeight != null">
+        product_weight,
+      </if>
+      <if test="thickness != null">
+        thickness,
+      </if>
+      <if test="processReportType != null">
+        process_report_type,
+      </if>
+      <if test="defect != null">
+        defect,
+      </if>
+      <if test="assistant != null">
+        assistant,
+      </if>
+      <if test="operatorInfo != null">
+        operator_info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="productInfoId != null">
+        #{productInfoId,jdbcType=BIGINT},
+      </if>
+      <if test="orgCode != null">
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        #{deviceId,jdbcType=BIGINT},
+      </if>
+      <if test="deviceName != null">
+        #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="productCardCode != null">
+        #{productCardCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null">
+        #{customerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null">
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="colorNo != null">
+        #{colorNo,jdbcType=VARCHAR},
+      </if>
+      <if test="color != null">
+        #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="fabricNo != null">
+        #{fabricNo,jdbcType=VARCHAR},
+      </if>
+      <if test="fabricName != null">
+        #{fabricName,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNo != null">
+        #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="fabricWidth != null">
+        #{fabricWidth,jdbcType=VARCHAR},
+      </if>
+      <if test="gramWeight != null">
+        #{gramWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="gramHeft != null">
+        #{gramHeft,jdbcType=INTEGER},
+      </if>
+      <if test="weftDensity != null">
+        #{weftDensity,jdbcType=VARCHAR},
+      </if>
+      <if test="planMeters != null">
+        #{planMeters,jdbcType=DECIMAL},
+      </if>
+      <if test="defectsNumber != null">
+        #{defectsNumber,jdbcType=INTEGER},
+      </if>
+      <if test="severity != null">
+        #{severity,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null">
+        #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="carNumber != null">
+        #{carNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="upperDoorWidth != null">
+        #{upperDoorWidth,jdbcType=DOUBLE},
+      </if>
+      <if test="lowerDoorWidth != null">
+        #{lowerDoorWidth,jdbcType=DOUBLE},
+      </if>
+      <if test="scanTime != null">
+        #{scanTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="preStatus != null">
+        #{preStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="afterStatus != null">
+        #{afterStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="handleTime != null">
+        #{handleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="saveTime != null">
+        #{saveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createSystem != null">
+        #{createSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateSystem != null">
+        #{updateSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=TINYINT},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="ptQuantity != null">
+        #{ptQuantity,jdbcType=DECIMAL},
+      </if>
+      <if test="productNo != null">
+        #{productNo,jdbcType=BIGINT},
+      </if>
+      <if test="productSort != null">
+        #{productSort,jdbcType=BIGINT},
+      </if>
+      <if test="employeeName != null">
+        #{employeeName,jdbcType=VARCHAR},
+      </if>
+      <if test="markupCraft != null">
+        #{markupCraft,jdbcType=VARCHAR},
+      </if>
+      <if test="teamGroup != null">
+        #{teamGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="avgCarSpeed != null">
+        #{avgCarSpeed,jdbcType=DECIMAL},
+      </if>
+      <if test="avgTemperature != null">
+        #{avgTemperature,jdbcType=DECIMAL},
+      </if>
+      <if test="avgWindSpeed != null">
+        #{avgWindSpeed,jdbcType=DECIMAL},
+      </if>
+      <if test="avgTopFeed != null">
+        #{avgTopFeed,jdbcType=DECIMAL},
+      </if>
+      <if test="deptName != null">
+        #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="scheduleDate != null">
+        #{scheduleDate,jdbcType=DATE},
+      </if>
+      <if test="teamGroupId != null">
+        #{teamGroupId,jdbcType=BIGINT},
+      </if>
+      <if test="teamGroupName != null">
+        #{teamGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="teamShiftId != null">
+        #{teamShiftId,jdbcType=BIGINT},
+      </if>
+      <if test="teamShiftName != null">
+        #{teamShiftName,jdbcType=VARCHAR},
+      </if>
+      <if test="workshopId != null">
+        #{workshopId,jdbcType=BIGINT},
+      </if>
+      <if test="workshopName != null">
+        #{workshopName,jdbcType=VARCHAR},
+      </if>
+      <if test="scheduleStartTime != null">
+        #{scheduleStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="scheduleEndTime != null">
+        #{scheduleEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="calcDay != null">
+        #{calcDay,jdbcType=DATE},
+      </if>
+      <if test="preCarNumber != null">
+        #{preCarNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="craftType != null">
+        #{craftType,jdbcType=BIGINT},
+      </if>
+      <if test="preSort != null">
+        #{preSort,jdbcType=INTEGER},
+      </if>
+      <if test="specification != null">
+        #{specification,jdbcType=VARCHAR},
+      </if>
+      <if test="style != null">
+        #{style,jdbcType=VARCHAR},
+      </if>
+      <if test="preOperator != null">
+        #{preOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frontOperator != null">
+        #{frontOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="actualMeters != null">
+        #{actualMeters,jdbcType=DECIMAL},
+      </if>
+      <if test="matches != null">
+        #{matches,jdbcType=VARCHAR},
+      </if>
+      <if test="expectedTime != null">
+        #{expectedTime,jdbcType=VARCHAR},
+      </if>
+      <if test="actualTime != null">
+        #{actualTime,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionType != null">
+        #{exceptionType,jdbcType=INTEGER},
+      </if>
+      <if test="productWeightMin != null">
+        #{productWeightMin,jdbcType=VARCHAR},
+      </if>
+      <if test="productWeightMax != null">
+        #{productWeightMax,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isBatch != null">
+        #{isBatch,jdbcType=TINYINT},
+      </if>
+      <if test="processName != null">
+        #{processName,jdbcType=VARCHAR},
+      </if>
+      <if test="scheduleImport != null">
+        #{scheduleImport,jdbcType=TINYINT},
+      </if>
+      <if test="qualityStatus != null">
+        #{qualityStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="processCode != null">
+        #{processCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null">
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="platform != null">
+        #{platform,jdbcType=INTEGER},
+      </if>
+      <if test="taskNo != null">
+        #{taskNo,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantExceptionType != null">
+        #{assistantExceptionType,jdbcType=INTEGER},
+      </if>
+      <if test="customerRequest != null">
+        #{customerRequest,jdbcType=VARCHAR},
+      </if>
+      <if test="stereotypeRequirement != null">
+        #{stereotypeRequirement,jdbcType=VARCHAR},
+      </if>
+      <if test="craftSuitability != null">
+        #{craftSuitability,jdbcType=DECIMAL},
+      </if>
+      <if test="shrinkage != null">
+        #{shrinkage,jdbcType=DECIMAL},
+      </if>
+      <if test="craftExceptionType != null">
+        #{craftExceptionType,jdbcType=INTEGER},
+      </if>
+      <if test="isHaveCraft != null">
+        #{isHaveCraft,jdbcType=TINYINT},
+      </if>
+      <if test="productWeight != null">
+        #{productWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="thickness != null">
+        #{thickness,jdbcType=VARCHAR},
+      </if>
+      <if test="processReportType != null">
+        #{processReportType,jdbcType=TINYINT},
+      </if>
+      <if test="defect != null">
+        #{defect,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler},
+      </if>
+      <if test="assistant != null">
+        #{assistant,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler},
+      </if>
+      <if test="operatorInfo != null">
+        #{operatorInfo,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zw.cloud.mybatis.entity.ProductRecordExample" resultType="java.lang.Long">
+    select count(*) from product_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update product_record
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.productInfoId != null">
+        product_info_id = #{record.productInfoId,jdbcType=BIGINT},
+      </if>
+      <if test="record.orgCode != null">
+        org_code = #{record.orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceId != null">
+        device_id = #{record.deviceId,jdbcType=BIGINT},
+      </if>
+      <if test="record.deviceName != null">
+        device_name = #{record.deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productCardCode != null">
+        product_card_code = #{record.productCardCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderId != null">
+        order_id = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerNo != null">
+        customer_no = #{record.customerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerName != null">
+        customer_name = #{record.customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.colorNo != null">
+        color_no = #{record.colorNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.color != null">
+        color = #{record.color,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fabricNo != null">
+        fabric_no = #{record.fabricNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fabricName != null">
+        fabric_name = #{record.fabricName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.batchNo != null">
+        batch_no = #{record.batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fabricWidth != null">
+        fabric_width = #{record.fabricWidth,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gramWeight != null">
+        gram_weight = #{record.gramWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="record.gramHeft != null">
+        gram_heft = #{record.gramHeft,jdbcType=INTEGER},
+      </if>
+      <if test="record.weftDensity != null">
+        weft_density = #{record.weftDensity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.planMeters != null">
+        plan_meters = #{record.planMeters,jdbcType=DECIMAL},
+      </if>
+      <if test="record.defectsNumber != null">
+        defects_number = #{record.defectsNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.severity != null">
+        severity = #{record.severity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.result != null">
+        result = #{record.result,jdbcType=VARCHAR},
+      </if>
+      <if test="record.carNumber != null">
+        car_number = #{record.carNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.upperDoorWidth != null">
+        upper_door_width = #{record.upperDoorWidth,jdbcType=DOUBLE},
+      </if>
+      <if test="record.lowerDoorWidth != null">
+        lower_door_width = #{record.lowerDoorWidth,jdbcType=DOUBLE},
+      </if>
+      <if test="record.scanTime != null">
+        scan_time = #{record.scanTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.preStatus != null">
+        pre_status = #{record.preStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.afterStatus != null">
+        after_status = #{record.afterStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.handleTime != null">
+        handle_time = #{record.handleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.saveTime != null">
+        save_time = #{record.saveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.operator != null">
+        operator = #{record.operator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      </if>
+      <if test="record.createUser != null">
+        create_user = #{record.createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createSystem != null">
+        create_system = #{record.createSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      </if>
+      <if test="record.updateUser != null">
+        update_user = #{record.updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateSystem != null">
+        update_system = #{record.updateSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDeleted != null">
+        is_deleted = #{record.isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="record.source != null">
+        source = #{record.source,jdbcType=TINYINT},
+      </if>
+      <if test="record.sort != null">
+        sort = #{record.sort,jdbcType=INTEGER},
+      </if>
+      <if test="record.ptQuantity != null">
+        pt_quantity = #{record.ptQuantity,jdbcType=DECIMAL},
+      </if>
+      <if test="record.productNo != null">
+        product_no = #{record.productNo,jdbcType=BIGINT},
+      </if>
+      <if test="record.productSort != null">
+        product_sort = #{record.productSort,jdbcType=BIGINT},
+      </if>
+      <if test="record.employeeName != null">
+        employee_name = #{record.employeeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.markupCraft != null">
+        markup_craft = #{record.markupCraft,jdbcType=VARCHAR},
+      </if>
+      <if test="record.teamGroup != null">
+        team_group = #{record.teamGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="record.avgCarSpeed != null">
+        avg_car_speed = #{record.avgCarSpeed,jdbcType=DECIMAL},
+      </if>
+      <if test="record.avgTemperature != null">
+        avg_temperature = #{record.avgTemperature,jdbcType=DECIMAL},
+      </if>
+      <if test="record.avgWindSpeed != null">
+        avg_wind_speed = #{record.avgWindSpeed,jdbcType=DECIMAL},
+      </if>
+      <if test="record.avgTopFeed != null">
+        avg_top_feed = #{record.avgTopFeed,jdbcType=DECIMAL},
+      </if>
+      <if test="record.deptName != null">
+        dept_name = #{record.deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.scheduleDate != null">
+        schedule_date = #{record.scheduleDate,jdbcType=DATE},
+      </if>
+      <if test="record.teamGroupId != null">
+        team_group_id = #{record.teamGroupId,jdbcType=BIGINT},
+      </if>
+      <if test="record.teamGroupName != null">
+        team_group_name = #{record.teamGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.teamShiftId != null">
+        team_shift_id = #{record.teamShiftId,jdbcType=BIGINT},
+      </if>
+      <if test="record.teamShiftName != null">
+        team_shift_name = #{record.teamShiftName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workshopId != null">
+        workshop_id = #{record.workshopId,jdbcType=BIGINT},
+      </if>
+      <if test="record.workshopName != null">
+        workshop_name = #{record.workshopName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.scheduleStartTime != null">
+        schedule_start_time = #{record.scheduleStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.scheduleEndTime != null">
+        schedule_end_time = #{record.scheduleEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.calcDay != null">
+        calc_day = #{record.calcDay,jdbcType=DATE},
+      </if>
+      <if test="record.preCarNumber != null">
+        pre_car_number = #{record.preCarNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.craftType != null">
+        craft_type = #{record.craftType,jdbcType=BIGINT},
+      </if>
+      <if test="record.preSort != null">
+        pre_sort = #{record.preSort,jdbcType=INTEGER},
+      </if>
+      <if test="record.specification != null">
+        specification = #{record.specification,jdbcType=VARCHAR},
+      </if>
+      <if test="record.style != null">
+        style = #{record.style,jdbcType=VARCHAR},
+      </if>
+      <if test="record.preOperator != null">
+        pre_operator = #{record.preOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startTime != null">
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null">
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.frontOperator != null">
+        front_operator = #{record.frontOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actualMeters != null">
+        actual_meters = #{record.actualMeters,jdbcType=DECIMAL},
+      </if>
+      <if test="record.matches != null">
+        matches = #{record.matches,jdbcType=VARCHAR},
+      </if>
+      <if test="record.expectedTime != null">
+        expected_time = #{record.expectedTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actualTime != null">
+        actual_time = #{record.actualTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.exceptionType != null">
+        exception_type = #{record.exceptionType,jdbcType=INTEGER},
+      </if>
+      <if test="record.productWeightMin != null">
+        product_weight_min = #{record.productWeightMin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productWeightMax != null">
+        product_weight_max = #{record.productWeightMax,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isBatch != null">
+        is_batch = #{record.isBatch,jdbcType=TINYINT},
+      </if>
+      <if test="record.processName != null">
+        process_name = #{record.processName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.scheduleImport != null">
+        schedule_import = #{record.scheduleImport,jdbcType=TINYINT},
+      </if>
+      <if test="record.qualityStatus != null">
+        quality_status = #{record.qualityStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.processCode != null">
+        process_code = #{record.processCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productCode != null">
+        product_code = #{record.productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.platform != null">
+        platform = #{record.platform,jdbcType=INTEGER},
+      </if>
+      <if test="record.taskNo != null">
+        task_no = #{record.taskNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.assistantExceptionType != null">
+        assistant_exception_type = #{record.assistantExceptionType,jdbcType=INTEGER},
+      </if>
+      <if test="record.customerRequest != null">
+        customer_request = #{record.customerRequest,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stereotypeRequirement != null">
+        stereotype_requirement = #{record.stereotypeRequirement,jdbcType=VARCHAR},
+      </if>
+      <if test="record.craftSuitability != null">
+        craft_suitability = #{record.craftSuitability,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shrinkage != null">
+        shrinkage = #{record.shrinkage,jdbcType=DECIMAL},
+      </if>
+      <if test="record.craftExceptionType != null">
+        craft_exception_type = #{record.craftExceptionType,jdbcType=INTEGER},
+      </if>
+      <if test="record.isHaveCraft != null">
+        is_have_craft = #{record.isHaveCraft,jdbcType=TINYINT},
+      </if>
+      <if test="record.productWeight != null">
+        product_weight = #{record.productWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thickness != null">
+        thickness = #{record.thickness,jdbcType=VARCHAR},
+      </if>
+      <if test="record.processReportType != null">
+        process_report_type = #{record.processReportType,jdbcType=TINYINT},
+      </if>
+      <if test="record.defect != null">
+        defect = #{record.defect,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler},
+      </if>
+      <if test="record.assistant != null">
+        assistant = #{record.assistant,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler},
+      </if>
+      <if test="record.operatorInfo != null">
+        operator_info = #{record.operatorInfo,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update product_record
+    set id = #{record.id,jdbcType=BIGINT},
+      product_info_id = #{record.productInfoId,jdbcType=BIGINT},
+      org_code = #{record.orgCode,jdbcType=VARCHAR},
+      device_id = #{record.deviceId,jdbcType=BIGINT},
+      device_name = #{record.deviceName,jdbcType=VARCHAR},
+      product_card_code = #{record.productCardCode,jdbcType=VARCHAR},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
+      customer_no = #{record.customerNo,jdbcType=VARCHAR},
+      customer_name = #{record.customerName,jdbcType=VARCHAR},
+      color_no = #{record.colorNo,jdbcType=VARCHAR},
+      color = #{record.color,jdbcType=VARCHAR},
+      fabric_no = #{record.fabricNo,jdbcType=VARCHAR},
+      fabric_name = #{record.fabricName,jdbcType=VARCHAR},
+      batch_no = #{record.batchNo,jdbcType=VARCHAR},
+      fabric_width = #{record.fabricWidth,jdbcType=VARCHAR},
+      gram_weight = #{record.gramWeight,jdbcType=DECIMAL},
+      gram_heft = #{record.gramHeft,jdbcType=INTEGER},
+      weft_density = #{record.weftDensity,jdbcType=VARCHAR},
+      plan_meters = #{record.planMeters,jdbcType=DECIMAL},
+      defects_number = #{record.defectsNumber,jdbcType=INTEGER},
+      severity = #{record.severity,jdbcType=VARCHAR},
+      result = #{record.result,jdbcType=VARCHAR},
+      car_number = #{record.carNumber,jdbcType=VARCHAR},
+      upper_door_width = #{record.upperDoorWidth,jdbcType=DOUBLE},
+      lower_door_width = #{record.lowerDoorWidth,jdbcType=DOUBLE},
+      scan_time = #{record.scanTime,jdbcType=TIMESTAMP},
+      pre_status = #{record.preStatus,jdbcType=VARCHAR},
+      after_status = #{record.afterStatus,jdbcType=VARCHAR},
+      handle_time = #{record.handleTime,jdbcType=TIMESTAMP},
+      save_time = #{record.saveTime,jdbcType=TIMESTAMP},
+      operator = #{record.operator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      create_user = #{record.createUser,jdbcType=VARCHAR},
+      create_system = #{record.createSystem,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      update_user = #{record.updateUser,jdbcType=VARCHAR},
+      update_system = #{record.updateSystem,jdbcType=VARCHAR},
+      is_deleted = #{record.isDeleted,jdbcType=TINYINT},
+      source = #{record.source,jdbcType=TINYINT},
+      sort = #{record.sort,jdbcType=INTEGER},
+      pt_quantity = #{record.ptQuantity,jdbcType=DECIMAL},
+      product_no = #{record.productNo,jdbcType=BIGINT},
+      product_sort = #{record.productSort,jdbcType=BIGINT},
+      employee_name = #{record.employeeName,jdbcType=VARCHAR},
+      markup_craft = #{record.markupCraft,jdbcType=VARCHAR},
+      team_group = #{record.teamGroup,jdbcType=VARCHAR},
+      avg_car_speed = #{record.avgCarSpeed,jdbcType=DECIMAL},
+      avg_temperature = #{record.avgTemperature,jdbcType=DECIMAL},
+      avg_wind_speed = #{record.avgWindSpeed,jdbcType=DECIMAL},
+      avg_top_feed = #{record.avgTopFeed,jdbcType=DECIMAL},
+      dept_name = #{record.deptName,jdbcType=VARCHAR},
+      schedule_date = #{record.scheduleDate,jdbcType=DATE},
+      team_group_id = #{record.teamGroupId,jdbcType=BIGINT},
+      team_group_name = #{record.teamGroupName,jdbcType=VARCHAR},
+      team_shift_id = #{record.teamShiftId,jdbcType=BIGINT},
+      team_shift_name = #{record.teamShiftName,jdbcType=VARCHAR},
+      workshop_id = #{record.workshopId,jdbcType=BIGINT},
+      workshop_name = #{record.workshopName,jdbcType=VARCHAR},
+      schedule_start_time = #{record.scheduleStartTime,jdbcType=TIMESTAMP},
+      schedule_end_time = #{record.scheduleEndTime,jdbcType=TIMESTAMP},
+      calc_day = #{record.calcDay,jdbcType=DATE},
+      pre_car_number = #{record.preCarNumber,jdbcType=VARCHAR},
+      craft_type = #{record.craftType,jdbcType=BIGINT},
+      pre_sort = #{record.preSort,jdbcType=INTEGER},
+      specification = #{record.specification,jdbcType=VARCHAR},
+      style = #{record.style,jdbcType=VARCHAR},
+      pre_operator = #{record.preOperator,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      front_operator = #{record.frontOperator,jdbcType=VARCHAR},
+      actual_meters = #{record.actualMeters,jdbcType=DECIMAL},
+      matches = #{record.matches,jdbcType=VARCHAR},
+      expected_time = #{record.expectedTime,jdbcType=VARCHAR},
+      actual_time = #{record.actualTime,jdbcType=VARCHAR},
+      exception_type = #{record.exceptionType,jdbcType=INTEGER},
+      product_weight_min = #{record.productWeightMin,jdbcType=VARCHAR},
+      product_weight_max = #{record.productWeightMax,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      is_batch = #{record.isBatch,jdbcType=TINYINT},
+      process_name = #{record.processName,jdbcType=VARCHAR},
+      schedule_import = #{record.scheduleImport,jdbcType=TINYINT},
+      quality_status = #{record.qualityStatus,jdbcType=VARCHAR},
+      process_code = #{record.processCode,jdbcType=VARCHAR},
+      product_code = #{record.productCode,jdbcType=VARCHAR},
+      platform = #{record.platform,jdbcType=INTEGER},
+      task_no = #{record.taskNo,jdbcType=VARCHAR},
+      assistant_exception_type = #{record.assistantExceptionType,jdbcType=INTEGER},
+      customer_request = #{record.customerRequest,jdbcType=VARCHAR},
+      stereotype_requirement = #{record.stereotypeRequirement,jdbcType=VARCHAR},
+      craft_suitability = #{record.craftSuitability,jdbcType=DECIMAL},
+      shrinkage = #{record.shrinkage,jdbcType=DECIMAL},
+      craft_exception_type = #{record.craftExceptionType,jdbcType=INTEGER},
+      is_have_craft = #{record.isHaveCraft,jdbcType=TINYINT},
+      product_weight = #{record.productWeight,jdbcType=VARCHAR},
+      thickness = #{record.thickness,jdbcType=VARCHAR},
+      process_report_type = #{record.processReportType,jdbcType=TINYINT},
+      defect = #{record.defect,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler},
+      assistant = #{record.assistant,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler},
+      operator_info = #{record.operatorInfo,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update product_record
+    set id = #{record.id,jdbcType=BIGINT},
+      product_info_id = #{record.productInfoId,jdbcType=BIGINT},
+      org_code = #{record.orgCode,jdbcType=VARCHAR},
+      device_id = #{record.deviceId,jdbcType=BIGINT},
+      device_name = #{record.deviceName,jdbcType=VARCHAR},
+      product_card_code = #{record.productCardCode,jdbcType=VARCHAR},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
+      customer_no = #{record.customerNo,jdbcType=VARCHAR},
+      customer_name = #{record.customerName,jdbcType=VARCHAR},
+      color_no = #{record.colorNo,jdbcType=VARCHAR},
+      color = #{record.color,jdbcType=VARCHAR},
+      fabric_no = #{record.fabricNo,jdbcType=VARCHAR},
+      fabric_name = #{record.fabricName,jdbcType=VARCHAR},
+      batch_no = #{record.batchNo,jdbcType=VARCHAR},
+      fabric_width = #{record.fabricWidth,jdbcType=VARCHAR},
+      gram_weight = #{record.gramWeight,jdbcType=DECIMAL},
+      gram_heft = #{record.gramHeft,jdbcType=INTEGER},
+      weft_density = #{record.weftDensity,jdbcType=VARCHAR},
+      plan_meters = #{record.planMeters,jdbcType=DECIMAL},
+      defects_number = #{record.defectsNumber,jdbcType=INTEGER},
+      severity = #{record.severity,jdbcType=VARCHAR},
+      result = #{record.result,jdbcType=VARCHAR},
+      car_number = #{record.carNumber,jdbcType=VARCHAR},
+      upper_door_width = #{record.upperDoorWidth,jdbcType=DOUBLE},
+      lower_door_width = #{record.lowerDoorWidth,jdbcType=DOUBLE},
+      scan_time = #{record.scanTime,jdbcType=TIMESTAMP},
+      pre_status = #{record.preStatus,jdbcType=VARCHAR},
+      after_status = #{record.afterStatus,jdbcType=VARCHAR},
+      handle_time = #{record.handleTime,jdbcType=TIMESTAMP},
+      save_time = #{record.saveTime,jdbcType=TIMESTAMP},
+      operator = #{record.operator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      create_user = #{record.createUser,jdbcType=VARCHAR},
+      create_system = #{record.createSystem,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      update_user = #{record.updateUser,jdbcType=VARCHAR},
+      update_system = #{record.updateSystem,jdbcType=VARCHAR},
+      is_deleted = #{record.isDeleted,jdbcType=TINYINT},
+      source = #{record.source,jdbcType=TINYINT},
+      sort = #{record.sort,jdbcType=INTEGER},
+      pt_quantity = #{record.ptQuantity,jdbcType=DECIMAL},
+      product_no = #{record.productNo,jdbcType=BIGINT},
+      product_sort = #{record.productSort,jdbcType=BIGINT},
+      employee_name = #{record.employeeName,jdbcType=VARCHAR},
+      markup_craft = #{record.markupCraft,jdbcType=VARCHAR},
+      team_group = #{record.teamGroup,jdbcType=VARCHAR},
+      avg_car_speed = #{record.avgCarSpeed,jdbcType=DECIMAL},
+      avg_temperature = #{record.avgTemperature,jdbcType=DECIMAL},
+      avg_wind_speed = #{record.avgWindSpeed,jdbcType=DECIMAL},
+      avg_top_feed = #{record.avgTopFeed,jdbcType=DECIMAL},
+      dept_name = #{record.deptName,jdbcType=VARCHAR},
+      schedule_date = #{record.scheduleDate,jdbcType=DATE},
+      team_group_id = #{record.teamGroupId,jdbcType=BIGINT},
+      team_group_name = #{record.teamGroupName,jdbcType=VARCHAR},
+      team_shift_id = #{record.teamShiftId,jdbcType=BIGINT},
+      team_shift_name = #{record.teamShiftName,jdbcType=VARCHAR},
+      workshop_id = #{record.workshopId,jdbcType=BIGINT},
+      workshop_name = #{record.workshopName,jdbcType=VARCHAR},
+      schedule_start_time = #{record.scheduleStartTime,jdbcType=TIMESTAMP},
+      schedule_end_time = #{record.scheduleEndTime,jdbcType=TIMESTAMP},
+      calc_day = #{record.calcDay,jdbcType=DATE},
+      pre_car_number = #{record.preCarNumber,jdbcType=VARCHAR},
+      craft_type = #{record.craftType,jdbcType=BIGINT},
+      pre_sort = #{record.preSort,jdbcType=INTEGER},
+      specification = #{record.specification,jdbcType=VARCHAR},
+      style = #{record.style,jdbcType=VARCHAR},
+      pre_operator = #{record.preOperator,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      front_operator = #{record.frontOperator,jdbcType=VARCHAR},
+      actual_meters = #{record.actualMeters,jdbcType=DECIMAL},
+      matches = #{record.matches,jdbcType=VARCHAR},
+      expected_time = #{record.expectedTime,jdbcType=VARCHAR},
+      actual_time = #{record.actualTime,jdbcType=VARCHAR},
+      exception_type = #{record.exceptionType,jdbcType=INTEGER},
+      product_weight_min = #{record.productWeightMin,jdbcType=VARCHAR},
+      product_weight_max = #{record.productWeightMax,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      is_batch = #{record.isBatch,jdbcType=TINYINT},
+      process_name = #{record.processName,jdbcType=VARCHAR},
+      schedule_import = #{record.scheduleImport,jdbcType=TINYINT},
+      quality_status = #{record.qualityStatus,jdbcType=VARCHAR},
+      process_code = #{record.processCode,jdbcType=VARCHAR},
+      product_code = #{record.productCode,jdbcType=VARCHAR},
+      platform = #{record.platform,jdbcType=INTEGER},
+      task_no = #{record.taskNo,jdbcType=VARCHAR},
+      assistant_exception_type = #{record.assistantExceptionType,jdbcType=INTEGER},
+      customer_request = #{record.customerRequest,jdbcType=VARCHAR},
+      stereotype_requirement = #{record.stereotypeRequirement,jdbcType=VARCHAR},
+      craft_suitability = #{record.craftSuitability,jdbcType=DECIMAL},
+      shrinkage = #{record.shrinkage,jdbcType=DECIMAL},
+      craft_exception_type = #{record.craftExceptionType,jdbcType=INTEGER},
+      is_have_craft = #{record.isHaveCraft,jdbcType=TINYINT},
+      product_weight = #{record.productWeight,jdbcType=VARCHAR},
+      thickness = #{record.thickness,jdbcType=VARCHAR},
+      process_report_type = #{record.processReportType,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zw.cloud.mybatis.entity.ProductRecord">
+    update product_record
+    <set>
+      <if test="productInfoId != null">
+        product_info_id = #{productInfoId,jdbcType=BIGINT},
+      </if>
+      <if test="orgCode != null">
+        org_code = #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        device_id = #{deviceId,jdbcType=BIGINT},
+      </if>
+      <if test="deviceName != null">
+        device_name = #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="productCardCode != null">
+        product_card_code = #{productCardCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null">
+        customer_no = #{customerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null">
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="colorNo != null">
+        color_no = #{colorNo,jdbcType=VARCHAR},
+      </if>
+      <if test="color != null">
+        color = #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="fabricNo != null">
+        fabric_no = #{fabricNo,jdbcType=VARCHAR},
+      </if>
+      <if test="fabricName != null">
+        fabric_name = #{fabricName,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNo != null">
+        batch_no = #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="fabricWidth != null">
+        fabric_width = #{fabricWidth,jdbcType=VARCHAR},
+      </if>
+      <if test="gramWeight != null">
+        gram_weight = #{gramWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="gramHeft != null">
+        gram_heft = #{gramHeft,jdbcType=INTEGER},
+      </if>
+      <if test="weftDensity != null">
+        weft_density = #{weftDensity,jdbcType=VARCHAR},
+      </if>
+      <if test="planMeters != null">
+        plan_meters = #{planMeters,jdbcType=DECIMAL},
+      </if>
+      <if test="defectsNumber != null">
+        defects_number = #{defectsNumber,jdbcType=INTEGER},
+      </if>
+      <if test="severity != null">
+        severity = #{severity,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null">
+        result = #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="carNumber != null">
+        car_number = #{carNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="upperDoorWidth != null">
+        upper_door_width = #{upperDoorWidth,jdbcType=DOUBLE},
+      </if>
+      <if test="lowerDoorWidth != null">
+        lower_door_width = #{lowerDoorWidth,jdbcType=DOUBLE},
+      </if>
+      <if test="scanTime != null">
+        scan_time = #{scanTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="preStatus != null">
+        pre_status = #{preStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="afterStatus != null">
+        after_status = #{afterStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="handleTime != null">
+        handle_time = #{handleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="saveTime != null">
+        save_time = #{saveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createSystem != null">
+        create_system = #{createSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateSystem != null">
+        update_system = #{updateSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="source != null">
+        source = #{source,jdbcType=TINYINT},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="ptQuantity != null">
+        pt_quantity = #{ptQuantity,jdbcType=DECIMAL},
+      </if>
+      <if test="productNo != null">
+        product_no = #{productNo,jdbcType=BIGINT},
+      </if>
+      <if test="productSort != null">
+        product_sort = #{productSort,jdbcType=BIGINT},
+      </if>
+      <if test="employeeName != null">
+        employee_name = #{employeeName,jdbcType=VARCHAR},
+      </if>
+      <if test="markupCraft != null">
+        markup_craft = #{markupCraft,jdbcType=VARCHAR},
+      </if>
+      <if test="teamGroup != null">
+        team_group = #{teamGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="avgCarSpeed != null">
+        avg_car_speed = #{avgCarSpeed,jdbcType=DECIMAL},
+      </if>
+      <if test="avgTemperature != null">
+        avg_temperature = #{avgTemperature,jdbcType=DECIMAL},
+      </if>
+      <if test="avgWindSpeed != null">
+        avg_wind_speed = #{avgWindSpeed,jdbcType=DECIMAL},
+      </if>
+      <if test="avgTopFeed != null">
+        avg_top_feed = #{avgTopFeed,jdbcType=DECIMAL},
+      </if>
+      <if test="deptName != null">
+        dept_name = #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="scheduleDate != null">
+        schedule_date = #{scheduleDate,jdbcType=DATE},
+      </if>
+      <if test="teamGroupId != null">
+        team_group_id = #{teamGroupId,jdbcType=BIGINT},
+      </if>
+      <if test="teamGroupName != null">
+        team_group_name = #{teamGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="teamShiftId != null">
+        team_shift_id = #{teamShiftId,jdbcType=BIGINT},
+      </if>
+      <if test="teamShiftName != null">
+        team_shift_name = #{teamShiftName,jdbcType=VARCHAR},
+      </if>
+      <if test="workshopId != null">
+        workshop_id = #{workshopId,jdbcType=BIGINT},
+      </if>
+      <if test="workshopName != null">
+        workshop_name = #{workshopName,jdbcType=VARCHAR},
+      </if>
+      <if test="scheduleStartTime != null">
+        schedule_start_time = #{scheduleStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="scheduleEndTime != null">
+        schedule_end_time = #{scheduleEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="calcDay != null">
+        calc_day = #{calcDay,jdbcType=DATE},
+      </if>
+      <if test="preCarNumber != null">
+        pre_car_number = #{preCarNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="craftType != null">
+        craft_type = #{craftType,jdbcType=BIGINT},
+      </if>
+      <if test="preSort != null">
+        pre_sort = #{preSort,jdbcType=INTEGER},
+      </if>
+      <if test="specification != null">
+        specification = #{specification,jdbcType=VARCHAR},
+      </if>
+      <if test="style != null">
+        style = #{style,jdbcType=VARCHAR},
+      </if>
+      <if test="preOperator != null">
+        pre_operator = #{preOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frontOperator != null">
+        front_operator = #{frontOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="actualMeters != null">
+        actual_meters = #{actualMeters,jdbcType=DECIMAL},
+      </if>
+      <if test="matches != null">
+        matches = #{matches,jdbcType=VARCHAR},
+      </if>
+      <if test="expectedTime != null">
+        expected_time = #{expectedTime,jdbcType=VARCHAR},
+      </if>
+      <if test="actualTime != null">
+        actual_time = #{actualTime,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionType != null">
+        exception_type = #{exceptionType,jdbcType=INTEGER},
+      </if>
+      <if test="productWeightMin != null">
+        product_weight_min = #{productWeightMin,jdbcType=VARCHAR},
+      </if>
+      <if test="productWeightMax != null">
+        product_weight_max = #{productWeightMax,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isBatch != null">
+        is_batch = #{isBatch,jdbcType=TINYINT},
+      </if>
+      <if test="processName != null">
+        process_name = #{processName,jdbcType=VARCHAR},
+      </if>
+      <if test="scheduleImport != null">
+        schedule_import = #{scheduleImport,jdbcType=TINYINT},
+      </if>
+      <if test="qualityStatus != null">
+        quality_status = #{qualityStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="processCode != null">
+        process_code = #{processCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null">
+        product_code = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="platform != null">
+        platform = #{platform,jdbcType=INTEGER},
+      </if>
+      <if test="taskNo != null">
+        task_no = #{taskNo,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantExceptionType != null">
+        assistant_exception_type = #{assistantExceptionType,jdbcType=INTEGER},
+      </if>
+      <if test="customerRequest != null">
+        customer_request = #{customerRequest,jdbcType=VARCHAR},
+      </if>
+      <if test="stereotypeRequirement != null">
+        stereotype_requirement = #{stereotypeRequirement,jdbcType=VARCHAR},
+      </if>
+      <if test="craftSuitability != null">
+        craft_suitability = #{craftSuitability,jdbcType=DECIMAL},
+      </if>
+      <if test="shrinkage != null">
+        shrinkage = #{shrinkage,jdbcType=DECIMAL},
+      </if>
+      <if test="craftExceptionType != null">
+        craft_exception_type = #{craftExceptionType,jdbcType=INTEGER},
+      </if>
+      <if test="isHaveCraft != null">
+        is_have_craft = #{isHaveCraft,jdbcType=TINYINT},
+      </if>
+      <if test="productWeight != null">
+        product_weight = #{productWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="thickness != null">
+        thickness = #{thickness,jdbcType=VARCHAR},
+      </if>
+      <if test="processReportType != null">
+        process_report_type = #{processReportType,jdbcType=TINYINT},
+      </if>
+      <if test="defect != null">
+        defect = #{defect,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler},
+      </if>
+      <if test="assistant != null">
+        assistant = #{assistant,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler},
+      </if>
+      <if test="operatorInfo != null">
+        operator_info = #{operatorInfo,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zw.cloud.mybatis.entity.ProductRecord">
+    update product_record
+    set product_info_id = #{productInfoId,jdbcType=BIGINT},
+      org_code = #{orgCode,jdbcType=VARCHAR},
+      device_id = #{deviceId,jdbcType=BIGINT},
+      device_name = #{deviceName,jdbcType=VARCHAR},
+      product_card_code = #{productCardCode,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      customer_no = #{customerNo,jdbcType=VARCHAR},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      color_no = #{colorNo,jdbcType=VARCHAR},
+      color = #{color,jdbcType=VARCHAR},
+      fabric_no = #{fabricNo,jdbcType=VARCHAR},
+      fabric_name = #{fabricName,jdbcType=VARCHAR},
+      batch_no = #{batchNo,jdbcType=VARCHAR},
+      fabric_width = #{fabricWidth,jdbcType=VARCHAR},
+      gram_weight = #{gramWeight,jdbcType=DECIMAL},
+      gram_heft = #{gramHeft,jdbcType=INTEGER},
+      weft_density = #{weftDensity,jdbcType=VARCHAR},
+      plan_meters = #{planMeters,jdbcType=DECIMAL},
+      defects_number = #{defectsNumber,jdbcType=INTEGER},
+      severity = #{severity,jdbcType=VARCHAR},
+      result = #{result,jdbcType=VARCHAR},
+      car_number = #{carNumber,jdbcType=VARCHAR},
+      upper_door_width = #{upperDoorWidth,jdbcType=DOUBLE},
+      lower_door_width = #{lowerDoorWidth,jdbcType=DOUBLE},
+      scan_time = #{scanTime,jdbcType=TIMESTAMP},
+      pre_status = #{preStatus,jdbcType=VARCHAR},
+      after_status = #{afterStatus,jdbcType=VARCHAR},
+      handle_time = #{handleTime,jdbcType=TIMESTAMP},
+      save_time = #{saveTime,jdbcType=TIMESTAMP},
+      operator = #{operator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_system = #{createSystem,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_system = #{updateSystem,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      source = #{source,jdbcType=TINYINT},
+      sort = #{sort,jdbcType=INTEGER},
+      pt_quantity = #{ptQuantity,jdbcType=DECIMAL},
+      product_no = #{productNo,jdbcType=BIGINT},
+      product_sort = #{productSort,jdbcType=BIGINT},
+      employee_name = #{employeeName,jdbcType=VARCHAR},
+      markup_craft = #{markupCraft,jdbcType=VARCHAR},
+      team_group = #{teamGroup,jdbcType=VARCHAR},
+      avg_car_speed = #{avgCarSpeed,jdbcType=DECIMAL},
+      avg_temperature = #{avgTemperature,jdbcType=DECIMAL},
+      avg_wind_speed = #{avgWindSpeed,jdbcType=DECIMAL},
+      avg_top_feed = #{avgTopFeed,jdbcType=DECIMAL},
+      dept_name = #{deptName,jdbcType=VARCHAR},
+      schedule_date = #{scheduleDate,jdbcType=DATE},
+      team_group_id = #{teamGroupId,jdbcType=BIGINT},
+      team_group_name = #{teamGroupName,jdbcType=VARCHAR},
+      team_shift_id = #{teamShiftId,jdbcType=BIGINT},
+      team_shift_name = #{teamShiftName,jdbcType=VARCHAR},
+      workshop_id = #{workshopId,jdbcType=BIGINT},
+      workshop_name = #{workshopName,jdbcType=VARCHAR},
+      schedule_start_time = #{scheduleStartTime,jdbcType=TIMESTAMP},
+      schedule_end_time = #{scheduleEndTime,jdbcType=TIMESTAMP},
+      calc_day = #{calcDay,jdbcType=DATE},
+      pre_car_number = #{preCarNumber,jdbcType=VARCHAR},
+      craft_type = #{craftType,jdbcType=BIGINT},
+      pre_sort = #{preSort,jdbcType=INTEGER},
+      specification = #{specification,jdbcType=VARCHAR},
+      style = #{style,jdbcType=VARCHAR},
+      pre_operator = #{preOperator,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      front_operator = #{frontOperator,jdbcType=VARCHAR},
+      actual_meters = #{actualMeters,jdbcType=DECIMAL},
+      matches = #{matches,jdbcType=VARCHAR},
+      expected_time = #{expectedTime,jdbcType=VARCHAR},
+      actual_time = #{actualTime,jdbcType=VARCHAR},
+      exception_type = #{exceptionType,jdbcType=INTEGER},
+      product_weight_min = #{productWeightMin,jdbcType=VARCHAR},
+      product_weight_max = #{productWeightMax,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      is_batch = #{isBatch,jdbcType=TINYINT},
+      process_name = #{processName,jdbcType=VARCHAR},
+      schedule_import = #{scheduleImport,jdbcType=TINYINT},
+      quality_status = #{qualityStatus,jdbcType=VARCHAR},
+      process_code = #{processCode,jdbcType=VARCHAR},
+      product_code = #{productCode,jdbcType=VARCHAR},
+      platform = #{platform,jdbcType=INTEGER},
+      task_no = #{taskNo,jdbcType=VARCHAR},
+      assistant_exception_type = #{assistantExceptionType,jdbcType=INTEGER},
+      customer_request = #{customerRequest,jdbcType=VARCHAR},
+      stereotype_requirement = #{stereotypeRequirement,jdbcType=VARCHAR},
+      craft_suitability = #{craftSuitability,jdbcType=DECIMAL},
+      shrinkage = #{shrinkage,jdbcType=DECIMAL},
+      craft_exception_type = #{craftExceptionType,jdbcType=INTEGER},
+      is_have_craft = #{isHaveCraft,jdbcType=TINYINT},
+      product_weight = #{productWeight,jdbcType=VARCHAR},
+      thickness = #{thickness,jdbcType=VARCHAR},
+      process_report_type = #{processReportType,jdbcType=TINYINT},
+      defect = #{defect,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler},
+      assistant = #{assistant,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler},
+      operator_info = #{operatorInfo,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zw.cloud.mybatis.entity.ProductRecord">
+    update product_record
+    set product_info_id = #{productInfoId,jdbcType=BIGINT},
+      org_code = #{orgCode,jdbcType=VARCHAR},
+      device_id = #{deviceId,jdbcType=BIGINT},
+      device_name = #{deviceName,jdbcType=VARCHAR},
+      product_card_code = #{productCardCode,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      customer_no = #{customerNo,jdbcType=VARCHAR},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      color_no = #{colorNo,jdbcType=VARCHAR},
+      color = #{color,jdbcType=VARCHAR},
+      fabric_no = #{fabricNo,jdbcType=VARCHAR},
+      fabric_name = #{fabricName,jdbcType=VARCHAR},
+      batch_no = #{batchNo,jdbcType=VARCHAR},
+      fabric_width = #{fabricWidth,jdbcType=VARCHAR},
+      gram_weight = #{gramWeight,jdbcType=DECIMAL},
+      gram_heft = #{gramHeft,jdbcType=INTEGER},
+      weft_density = #{weftDensity,jdbcType=VARCHAR},
+      plan_meters = #{planMeters,jdbcType=DECIMAL},
+      defects_number = #{defectsNumber,jdbcType=INTEGER},
+      severity = #{severity,jdbcType=VARCHAR},
+      result = #{result,jdbcType=VARCHAR},
+      car_number = #{carNumber,jdbcType=VARCHAR},
+      upper_door_width = #{upperDoorWidth,jdbcType=DOUBLE},
+      lower_door_width = #{lowerDoorWidth,jdbcType=DOUBLE},
+      scan_time = #{scanTime,jdbcType=TIMESTAMP},
+      pre_status = #{preStatus,jdbcType=VARCHAR},
+      after_status = #{afterStatus,jdbcType=VARCHAR},
+      handle_time = #{handleTime,jdbcType=TIMESTAMP},
+      save_time = #{saveTime,jdbcType=TIMESTAMP},
+      operator = #{operator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_system = #{createSystem,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_system = #{updateSystem,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      source = #{source,jdbcType=TINYINT},
+      sort = #{sort,jdbcType=INTEGER},
+      pt_quantity = #{ptQuantity,jdbcType=DECIMAL},
+      product_no = #{productNo,jdbcType=BIGINT},
+      product_sort = #{productSort,jdbcType=BIGINT},
+      employee_name = #{employeeName,jdbcType=VARCHAR},
+      markup_craft = #{markupCraft,jdbcType=VARCHAR},
+      team_group = #{teamGroup,jdbcType=VARCHAR},
+      avg_car_speed = #{avgCarSpeed,jdbcType=DECIMAL},
+      avg_temperature = #{avgTemperature,jdbcType=DECIMAL},
+      avg_wind_speed = #{avgWindSpeed,jdbcType=DECIMAL},
+      avg_top_feed = #{avgTopFeed,jdbcType=DECIMAL},
+      dept_name = #{deptName,jdbcType=VARCHAR},
+      schedule_date = #{scheduleDate,jdbcType=DATE},
+      team_group_id = #{teamGroupId,jdbcType=BIGINT},
+      team_group_name = #{teamGroupName,jdbcType=VARCHAR},
+      team_shift_id = #{teamShiftId,jdbcType=BIGINT},
+      team_shift_name = #{teamShiftName,jdbcType=VARCHAR},
+      workshop_id = #{workshopId,jdbcType=BIGINT},
+      workshop_name = #{workshopName,jdbcType=VARCHAR},
+      schedule_start_time = #{scheduleStartTime,jdbcType=TIMESTAMP},
+      schedule_end_time = #{scheduleEndTime,jdbcType=TIMESTAMP},
+      calc_day = #{calcDay,jdbcType=DATE},
+      pre_car_number = #{preCarNumber,jdbcType=VARCHAR},
+      craft_type = #{craftType,jdbcType=BIGINT},
+      pre_sort = #{preSort,jdbcType=INTEGER},
+      specification = #{specification,jdbcType=VARCHAR},
+      style = #{style,jdbcType=VARCHAR},
+      pre_operator = #{preOperator,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      front_operator = #{frontOperator,jdbcType=VARCHAR},
+      actual_meters = #{actualMeters,jdbcType=DECIMAL},
+      matches = #{matches,jdbcType=VARCHAR},
+      expected_time = #{expectedTime,jdbcType=VARCHAR},
+      actual_time = #{actualTime,jdbcType=VARCHAR},
+      exception_type = #{exceptionType,jdbcType=INTEGER},
+      product_weight_min = #{productWeightMin,jdbcType=VARCHAR},
+      product_weight_max = #{productWeightMax,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      is_batch = #{isBatch,jdbcType=TINYINT},
+      process_name = #{processName,jdbcType=VARCHAR},
+      schedule_import = #{scheduleImport,jdbcType=TINYINT},
+      quality_status = #{qualityStatus,jdbcType=VARCHAR},
+      process_code = #{processCode,jdbcType=VARCHAR},
+      product_code = #{productCode,jdbcType=VARCHAR},
+      platform = #{platform,jdbcType=INTEGER},
+      task_no = #{taskNo,jdbcType=VARCHAR},
+      assistant_exception_type = #{assistantExceptionType,jdbcType=INTEGER},
+      customer_request = #{customerRequest,jdbcType=VARCHAR},
+      stereotype_requirement = #{stereotypeRequirement,jdbcType=VARCHAR},
+      craft_suitability = #{craftSuitability,jdbcType=DECIMAL},
+      shrinkage = #{shrinkage,jdbcType=DECIMAL},
+      craft_exception_type = #{craftExceptionType,jdbcType=INTEGER},
+      is_have_craft = #{isHaveCraft,jdbcType=TINYINT},
+      product_weight = #{productWeight,jdbcType=VARCHAR},
+      thickness = #{thickness,jdbcType=VARCHAR},
+      process_report_type = #{processReportType,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <insert id="batchInsert" parameterType="java.util.List">
+    <!--
+      WARNING - @mbg.generated
+      这个节点为代码生成工具生成，请不要修改!
+      @author hewei
+    -->
+    insert into product_record (id, product_info_id, org_code, device_id, device_name, product_card_code, order_id, customer_no, customer_name, color_no, color, fabric_no, fabric_name, batch_no, fabric_width, gram_weight, gram_heft, weft_density, plan_meters, defects_number, severity, result, car_number, upper_door_width, lower_door_width, scan_time, pre_status, after_status, handle_time, save_time, operator, create_time, create_user, create_system, update_time, update_user, update_system, is_deleted, source, sort, pt_quantity, product_no, product_sort, employee_name, markup_craft, team_group, avg_car_speed, avg_temperature, avg_wind_speed, avg_top_feed, dept_name, schedule_date, team_group_id, team_group_name, team_shift_id, team_shift_name, workshop_id, workshop_name, schedule_start_time, schedule_end_time, calc_day, pre_car_number, craft_type, pre_sort, specification, style, pre_operator, start_time, end_time, front_operator, actual_meters, matches, expected_time, actual_time, exception_type, product_weight_min, product_weight_max, remark, is_batch, process_name, schedule_import, quality_status, process_code, product_code, platform, task_no, assistant_exception_type, customer_request, stereotype_requirement, craft_suitability, shrinkage, craft_exception_type, is_have_craft, product_weight, thickness, process_report_type, defect, assistant, operator_info)
+    values
+    <foreach collection="list" item="item" separator=",">
+       (#{item.id,jdbcType=BIGINT}, #{item.productInfoId,jdbcType=BIGINT}, #{item.orgCode,jdbcType=VARCHAR}, #{item.deviceId,jdbcType=BIGINT}, #{item.deviceName,jdbcType=VARCHAR}, #{item.productCardCode,jdbcType=VARCHAR}, #{item.orderId,jdbcType=VARCHAR}, #{item.customerNo,jdbcType=VARCHAR}, #{item.customerName,jdbcType=VARCHAR}, #{item.colorNo,jdbcType=VARCHAR}, #{item.color,jdbcType=VARCHAR}, #{item.fabricNo,jdbcType=VARCHAR}, #{item.fabricName,jdbcType=VARCHAR}, #{item.batchNo,jdbcType=VARCHAR}, #{item.fabricWidth,jdbcType=VARCHAR}, #{item.gramWeight,jdbcType=DECIMAL}, #{item.gramHeft,jdbcType=INTEGER}, #{item.weftDensity,jdbcType=VARCHAR}, #{item.planMeters,jdbcType=DECIMAL}, #{item.defectsNumber,jdbcType=INTEGER}, #{item.severity,jdbcType=VARCHAR}, #{item.result,jdbcType=VARCHAR}, #{item.carNumber,jdbcType=VARCHAR}, #{item.upperDoorWidth,jdbcType=DOUBLE}, #{item.lowerDoorWidth,jdbcType=DOUBLE}, #{item.scanTime,jdbcType=TIMESTAMP}, #{item.preStatus,jdbcType=VARCHAR}, #{item.afterStatus,jdbcType=VARCHAR}, #{item.handleTime,jdbcType=TIMESTAMP}, #{item.saveTime,jdbcType=TIMESTAMP}, #{item.operator,jdbcType=VARCHAR}, #{item.createTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}, #{item.createUser,jdbcType=VARCHAR}, #{item.createSystem,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=OTHER,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler}, #{item.updateUser,jdbcType=VARCHAR}, #{item.updateSystem,jdbcType=VARCHAR}, #{item.isDeleted,jdbcType=TINYINT}, #{item.source,jdbcType=TINYINT}, #{item.sort,jdbcType=INTEGER}, #{item.ptQuantity,jdbcType=DECIMAL}, #{item.productNo,jdbcType=BIGINT}, #{item.productSort,jdbcType=BIGINT}, #{item.employeeName,jdbcType=VARCHAR}, #{item.markupCraft,jdbcType=VARCHAR}, #{item.teamGroup,jdbcType=VARCHAR}, #{item.avgCarSpeed,jdbcType=DECIMAL}, #{item.avgTemperature,jdbcType=DECIMAL}, #{item.avgWindSpeed,jdbcType=DECIMAL}, #{item.avgTopFeed,jdbcType=DECIMAL}, #{item.deptName,jdbcType=VARCHAR}, #{item.scheduleDate,jdbcType=DATE}, #{item.teamGroupId,jdbcType=BIGINT}, #{item.teamGroupName,jdbcType=VARCHAR}, #{item.teamShiftId,jdbcType=BIGINT}, #{item.teamShiftName,jdbcType=VARCHAR}, #{item.workshopId,jdbcType=BIGINT}, #{item.workshopName,jdbcType=VARCHAR}, #{item.scheduleStartTime,jdbcType=TIMESTAMP}, #{item.scheduleEndTime,jdbcType=TIMESTAMP}, #{item.calcDay,jdbcType=DATE}, #{item.preCarNumber,jdbcType=VARCHAR}, #{item.craftType,jdbcType=BIGINT}, #{item.preSort,jdbcType=INTEGER}, #{item.specification,jdbcType=VARCHAR}, #{item.style,jdbcType=VARCHAR}, #{item.preOperator,jdbcType=VARCHAR}, #{item.startTime,jdbcType=TIMESTAMP}, #{item.endTime,jdbcType=TIMESTAMP}, #{item.frontOperator,jdbcType=VARCHAR}, #{item.actualMeters,jdbcType=DECIMAL}, #{item.matches,jdbcType=VARCHAR}, #{item.expectedTime,jdbcType=VARCHAR}, #{item.actualTime,jdbcType=VARCHAR}, #{item.exceptionType,jdbcType=INTEGER}, #{item.productWeightMin,jdbcType=VARCHAR}, #{item.productWeightMax,jdbcType=VARCHAR}, #{item.remark,jdbcType=VARCHAR}, #{item.isBatch,jdbcType=TINYINT}, #{item.processName,jdbcType=VARCHAR}, #{item.scheduleImport,jdbcType=TINYINT}, #{item.qualityStatus,jdbcType=VARCHAR}, #{item.processCode,jdbcType=VARCHAR}, #{item.productCode,jdbcType=VARCHAR}, #{item.platform,jdbcType=INTEGER}, #{item.taskNo,jdbcType=VARCHAR}, #{item.assistantExceptionType,jdbcType=INTEGER}, #{item.customerRequest,jdbcType=VARCHAR}, #{item.stereotypeRequirement,jdbcType=VARCHAR}, #{item.craftSuitability,jdbcType=DECIMAL}, #{item.shrinkage,jdbcType=DECIMAL}, #{item.craftExceptionType,jdbcType=INTEGER}, #{item.isHaveCraft,jdbcType=TINYINT}, #{item.productWeight,jdbcType=VARCHAR}, #{item.thickness,jdbcType=VARCHAR}, #{item.processReportType,jdbcType=TINYINT},
+      #{item.defect,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler},
+      #{item.assistant,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler},
+      #{item.operatorInfo,typeHandler=com.zw.cloud.mybatis.config.typehandlers.JsonTypeHandler})
+    </foreach>
+  </insert>
+  <select id="selectOneByExample" parameterType="com.zw.cloud.mybatis.entity.ProductRecordExample" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - @mbg.generated
+      这个节点为代码生成工具生成，请不要修改!
+      @author hewei
+    -->
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from product_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
+</mapper>

@@ -13,6 +13,9 @@ class Test{
         EnumSingle instance2 = EnumSingle.INSTANCE;
         System.out.println(instance1);
         System.out.println(instance2);
+        /**
+         * NoSuchMethodException: com.zw.cloud.tools.concurrent.single.EnumSingle.<init>()
+         */
         Constructor<EnumSingle> constructor = EnumSingle.class.getDeclaredConstructor();
         constructor.setAccessible(true);
         EnumSingle instance3 = constructor.newInstance();

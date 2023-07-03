@@ -19,12 +19,16 @@ public class HttpFilter implements Filter {
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         //打印路径和线程id日志
-        log.info("[HttpFilter][doFilter]{},{}",request.getRequestURI(),Thread.currentThread().getId());
+        //log.info("[HttpFilter][doFilter]{},{}",request.getRequestURI(),Thread.currentThread().getId());
 
         //将线程Id放在自定义的RequestHolder
         RequestHolder.setValue(String.valueOf(Thread.currentThread().getId()));
 
-        filterChain.doFilter(servletRequest,servletResponse);
+        try {
+            filterChain.doFilter(servletRequest,servletResponse);
+        } finally {
+            RequestHolder.remove();
+        }
     }
 
     @Override

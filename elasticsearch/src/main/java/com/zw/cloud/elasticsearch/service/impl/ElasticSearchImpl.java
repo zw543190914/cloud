@@ -1,6 +1,6 @@
 package com.zw.cloud.elasticsearch.service.impl;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.zw.cloud.elasticsearch.entity.Content;
 import com.zw.cloud.elasticsearch.utils.HtmlParseUtils;
 import org.apache.commons.collections4.CollectionUtils;

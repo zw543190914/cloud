@@ -1,10 +1,9 @@
 package com.zw.cloud.tools.service.impl.poem;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.google.common.collect.Lists;
-import com.zw.cloud.tools.dao.poem.PoemMapper;
 import com.zw.cloud.tools.entity.poem.Poem;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -19,10 +18,6 @@ class PoemServiceImplTest {
 
     @InjectMocks
     private PoemServiceImpl poemService;
-    @Mock
-    ServiceImpl service;
-    @Mock
-    private PoemMapper baseMapper;
 
     @BeforeEach
     void before() {
@@ -36,13 +31,9 @@ class PoemServiceImplTest {
         Poem poem = new Poem();
         poem.setContent("test");
         ArrayList<Poem> poems = Lists.newArrayList(poem);
-       /* ServiceImpl spy = Mockito.spy(service);
-        Mockito.doReturn(true).when(spy).saveBatch(Mockito.anyCollection());*/
-        //Mockito.when(poemService.saveBatch(poems)).thenReturn(true);
         try (MockedStatic<SqlHelper> sqlHelperMockedStatic = mockStatic(SqlHelper.class)) {
             sqlHelperMockedStatic.when(() -> SqlHelper.executeBatch(any(),any(),anyCollection(),anyInt(),any())).thenReturn(true);
-            boolean b = poemService.saveBatch(Lists.newArrayList(poems));
-            System.out.println(b);
+            Assertions.assertDoesNotThrow(() -> poemService.saveBatch(Lists.newArrayList(poems)));
         }
 
     }

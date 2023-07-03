@@ -2,6 +2,9 @@ package com.zw.cloud.tools.concurrent.single;
 
 import java.lang.reflect.Constructor;
 
+/**
+ * https://zhuanlan.zhihu.com/p/402303950
+ */
 public class LazyMan2 {
 
     //private static LazyMan2 lazyMan;
@@ -31,13 +34,21 @@ public class LazyMan2 {
     }
 
     public static void main(String[] args) throws Exception{
-        /*for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             new Thread(()->{
                 LazyMan2 instance = getInstance();
                 System.out.println(Thread.currentThread().getName() + instance);
             }).start();
-        }*/
+        }
 
+        /**
+         * LazyMan2初始化
+         * Thread-0com.zw.cloud.tools.concurrent.single.LazyMan2@191b0d6a
+         * Thread-2com.zw.cloud.tools.concurrent.single.LazyMan2@191b0d6a
+         * Thread-3com.zw.cloud.tools.concurrent.single.LazyMan2@191b0d6a
+         * Thread-1com.zw.cloud.tools.concurrent.single.LazyMan2@191b0d6a
+         * Thread-4com.zw.cloud.tools.concurrent.single.LazyMan2@191b0d6a
+         */
         // 反射
         /*LazyMan2 instance = getInstance();
         Constructor<LazyMan2> declaredConstructor = LazyMan2.class.getDeclaredConstructor();

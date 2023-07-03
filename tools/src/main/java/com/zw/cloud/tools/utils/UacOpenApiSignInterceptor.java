@@ -166,25 +166,21 @@ public class UacOpenApiSignInterceptor implements HttpRequestInterceptor {
     }
 
     public static void main(String[] args) throws Exception {
-        //test1();
-        test2();
+        test1();
+        //test2();
     }
 
     public static void test1() throws Exception {
-        HttpPost httpPost=new HttpPost("https://openapi.szzhijing.com/dyeing-stenter/open-api/queryBaseTenterCraftDevice");
+        HttpPost httpPost=new HttpPost("https://qa-openapi.szzhijing.com/dyeing-stenter/open-api/selectReportList");
         String body="{\n" +
-                "    \"fabricNoList\":[\n" +
-                "        \"SWHQ00173\",\n" +
-                "        \"EHQ00219\"\n" +
-                "    ],\n" +
-                "    \"craftTypeNameSet\":[\n" +
-                "        \"定小\",\n" +
-                "        \"工艺类型\"\n" +
-                "    ]\n" +
+                "    \"orgCode\":\"3983D94F788342E1B0D8F52EA890D8E8\",\n" +
+                "    \"productCardCodeList\":[\"1711-1111\"],\n" +
+                "    \"startTime\":\"2022-12-16 16:47:55\",\n" +
+                "    \"endTime\":\"2022-12-20 16:11:41\"\n" +
                 "}";
         httpPost.addHeader("Content-Type","application/json");
         httpPost.setEntity(new StringEntity(body,StandardCharsets.UTF_8));
-        CloseableHttpClient client = HttpClients.custom().addInterceptorLast(new UacOpenApiSignInterceptor("1e01788836dd423fa2f682f242279abe", "b3a4a7072321400d9907ea71a994ade4")).build();
+        CloseableHttpClient client = HttpClients.custom().addInterceptorLast(new UacOpenApiSignInterceptor("c8d1e74111df4572a44966c1408497e3", "0c6e4c4ac9144c44b7b19e24bf6de03e")).build();
         HttpResponse response=client.execute(httpPost);
         System.out.println("返回CODE:"+response.getStatusLine().getStatusCode());
         if(response.getStatusLine().getStatusCode() == 200) {

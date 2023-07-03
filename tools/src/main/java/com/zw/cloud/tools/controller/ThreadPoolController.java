@@ -1,67 +1,60 @@
 package com.zw.cloud.tools.controller;
 
 
-import com.zw.cloud.tools.service.impl.ScheduleService;
-import com.zw.cloud.tools.utils.CustomerExecutorService;
-import lombok.RequiredArgsConstructor;
+import com.zw.cloud.tools.service.impl.AsyncService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.framework.AopContext;
-import org.springframework.aop.framework.AopProxyUtils;
-import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
+import javax.annotation.Resource;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/tools/test")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ThreadPoolController {
 
-    private final ScheduleService scheduleService;
+    @Autowired
+    private AsyncService asyncService;
+
+    @Resource(name = "ioThreadPoolTaskExecutor")
+    private ThreadPoolTaskExecutor ioThreadPoolTaskExecutor;
 
     private Logger logger = LoggerFactory.getLogger(ThreadPoolController.class);
 
 
     @GetMapping("/query")
     //http://localhost:9040/tools/test/query?id=1
-    public String query(@RequestParam("id") String id)throws Exception{
+    public void query(@RequestParam("id") Integer id) {
         logger.info("[query]id is {}, thread name is {}", id,Thread.currentThread().getName());
-        Future<String> future = CustomerExecutorService.pool.submit(() -> queryData(id));
-
-        //阻塞
-        String result = future.get();
-        logger.info("[query]id is {}, thread name is {},result is {}", id,Thread.currentThread().getName(),result);
-        return result;
+        //Future<String> future = CustomerExecutorService.pool.submit(() -> queryData(id));
+        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+            String result = queryData(id);
+            logger.info("[query]id is {}, thread name is {},result is {}", id, Thread.currentThread().getName(), result);
+            if (Objects.equals(0,id)) {
+                int num = 1/0;
+            }
+            return result;
+        }, ioThreadPoolTaskExecutor).whenComplete((result, ex) -> {
+            if (Objects.nonNull(ex)) {
+                logger.error("[query]id is {}, thread name is {},result is {},ex is ", id, Thread.currentThread().getName(), result, ex);
+            }
+        });
     }
 
-    @GetMapping("/test")
-    //http://localhost:9040/tools/test/test
-    public String test1() {
-      return "test";
+    @GetMapping("/asyncTask")
+    //http://localhost:9040/tools/test/asyncTask
+    public void asyncTask() {
+        asyncService.asyncTask();
     }
 
-    @GetMapping("/testAsync1")
-    //http://localhost:9040/tools/test/testAsync1
-    public void testAsync1() throws Exception{
-        scheduleService.test();
-    }
 
-   /* @Scheduled(fixedRate = 1000)
-    public void testScheduled(){
-        logger.info("Scheduled thread is " + Thread.currentThread().getName());
-    }
-*/
-
-
-    private String queryData(String id){
+    private String queryData(Integer id){
         logger.info("[queryData]id is {}, thread name is {}", id,Thread.currentThread().getName());
         return "test:" + id;
     }

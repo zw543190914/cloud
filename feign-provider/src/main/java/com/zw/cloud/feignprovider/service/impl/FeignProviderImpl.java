@@ -1,6 +1,6 @@
 package com.zw.cloud.feignprovider.service.impl;
 
-import com.zw.cloud.common.utils.WebResult;
+import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import com.zw.cloud.feignproviderapi.service.IFeignProviderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

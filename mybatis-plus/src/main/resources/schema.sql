@@ -9,7 +9,8 @@ CREATE TABLE `user_info_0` (
                              `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                              `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
                              `org_code` varchar(255) NOT NULL DEFAULT '' COMMENT '组织id',
-                             PRIMARY KEY (`id`)
+                             PRIMARY KEY (`id`),
+                             UNIQUE KEY `uk_name` (`name`)
 ) ENGINE=InnoDB COMMENT='用户表';
 
 CREATE TABLE `user_info_1` (
@@ -87,7 +88,7 @@ CREATE TABLE `base_tender_craft` (
                                      KEY `idx_no` (`org_code`,`customer_no`,`fabric_no`,`craft_type`,`specification`,`style`) USING BTREE
 ) ENGINE=InnoDB COMMENT='定型工艺';
 
-CREATE TABLE `base_product_record` (
+CREATE TABLE `product_record` (
                                        `id` bigint NOT NULL COMMENT '主键',
                                        `product_info_id` bigint DEFAULT NULL COMMENT '历史生产信息表id',
                                        `org_code` varchar(32) NOT NULL COMMENT '机构编号',
@@ -188,32 +189,193 @@ CREATE TABLE `base_product_record` (
                                        `thickness` varchar(100) DEFAULT '' COMMENT '厚度',
                                        `process_report_type` tinyint NOT NULL DEFAULT '0' COMMENT '报工标识(0:初始状态 10: 不可报工,20:未报工,30:已报工)',
                                        PRIMARY KEY (`id`) USING BTREE,
+                                       UNIQUE KEY `uk_product_info_id` (`product_info_id`) USING BTREE,
                                        KEY `idx_org_code_end_time` (`org_code`,`end_time`) USING BTREE
 ) ENGINE=InnoDB  COMMENT='生产记录表';
 
+CREATE TABLE `product_record_detail` (
+                                         `id` bigint NOT NULL COMMENT '主键',
+                                         `product_record_id` bigint NOT NULL COMMENT '生产记录ID',
+                                         `org_code` varchar(32) NOT NULL COMMENT '机构编号',
+                                         `exception_update_time` datetime DEFAULT NULL COMMENT '异常更新时间',
+                                         `create_user` varchar(32) NOT NULL DEFAULT '' COMMENT '创建用户',
+                                         `create_system` varchar(32) NOT NULL DEFAULT '' COMMENT '创建系统',
+                                         `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                         `update_user` varchar(32) NOT NULL DEFAULT '' COMMENT '更新用户',
+                                         `update_system` varchar(32) NOT NULL DEFAULT '' COMMENT '修改系统',
+                                         `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                         `reduction_weight` varchar(32) DEFAULT NULL COMMENT '还原克重(实际生产)',
+                                         `reduction_amplitude` varchar(32) DEFAULT NULL COMMENT '还原门幅(实际生产)',
+                                         PRIMARY KEY (`id`),
+                                         UNIQUE KEY `uk_product_record_id` (`product_record_id`) USING BTREE,
+                                         KEY `idx_exception_update_time` (`org_code`,`exception_update_time`) USING BTREE
+) ENGINE=InnoDB COMMENT='生产记录关联表';
 
-CREATE TABLE `fc` (
-                      `id` int NOT NULL,
-                      `one` int NOT NULL,
-                      `two` int NOT NULL,
-                      `three` int NOT NULL,
-                      `four` int NOT NULL,
-                      `five` int NOT NULL,
-                      `six` int NOT NULL,
-                      `seven` int NOT NULL,
-                      `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                      PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+CREATE TABLE `general_product_record` (
+                                          `id` bigint NOT NULL COMMENT '主键',
+                                          `product_card_code` varchar(32) NOT NULL COMMENT '流转卡号',
+                                          `device_id` bigint NOT NULL COMMENT '设备表id',
+                                          `device_name` varchar(32) NOT NULL DEFAULT '' COMMENT '设备名称',
+                                          `craft_type` varchar(255) NOT NULL DEFAULT '' COMMENT '工序类型',
+                                          `org_code` varchar(32) NOT NULL COMMENT '机构编号',
+                                          `craft_code` varchar(64) NOT NULL DEFAULT '' COMMENT '工艺编码',
+                                          `craft_name` varchar(255) NOT NULL DEFAULT '' COMMENT '工艺名称',
+                                          `customer_no` varchar(32) NOT NULL DEFAULT '' COMMENT '客户编号',
+                                          `customer_name` varchar(64) NOT NULL DEFAULT '' COMMENT '客户名称',
+                                          `color_no` varchar(50) NOT NULL DEFAULT '' COMMENT '颜色色号',
+                                          `color` varchar(200) DEFAULT NULL COMMENT '颜色名称',
+                                          `fabric_no` varchar(255) NOT NULL DEFAULT '' COMMENT '坯布编号',
+                                          `fabric_name` varchar(255) NOT NULL DEFAULT '' COMMENT '坯布名称',
+                                          `fabric_width` varchar(50) DEFAULT '' COMMENT '成品门幅',
+                                          `product_weight` varchar(20) DEFAULT '' COMMENT '成品布克重(成品克重)',
+                                          `shrinkage` decimal(10,2) DEFAULT NULL COMMENT '缩率',
+                                          `thickness` varchar(100) DEFAULT '' COMMENT '厚度',
+                                          `customer_request` varchar(255) DEFAULT NULL COMMENT '客户要求',
+                                          `matches` varchar(100) DEFAULT NULL COMMENT '实际匹数',
+                                          `sort` int DEFAULT '0' COMMENT '排序值',
+                                          `pre_status` tinyint NOT NULL COMMENT '前车状态(0.待办/待排产 1.已处理/生产中 2.已完成)',
+                                          `start_time` datetime DEFAULT NULL COMMENT '中车开始时间',
+                                          `end_time` datetime DEFAULT NULL COMMENT '中车结束时间',
+                                          `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已经删除，0未删除,1已删除',
+                                          `create_user` varchar(32) NOT NULL DEFAULT '' COMMENT '创建用户',
+                                          `create_system` varchar(32) NOT NULL DEFAULT '' COMMENT '创建系统',
+                                          `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                          `update_user` varchar(32) NOT NULL DEFAULT '' COMMENT '更新用户',
+                                          `update_system` varchar(32) NOT NULL DEFAULT '' COMMENT '修改系统',
+                                          `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                          PRIMARY KEY (`id`),
+                                          KEY `idx_product_card_code` (`org_code`,`product_card_code`) USING BTREE
+) ENGINE=InnoDB COMMENT='通用生产记录表';
 
-CREATE TABLE `tc` (
-                      `id` int NOT NULL,
-                      `one` int NOT NULL,
-                      `two` int NOT NULL,
-                      `three` int NOT NULL,
-                      `four` int NOT NULL,
-                      `five` int NOT NULL,
-                      `six` int NOT NULL,
-                      `seven` int NOT NULL,
-                      `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                      PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+CREATE TABLE `general_product_record_plan_craft` (
+                                                     `id` bigint NOT NULL COMMENT '主键',
+                                                     `general_product_record_id` bigint NOT NULL COMMENT '通用生产记录id(general_product_record)',
+                                                     `org_code` varchar(32) NOT NULL COMMENT '机构编号',
+                                                     `temperature` decimal(4,0) DEFAULT NULL COMMENT '温度',
+                                                     `speed` decimal(4,0) DEFAULT NULL COMMENT '车速',
+                                                     `alkali_concentration` decimal(5,2) DEFAULT NULL COMMENT '碱浓度',
+                                                     `holding_time` decimal(4,0) DEFAULT NULL COMMENT '保温时间',
+                                                     `decrement_rate` decimal(4,0) DEFAULT NULL COMMENT '减量率',
+                                                     `gram_weight_diff` decimal(4,0) DEFAULT NULL COMMENT '克重差',
+                                                     `ph` decimal(4,2) DEFAULT NULL COMMENT 'PH值',
+                                                     `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+                                                     `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已经删除，0未删除,1已删除',
+                                                     `create_user` varchar(32) NOT NULL DEFAULT '' COMMENT '创建用户',
+                                                     `create_system` varchar(32) NOT NULL DEFAULT '' COMMENT '创建系统',
+                                                     `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                                     `update_user` varchar(32) NOT NULL DEFAULT '' COMMENT '更新用户',
+                                                     `update_system` varchar(32) NOT NULL DEFAULT '' COMMENT '修改系统',
+                                                     `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                                     PRIMARY KEY (`id`),
+                                                     UNIQUE KEY `uk_general_product_record_id` (`general_product_record_id`) USING BTREE
+) ENGINE=InnoDB COMMENT='通用生产记录工艺关联表';
+
+CREATE TABLE `productivity_coefficient` (
+                                            `id` bigint NOT NULL COMMENT '主键',
+                                            `statistical_date` date NOT NULL COMMENT '统计日期',
+                                            `total_product_record` int NOT NULL COMMENT '生产记录数量',
+                                            `productivity_coefficient` decimal(8,4) DEFAULT NULL COMMENT '生产力系数',
+                                            `has_craft_rate` decimal(5,4) DEFAULT NULL COMMENT '有工艺的数量占比',
+                                            `craft_suitability_rate` decimal(5,4) DEFAULT NULL COMMENT '定型生产整体匹配度',
+                                            `controllable_time` decimal(5,4) DEFAULT NULL COMMENT '时长可控范围内的数量占比',
+                                            `repair_rate` decimal(5,4) DEFAULT NULL COMMENT '定型数量回修率',
+                                            `not_has_craft_rate` decimal(5,4) DEFAULT NULL COMMENT '无工艺占比',
+                                            `has_craft_suitability_rate` decimal(5,4) DEFAULT NULL COMMENT '有匹配度占比',
+                                            `not_has_craft_suitability` decimal(5,4) DEFAULT NULL COMMENT '无匹配度占比',
+                                            `craft_suitability_greater_than_standard_rate` decimal(5,4) DEFAULT NULL COMMENT '匹配度大于标准占比',
+                                            `craft_suitability_greater_than_overall_rate` decimal(5,4) DEFAULT NULL COMMENT '匹配度大于整体占比',
+                                            `craft_suitability_less_than_standard_rate` decimal(5,4) DEFAULT NULL COMMENT '匹配度小于标准占比',
+                                            `craft_suitability_less_than_overall_rate` decimal(5,4) DEFAULT NULL COMMENT '匹配度小于整体占比',
+                                            `duration_normal_rate` decimal(5,4) DEFAULT NULL COMMENT '时长正常占比',
+                                            `duration_abnormal_rate` decimal(5,4) DEFAULT NULL COMMENT '时长异常占比',
+                                            `no_time_rate` decimal(5,4) DEFAULT NULL COMMENT '无时长占比',
+                                            `craft_differential_distribution` json DEFAULT NULL COMMENT '工艺参数差异分布',
+                                            `non_standard_operations_distribution` json DEFAULT NULL COMMENT '系统操作不规范人员分布',
+                                            `org_code` varchar(32) NOT NULL COMMENT '机构编号',
+                                            `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已经删除，0未删除,1已删除',
+                                            `create_user` varchar(32) NOT NULL DEFAULT '' COMMENT '创建用户',
+                                            `create_system` varchar(32) NOT NULL DEFAULT '' COMMENT '创建系统',
+                                            `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                            `update_user` varchar(32) NOT NULL DEFAULT '' COMMENT '更新用户',
+                                            `update_system` varchar(32) NOT NULL DEFAULT '' COMMENT '修改系统',
+                                            `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                            PRIMARY KEY (`id`),
+                                            UNIQUE KEY `idx_statistical_date` (`statistical_date`,`org_code`,`is_deleted`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='定型生产力系数';
+
+CREATE TABLE `general_device_report_data` (
+                                              `id` bigint NOT NULL COMMENT '主键',
+                                              `ctime` datetime NOT NULL COMMENT '采集时间',
+                                              `speed_setting` decimal(8,4) DEFAULT NULL COMMENT '设定速度',
+                                              `speed` decimal(8,4) DEFAULT NULL COMMENT '实际车速',
+                                              `trough_actual_temp1` decimal(8,4) DEFAULT NULL COMMENT '1#水槽温度实际温度',
+                                              `trough_preset_temp1` decimal(8,4) DEFAULT NULL COMMENT '1#水槽温度设定温度',
+                                              `trough_actual_temp2` decimal(8,4) DEFAULT NULL COMMENT '2#水槽温度实际温度',
+                                              `trough_preset_temp2` decimal(8,4) DEFAULT NULL COMMENT '2#水槽温度设定温度',
+                                              `trough_actual_temp3` decimal(8,4) DEFAULT NULL COMMENT '3#水槽温度实际温度',
+                                              `trough_preset_temp3` decimal(8,4) DEFAULT NULL COMMENT '3#水槽温度设定温度',
+                                              `trough_actual_temp4` decimal(8,4) DEFAULT NULL COMMENT '4#水槽温度实际温度',
+                                              `trough_preset_temp4` decimal(8,4) DEFAULT NULL COMMENT '4#水槽温度设定温度',
+                                              `trough_actual_temp5` decimal(8,4) DEFAULT NULL COMMENT '5#水槽温度实际温度',
+                                              `trough_preset_temp5` decimal(8,4) DEFAULT NULL COMMENT '5#水槽温度设定温度',
+                                              `trough_actual_temp6` decimal(8,4) DEFAULT NULL COMMENT '6#水槽温度实际温度',
+                                              `trough_preset_temp6` decimal(8,4) DEFAULT NULL COMMENT '6#水槽温度设定温度',
+                                              `trough_actual_temp7` decimal(8,4) DEFAULT NULL COMMENT '7#水槽温度实际温度',
+                                              `trough_preset_temp7` decimal(8,4) DEFAULT NULL COMMENT '7#水槽温度设定温度',
+                                              `trough_actual_temp8` decimal(8,4) DEFAULT NULL COMMENT '8#水槽温度实际温度',
+                                              `trough_preset_temp8` decimal(8,4) DEFAULT NULL COMMENT '8#水槽温度设定温度',
+                                              `trough_actual_temp9` decimal(8,4) DEFAULT NULL COMMENT '9#水槽温度实际温度',
+                                              `trough_preset_temp9` decimal(8,4) DEFAULT NULL COMMENT '9#水槽温度设定温度',
+                                              `trough_actual_temp10` decimal(8,4) DEFAULT NULL COMMENT '10#水槽温度实际温度',
+                                              `trough_preset_temp10` decimal(8,4) DEFAULT NULL COMMENT '10#水槽温度设定温度',
+                                              `trough_actual_temp11` decimal(8,4) DEFAULT NULL COMMENT '11#水槽温度实际温度',
+                                              `trough_preset_temp11` decimal(8,4) DEFAULT NULL COMMENT '11#水槽温度设定温度',
+                                              `trough_actual_temp12` decimal(8,4) DEFAULT NULL COMMENT '12#水槽温度实际温度',
+                                              `trough_preset_temp12` decimal(8,4) DEFAULT NULL COMMENT '12#水槽温度设定温度',
+                                              `feed_centering_tension_actual` decimal(8,4) DEFAULT NULL COMMENT '进布张力实际',
+                                              `feed_centering_tension_preset` decimal(8,4) DEFAULT NULL COMMENT '进布张力设定',
+                                              `tension_outle_position_actual` decimal(8,4) DEFAULT NULL COMMENT '出布张力实际',
+                                              `tension_outle_position_preset` decimal(8,4) DEFAULT NULL COMMENT '出布张力设定',
+                                              `org_code` varchar(32) NOT NULL COMMENT '机构编号',
+                                              `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已经删除，0未删除,1已删除',
+                                              `create_user` varchar(32) NOT NULL DEFAULT '' COMMENT '创建用户',
+                                              `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                              `update_user` varchar(32) NOT NULL DEFAULT '' COMMENT '更新用户',
+                                              `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                              PRIMARY KEY (`id`),
+                                              KEY `idx_ctime` (`ctime`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='通用设备上报数据';
+
+CREATE TABLE `report_product_count` (
+                                        `id` bigint NOT NULL COMMENT '主键ID',
+                                        `org_code` varchar(64) NOT NULL COMMENT '工厂code',
+                                        `device_id` bigint NOT NULL COMMENT '设备id',
+                                        `device_name` varchar(64) DEFAULT NULL COMMENT '设备名称',
+                                        `workshop_id` bigint DEFAULT NULL COMMENT '车间id',
+                                        `calc_day` date DEFAULT NULL COMMENT '统计日期，格式 yyyy-MM-dd',
+                                        `product_quantity` decimal(18,4) DEFAULT NULL COMMENT '产量',
+                                        `product_num` int DEFAULT NULL COMMENT '生产记录数',
+                                        `white_product_quantity` decimal(18,4) DEFAULT NULL COMMENT '白班产量',
+                                        `white_product_num` int DEFAULT NULL COMMENT '白班生产记录数',
+                                        `white_product_quantity_rate` decimal(5,2) DEFAULT NULL COMMENT '白班产量占比',
+                                        `black_product_quantity` decimal(18,4) DEFAULT NULL COMMENT '晚班产量',
+                                        `black_product_num` int DEFAULT NULL COMMENT '晚班生产记录数',
+                                        `black_product_quantity_rate` decimal(5,2) DEFAULT NULL COMMENT '晚班产量占比',
+                                        `craft_product_info` json DEFAULT NULL COMMENT '按工序统计的生产信息',
+                                        `product_level_info` json DEFAULT NULL COMMENT '按产量等级统计的生产信息',
+                                        `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                        `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+                                        `create_user` varchar(32) DEFAULT '' COMMENT '创建用户',
+                                        `update_user` varchar(32) DEFAULT '' COMMENT '修改用户',
+                                        `create_system` varchar(32) DEFAULT NULL COMMENT '创建系统',
+                                        `update_system` varchar(32) DEFAULT NULL COMMENT '更新系统',
+                                        PRIMARY KEY (`id`),
+                                        UNIQUE KEY `uk_org_code_w_d_c_t` (`org_code`,`calc_day`,`workshop_id`,`device_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='定型产量统计报表';
+
+INSERT INTO `report_product_count` (`id`, `org_code`, `device_id`, `device_name`, `workshop_id`, `calc_day`, `product_quantity`, `product_num`, `white_product_quantity`, `white_product_num`, `white_product_quantity_rate`, `black_product_quantity`, `black_product_num`, `black_product_quantity_rate`, `craft_product_info`, `product_level_info`, `create_time`, `update_time`, `create_user`, `update_user`, `create_system`, `update_system`) VALUES (1, 'devController', 1, '1', 1, '2023-06-26', 100.0000, 5, 40.0000, 2, 40.00, 60.0000, 3, 60.00, '{"1": {"productNum": "4", "blackProductNum": "2", "productQuantity": "40", "whiteProductNum": "2", "productQuantityRate": "40", "blackProductQuantity": "20", "whiteProductQuantity": "20", "blackProductQuantityRate": "50", "whiteProductQuantityRate": "50"}, "2": {"productNum": "6", "blackProductNum": "2", "productQuantity": "60", "whiteProductNum": "4", "productQuantityRate": "60", "blackProductQuantity": "20", "whiteProductQuantity": "40", "blackProductQuantityRate": "33", "whiteProductQuantityRate": "66"}}', NULL, '2023-06-26 11:13:45', '2023-06-26 11:13:45', '', '', NULL, NULL);
+INSERT INTO `report_product_count` (`id`, `org_code`, `device_id`, `device_name`, `workshop_id`, `calc_day`, `product_quantity`, `product_num`, `white_product_quantity`, `white_product_num`, `white_product_quantity_rate`, `black_product_quantity`, `black_product_num`, `black_product_quantity_rate`, `craft_product_info`, `product_level_info`, `create_time`, `update_time`, `create_user`, `update_user`, `create_system`, `update_system`) VALUES (2, 'devController', 2, '2', 1, '2023-06-26', 100.0000, 5, 40.0000, 2, 40.00, 60.0000, 3, 60.00, '{"1": {"productNum": "4", "blackProductNum": "2", "productQuantity": "40", "whiteProductNum": "2", "productQuantityRate": "40", "blackProductQuantity": "20", "whiteProductQuantity": "20", "blackProductQuantityRate": "50", "whiteProductQuantityRate": "50"}, "2": {"productNum": "6", "blackProductNum": "2", "productQuantity": "60", "whiteProductNum": "4", "productQuantityRate": "60", "blackProductQuantity": "20", "whiteProductQuantity": "40", "blackProductQuantityRate": "33", "whiteProductQuantityRate": "66"}}', NULL, '2023-06-26 11:11:31', '2023-06-26 11:11:31', '', '', NULL, NULL);
+INSERT INTO `report_product_count` (`id`, `org_code`, `device_id`, `device_name`, `workshop_id`, `calc_day`, `product_quantity`, `product_num`, `white_product_quantity`, `white_product_num`, `white_product_quantity_rate`, `black_product_quantity`, `black_product_num`, `black_product_quantity_rate`, `craft_product_info`, `product_level_info`, `create_time`, `update_time`, `create_user`, `update_user`, `create_system`, `update_system`) VALUES (3, 'devController', 1, '1', 1, '2023-06-25', 100.0000, 5, 40.0000, 2, 40.00, 60.0000, 3, 60.00, '{"1": {"productNum": "4", "blackProductNum": "2", "productQuantity": "40", "whiteProductNum": "2", "productQuantityRate": "40", "blackProductQuantity": "20", "whiteProductQuantity": "20", "blackProductQuantityRate": "50", "whiteProductQuantityRate": "50"}, "2": {"productNum": "6", "blackProductNum": "2", "productQuantity": "60", "whiteProductNum": "4", "productQuantityRate": "60", "blackProductQuantity": "20", "whiteProductQuantity": "40", "blackProductQuantityRate": "33", "whiteProductQuantityRate": "66"}}', NULL, '2023-06-26 11:13:56', '2023-06-26 11:13:56', '', '', NULL, NULL);
+INSERT INTO `report_product_count` (`id`, `org_code`, `device_id`, `device_name`, `workshop_id`, `calc_day`, `product_quantity`, `product_num`, `white_product_quantity`, `white_product_num`, `white_product_quantity_rate`, `black_product_quantity`, `black_product_num`, `black_product_quantity_rate`, `craft_product_info`, `product_level_info`, `create_time`, `update_time`, `create_user`, `update_user`, `create_system`, `update_system`) VALUES (4, 'devController', 1, '1', 1, '2023-06-24', 100.0000, 5, 40.0000, 2, 40.00, 60.0000, 3, 60.00, '{"1": {"productNum": "4", "blackProductNum": "2", "productQuantity": "40", "whiteProductNum": "2", "productQuantityRate": "40", "blackProductQuantity": "20", "whiteProductQuantity": "20", "blackProductQuantityRate": "50", "whiteProductQuantityRate": "50"}, "2": {"productNum": "6", "blackProductNum": "2", "productQuantity": "60", "whiteProductNum": "4", "productQuantityRate": "60", "blackProductQuantity": "20", "whiteProductQuantity": "40", "blackProductQuantityRate": "33", "whiteProductQuantityRate": "66"}}', NULL, '2023-06-26 11:14:04', '2023-06-26 11:14:04', '', '', NULL, NULL);
+INSERT INTO `report_product_count` (`id`, `org_code`, `device_id`, `device_name`, `workshop_id`, `calc_day`, `product_quantity`, `product_num`, `white_product_quantity`, `white_product_num`, `white_product_quantity_rate`, `black_product_quantity`, `black_product_num`, `black_product_quantity_rate`, `craft_product_info`, `product_level_info`, `create_time`, `update_time`, `create_user`, `update_user`, `create_system`, `update_system`) VALUES (5, 'devController', 1, '1', 1, '2023-06-23', 100.0000, 5, 40.0000, 2, 40.00, 60.0000, 3, 60.00, '{ "2": {"productNum": "6", "blackProductNum": "2", "productQuantity": "60", "whiteProductNum": "4", "productQuantityRate": "60", "blackProductQuantity": "20", "whiteProductQuantity": "40", "blackProductQuantityRate": "33", "whiteProductQuantityRate": "66"}}', NULL, '2023-06-26 11:14:13', '2023-06-26 11:14:13', '', '', NULL, NULL);
+INSERT INTO `report_product_count` (`id`, `org_code`, `device_id`, `device_name`, `workshop_id`, `calc_day`, `product_quantity`, `product_num`, `white_product_quantity`, `white_product_num`, `white_product_quantity_rate`, `black_product_quantity`, `black_product_num`, `black_product_quantity_rate`, `craft_product_info`, `product_level_info`, `create_time`, `update_time`, `create_user`, `update_user`, `create_system`, `update_system`) VALUES (6, 'devController', 1, '1', 1, '2023-06-22', 100.0000, 5, 40.0000, 2, 40.00, 60.0000, 3, 60.00, '{"1": {"productNum": "6", "blackProductNum": "2", "productQuantity": "60", "whiteProductNum": "4", "productQuantityRate": "60", "blackProductQuantity": "20", "whiteProductQuantity": "40", "blackProductQuantityRate": "33", "whiteProductQuantityRate": "66"}}', NULL, '2023-06-26 11:14:21', '2023-06-26 11:15:03', '', '', NULL, NULL);

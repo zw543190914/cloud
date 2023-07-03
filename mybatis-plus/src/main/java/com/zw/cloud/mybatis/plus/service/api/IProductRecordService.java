@@ -24,6 +24,8 @@ public interface IProductRecordService extends IService<ProductRecord> {
 
     void insertProductRecord(ProductRecord productRecord);
 
+    void batchInsertProductRecord(List<ProductRecord> productRecordList);
+
     List<ProductRecord> queryList(ProductRecord productRecord);
 
 }

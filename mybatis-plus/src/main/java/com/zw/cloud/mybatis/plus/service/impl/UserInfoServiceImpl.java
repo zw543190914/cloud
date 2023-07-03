@@ -1,32 +1,97 @@
 package com.zw.cloud.mybatis.plus.service.impl;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
+import com.zw.cloud.common.exception.BizException;
 import com.zw.cloud.mybatis.plus.entity.UserInfo;
+import com.zw.cloud.mybatis.plus.entity.UserRole;
 import com.zw.cloud.mybatis.plus.mapper.UserInfoMapper;
 import com.zw.cloud.mybatis.plus.service.api.IUserInfoService;
+import com.zw.cloud.mybatis.plus.service.api.IUserRoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> implements IUserInfoService {
 
     @Autowired
-    private UserInfoMapper userInfoMapper;
-    @Autowired
     private SqlSessionFactory sqlSessionFactory;
+    @Autowired
+    private IUserRoleService userRoleService;
+    @Autowired
+    private DataSource dataSource;
+    @Autowired
+    private PlatformTransactionManager transactionManager;
+    @Autowired
+    @Qualifier("ioThreadPoolTaskExecutor")
+    private ThreadPoolTaskExecutor ioThreadPoolTaskExecutor;
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void testBatchInsertJdbc(List<UserInfo> userInfoList) throws SQLException {
+        long start = System.currentTimeMillis();
+        Connection connection = null;
+        try {
+            connection = dataSource.getConnection();
+            //设置手动提交
+            connection.setAutoCommit(false);
+            //预编译sql对象,只编译一回
+            PreparedStatement ps = connection.prepareStatement(
+                    "insert into user_info_0 (name, age, bir, other,update_time) values(?,?,?,?,?)");
+            for (UserInfo userInfo : userInfoList) {
+                ps.setString(1, userInfo.getName());
+                ps.setInt(2,userInfo.getAge());
+                // java.sql.Date
+                ps.setDate(3, java.sql.Date.valueOf(userInfo.getBir()));
+                ps.setString(4,JSON.toJSONString(userInfo.getOther()));
+                ps.setTimestamp(5,java.sql.Timestamp.valueOf(LocalDateTime.now()));
+                //添加到批次
+                ps.addBatch();
+            }
+            //提交批处理
+            ps.executeBatch();
+            connection.commit();
+        } catch (SQLException sqlException) {
+            if (Objects.nonNull(connection)) {
+                connection.rollback();
+            }
+            throw sqlException;
+        } finally {
+            if (Objects.nonNull(connection)) {
+                connection.close();
+            }
+        }
+        // 10000 条数据 431
+        // 30万 13796 20075 13521
+        log.info("[testBatchInsertJdbc] use time {}", System.currentTimeMillis() - start);
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -38,6 +103,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             userInfoList.forEach(mapper::insertByMapper);
             sqlSession.commit();
         } catch (Exception e) {
+            sqlSession.rollback();
             throw e;
         } finally {
             sqlSession.close();
@@ -45,6 +111,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         // 2000条数据 260
         // 10000条数据 810  接入 sharding-jdbc 6868 2518
         // 1362 2793 2862
+        // 30万 31076 24161 19086  54138 42820 32304  106337,98758(去除 rewriteBatchedStatements=true)
         log.info("[testBatchInsertOneByOne] use time {}", System.currentTimeMillis() - start);
     }
 
@@ -52,10 +119,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Transactional(rollbackFor = Exception.class)
     public void testBatchInsertByMapper(List<UserInfo> userInfoList) {
         long start = System.currentTimeMillis();
-        userInfoMapper.batchInsertByMapper(userInfoList);
+        baseMapper.batchInsertByMapper(userInfoList);
         // 2000条数据 330
         // 10000条数据 1180  接入 sharding-jdbc 1953 1596
         // 556 1129 1115
+        // 30万 74593 41711
         log.info("[testBatchInsertByMapper] use time {}", System.currentTimeMillis() - start);
     }
 
@@ -63,21 +131,57 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Transactional(rollbackFor = Exception.class)
     public void testBatchInsertByMybatisPlus(List<UserInfo> userInfoList) {
         long start = System.currentTimeMillis();
-        saveBatch(userInfoList,10000);
+        saveBatch(userInfoList,userInfoList.size());
         // 2000条数据 320
         // 10000条数据 1140 接入 sharding-jdbc 3824 6966
         // 1895 3369 3252
+        // 30万 80725 46066 34753
         log.info("[testBatchInsertByMybatisPlus] use time {}", System.currentTimeMillis() - start);
     }
 
     @Override
     public void batchInsertByMapper(List<UserInfo> userInfoList) {
-        userInfoMapper.batchInsertByMapper(userInfoList);
+        baseMapper.batchInsertByMapper(userInfoList);
+    }
+
+    /**
+     * 异步中编程式事务测试
+     */
+    @Override
+    public void asynUpdate(Long id) {
+        CompletableFuture.supplyAsync(() -> {
+            asynUpdateTask(id);
+            return 1;
+        },ioThreadPoolTaskExecutor).whenComplete((result,ex) -> {
+            if (Objects.nonNull(ex)) {
+                log.error("[asynUpdate]id is {],ex is ",id,ex);
+            }
+        });
+    }
+
+    private void asynUpdateTask(Long id) {
+        DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
+        // ISOLATION_READ_COMMITTED
+        defaultTransactionDefinition.setIsolationLevel(2);
+        TransactionStatus status = transactionManager.getTransaction(defaultTransactionDefinition);
+        try {
+            UserInfo userInfo = new UserInfo();
+            userInfo.setId(id);
+            userInfo.setName("asynUpdate");
+            int i = baseMapper.updateById(userInfo);
+            log.info("[UserInfoServiceImpl][asynUpdate] updateById {}", i);
+            if (id == 1) {
+                throw new BizException("asynUpdate");
+            }
+            transactionManager.commit(status);
+        } catch (Exception e) {
+            transactionManager.rollback(status);
+        }
     }
 
     @Override
     public void batchUpdateUserListByMapper(List<UserInfo> userInfoList) {
-        userInfoMapper.batchUpdate(userInfoList);
+        baseMapper.batchUpdate(userInfoList);
     }
 
     @Override
@@ -99,25 +203,27 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     /**
      * 无论是否有 @Transactional
      * 数据存在，其他事务此时更新,再次读取任然是当前值
-     * 数据不存在，其他事务插入新数据并提交，此时更新或者删除 上一个事务提交的数据，可以更新成新值或者删除新数据  没有完全禁止幻读
+     * 数据不存在，其他事务插入新数据并提交，此时更新或者删除 上一个事务提交的数据，可以更新成新值或者删除新数据,数据也可以查询到  没有完全禁止幻读
      * 解决：@Transactional 并且使用锁 select for update
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void testMvcc(Long id) {
-        UserInfo userInfo = userInfoMapper.selectById(id);
-        //UserInfo userInfo = userInfoMapper.queryByIdForUpdate(id);
+        UserInfo userInfo = baseMapper.selectById(id);
+        //UserInfo userInfo = baseMapper.queryByIdForUpdate(id);
         // 此时数据为空
         log.info("[testMvcc] userInfo is {}", JSON.toJSONString(userInfo));
 
         try {
-            Thread.sleep(3000);
+            Thread.sleep(4000);
             UserInfo updateUserInfo = new UserInfo();
             updateUserInfo.setId(id);
             updateUserInfo.setAge(66);
             // 此时其他事务提交，该id 有数据，可以修改成功
-            int i = userInfoMapper.updateById(updateUserInfo);
-            log.info("[testMvcc] update is {}", i);
+            int i = baseMapper.updateById(updateUserInfo);
+            UserInfo userInfo2 = baseMapper.selectById(id);
+            // 此时数据有值
+            log.info("[testMvcc] update is {},userInfo2 is {}", i,JSON.toJSONString(userInfo2));
         } catch (Exception e) {
             log.error("[testMvcc] error is ", e);
         }
@@ -132,11 +238,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     @Transactional
     public void testRepeatRead(Long id) {
-        UserInfo userInfo = userInfoMapper.selectById(id);
+        UserInfo userInfo = baseMapper.selectById(id);
         log.info("[testRepeatRead] userInfo is {}", JSON.toJSONString(userInfo));
         try {
             Thread.sleep(3000);
-            UserInfo userInfo2 = userInfoMapper.selectById(id);
+            UserInfo userInfo2 = baseMapper.selectById(id);
             log.info("[testRepeatRead] userInfo2 is {}", JSON.toJSONString(userInfo2));
         } catch (Exception e) {
             log.error("[testRepeatRead] error is ", e);
@@ -154,11 +260,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     public void testSerializable() {
         LambdaQueryWrapper<UserInfo> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(UserInfo::getId, Lists.newArrayList(1L,2L));
-        Integer count = userInfoMapper.selectCount(queryWrapper);
+        Integer count = baseMapper.selectCount(queryWrapper);
         log.info("[testSerializable] count is {}",count);
         try {
             Thread.sleep(3000);
-            Integer count2 = userInfoMapper.selectCount(queryWrapper);
+            Integer count2 = baseMapper.selectCount(queryWrapper);
             log.info("[testSerializable] count2 is {}",count2);
         } catch (Exception e) {
             log.error("[testSerializable] error is ", e);
@@ -166,22 +272,90 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void testPropagationRequiresNew(UserInfo userInfo) {
+        baseMapper.updateById(userInfo);
+        UserRole userRole = new UserRole();
+        userRole.setUserId(0);
+        userRole.setRoleId(0);
+        userRoleService.testPropagationRequiresNew(userRole);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void testPropagationRequires(UserInfo userInfo) {
+        baseMapper.updateById(userInfo);
+        UserRole userRole = new UserRole();
+        userRole.setUserId(0);
+        userRole.setRoleId(0);
+        // 使用 REQUIRED 异常被捕获，userInfo 任然没有更新
+        // Transaction rolled back because it has been marked as rollback-only -- 应该使用 NESTED
+        try {
+            userRoleService.testPropagationRequires(userRole);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * 1 里面抛异常 如果被捕获不能影响外层执行
+     * 2 外面抛出异常，里面都要回滚
+     */
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void testPropagationNested(UserInfo userInfo) {
+        baseMapper.updateById(userInfo);
+        UserRole userRole = new UserRole();
+        userRole.setUserId(0);
+        userRole.setRoleId(0);
+        // 使用 NESTED,子事务抛出异常，区别于REQUIRED userInfo 可以正常 更新
+        try {
+            userRoleService.testPropagationNested(userRole);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("sssss");
+    }
+
+    /**
+     * propagation = Propagation.REQUIRES_NEW 或者 默认
+     * Transaction rolled back because it has been marked as rollback-only
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void testPropagationDefault(UserInfo userInfo) {
+        baseMapper.updateById(userInfo);
+        UserRole userRole = new UserRole();
+        userRole.setUserId(0);
+        userRole.setRoleId(0);
+        // Transaction rolled back because it has been marked as rollback-only
+        try {
+            userRoleService.testPropagationDefault(userRole);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public List<UserInfo> queryJsonData(String name){
         UserInfo userInfo = new UserInfo();
         userInfo.setName(name);
-        return userInfoMapper.queryJsonData(userInfo);
+        return baseMapper.queryJsonData(userInfo);
     }
 
     @Override
     public List<UserInfo> queryJsonDataLike(String name){
         UserInfo userInfo = new UserInfo();
         userInfo.setName(name);
-        return userInfoMapper.queryJsonDataLike(userInfo);
+        return baseMapper.queryJsonDataLike(userInfo);
     }
 
     @Override
-    public List<UserInfo> queryAllDataTest(){
-        return userInfoMapper.queryAllDataTest();
+    public IPage<UserInfo> queryAllDataTest(Integer pageNo,Integer pageSize){
+        IPage<UserInfo> page = new Page<>(pageNo,pageSize);
+        return baseMapper.queryAllDataTest(page);
     }
 
     @Override
@@ -208,6 +382,27 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         where org_code = 'devController' and workshop_id = 1
         and calc_day = '2021-11-10'
         GROUP BY device_id,device_name*/
-        return userInfoMapper.queryUserData(sql.toString());
+        return baseMapper.queryUserData(sql.toString());
+    }
+
+    @Override
+    @Transactional
+    public void onDuplicateUpdate(List<UserInfo> userInfoList) {
+        baseMapper.onDuplicateUpdate(userInfoList);
+    }
+
+    @Override
+    @Transactional
+    public void updateByName(String name) {
+        UserInfo userInfo = baseMapper.selectOne(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getName, name));
+        if (Objects.nonNull(userInfo)) {
+            /*try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
+            userInfo.setAge(1);
+            updateById(userInfo);
+        }
     }
 }

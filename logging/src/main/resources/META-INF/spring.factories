@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.zw.cloud.logging.config.MDCAutoConfiguration,\
+com.zw.cloud.global.exception.GlobalExceptionHandlerAutoConfiguration,\
+com.zw.cloud.global.response.wrapper.ResponseWrapperAutoConfiguration
