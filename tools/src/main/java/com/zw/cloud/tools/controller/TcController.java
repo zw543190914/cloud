@@ -5,7 +5,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.zw.cloud.common.utils.http.HttpClientUtils;
-import com.zw.cloud.global.response.wrapper.entity.WebResult;
 import com.zw.cloud.tools.dao.TcMapper;
 import com.zw.cloud.tools.entity.Tc;
 import com.zw.cloud.tools.entity.TcExample;

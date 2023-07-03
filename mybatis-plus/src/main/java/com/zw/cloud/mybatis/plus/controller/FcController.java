@@ -1,9 +1,7 @@
 package com.zw.cloud.mybatis.plus.controller;
 
 
-import cn.afterturn.easypoi.excel.ExcelExportUtil;
-import cn.afterturn.easypoi.excel.entity.ExportParams;
-import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
+
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.zw.cloud.mybatis.plus.entity.Fc;
@@ -14,10 +12,6 @@ import com.zw.cloud.mybatis.plus.service.api.ITcService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,37 +45,30 @@ public class FcController {
     private RestTemplate restTemplate;
 
     @GetMapping("/insertFcList")
-    //http://localhost:8080/fc/insertFcList
+    //http://localhost:8082/fc/insertFcList
     public void insertFcList() {
-        String url = "http://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice?name=ssq&issueCount=&issueStart=2022133&issueEnd=2022134&dayStart=&dayEnd=";
-        HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.add("Accept-Encoding","gzip, deflate");
-        requestHeaders.add("Connection","keep-alive");
-        requestHeaders.add("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36");
-        // cookie设置
-        List<String> cookies = new ArrayList<>();
-        cookies.add("HMF_CI=ff631df18ddf701f100c6efc63f9358c20b6b1a87549cb7d8b29d5b232802936152cd60039aa71113334c365d688875ce5d95f14bbb6a2683086a3a8f6c103e902");
-        cookies.add("21_vq=73");
-        requestHeaders.put(HttpHeaders.COOKIE, cookies);
-        //此处加编码格式转换
-        //restTemplate.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
-        ResponseEntity<String> entity = restTemplate.exchange(url, HttpMethod.GET,new HttpEntity<>(requestHeaders), String.class);
-        System.out.println(entity.getBody());
-        FcResultDTO fcResultDTO = JSON.parseObject(String.valueOf(entity.getBody()), FcResultDTO.class);
-        if (Objects.isNull(fcResultDTO) || CollectionUtils.isEmpty(fcResultDTO.getResult())) {
-            return;
+        for (int i = 2; i <= 3; i++) {
+            String url = "http://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice?name=ssq&issueCount=100&issueStart=&issueEnd=&dayStart=&dayEnd=&pageNo="+ i +"&pageSize=30&systemType=PC";
+            String result = restTemplate.getForObject(url, String.class);
+            System.out.println(result);
+            FcResultDTO fcResultDTO = JSON.parseObject(result, FcResultDTO.class);
+            if (Objects.isNull(fcResultDTO) || CollectionUtils.isEmpty(fcResultDTO.getResult())) {
+                return;
+            }
+            List<FcResultDTO.FcDTO> fcDTOList = fcResultDTO.getResult();
+            fcDTOList.forEach(fcDTO -> {
+                Fc.FcBuilder builder = Fc.builder();
+                String[] split = fcDTO.getRed().split(",");
+                builder.id(Integer.parseInt(fcDTO.getCode())).one(Integer.parseInt(split[0]))
+                        .two(Integer.parseInt(split[1])).three(Integer.parseInt(split[2]))
+                        .four(Integer.parseInt(split[3])).five(Integer.parseInt(split[4]))
+                        .six(Integer.parseInt(split[5])).seven(Integer.parseInt(fcDTO.getBlue()));
+                Fc build = builder.build();
+                fcService.save(build);
+            });
+
         }
-        List<FcResultDTO.FcDTO> fcDTOList = fcResultDTO.getResult();
-        List<Fc> fcList = fcDTOList.stream().map(fcDTO -> {
-            Fc.FcBuilder builder = Fc.builder();
-            String[] split = fcDTO.getRed().split(",");
-            builder.id(Integer.parseInt(fcDTO.getCode())).one(Integer.parseInt(split[0]))
-                    .two(Integer.parseInt(split[1])).three(Integer.parseInt(split[2]))
-                    .four(Integer.parseInt(split[3])).five(Integer.parseInt(split[4]))
-                    .six(Integer.parseInt(split[5])).seven(Integer.parseInt(fcDTO.getBlue()));
-            return builder.build();
-        }).collect(Collectors.toList());
-        fcService.saveBatch(fcList,fcList.size());
+
     }
 
     @GetMapping("/insertFc")
@@ -195,55 +182,6 @@ public class FcController {
                 .eq(Objects.nonNull(five),Fc::getFive,five)
                 .orderByDesc(Fc::getId);
         return fcService.list(queryWrapper);
-    }
-
-    @GetMapping("/export/{count}")
-    //http://localhost:8080/fc/export/200
-    public void export(@PathVariable("count") Integer count,HttpServletResponse response) throws Exception {
-        LambdaQueryWrapper<Fc> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.orderByDesc(Fc::getId).last("limit " + count);
-        List<Fc> fcList = fcService.list(queryWrapper);
-        String title = "cp.xlsx";
-
-        // 单个sheet 导出
-        //Workbook workbook = ExcelExportUtils.export(null, "发货通知单", 0, shipmentOrderDTOS, ShipmentOrderDTO.class, null);
-
-        // https://blog.csdn.net/baidu_36821021/article/details/85216855
-        ExportParams sheet1Params = new ExportParams();
-        // 设置sheet得名称
-        sheet1Params.setSheetName("fc");
-        // 创建sheet1使用得map
-        Map<String, Object> sheet1ExportMap = new HashMap<>();
-        // title的参数为ExportParams类型，目前仅仅在ExportParams中设置了sheetName
-        sheet1ExportMap.put("title", sheet1Params);
-        // 模版导出对应得实体类型
-        sheet1ExportMap.put("entity", Fc.class);
-        // sheet中要填充得数据
-        sheet1ExportMap.put("data", fcList);
-
-        LambdaQueryWrapper<Tc> tcQueryWrapper = new LambdaQueryWrapper<>();
-        tcQueryWrapper.orderByDesc(Tc::getId).last("limit " + count);
-        List<Tc> tcList = tcService.list(tcQueryWrapper);
-        ExportParams sheet2Params = new ExportParams();
-        sheet2Params.setSheetName("tc");
-        // 创建sheet2使用得map
-        Map<String, Object> sheet2ExportMap = new HashMap<>();
-        sheet2ExportMap.put("title", sheet2Params);
-        sheet2ExportMap.put("entity", Tc.class);
-        sheet2ExportMap.put("data", tcList);
-
-        // 将sheet1、sheet2、sheet3使用得map进行包装
-        List<Map<String, Object>> sheetsList = new ArrayList<>();
-        sheetsList.add(sheet1ExportMap);
-        sheetsList.add(sheet2ExportMap);
-
-        Workbook workbook = ExcelExportUtil.exportExcel(sheetsList, ExcelType.HSSF);
-
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("content-Type", "application/vnd.ms-excel");
-        response.setHeader("Content-Disposition",
-                "attachment;filename=" + URLEncoder.encode(title, String.valueOf(StandardCharsets.UTF_8)));
-        workbook.write(response.getOutputStream());
     }
 
     private String fc() {
