@@ -476,7 +476,7 @@ public class DateTimeUtils {
                 localDateDTO.setEndTime(sunday);
             }
             StringBuilder dateStr = new StringBuilder(parseMonth2Str(localDate, "yyyy-MM"));
-            dateStr.append(":第").append(convertNumToCN(num ++)).append("周:(").append(parse2Str(localDateDTO.getStartTime(),"MM/dd")).append( "-").append(parse2Str(localDateDTO.getEndTime(),"MM/dd")).append(")");
+            dateStr.append("月:第").append(convertNumToCN(num ++)).append("周:(").append(parse2Str(localDateDTO.getStartTime(),"MM/dd")).append( "-").append(parse2Str(localDateDTO.getEndTime(),"MM/dd")).append(")");
             localDateDTO.setDateStr(dateStr.toString());
             localDateDTOList.add(localDateDTO);
         }
