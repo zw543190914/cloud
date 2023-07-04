@@ -2,7 +2,9 @@ package com.zw.cloud.common.utils;
 
 import com.alibaba.fastjson2.JSON;
 import com.zw.cloud.common.entity.dto.FeishuMsgDTO;
+import com.zw.cloud.common.thread.pool.ThreadExecutorPool;
 import com.zw.cloud.common.utils.http.HttpClientUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Mac;
@@ -10,10 +12,13 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN
  */
+@Slf4j
 public class FeishuMsgUtils {
 
     //这里就是刚才拿到的Webhook的值
@@ -22,21 +27,31 @@ public class FeishuMsgUtils {
     public static final String SECRET = "ADUmsMcaBv5eQj7lakis8e";
 
     public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeyException {
-        System.out.println(sendMessage("这里是消息内容"));
+        sendMessage("这里是消息内容");
     }
 
-    public static String sendMessage(String msg) throws InvalidKeyException, NoSuchAlgorithmException {
+    public static void sendMessage(String msg) {
         FeishuMsgDTO feishuMsgDTO = new FeishuMsgDTO();
         int timestamp = (int) (System.currentTimeMillis() / 1000);
         feishuMsgDTO.setTimestamp(timestamp);
-        feishuMsgDTO.setSign(genSign());
+        try {
+            feishuMsgDTO.setSign(genSign());
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            log.error("[FeishuMsgUtils][sendMessage]genSign error is ",e);
+        }
         feishuMsgDTO.setMsg_type("text");
         FeishuMsgDTO.MsgContent msgContent = new FeishuMsgDTO.MsgContent();
         msgContent.setText(msg);
         feishuMsgDTO.setContent(msgContent);
         //发送post请求
-        return HttpClientUtils.doPostJson(WEB_HOOK_URL,JSON.toJSONString(feishuMsgDTO),null);
-        //return HttpRequest.post(WEB_HOOK_URL).body(JSON.toJSONString(feishuMsgDTO), "application/json;charset=UTF-8").execute().body();
+        CompletableFuture.supplyAsync(() -> {
+            return HttpClientUtils.doPostJson(WEB_HOOK_URL,JSON.toJSONString(feishuMsgDTO),null);
+            //return HttpRequest.post(WEB_HOOK_URL).body(JSON.toJSONString(feishuMsgDTO), "application/json;charset=UTF-8").execute().body();
+        }, ThreadExecutorPool.msgThreadPoolExecutor).whenComplete((result, ex) -> {
+            if (Objects.nonNull(ex)) {
+                log.error("[FeishuMsgUtils][sendMessage] error is ", ex);
+            }
+        });
     }
 
     private static String genSign() throws NoSuchAlgorithmException, InvalidKeyException {

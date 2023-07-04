@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 public class WeatherUtils {
@@ -90,6 +91,9 @@ public class WeatherUtils {
         WeatherDTO weatherDTO = JSON.parseObject(response, WeatherDTO.class);
         log.info("[WeatherUtils][getWeatherByXinZhi] location is {},weatherDTO is {}",location,JSON.toJSONString(weatherDTO));
         StringBuffer msg = new StringBuffer("#### " + location +" 天气预报\n");
+        if (Objects.isNull(weatherDTO) || CollectionUtils.isEmpty(weatherDTO.getResults())) {
+            return weatherDTO;
+        }
         WeatherDTO.ResultsDTO resultsDTO = weatherDTO.getResults().get(0);
 
         for (WeatherDTO.ResultsDTO.DailyDTO dailyDTO : resultsDTO.getDaily()) {
