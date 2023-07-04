@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,7 +40,7 @@ public class TcController {
     @Autowired
     private ITcService tcService;
 
-    @GetMapping("/add")
+    @PostConstruct
     //http://localhost:8080/tc/add
     public void add(){
         for (int i = 1; i <= 3; i++) {
@@ -54,7 +55,7 @@ public class TcController {
             if (CollectionUtils.isEmpty(list)) {
                 return;
             }
-            List<Tc> tcList = list.stream().map(valueData -> {
+            for (TcResultVO.ValueData valueData : list) {
                 String lotteryDrawResult = valueData.getLotteryDrawResult();
                 String[] values = lotteryDrawResult.split(" ");
                 Tc tc = new Tc();
@@ -66,9 +67,13 @@ public class TcController {
                 tc.setFive(Integer.valueOf(values[4]));
                 tc.setSix(Integer.valueOf(values[5]));
                 tc.setSeven(Integer.valueOf(values[6]));
-                tcService.save(tc);
-                return tc;
-            }).collect(Collectors.toList());
+                try {
+                    tcService.save(tc);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return;
+                }
+            }
             //tcService.saveBatch(tcList, tcList.size());
         }
     }
