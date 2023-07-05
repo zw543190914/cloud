@@ -6,6 +6,7 @@ import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiRobotSendRequest;
 import com.dingtalk.api.response.OapiRobotSendResponse;
 import com.taobao.api.ApiException;
+import com.zw.cloud.common.thread.pool.ThreadExecutorPool;
 import com.zw.cloud.common.utils.http.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
@@ -18,6 +19,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -33,11 +37,11 @@ public class DingTalkUtils {
     public static void main(String[] args) throws Exception {
         //System.out.println(genSign(System.currentTimeMillis(), "SEC1ded33d7e58ef4aa813d074e7e24e7df83d9427ee7496d819bdff256ceda1583"));
         //sendDingTalkMsg("7b66a82f1620672a1f5b2229d536d41cd978fb9f949141df8b40cd3b8bc9dd54",DingTalkUtils.class,"sendDingTalkMsg",null,new RuntimeException("running exception..."));
-        //sendDingTalkMsgWithSign("3a93469afdb2c38e22f0944e7f61a9b4d2e95a0138901d813ce6fe2c33dd1145","SECd51ae59f656260a2f859e4e149a54e120c8673a9aa789cf60f7ee20f09048a49");
-
+        sendDingTalkMsgWithSign("标题","3a93469afdb2c38e22f0944e7f61a9b4d2e95a0138901d813ce6fe2c33dd1145","SECd51ae59f656260a2f859e4e149a54e120c8673a9aa789cf60f7ee20f09048a49","<font color=#0000FF>哈哈哈</font> \n\n  嘻嘻");
+        TimeUnit.SECONDS.sleep(10);
     }
 
-    public static void sendDingTalkMsg(String token,Class clazz,String methodName,Object args,Exception e) throws Exception{
+    public static void sendDingTalkMsg(String token,Class clazz,String methodName,Object args,Exception e) {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/robot/send?access_token=" + token);
         OapiRobotSendRequest request = new OapiRobotSendRequest();
         /*request.setMsgtype("text");
@@ -70,30 +74,30 @@ public class DingTalkUtils {
                 //"> ![screenshot](https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic.jj20.com%2Fup%2Fallimg%2Fmx12%2F0F420115037%2F200F4115037-11.jpg&refer=http%3A%2F%2Fpic.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638372678&t=004b8405f7b0780a5226dbb99b04c924)\n"  +
                 "> [百度一下](http://www.baidu.com/) \n");
         request.setMarkdown(markdown);
-        OapiRobotSendResponse response = client.execute(request);
-        //log.info("[DingTalkUtils][sendDingTalkMsg] response is {}", JSONUtil.toJsonStr(response));
+        sendMsgByClient(client,request);
     }
 
     public static void sendDingTalkMsgWithSign(String title,String token,String sign,String msg) {
+        long timestamp = System.currentTimeMillis();
+        String genSign;
         try {
-            long timestamp = System.currentTimeMillis();
-            String genSign = genSign(timestamp, sign);
-            DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/robot/send?access_token=" + token + "&timestamp=" + timestamp + "&sign=" + genSign);
-            OapiRobotSendRequest request = new OapiRobotSendRequest();
-            request.setMsgtype("markdown");
-            OapiRobotSendRequest.Markdown markdown = new OapiRobotSendRequest.Markdown();
-            markdown.setTitle(title);
-            markdown.setText(msg);
-            request.setMarkdown(markdown);
-            OapiRobotSendResponse response = client.execute(request);
-            //log.info("[DingTalkUtils][sendDingTalkMsg] response is {}", JSONUtil.toJsonStr(response));
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException | InvalidKeyException | ApiException e) {
-            log.error("[DingTalkUtils][sendDingTalkMsgWithSign] error is ",e);
-            throw new RuntimeException("钉钉消息发送失败");
+            genSign = genSign(timestamp, sign);
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException | InvalidKeyException e) {
+            log.error("[DingTalkUtils][sendDingTalkMsgWithSign] token is {}, sign is {},error is ", token,sign,e);
+            return;
         }
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/robot/send?access_token=" + token + "&timestamp=" + timestamp + "&sign=" + genSign);
+        OapiRobotSendRequest request = new OapiRobotSendRequest();
+        request.setMsgtype("markdown");
+        OapiRobotSendRequest.Markdown markdown = new OapiRobotSendRequest.Markdown();
+        markdown.setTitle(title);
+        // <font color=#0000FF>蓝色字体</font>
+        markdown.setText(msg);
+        request.setMarkdown(markdown);
+        sendMsgByClient(client,request);
     }
 
-    public static void sendDingTalkMsg(String token,String userId,String msg) throws Exception{
+    public static void sendDingTalkMsg(String token,String userId,String msg) {
         if (StringUtils.isBlank(token)) {
             token = "7b66a82f1620672a1f5b2229d536d41cd978fb9f949141df8b40cd3b8bc9dd54";
         }
@@ -108,11 +112,10 @@ public class DingTalkUtils {
                 "> ![screenshot](https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F2017-10-18%2F59e733be24fec.jpg&refer=http%3A%2F%2Fpic1.win4000.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1673529052&t=5763d086e9fd67b4625a3699cde8229f)\n"  +
                 "> [百度一下](http://www.baidu.com/) \n");
         request.setMarkdown(markdown);
-        OapiRobotSendResponse response = client.execute(request);
-        //log.info("[DingTalkUtils][sendDingTalkMsg] response is {}", JSONUtil.toJsonStr(response));
+        sendMsgByClient(client,request);
     }
 
-    public static void sendDingTalkChatMsg(String msg) throws Exception {
+    public static void sendDingTalkChatMsg(String msg) {
         String token = "";
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/robot/send?access_token=" + token);
         OapiRobotSendRequest request = new OapiRobotSendRequest();
@@ -122,8 +125,23 @@ public class DingTalkUtils {
         markdown.setText("#### chat\n" +
                 "> "+ msg + "\n");
         request.setMarkdown(markdown);
-        OapiRobotSendResponse response = client.execute(request);
-        log.info("[DingTalkUtils][sendDingTalkChatMsg] response is {}", JSONUtil.toJsonStr(response));
+        sendMsgByClient(client,request);
+    }
+
+    private static void sendMsgByClient(DingTalkClient client,OapiRobotSendRequest request) {
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                OapiRobotSendResponse execute = client.execute(request);
+                log.info("[DingTalkUtils][sendMsgByClient] request is {}, execute is {}", JSONUtil.toJsonStr(request),JSONUtil.toJsonStr(execute));
+            } catch (ApiException e) {
+                log.error("[DingTalkUtils][sendMsgByClient] request is {}, error is ", JSONUtil.toJsonStr(request),e);
+            }
+            return null;
+        },ThreadExecutorPool.msgThreadPoolExecutor).whenComplete((result,ex) -> {
+            if (Objects.nonNull(ex)) {
+                log.error("[DingTalkUtils][sendMsgByClient] request is {}, error is ", JSONUtil.toJsonStr(request),ex);
+            }
+        });
     }
 
     private static String genSign(long timestamp,String secret) throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeyException {

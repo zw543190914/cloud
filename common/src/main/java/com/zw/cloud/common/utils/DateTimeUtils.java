@@ -3,6 +3,7 @@ package com.zw.cloud.common.utils;
 import com.alibaba.fastjson2.JSON;
 import com.zw.cloud.common.entity.dto.LocalDateDTO;
 import com.zw.cloud.common.entity.dto.LocalDateTimeDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
@@ -12,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
+@Slf4j
 public class DateTimeUtils {
 
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
@@ -21,13 +23,13 @@ public class DateTimeUtils {
     public static void main(String[] args) throws Exception{
         //获取秒数
         LocalDateTime now = LocalDateTime.now();
-        System.out.println(now);
+        System.out.println("now:" + now);
         Long second = now.toEpochSecond(ZoneOffset.of("+8"));
-        System.out.println(second);
+        System.out.println("now to second:" + second);
         //获取毫秒数
         Long milliSecond = now.toInstant(ZoneOffset.of("+8")).toEpochMilli();
         System.out.println("=========毫秒数===========");
-        System.out.println(milliSecond);
+        System.out.println("毫秒数:" + milliSecond);
         System.out.println(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
         System.out.println("=========毫秒数转为LocalDateTime===========");
         System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(milliSecond), ZoneId.systemDefault()));
@@ -38,54 +40,51 @@ public class DateTimeUtils {
         System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(milliSecond), ZoneId.of("UTC+8")));
         System.out.println("=========Instant===========");
         Instant instant = Instant.ofEpochSecond(second);
-        System.out.println(instant);
-        System.out.println(instant.atZone(ZoneId.systemDefault()));
-        System.out.println(ZoneId.systemDefault());
-        System.out.println(instant.toEpochMilli());
+        System.out.println("instant:" + instant);
+        System.out.println("instant atZone :" + instant.atZone(ZoneId.systemDefault()));
+        System.out.println("ZoneId :" + ZoneId.systemDefault());
+        System.out.println("instant.toEpochMilli:" + instant.toEpochMilli());
         System.out.println(Instant.parse("2021-11-03T20:37:30.00Z"));
         String date = "2017-03-08T12:30:54";
         LocalDateTime localdatetime = LocalDateTime.parse(date);
-        System.out.println("localdatetime:" + localdatetime);
+        System.out.println("LocalDateTime:" + localdatetime);
 
         LocalDateTime dateTime = LocalDateTime.of(localdatetime.getYear(), localdatetime.getMonth(), localdatetime.getDayOfMonth(), Integer.parseInt("09"), Integer.parseInt("59"), 0);
-        System.out.println(dateTime);
+        System.out.println("dateTime:" + dateTime);
         LocalDateTime localDateTime = now.minusHours(7);
         Duration between = Duration.between(localDateTime, now);
-        System.out.println(between.getSeconds());
+        System.out.println("between:" + between.getSeconds());
 
-        System.out.println(getNumOfMonth("2021-02"));
-        System.out.println("localdatetime2:" + LocalDateTime.now().toString());
+        System.out.println("根据年月（字符串）获取当前月的天数:" + getNumOfMonth("2021-02"));
+        System.out.println("LocalDateTime2:" + LocalDateTime.now());
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String localDateTimeStr = dateTimeFormatter.format(LocalDateTime.now());
         System.out.println("localDateTimeStr==" + localDateTimeStr);
         System.out.println(LocalDateTime.parse(localDateTimeStr,dateTimeFormatter));
 
-        System.out.println(3600 * 24 * 30 * 3);
-        String start = "2022-05-18T23:59:00";
-        LocalDateTime startTime = LocalDateTime.parse(start);
-        String end = "2022-05-19T23:59:00";
-        LocalDateTime endTime = LocalDateTime.parse(end);
-        String config = "2022-05-19T23:50:00";
-        LocalDateTime configTime = LocalDateTime.parse(config);
+        LocalDateTime startTime = LocalDateTime.parse("2022-05-18T23:59:00");
+        LocalDateTime endTime = LocalDateTime.parse("2022-05-19T23:59:00");
+        LocalDateTime configTime = LocalDateTime.parse("2022-05-19T23:50:00");
         List<LocalDateTimeDTO> localDateTimeDTOS = calBetweenTime(startTime, endTime, configTime);
         System.out.println("根据指定时间 切分时间:" + JSON.toJSONString(localDateTimeDTOS));
-        System.out.println(LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8")));
-        System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(1656915925000L), ZoneId.systemDefault()));
+        System.out.println("now to second:" + LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8")));
+        System.out.println("毫秒 转为 LocalDateTime:" + LocalDateTime.ofInstant(Instant.ofEpochMilli(1656915925000L), ZoneId.systemDefault()));
         Instant instant1 = Instant.ofEpochSecond(System.currentTimeMillis()/1000);
-        System.out.println(instant1);
+        System.out.println("毫秒 转为 Instant:" + instant1);
 
         System.out.println("=========时间间隔===========");
         Duration duration = Duration.between(LocalDateTime.parse("2022-05-18T23:58:20"), LocalDateTime.parse("2022-05-18T23:59:00"));
-        System.out.println(duration.toMinutes());
+        System.out.println("时间间隔 分钟数:" + duration.toMinutes());
         System.out.println("instant = " + instant + ",instant + 60s = " + instant.plusSeconds(60));
         Duration between1 = Duration.between(instant, instant.plusSeconds(60));
-        System.out.println(between1.toMinutes());
+        System.out.println("时间间隔 分钟数:" + between1.toMinutes());
         System.out.println(Duration.between(instant.plusSeconds(60), now.atZone(ZoneId.systemDefault()).toInstant()).toMinutes());
 
         between(LocalDateTime.parse("2023-04-03T18:47:00"),LocalDateTime.parse("2023-04-04T14:28:00"));
-        System.out.println("zero:" + transferTimeToZero(LocalDateTime.now()));
+        System.out.println("时分秒 置为0:" + transferTimeToZero(LocalDateTime.now()));
 
+        System.out.println("=========时间和字符串相互转换===========");
         System.out.println(parse2datetime("2023-04-03 18:47:02",null));
         System.out.println(parse2Str(LocalDateTime.now(),null));
         System.out.println(parse2date("2023-04-03"));
@@ -101,6 +100,17 @@ public class DateTimeUtils {
         List<LocalDateDTO> weekPeriodsByMonth = getWeekPeriodsByMonth(parse2date("2023-06-30"));
         System.out.println("按 自然周 拆分指定月份:" + JSON.toJSONString(weekPeriodsByMonth));
 
+        LocalDateTime configDateTime = parse2datetime("2023-07-04 23:50:00", DATE_TIME_PATTERN);
+        LocalDateTime currDateTime = parse2datetime("2023-07-04 23:58:00", DATE_TIME_PATTERN);
+        if (needMinusDays(configDateTime,currDateTime)) {
+            startTime = configDateTime.minusDays(1);
+        } else if (currDateTime.compareTo(configDateTime) < 0) {
+            log.info("当前时间<=当天配置时间");
+            return;
+        } else {
+            startTime = configDateTime;
+        }
+        System.out.println("定时任务执行时 和 配置的统计时间跨天处理 startTime:" + startTime.minusDays(1));
     }
 
     public static LocalDateTime dateToLocalDateTime(Date date) {
@@ -588,6 +598,22 @@ public class DateTimeUtils {
     public static LocalDateTime transferTimeToZero(LocalDateTime localDateTime) {
         return LocalDateTime.of(localDateTime.getYear(), localDateTime.getMonth(), localDateTime.getDayOfMonth(), 0, 0, 0);
         //return localDateTime.withHour(0).withMinute(0).withSecond(0).withNano(0);
+    }
+
+    /**
+     * 定时任务执行时 和 配置的统计时间跨天处理
+     */
+    public static boolean needMinusDays(LocalDateTime configTime,LocalDateTime now) {
+        // 30分钟后是否跨天
+        // 如果配置 统计时间 为 23:59 则下次定时任务执行时可能跨天
+        LocalDate localDate = configTime.plusMinutes(30).toLocalDate();
+        if (localDate.compareTo(configTime.toLocalDate()) == 0) {
+            // 30分钟没有跨天 配置时间在 23:30之前
+            return false;
+        }
+        // 出现跨天 此时配置时间>=23:30
+        // 判断当前时间是否 小于等于配置，如果小于等于,数据统计时间范围为: 配置时间-2天 到 配置时间前一天
+        return now.compareTo(configTime) <= 0;
     }
 
 }
