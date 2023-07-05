@@ -4,7 +4,6 @@ package com.zw.cloud.mybatis.plus.controller;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Sets;
-import com.zw.cloud.mybatis.plus.entity.Fc;
 import com.zw.cloud.mybatis.plus.entity.Tc;
 import com.zw.cloud.mybatis.plus.entity.vo.TcResultVO;
 import com.zw.cloud.mybatis.plus.service.api.ITcService;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -40,8 +38,8 @@ public class TcController {
     @Autowired
     private ITcService tcService;
 
-    @PostConstruct
-    //http://localhost:8080/tc/add
+    @GetMapping
+    //http://localhost:8082/tc
     public void add(){
         for (int i = 1; i <= 3; i++) {
             String url = "https://webapi.sporttery.cn/gateway/lottery/getHistoryPageListV1.qry?gameNo=85&provinceId=0&pageSize=30&isVerify=1&pageNo=" + i;

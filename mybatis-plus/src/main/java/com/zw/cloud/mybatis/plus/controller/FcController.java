@@ -7,6 +7,8 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.google.common.collect.Sets;
+import com.zw.cloud.common.utils.DingTalkUtils;
 import com.zw.cloud.mybatis.plus.entity.Fc;
 import com.zw.cloud.mybatis.plus.entity.Tc;
 import com.zw.cloud.mybatis.plus.entity.dto.FcDTO;
@@ -23,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -50,7 +51,7 @@ public class FcController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @PostConstruct
+    @GetMapping
     //http://localhost:8082/fc/insertFcList
     public void insertFcList() {
 
@@ -182,6 +183,50 @@ public class FcController {
                 .eq(Objects.nonNull(five),Fc::getFive,five)
                 .orderByDesc(Fc::getId);
         return fcService.list(queryWrapper);
+    }
+
+    @GetMapping(value = {"/queryList/{count}","/queryList/{count}/{id}"})
+    //http://localhost:8082/fc/queryList/5
+    public Map<String,Object> queryList(@PathVariable("count") Integer count,@PathVariable(required = false) Integer id) {
+        LambdaQueryWrapper<Fc> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.lt(Objects.nonNull(id),Fc::getId,id).orderByDesc(Fc::getId).last("limit " + count);
+        List<Fc> fcList = fcService.list(queryWrapper);
+        List<Integer> exitList = new ArrayList<>(60);
+        fcList.forEach(fc -> {
+            exitList.add(fc.getOne());
+            exitList.add(fc.getTwo());
+            exitList.add(fc.getThree());
+            exitList.add(fc.getFour());
+            exitList.add(fc.getFive());
+            exitList.add(fc.getSix());
+        });
+        Map<String,Object> result = new HashMap<>();
+        if (Objects.nonNull(id)) {
+            Fc fc = fcService.getById(id);
+            Set<Integer> code = new HashSet<>();
+            code.add(fc.getOne());
+            code.add(fc.getTwo());
+            code.add(fc.getThree());
+            code.add(fc.getFour());
+            code.add(fc.getFive());
+            code.add(fc.getSix());
+            Sets.SetView<Integer> difference = Sets.difference(code, Sets.newHashSet(exitList));
+            result.put("difference",difference);
+        }
+        Set<Integer> resultSet = new HashSet<>(8);
+        while (resultSet.size() < 6) {
+            Random random = new Random();
+            int index = random.nextInt(exitList.size());
+            resultSet.add(exitList.get(index));
+        }
+        List<Integer> resultList = resultSet.stream().sorted(Comparator.comparingInt(s -> s)).collect(Collectors.toList());
+        result.put("resultList", resultList);
+        StringBuilder msg = new StringBuilder("<font color=#FF0000>");
+        msg.append(resultList.stream().map(String::valueOf).collect(Collectors.joining(" ")))
+                .append("</font>").append("\n\n");
+
+        DingTalkUtils.sendDingTalkMsgWithSign("FC",msg.toString());
+        return result;
     }
 
     @GetMapping("/export")
