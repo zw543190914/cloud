@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN
@@ -31,10 +32,13 @@ public class FeishuMsgUtils {
 
     public static final String SECRET = "ADUmsMcaBv5eQj7lakis8e";
 
-    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeyException {
+    private static String br = "\n";
+
+    public static void main(String[] args) throws Exception {
         //sendMessage("这里是消息内容 \n 哈哈哈 ");
-        sendCardMessage("标题"," <font color='red'> ss  </font>  \n  hh ");
+        sendCardMessage("标题"," <font color='red'> ss  </font>   \n  hh ");
         //sendPostMessage("标题"," {color:#DE350B}ce{color}  \n  hh ");
+        TimeUnit.SECONDS.sleep(10);
     }
 
     public static void sendMessage(String msg) {
@@ -51,7 +55,7 @@ public class FeishuMsgUtils {
         msgContent.setText(msg);
         feishuMsgDTO.setContent(msgContent);
         //发送post请求
-        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+        CompletableFuture.supplyAsync(() -> {
             return HttpClientUtils.doPostJson(WEB_HOOK_URL, JSON.toJSONString(feishuMsgDTO), null);
             //return HttpRequest.post(WEB_HOOK_URL).body(JSON.toJSONString(feishuMsgDTO), "application/json;charset=UTF-8").execute().body();
         }, ThreadExecutorPool.msgThreadPoolExecutor).whenComplete((result, ex) -> {
@@ -59,13 +63,7 @@ public class FeishuMsgUtils {
                 log.error("[FeishuMsgUtils][sendMessage] error is ", ex);
             }
         });
-        /*try {
-            future.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }*/
+
     }
 
     public static void sendCardMessage(String titleStr,String msg) {
@@ -93,7 +91,7 @@ public class FeishuMsgUtils {
 
         feishuCardMsgDTO.setCard(card);
         //发送post请求
-        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+        CompletableFuture.supplyAsync(() -> {
             return HttpClientUtils.doPostJson(WEB_HOOK_URL, JSON.toJSONString(feishuCardMsgDTO), null);
             //return HttpRequest.post(WEB_HOOK_URL).body(JSON.toJSONString(feishuMsgDTO), "application/json;charset=UTF-8").execute().body();
         }, ThreadExecutorPool.msgThreadPoolExecutor).whenComplete((result, ex) -> {
@@ -101,13 +99,6 @@ public class FeishuMsgUtils {
                 log.error("[FeishuMsgUtils][sendCardMessage] error is ", ex);
             }
         });
-        /*try {
-            future.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }*/
     }
 
     public static void sendPostMessage(String titleStr,String msg) {
@@ -139,7 +130,7 @@ public class FeishuMsgUtils {
 
         feishuPostMsgDTO.setContent(outContent);
         //发送post请求
-        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+        CompletableFuture.supplyAsync(() -> {
             return HttpClientUtils.doPostJson(WEB_HOOK_URL, JSON.toJSONString(feishuPostMsgDTO), null);
             //return HttpRequest.post(WEB_HOOK_URL).body(JSON.toJSONString(feishuMsgDTO), "application/json;charset=UTF-8").execute().body();
         }, ThreadExecutorPool.msgThreadPoolExecutor).whenComplete((result, ex) -> {
@@ -147,13 +138,7 @@ public class FeishuMsgUtils {
                 log.error("[FeishuMsgUtils][sendPostMessage] error is ", ex);
             }
         });
-       /* try {
-            future.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }*/
+
     }
 
     private static String genSign() throws NoSuchAlgorithmException, InvalidKeyException {
