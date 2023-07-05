@@ -7,7 +7,6 @@ import com.dingtalk.api.request.OapiRobotSendRequest;
 import com.dingtalk.api.response.OapiRobotSendResponse;
 import com.taobao.api.ApiException;
 import com.zw.cloud.common.thread.pool.ThreadExecutorPool;
-import com.zw.cloud.common.utils.http.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
@@ -37,6 +36,13 @@ public class DingTalkUtils {
     public static void main(String[] args) throws Exception {
         //System.out.println(genSign(System.currentTimeMillis(), "SEC1ded33d7e58ef4aa813d074e7e24e7df83d9427ee7496d819bdff256ceda1583"));
         //sendDingTalkMsg("7b66a82f1620672a1f5b2229d536d41cd978fb9f949141df8b40cd3b8bc9dd54",DingTalkUtils.class,"sendDingTalkMsg",null,new RuntimeException("running exception..."));
+        //红色：#FF0000
+        //橙色：#FFA500
+        //黄色：#FFFF00
+        //绿色：#008000
+        //蓝色：#0000FF
+        //靛色：#4B0082
+        //紫色：#800080
         sendDingTalkMsgWithSign("标题","3a93469afdb2c38e22f0944e7f61a9b4d2e95a0138901d813ce6fe2c33dd1145","SECd51ae59f656260a2f859e4e149a54e120c8673a9aa789cf60f7ee20f09048a49","<font color=#0000FF>哈哈哈</font> \n\n  嘻嘻");
         TimeUnit.SECONDS.sleep(10);
     }
@@ -77,6 +83,10 @@ public class DingTalkUtils {
         sendMsgByClient(client,request);
     }
 
+    public static void sendDingTalkMsgWithSign(String title,String msg) {
+        sendDingTalkMsgWithSign(title,"3a93469afdb2c38e22f0944e7f61a9b4d2e95a0138901d813ce6fe2c33dd1145","SECd51ae59f656260a2f859e4e149a54e120c8673a9aa789cf60f7ee20f09048a49",msg);
+    }
+
     public static void sendDingTalkMsgWithSign(String title,String token,String sign,String msg) {
         long timestamp = System.currentTimeMillis();
         String genSign;
@@ -94,6 +104,10 @@ public class DingTalkUtils {
         // <font color=#0000FF>蓝色字体</font>
         markdown.setText(msg);
         request.setMarkdown(markdown);
+
+        OapiRobotSendRequest.At at = new OapiRobotSendRequest.At();
+        at.setIsAtAll(true);
+        request.setAt(at);
         sendMsgByClient(client,request);
     }
 
