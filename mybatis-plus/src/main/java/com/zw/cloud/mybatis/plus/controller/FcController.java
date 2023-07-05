@@ -186,12 +186,13 @@ public class FcController {
     }
 
     @GetMapping(value = {"/queryList/{count}","/queryList/{count}/{id}"})
-    //http://localhost:8082/fc/queryList/5
+    //http://localhost:8082/fc/queryList/5/2023076
     public Map<String,Object> queryList(@PathVariable("count") Integer count,@PathVariable(required = false) Integer id) {
         LambdaQueryWrapper<Fc> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.lt(Objects.nonNull(id),Fc::getId,id).orderByDesc(Fc::getId).last("limit " + count);
         List<Fc> fcList = fcService.list(queryWrapper);
         List<Integer> exitList = new ArrayList<>(60);
+        List<Integer> blueList = new ArrayList<>();
         fcList.forEach(fc -> {
             exitList.add(fc.getOne());
             exitList.add(fc.getTwo());
@@ -199,6 +200,7 @@ public class FcController {
             exitList.add(fc.getFour());
             exitList.add(fc.getFive());
             exitList.add(fc.getSix());
+            blueList.add(fc.getSeven());
         });
         Map<String,Object> result = new HashMap<>();
         if (Objects.nonNull(id)) {
@@ -221,8 +223,11 @@ public class FcController {
         }
         List<Integer> resultList = resultSet.stream().sorted(Comparator.comparingInt(s -> s)).collect(Collectors.toList());
         result.put("resultList", resultList);
+        result.put("blueList",blueList);
         StringBuilder msg = new StringBuilder("<font color=#FF0000>");
         msg.append(resultList.stream().map(String::valueOf).collect(Collectors.joining(" ")))
+                .append("</font>").append("\n\n")
+                .append("<font color=#0000FF>").append(blueList.stream().map(String::valueOf).collect(Collectors.joining(" ")))
                 .append("</font>").append("\n\n");
 
         DingTalkUtils.sendDingTalkMsgWithSign("FC",msg.toString());
