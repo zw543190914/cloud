@@ -8,6 +8,7 @@ import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Sets;
+import com.zw.cloud.common.utils.DateTimeUtils;
 import com.zw.cloud.common.utils.DingTalkUtils;
 import com.zw.cloud.mybatis.plus.entity.Fc;
 import com.zw.cloud.mybatis.plus.entity.Tc;
@@ -18,6 +19,8 @@ import com.zw.cloud.mybatis.plus.service.api.ITcService;
 import com.zw.cloud.mybatis.plus.util.BeanUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +33,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -51,7 +55,8 @@ public class FcController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @GetMapping
+    @Scheduled(fixedDelay = 1,timeUnit = TimeUnit.HOURS)
+    @Async
     //http://localhost:8082/fc/insertFcList
     public void insertFcList() {
 
@@ -186,7 +191,7 @@ public class FcController {
     }
 
     @GetMapping(value = {"/queryList/{count}","/queryList/{count}/{id}"})
-    //http://localhost:8082/fc/queryList/5/2023076
+    //http://localhost:8082/fc/queryList/5
     public Map<String,Object> queryList(@PathVariable("count") Integer count,@PathVariable(required = false) Integer id) {
         LambdaQueryWrapper<Fc> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.lt(Objects.nonNull(id),Fc::getId,id).orderByDesc(Fc::getId).last("limit " + count);
@@ -224,11 +229,21 @@ public class FcController {
         List<Integer> resultList = resultSet.stream().sorted(Comparator.comparingInt(s -> s)).collect(Collectors.toList());
         result.put("resultList", resultList);
         result.put("blueList",blueList);
-        StringBuilder msg = new StringBuilder("<font color=#FF0000>");
-        msg.append(resultList.stream().map(String::valueOf).collect(Collectors.joining(" ")))
+        Fc laster = fcList.get(0);
+        StringBuilder msg = new StringBuilder("最新一期: \n\n");
+        msg.append(String.format("%02d",laster.getOne())).append(" ")
+                .append(String.format("%02d",laster.getTwo())).append(" ")
+                .append(String.format("%02d",laster.getThree())).append(" ")
+                .append(String.format("%02d",laster.getFour())).append(" ")
+                .append(String.format("%02d",laster.getFive())).append(" ")
+                .append(String.format("%02d",laster.getSix())).append(" ")
+                .append(String.format("%02d",laster.getSeven())).append(" ")
+                .append("\n\n")
+                .append("<font color=#FF0000>").append(resultList.stream().map(s -> String.format("%02d",s)).collect(Collectors.joining(" ")))
                 .append("</font>").append("\n\n")
                 .append("<font color=#0000FF>").append(blueList.stream().map(String::valueOf).collect(Collectors.joining(" ")))
-                .append("</font>").append("\n\n");
+                .append("</font>").append("\n\n")
+                .append(DateTimeUtils.parse2Str(laster.getUpdateTime(),DateTimeUtils.DATE_TIME_PATTERN));
 
         DingTalkUtils.sendDingTalkMsgWithSign("FC",msg.toString());
         return result;

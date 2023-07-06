@@ -9,6 +9,8 @@ import com.zw.cloud.mybatis.plus.entity.vo.TcResultVO;
 import com.zw.cloud.mybatis.plus.service.api.ITcService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,7 +41,8 @@ public class TcController {
     @Autowired
     private ITcService tcService;
 
-    @GetMapping
+    @Scheduled(fixedDelay = 1,timeUnit = TimeUnit.HOURS)
+    @Async
     //http://localhost:8082/tc
     public void add(){
         for (int i = 1; i <= 3; i++) {
