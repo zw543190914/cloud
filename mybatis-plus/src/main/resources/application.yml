@@ -118,8 +118,8 @@ mybatis-plus:
       #logic-not-delete-value: 0
 logging:
   config: classpath:log/logback-spring.xml
-  file:
-    path: D:/logs/cloud
+#  file:
+#    path: D:/logs/cloud
   level:
 #    单独给dao下目录配置debug模式 打印sql日志
     com:
