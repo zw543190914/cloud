@@ -12,10 +12,6 @@
     <name>xxl-job-admin</name>
     <description>xxl-job</description>
 
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
-
     <dependencies>
         <!-- starter-web：spring-webmvc + autoconfigure + logback + yaml + tomcat -->
         <dependency>
