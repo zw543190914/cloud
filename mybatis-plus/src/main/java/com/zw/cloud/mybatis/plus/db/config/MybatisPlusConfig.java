@@ -1,7 +1,6 @@
 package com.zw.cloud.mybatis.plus.db.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
-import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusPropertiesCustomizer;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
@@ -9,14 +8,19 @@ import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.zw.cloud.mybatis.plus.cache.ShareCache;
 import com.zw.cloud.mybatis.plus.db.AutoFillHandler;
 import com.zw.cloud.mybatis.plus.db.MybatisPlusUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class MybatisPlusConfig {
+
+    @Autowired
+    private ShareCache shareCache;
 
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
@@ -33,11 +37,14 @@ public class MybatisPlusConfig {
     }
 
     /**
-     * 新的分页插件,一缓和二缓遵循mybatis的规则,需要设置 MybatisConfiguration#useDeprecatedExecutor = false 避免缓存出现问题
+     * sql 拦截
      */
    /* @Bean
-    public ConfigurationCustomizer configurationCustomizer() {
-        return configuration -> configuration.setUseDeprecatedExecutor(false);
+    ConfigurationCustomizer sqlInterceptorConfigurationCustomizer() {
+        SqlQueryInterceptor sqlQueryInterceptor = new SqlQueryInterceptor(shareCache);
+        return (configuration) -> {
+            configuration.addInterceptor(sqlQueryInterceptor);
+        };
     }*/
 
 
