@@ -46,16 +46,21 @@ select * from user_info_0 where  json_extract(other,"$[*].name") like CONCAT('%'
 -- 过滤出 assistant不为[]的数据
 SELECT id,assistant FROM `base_tenter_craft` WHERE JSON_LENGTH(assistant) > 0;
 
+-- JSON 对象过滤
+SELECT * FROM base_dictionary WHERE JSON_EXTRACT(external_filed, '$.multipleProduction') = false;
+SELECT * FROM base_dictionary WHERE org_code = 'devController' and `group_code` = 'CRAFT_TYPE_CONFIG'
+and JSON_CONTAINS(external_filed,JSON_OBJECT('multipleProduction', false));
+
 -- 将数据插入其他表
 insert into `product_report_search_condition` (name,org_code,type,name_id,create_time,update_time)
 SELECT customer_name as name, org_code,'customerName' as type,customer_no as name_id,now(),now()
 FROM  product_record where customer_name is not null
 GROUP BY customer_name;
 
--- 将所有org_code数据中增加一个type13的数据。 按照orgCode分组，向每一组中都新增一条数据
+-- 将所有org_code数据中增加一个type=27的数据。 按照orgCode分组，向每一组中都新增一条数据
 INSERT INTO `dyeing_stenter`.`base_shaping_param_config` (`name`, `product_card_field`, `status`, `sort`, `remark`, `module`, `type`, `update_user`, `update_system`, `update_time`, `org_code`, `config_json`)
-SELECT 'dryingRoomTempSetting', 0, 0, 2, '设定温度', '', 13, '陈启康', 'B4263529337148489E88A215BE562CF8', '2022-10-17 17:31:50', org_code , '{\"value\": \"˚C\", \"options\": [\"˚C\"], \"isRequire\": true}'
-FROM  `dyeing_stenter`.`base_shaping_param_config` where type = 13 GROUP BY org_code;
+SELECT 'canUpdateCraftType', 0, 0, 1, '生产中是否允许变更「工序类型」？', '', 27, 'system', 'system', NOW(), org_code , null
+FROM  `dyeing_stenter`.`base_shaping_param_config` where type = 1 GROUP BY org_code;
 
 -- 假如要将B表中的字段更新到A表中语句：
 update 库名.表A
