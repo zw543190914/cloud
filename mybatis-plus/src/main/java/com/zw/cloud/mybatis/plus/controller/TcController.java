@@ -41,7 +41,7 @@ public class TcController {
     @Autowired
     private ITcService tcService;
 
-    @Scheduled(fixedDelay = 1,timeUnit = TimeUnit.HOURS)
+    @Scheduled(cron = "30 01 9 * * ? ")
     @Async
     //http://localhost:8082/tc
     public void add(){

@@ -17,6 +17,7 @@ import com.zw.cloud.mybatis.plus.entity.dto.FcResultDTO;
 import com.zw.cloud.mybatis.plus.service.api.IFcService;
 import com.zw.cloud.mybatis.plus.service.api.ITcService;
 import com.zw.cloud.mybatis.plus.util.BeanUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -46,6 +47,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/fc")
+@Slf4j
 public class FcController {
 
     @Autowired
@@ -55,7 +57,7 @@ public class FcController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Scheduled(fixedDelay = 1,timeUnit = TimeUnit.HOURS)
+    @Scheduled(cron = "30 21 9 * * ? ")
     @Async
     //http://localhost:8082/fc/insertFcList
     public void insertFcList() {
@@ -78,10 +80,12 @@ public class FcController {
             try {
                 fcService.save(build);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("[insertFcList] error is ",e);
+                queryList(5,null);
                 return;
             }
         }
+        queryList(5,null);
 
     }
 
