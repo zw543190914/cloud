@@ -45,9 +45,12 @@ SELECT * FROM `user_info` where JSON_CONTAINS(description,JSON_OBJECT('preOperat
 select * from user_info_0 where  json_extract(other,"$[*].name") like CONCAT('%','test','%');
 -- 过滤出 assistant不为[]的数据
 SELECT id,assistant FROM `base_tenter_craft` WHERE JSON_LENGTH(assistant) > 0;
-
--- JSON 对象过滤
+-- mysql表中有 config_json 字段，数据类似为json 格式为["1","devController1"] 写一个sql 过滤 config_json 字段中数据为 1的数据
+SELECT org_code FROM `base_system_config` WHERE config_type_code = 'associatedFactoryConfig'
+                                            and JSON_CONTAINS(config_json,'"devController1"');
+-- JSON 对象过滤 {"multipleProduction": false}
 SELECT * FROM base_dictionary WHERE JSON_EXTRACT(external_filed, '$.multipleProduction') = false;
+
 SELECT * FROM base_dictionary WHERE org_code = 'devController' and `group_code` = 'CRAFT_TYPE_CONFIG'
 and JSON_CONTAINS(external_filed,JSON_OBJECT('multipleProduction', false));
 
