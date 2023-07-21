@@ -1,25 +1,34 @@
 package com.zw.cloud.tools.threadlocal;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class InheritableThreadLocalUtil {
 
-    private static final InheritableThreadLocal<String> THREAD_LOCAL = new InheritableThreadLocal<>();
+    private static final InheritableThreadLocal<Map<String, String>> THREAD_LOCAL = new InheritableThreadLocal<>() {
+        @Override
+        protected Map<String, String> initialValue() {
+            Map<String, String> map = new ConcurrentHashMap();
+            return map;
+        }
+    };
 
-    //设置线程需要保存的值
-    public static void setValue (String str) {
-        THREAD_LOCAL.set(str);
-    }
-    //获取线程中保存的值
-    public static String getValue() {
-        return THREAD_LOCAL.get();
-    }
-    //移除线程中保存的值
-    public static void remove() {
-        THREAD_LOCAL.remove();
+    public static String getValue(String key) {
+        return (String)((Map)THREAD_LOCAL.get()).get(key);
     }
 
+    public static void setValue(String key, String value) {
+        if (key != null && value != null) {
+            ((Map)THREAD_LOCAL.get()).put(key, value);
+        }
+    }
+
+    public static void clear() {
+        ((Map)THREAD_LOCAL.get()).clear();
+    }
     public static void main(String[] args) {
-        InheritableThreadLocalUtil.setValue("data");
-        new Thread(() -> System.out.println(InheritableThreadLocalUtil.getValue())).start();
+        InheritableThreadLocalUtil.setValue("key","data");
+        new Thread(() -> System.out.println(InheritableThreadLocalUtil.getValue("key"))).start();
 
         RequestHolder.setValue("data1");
         new Thread(() -> System.out.println(RequestHolder.getValue())).start();
