@@ -1,8 +1,11 @@
 package com.zw.cloud.kafka.service;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.zw.cloud.kafka.entity.ProductRecord;
+import com.zw.cloud.kafka.entity.WorkStatusMqttKafkaContentDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -26,7 +29,44 @@ public class KafkaConsumerService {
             return;
         }
         String message = value.toString();
-        //TimeUnit.MILLISECONDS.sleep(50);
+        WorkStatusMqttKafkaContentDTO mqttKafkaContentDTO = JSON.parseObject(message, WorkStatusMqttKafkaContentDTO.class);
+        if (Objects.isNull(mqttKafkaContentDTO.getSdata())) {
+            log.warn("[KafkaConsumer][onMessage] received message sdata attribute is empty!");
+            return;
+        }
+        // 兼容新旧两种消息格式
+        WorkStatusMqttKafkaContentDTO.Msg msg = mqttKafkaContentDTO.getMData().getMsg();
+        String subTopic;
+        if (Objects.nonNull(msg) && StringUtils.isNotEmpty(msg.getSubTopic())) {
+            subTopic = "/up/" + msg.getSubTopic().replace("_", "/");
+        } else {
+            subTopic = mqttKafkaContentDTO.getMData().getMqtt().getTopic();
+        }
+        //基本参数校验
+        String sData = JSON.toJSONString(mqttKafkaContentDTO.getSdata());
+        JSONObject sdataObject = JSON.parseObject(sData);
+        String orgCode = sdataObject.getString("orgCode");
+        //工厂ID
+        if (StringUtils.isBlank(orgCode)) {
+            log.warn("[KafkaConsumer][onMessage] orgCode is empty,skip execution!");
+            return;
+        }
+
+        //消息内容
+        String data = sdataObject.getString("data");
+        if (StringUtils.isBlank(data)) {
+            log.warn("[KafkaConsumer][onMessage] data subject is empty,skip execution!");
+            return;
+        }
+        //业务类型
+        String businessType = sdataObject.getString("businessType");
+        if (StringUtils.isBlank(businessType)) {
+            log.warn("[KafkaConsumer][onMessage] businessType is empty,skip execution!");
+            return;
+        }
+
+        String msgId = sdataObject.getString("msgId");
+        log.info("[KafkaConsumerService][onMessage] subTopic is {},businessType is {},msgId is {}",subTopic,businessType,msgId);
 
     }
 
