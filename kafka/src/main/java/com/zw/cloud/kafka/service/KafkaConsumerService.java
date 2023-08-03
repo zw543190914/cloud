@@ -31,7 +31,7 @@ public class KafkaConsumerService {
         String message = value.toString();
         WorkStatusMqttKafkaContentDTO mqttKafkaContentDTO = JSON.parseObject(message, WorkStatusMqttKafkaContentDTO.class);
         if (Objects.isNull(mqttKafkaContentDTO.getSdata())) {
-            log.warn("[KafkaConsumer][onMessage] received message sdata attribute is empty!");
+            log.warn("[KafkaConsumerService][onMessage] received message sdata attribute is empty!");
             return;
         }
         // 兼容新旧两种消息格式
@@ -48,20 +48,20 @@ public class KafkaConsumerService {
         String orgCode = sdataObject.getString("orgCode");
         //工厂ID
         if (StringUtils.isBlank(orgCode)) {
-            log.warn("[KafkaConsumer][onMessage] orgCode is empty,skip execution!");
+            log.warn("[KafkaConsumerService][onMessage] orgCode is empty,skip execution!");
             return;
         }
 
         //消息内容
         String data = sdataObject.getString("data");
         if (StringUtils.isBlank(data)) {
-            log.warn("[KafkaConsumer][onMessage] data subject is empty,skip execution!");
+            log.warn("[KafkaConsumerService][onMessage] data subject is empty,skip execution!");
             return;
         }
         //业务类型
         String businessType = sdataObject.getString("businessType");
         if (StringUtils.isBlank(businessType)) {
-            log.warn("[KafkaConsumer][onMessage] businessType is empty,skip execution!");
+            log.warn("[KafkaConsumerService][onMessage] businessType is empty,skip execution!");
             return;
         }
 
