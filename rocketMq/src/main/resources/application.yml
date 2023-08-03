@@ -24,7 +24,7 @@ rocketmq:
 
 logging:
   config: classpath:log/logback-spring.xml
-  file:
-    path: D:/logs/cloud
+#  file:
+#    path: D:/logs/cloud
   level:
     root: info
