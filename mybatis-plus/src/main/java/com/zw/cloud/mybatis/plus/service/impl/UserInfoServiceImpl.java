@@ -359,6 +359,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     @Override
+    public List<UserInfo> queryByOrgCode(String orgCode) {
+        return baseMapper.queryByOrgCode(orgCode);
+    }
+
+    @Override
     public Map<String, Object> queryUserData() {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT sum(if(pt_quantity is null,0,pt_quantity)) ptQuantityTotal").append(",");

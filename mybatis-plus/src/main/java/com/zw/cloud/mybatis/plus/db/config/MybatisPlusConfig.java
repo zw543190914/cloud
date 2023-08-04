@@ -1,6 +1,7 @@
 package com.zw.cloud.mybatis.plus.db.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusPropertiesCustomizer;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 import com.zw.cloud.mybatis.plus.cache.ShareCache;
 import com.zw.cloud.mybatis.plus.db.AutoFillHandler;
 import com.zw.cloud.mybatis.plus.db.MybatisPlusUtil;
+import com.zw.cloud.mybatis.plus.interceptor.SqlQueryInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,13 +41,13 @@ public class MybatisPlusConfig {
     /**
      * sql 拦截
      */
-   /* @Bean
+    @Bean
     ConfigurationCustomizer sqlInterceptorConfigurationCustomizer() {
         SqlQueryInterceptor sqlQueryInterceptor = new SqlQueryInterceptor(shareCache);
         return (configuration) -> {
             configuration.addInterceptor(sqlQueryInterceptor);
         };
-    }*/
+    }
 
 
     /**

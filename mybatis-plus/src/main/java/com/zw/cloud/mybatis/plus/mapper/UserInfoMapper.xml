@@ -83,4 +83,8 @@
         </foreach>
         on duplicate key update name=values(name), age=values(age), bir=values(bir),other=values(other),update_time = values(update_time)
     </insert>
+
+    <select id="queryByOrgCode" resultMap="BaseResultMap">
+        select * from user_info_0 where org_code = #{orgCode}
+    </select>
 </mapper>

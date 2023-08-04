@@ -52,6 +52,8 @@ public interface IUserInfoService extends IService<UserInfo> {
 
     List<UserInfo> queryJsonDataLike(String name);
 
+    List<UserInfo> queryByOrgCode(String orgCode);
+
     IPage<UserInfo> queryAllDataTest(Integer pageNo, Integer pageSize);
 
     Map<String, Object> queryUserData();

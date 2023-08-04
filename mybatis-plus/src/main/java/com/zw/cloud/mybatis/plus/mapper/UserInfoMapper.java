@@ -24,6 +24,7 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
 
     List<UserInfo> queryJsonDataLike(@Param("userInfo") UserInfo userInfo);
 
+    List<UserInfo> queryByOrgCode(String orgCode);
 
     @Select("select * from user_info_0 where id = #{id} for update;")
     UserInfo queryByIdForUpdate(@Param("id") Long id);

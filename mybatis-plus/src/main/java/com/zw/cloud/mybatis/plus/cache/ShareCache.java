@@ -41,7 +41,7 @@ public class ShareCache {
 
     private List<String> queryShareList(String key) {
         log.info("[ShareCache][queryShareList] ");
-        return Lists.newArrayList("zw","zw1");
+        return Lists.newArrayList("devController","devController1");
     }
 
 }
