@@ -96,12 +96,16 @@ Date.prototype.format = function(fmt) {
     		if (data == null) {
     			alert("获取用户信息失败")
 			}
-    		user = data.username;
-    		uid = data.id;
+			if (data.code !== 200) {
+				alert("获取用户信息失败")
+			}
+			console.log(JSON.stringify(data))
+    		user = data.data.username;
+    		uid = data.data.id;
     		$("#user").html(user);
     		
 	        if ('WebSocket' in window) {
-				websocket = new WebSocket("ws://127.0.0.1:18092/test/oneToMany/"+user);
+				websocket = new WebSocket("ws://192.168.0.107:18092/test/oneToMany/"+user);
 			}
 			websocket.onerror = function() {
 				$("#log-container").append("<div class='bg-info'><label class='text-danger'>"+"系统提示"+"&nbsp;"+"  "+"</label><div class='text-success'>"+"WebSocket连接发生错误,检查用户是否已经登陆"+"</div></div><br>");
@@ -138,9 +142,9 @@ Date.prototype.format = function(fmt) {
 	        };
 	        
 	        $.post("/onlineUsers?currentUser="+user,function(data){
-    		for(var i=0;i<data.length;i++)
-    			$("#users").append('<a href="#" onclick="talk(this)" class="list-group-item">'+data[i]+'</a>');
-    		});
+				for(var i=0;i<data.data.length;i++)
+					$("#users").append('<a href="#" onclick="talk(this)" class="list-group-item">'+data.data[i]+'</a>');
+				});
     	
     	});
     	
