@@ -41,4 +41,26 @@ public class BeanUtils extends cn.hutool.core.bean.BeanUtil {
 
     }
 
+    public static void copyByCopyFieldOnTarget(Object source, Object target) {
+        Class<?> sourceClass = source.getClass();
+        Class<?> targetClass = target.getClass();
+        Field[] targetFields = targetClass.getDeclaredFields();
+        for (Field targetField : targetFields) {
+            CopyField annotation = targetField.getAnnotation(CopyField.class);
+            if (Objects.isNull(annotation)) {
+                continue;
+            }
+            targetField.setAccessible(true);
+            String sourceFieldName = annotation.sourceFieldName();
+            try {
+                Field sourceField = sourceClass.getDeclaredField(sourceFieldName);
+                sourceField.setAccessible(true);
+                targetField.set(target,sourceField.get(source));
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                log.warn("[BeanUtils][copyByCopyFieldOnTarget]sourceField is {},targetFieldName is {},copy error is ",sourceFieldName,targetField.getName(),e);
+            }
+        }
+
+    }
+
 }

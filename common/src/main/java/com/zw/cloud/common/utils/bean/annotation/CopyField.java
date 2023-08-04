@@ -16,4 +16,9 @@ public @interface CopyField {
      */
     String targetFieldName() default "";
 
+    /**
+     * 源字段名称
+     */
+    String sourceFieldName() default "";
+
 }

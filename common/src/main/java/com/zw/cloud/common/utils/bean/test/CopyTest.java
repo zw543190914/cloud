@@ -15,9 +15,14 @@ public class CopyTest {
         studentVO.setNm("zw");
         studentVO.setId(1L);
         studentVO.setBir(LocalDateTime.now());
+
         Student student = new Student();
         BeanUtils.copyByCopyField(studentVO, student);
         System.out.println(JSON.toJSONString(student));
+
+        Student student1 = new Student();
+        BeanUtils.copyByCopyFieldOnTarget(studentVO, student1);
+        System.out.println(JSON.toJSONString(student1));
 
     }
 }
