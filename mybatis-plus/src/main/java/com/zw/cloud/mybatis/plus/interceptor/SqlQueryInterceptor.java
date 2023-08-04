@@ -51,7 +51,7 @@ public class SqlQueryInterceptor implements Interceptor {
             return invocation.proceed();
         }
         BoundSql boundSql = statementHandler.getBoundSql();
-        log.info("boundSql is {}",JSON.toJSONString(boundSql));
+        log.info("[SqlQueryInterceptor]boundSql is {}",JSON.toJSONString(boundSql));
         String oriSql = boundSql.getSql();
         try {
             String newSql = installSql(oriSql);
@@ -68,11 +68,14 @@ public class SqlQueryInterceptor implements Interceptor {
 
     String installSql(String sql) {
 
-        log.info("修改前的sql: {}", sql);
+        log.info("[SqlQueryInterceptor]修改前的sql: {}", sql);
         if (!StringUtils.containsIgnoreCase(sql,SQL_WHERE) || !StringUtils.containsIgnoreCase(sql,ORG_CODE)) {
             return sql;
         }
         String[] sqlParts = sql.split("(?i)where");
+        if (!StringUtils.containsIgnoreCase(sqlParts[1],ORG_CODE)) {
+            return sql;
+        }
         String replace = sqlParts[1].replace("org_code = ?", " (1=1 or org_code = ?) ");
         StringBuilder sqlBuild = new StringBuilder(sqlParts[0]);
         sqlBuild.append(SQL_WHERE).append(" org_code in (");
@@ -81,7 +84,7 @@ public class SqlQueryInterceptor implements Interceptor {
         orgCodeList.forEach(s -> sqlBuild.append("'").append(s).append("'").append(","));
 
         sql = sqlBuild.substring(0,sqlBuild.length() -1) + ") AND " + replace;
-        log.info("修改后的sql: {}", sql);
+        log.info("[SqlQueryInterceptor]修改后的sql: {}", sql);
         return sql;
     }
 
