@@ -2,6 +2,7 @@ package com.zw.cloud.tools.test;
 
 import com.alibaba.fastjson2.JSON;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.zw.cloud.tools.entity.User;
 
@@ -45,5 +46,13 @@ public class SetTest {
         Map<Long, String> map = Lists.newArrayList(user, user2, user3, user4,user5).stream().collect(Collectors.toMap(User::getId, User::getName, (v1, v2) -> v1));
         System.out.println(JSON.toJSONString(map));
 
+        Map<String,Object> oldMap = new HashMap<>();
+        oldMap.put("k1",new User());
+        Map<String,Object> newMap = new HashMap<>();
+        newMap.put("k1",new User());
+        System.out.println(Maps.difference(oldMap, newMap).areEqual());
+        oldMap.keySet().forEach(k -> oldMap.put(k,oldMap.get(k).toString()));
+        newMap.keySet().forEach(k -> newMap.put(k,newMap.get(k).toString()));
+        System.out.println(Maps.difference(oldMap, newMap).areEqual());
     }
 }

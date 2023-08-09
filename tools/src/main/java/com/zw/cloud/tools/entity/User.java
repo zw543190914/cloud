@@ -7,6 +7,7 @@ import com.alibaba.excel.annotation.write.style.HeadRowHeight;
 import com.zw.cloud.tools.bindcheckgroup.InsertCheckGroup;
 import com.zw.cloud.tools.bindcheckgroup.UpdateCheckGroup;
 import com.zw.cloud.tools.excel.converter.LocalDateTimeConverter;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +21,7 @@ import java.util.Date;
 @Setter
 @HeadRowHeight(value = 20)
 @ColumnWidth(value = 20)
+@EqualsAndHashCode
 public class User extends Base implements Serializable {
     @NotNull(message = "id is null",groups = {UpdateCheckGroup.class})
     @ExcelProperty(value = "id",index = 0)
