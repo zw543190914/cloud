@@ -45,7 +45,12 @@ SELECT * FROM `user_info` where JSON_CONTAINS(description,JSON_OBJECT('preOperat
 -- JSON_SEARCH
 -- mysql数据库有other字段，数据类型为JSON,格式为：{"matchList": [{"source": "颜色编号", "target": "颜色编号"}, {"source": "颜色名称", "target": "颜色名称"}, {"source": "坯布编号", "target": "坯布编号"}, {"source": "坯布名称", "target": "坯布名称"}, {"source": "潘通", "target": "潘通"}, {"source": "主光源", "target": "主光源"}, {"source": "辅光源", "target": "辅光源"}], "autoFabricStatus": 1}
 -- 使用 JSON_SEARCH 查询 other字段中，matchList下，source为 颜色编号 的数据
-SELECT * FROM `user_info_0` where JSON_SEARCH(other, 'all', '颜色编号', NULL, '$.matchList[*].source') IS NOT NULL;
+SELECT * FROM `user_info_0` where JSON_SEARCH(other, 'all', '颜色编号', NULL, '$.matchList[*].source') ;
+SELECT * FROM `user_info_0` where JSON_SEARCH(other, 'one', '颜色编号', NULL, '$**.source') ;
+-- JSON_SEARCH
+-- {"source": "颜色编号", "target": "颜色编号"}
+SELECT * FROM `user_info_0` where JSON_SEARCH(other, 'one', '颜色编号', NULL, '$**.source') ;
+
 -- json 数组模糊搜索
 select * from user_info_0 where  json_extract(other,"$[*].name") like CONCAT('%','test','%');
 -- 过滤出 assistant不为[]的数据
