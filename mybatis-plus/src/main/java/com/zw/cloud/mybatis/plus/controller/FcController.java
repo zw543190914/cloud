@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -57,12 +58,13 @@ public class FcController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Scheduled(cron = "30 21 9 * * ? ")
+    //@Scheduled(cron = "30 21 9 * * ? ")
+    @PostConstruct
     @Async
     //http://localhost:8082/fc/insertFcList
     public void insertFcList() {
 
-        String url = "http://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice?name=ssq&issueCount=100&issueStart=&issueEnd=&dayStart=&dayEnd=&pageNo=1&pageSize=30&systemType=PC";
+        String url = "http://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice?name=ssq&pageNo=1&pageSize=30&systemType=PC";
         String result = restTemplate.getForObject(url, String.class);
         FcResultDTO fcResultDTO = JSON.parseObject(result, FcResultDTO.class);
         if (Objects.isNull(fcResultDTO) || CollectionUtils.isEmpty(fcResultDTO.getResult())) {
@@ -197,7 +199,7 @@ public class FcController {
     @GetMapping(value = {"/sendMsg/{count}"})
     //http://localhost:8082/fc/sendMsg/5
     public void sendMsg(@PathVariable("count") Integer count) {
-        String url = "http://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice?name=ssq&issueCount=100&issueStart=&issueEnd=&dayStart=&dayEnd=&pageNo=1&pageSize=30&systemType=PC";
+        String url = "http://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice?name=ssq&pageNo=1&pageSize=30&systemType=PC";
         String result = restTemplate.getForObject(url, String.class);
         FcResultDTO fcResultDTO = JSON.parseObject(result, FcResultDTO.class);
         if (Objects.isNull(fcResultDTO) || CollectionUtils.isEmpty(fcResultDTO.getResult())) {

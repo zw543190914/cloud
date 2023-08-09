@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -41,11 +42,12 @@ public class TcController {
     @Autowired
     private ITcService tcService;
 
-    @Scheduled(cron = "30 01 9 * * ? ")
+    //@Scheduled(cron = "30 01 9 * * ? ")
+    @PostConstruct
     @Async
     //http://localhost:8082/tc
     public void add(){
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= 5; i++) {
             String url = "https://webapi.sporttery.cn/gateway/lottery/getHistoryPageListV1.qry?gameNo=85&provinceId=0&pageSize=30&isVerify=1&pageNo=" + i;
             String result = restTemplate.getForObject(url, String.class);
             TcResultVO tcResultVO = JSON.parseObject(result, TcResultVO.class);
