@@ -81,11 +81,11 @@ public class FcController {
                 fcService.save(build);
             } catch (Exception e) {
                 log.error("[insertFcList] error is ",e);
-                queryList(5,null);
+                queryList(5);
                 return;
             }
         }
-        queryList(5,null);
+        queryList(5);
 
     }
 
@@ -194,11 +194,38 @@ public class FcController {
         return fcService.list(queryWrapper);
     }
 
-    @GetMapping(value = {"/queryList/{count}","/queryList/{count}/{id}"})
+    @GetMapping(value = {"/sendMsg/{count}"})
+    //http://localhost:8082/fc/sendMsg/5
+    public void sendMsg(@PathVariable("count") Integer count) {
+        String url = "http://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice?name=ssq&issueCount=100&issueStart=&issueEnd=&dayStart=&dayEnd=&pageNo=1&pageSize=30&systemType=PC";
+        String result = restTemplate.getForObject(url, String.class);
+        FcResultDTO fcResultDTO = JSON.parseObject(result, FcResultDTO.class);
+        if (Objects.isNull(fcResultDTO) || CollectionUtils.isEmpty(fcResultDTO.getResult())) {
+            return;
+        }
+        List<FcResultDTO.FcDTO> fcDTOList = fcResultDTO.getResult();
+
+        List<Fc> fcList = new ArrayList<>(30);
+        for (FcResultDTO.FcDTO fcDTO : fcDTOList) {
+            Fc.FcBuilder builder = Fc.builder();
+            String[] split = fcDTO.getRed().split(",");
+            builder.id(Integer.parseInt(fcDTO.getCode())).one(Integer.parseInt(split[0]))
+                    .two(Integer.parseInt(split[1])).three(Integer.parseInt(split[2]))
+                    .four(Integer.parseInt(split[3])).five(Integer.parseInt(split[4]))
+                    .six(Integer.parseInt(split[5])).seven(Integer.parseInt(fcDTO.getBlue()));
+            Fc build = builder.build();
+            fcList.add(build);
+        }
+        fcList = fcList.stream().sorted(Comparator.comparing(Fc::getId).reversed()).collect(Collectors.toList());
+        fcList.subList(0,count);
+        randomNum(fcList);
+    }
+
+    @GetMapping(value = {"/queryList/{count}"})
     //http://localhost:8082/fc/queryList/5
-    public Map<String,Object> queryList(@PathVariable("count") Integer count,@PathVariable(required = false) Integer id) {
+    public Map<String,Object> queryList(@PathVariable("count") Integer count) {
         LambdaQueryWrapper<Fc> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.lt(Objects.nonNull(id),Fc::getId,id).orderByDesc(Fc::getId).last("limit " + count);
+        queryWrapper.orderByDesc(Fc::getId).last("limit " + count);
         List<Fc> fcList = fcService.list(queryWrapper);
         List<Integer> exitList = new ArrayList<>(60);
         List<Integer> blueList = new ArrayList<>();
@@ -211,19 +238,45 @@ public class FcController {
             exitList.add(fc.getSix());
             blueList.add(fc.getSeven());
         });
+        return randomNum(fcList);
+    }
+
+    @GetMapping("/export")
+    //http://localhost:8082/fc/export
+    public void export(HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("content-Type", "application/vnd.ms-excel");
+        response.setHeader("Content-Disposition",
+                "attachment;filename=" + URLEncoder.encode("fc.xlsx", String.valueOf(StandardCharsets.UTF_8)));
+        //新建ExcelWriter
+        ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream(),Fc.class).build();
+
+        WriteSheet sheet1 = EasyExcel.writerSheet(0, "fc").build();
+        List<Fc> fcList = fcService.list(null);
+        excelWriter.write(fcList, sheet1);
+
+        WriteSheet sheet2 = EasyExcel.writerSheet(1, "tc").build();
+        List<Tc> tcList = tcService.list(null);
+        List<Fc> fcs = BeanUtil.copyList(tcList, Fc.class);
+        excelWriter.write(fcs, sheet2);
+
+        //关闭流
+        excelWriter.finish();
+    }
+
+    private Map<String,Object> randomNum(List<Fc> fcList) {
+        List<Integer> exitList = new ArrayList<>(60);
+        List<Integer> blueList = new ArrayList<>();
+        fcList.forEach(fc -> {
+            exitList.add(fc.getOne());
+            exitList.add(fc.getTwo());
+            exitList.add(fc.getThree());
+            exitList.add(fc.getFour());
+            exitList.add(fc.getFive());
+            exitList.add(fc.getSix());
+            blueList.add(fc.getSeven());
+        });
         Map<String,Object> result = new HashMap<>();
-        if (Objects.nonNull(id)) {
-            Fc fc = fcService.getById(id);
-            Set<Integer> code = new HashSet<>();
-            code.add(fc.getOne());
-            code.add(fc.getTwo());
-            code.add(fc.getThree());
-            code.add(fc.getFour());
-            code.add(fc.getFive());
-            code.add(fc.getSix());
-            Sets.SetView<Integer> difference = Sets.difference(code, Sets.newHashSet(exitList));
-            result.put("difference",difference);
-        }
         Set<Integer> resultSet = new HashSet<>(8);
         while (resultSet.size() < 6) {
             Random random = new Random();
@@ -251,28 +304,5 @@ public class FcController {
 
         DingTalkUtils.sendDingTalkMsgWithSign("FC",msg.toString());
         return result;
-    }
-
-    @GetMapping("/export")
-    //http://localhost:8082/fc/export
-    public void export(HttpServletResponse response) throws IOException {
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("content-Type", "application/vnd.ms-excel");
-        response.setHeader("Content-Disposition",
-                "attachment;filename=" + URLEncoder.encode("fc.xlsx", String.valueOf(StandardCharsets.UTF_8)));
-        //新建ExcelWriter
-        ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream(),Fc.class).build();
-
-        WriteSheet sheet1 = EasyExcel.writerSheet(0, "fc").build();
-        List<Fc> fcList = fcService.list(null);
-        excelWriter.write(fcList, sheet1);
-
-        WriteSheet sheet2 = EasyExcel.writerSheet(1, "tc").build();
-        List<Tc> tcList = tcService.list(null);
-        List<Fc> fcs = BeanUtil.copyList(tcList, Fc.class);
-        excelWriter.write(fcs, sheet2);
-
-        //关闭流
-        excelWriter.finish();
     }
 }
