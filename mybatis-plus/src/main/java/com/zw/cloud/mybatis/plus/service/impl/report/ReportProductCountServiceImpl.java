@@ -20,6 +20,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFCell;
@@ -262,6 +263,18 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
                 }
             }
         }
+
+        //Excel隐藏  80-120行
+        /*for (Integer rowIndex = 80; rowIndex < 120; rowIndex++) {
+            Row row = sheet.getRow(rowIndex);
+            row.setZeroHeight(true);
+        }*/
+
+        //隐藏 第 5-7 列
+        /*for (int i = 4; i < 7; i++) {
+            sheet.setColumnHidden(i,true);
+        }*/
+
 
         return workbook;
     }
