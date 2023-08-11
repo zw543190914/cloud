@@ -12,14 +12,7 @@ import java.io.Serializable;
 
 import lombok.*;
 
-/**
- * <p>
- * 体彩
- * </p>
- *
- * @author zw
- * @since 2022-08-03
- */
+
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Builder
