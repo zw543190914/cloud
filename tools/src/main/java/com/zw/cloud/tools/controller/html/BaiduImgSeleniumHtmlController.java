@@ -1,14 +1,13 @@
 package com.zw.cloud.tools.controller.html;
 
+import com.google.common.collect.Lists;
 import com.zw.cloud.common.entity.vo.ImgAttachmentVO;
 import com.zw.cloud.common.utils.file.FileUtils;
 import com.zw.cloud.common.utils.bean.BeanUtils;
 import com.zw.cloud.common.utils.selenium.BaiduImgSeleniumHtmlUtils;
 import com.zw.cloud.tools.entity.img.ImgAttachment;
-import com.zw.cloud.tools.service.api.img.IImgAttachmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +20,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/html/selenium")
 public class BaiduImgSeleniumHtmlController {
 
-    @Autowired
-    private IImgAttachmentService imgAttachmentService;
 
     @GetMapping("/queryImg/{key}")
     //http://localhost:9040/html/selenium/queryImg/青春校园
@@ -42,7 +39,6 @@ public class BaiduImgSeleniumHtmlController {
             imgAttachment.setType(key);
             return attachment;
         }).collect(Collectors.toList());
-        imgAttachmentService.saveBatch(attachmentList);
         stopWatch.stop();
         stopWatch.start("t3");
         imgDTOList.parallelStream().forEach(baiduImgDTO -> FileUtils.downLoadImage(baiduImgDTO.getUrl(),"D:\\img\\",baiduImgDTO.getTitle()));
@@ -53,7 +49,8 @@ public class BaiduImgSeleniumHtmlController {
     @GetMapping("/downloadImg")
     //http://localhost:9040/html/selenium/downloadImg
     public void downloadImg() {
-        List<ImgAttachment> imgAttachmentList = imgAttachmentService.list();
+        //List<ImgAttachment> imgAttachmentList = imgAttachmentService.list();
+        List<ImgAttachment> imgAttachmentList = Lists.newArrayList();
         imgAttachmentList.parallelStream().forEach(baiduImgDTO -> FileUtils.downloadFileFromNet(baiduImgDTO.getUrl(),"D:\\img\\",baiduImgDTO.getTitle()));
     }
 }

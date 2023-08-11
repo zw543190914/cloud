@@ -1,8 +1,6 @@
 package com.zw.cloud.tools.controller.excel;
 
 
-import com.zw.cloud.tools.dao.TcDao;
-import com.zw.cloud.tools.dao.UserMapper;
 import com.zw.cloud.tools.entity.User;
 import com.zw.cloud.tools.handler.poi.SheetHandler;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +30,6 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -44,9 +41,6 @@ import java.util.*;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ExcelController {
 
-    private final UserMapper mapper;
-
-    private final TcDao tcMapper;
 
     @PostMapping("/import")
     //http://localhost:9040/tools/poi/excel/import

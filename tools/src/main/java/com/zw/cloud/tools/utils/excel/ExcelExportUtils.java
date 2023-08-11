@@ -3,7 +3,7 @@ package com.zw.cloud.tools.utils.excel;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.export.ExcelBatchExportService;
 import cn.afterturn.easypoi.handler.inter.IExcelDictHandler;
-import com.github.pagehelper.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFCell;
 import org.apache.poi.xssf.streaming.SXSSFRow;
@@ -81,7 +81,7 @@ public abstract class ExcelExportUtils {
                     continue;
                 }
                 String cellContent = currentCell.getStringCellValue();
-                if (StringUtil.isEmpty(cellContent)) {
+                if (StringUtils.isEmpty(cellContent)) {
                     continue;
                 }
                 int cellContentWidth = cellContent.getBytes().length * 256;

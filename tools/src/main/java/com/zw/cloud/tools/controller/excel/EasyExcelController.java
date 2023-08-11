@@ -6,8 +6,7 @@ import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.read.metadata.ReadSheet;
 import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.fastjson2.JSON;
-import com.zw.cloud.tools.dao.UserMapper;
+import com.google.common.collect.Lists;
 import com.zw.cloud.tools.entity.User;
 import com.zw.cloud.tools.excel.listener.ExcelListener;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +26,11 @@ import java.util.*;
 @Slf4j
 public class EasyExcelController {
 
-    private final UserMapper userDao;
 
     @PostMapping
     //http://localhost:9040/easy/excel
     public void upload(MultipartFile file) throws Exception {
-        ExcelListener excelListener = new ExcelListener(userDao);
+        ExcelListener excelListener = new ExcelListener(/*userDao*/);
         ExcelReader excelReader = EasyExcelFactory.read(file.getInputStream(), User.class,excelListener).build();
         try {
             // headRowNumber 读取开始行数
@@ -62,10 +60,10 @@ public class EasyExcelController {
         //新建ExcelWriter
         ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream(),User.class).build();
         WriteSheet sheet1 = EasyExcel.writerSheet(0, "sheet1").head(generateHead()).build();
-        List<User> users = userDao.queryUserList(1588093790661382146L);
+        List<User> users = Lists.newArrayList();
         excelWriter.write(users, sheet1);
         WriteSheet sheet2 = EasyExcel.writerSheet(1, "sheet2").head(generateHead()).build();
-        List<User> userList = userDao.queryUserList(1587799507834171400L);
+        List<User> userList = Lists.newArrayList();
         excelWriter.write(userList, sheet2);
         //关闭流
         excelWriter.finish();
