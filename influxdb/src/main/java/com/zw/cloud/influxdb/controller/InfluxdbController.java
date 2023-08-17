@@ -4,12 +4,14 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.Lists;
 import com.zw.cloud.influxdb.entity.Device;
 import com.zw.cloud.influxdb.entity.DeviceVO;
-import com.zw.cloud.influxdb.util.InfluxdbUtils;
+import com.zw.cloud.influxdb.service.InfluxdbQueryService;
 import lombok.extern.slf4j.Slf4j;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.BatchPoints;
@@ -28,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/influxdb")
 public class InfluxdbController {
     @Autowired
-    private InfluxdbUtils influxdbUtils;
+    private InfluxdbQueryService influxdbQueryService;
 
     @Value("${spring.influx.database}")
     private String database;
@@ -46,7 +48,7 @@ public class InfluxdbController {
     @GetMapping("/insert")
     //http://localhost:10010/influxdb/insert
     public void insert(){
-        Device device = buildDevice(38f, 66);
+        Device device = buildDevice(38f, 66,"dfgs");
         Point point = Point.measurementByPOJO(device.getClass()).addFieldsFromPOJO(device).build();
         influxDB.write(point);
     }
@@ -57,7 +59,7 @@ public class InfluxdbController {
     @GetMapping("/batchInsert")
     //http://localhost:10010/influxdb/batchInsert
     public void batchInsert(){
-        Device device = buildDevice(33f, 66);
+        Device device = buildDevice(33f, 66,"dfgs");
         BatchPoints.Builder builder = BatchPoints.builder();
         Lists.newArrayList(device).forEach(m -> builder.point(Point.measurementByPOJO(m.getClass()).addFieldsFromPOJO(m).build()));
         //写入
@@ -116,69 +118,23 @@ public class InfluxdbController {
     /**
      * 获取数据
      */
-    @GetMapping("/datas1")
-    //http://localhost:10010/influxdb/datas1?page=1&device=dev_test_device_stenter_03
-    public List<Object> datas1(@RequestParam Integer page,@RequestParam String device){
+    @GetMapping("/query")
+    //http://localhost:10010/influxdb/query?page=1&device=dfgs
+    public List<DeviceVO> query(@RequestParam Integer page,@RequestParam String device){
         int pageSize = 10;
         // InfluxDB支持分页查询,因此可以设置分页查询条件
-        String pageQuery = " LIMIT " + pageSize + " OFFSET " + (page - 1) * pageSize;
 
-        /*LocalDateTime now = LocalDateTime.now();
-        Instant endTime = buildTimeParam(now);
-        Instant startTime = buildTimeParam(now.minusMinutes(5));*/
-        LocalDateTime startTimeLocal = LocalDateTime.parse("2021-11-02T20:04:50");
-        LocalDateTime endTimeLocal = startTimeLocal.plusMinutes(10);
-        Instant startTime = buildTimeParam(startTimeLocal);
-        Instant endTime = buildTimeParam(endTimeLocal);
-
-        String queryCondition = " where time >= '" + startTime + "' and time <= '" + endTime + "' and device = '" + device + "' and dataType = 'report' ";  //查询条件
-
-        // 此处查询所有内容,如果
-        String queryCmd = "SELECT * FROM device_report_data"
-                // 查询指定设备下的日志信息
-                // 要指定从 RetentionPolicyName.measurement中查询指定数据,默认的策略可以不加；
-                // + 策略name + "." + measurement
-                // 添加查询条件(注意查询条件选择tag值,选择field数值会严重拖慢查询速度)
-                + queryCondition
-                // 查询结果需要按照时间排序
-                + " ORDER BY time DESC"
-                // 添加分页查询条件
-                + pageQuery;
-        System.out.println(queryCmd);
-        return influxdbUtils.fetchRecords(queryCmd);
-    }
-
-    /**
-     * 获取数据
-     */
-    @GetMapping("/datas2")
-    //http://localhost:10010/influxdb/datas2?page=1&device=dev_test_device_stenter_03
-    public List<DeviceVO> datas2(@RequestParam Integer page,@RequestParam String device){
-        int pageSize = 10;
-        // InfluxDB支持分页查询,因此可以设置分页查询条件
-        String pageQuery = " LIMIT " + pageSize + " OFFSET " + (page - 1) * pageSize;
-        LocalDateTime now = LocalDateTime.now();
-        Instant endTime = buildTimeParam(now);
-        Instant startTime = buildTimeParam(now.minusMinutes(5));
-        String queryCondition = " where time >= '" + startTime + "' and time <= '" + endTime + "' and device = '" + device + "' and dataType = 'report' ";  //查询条件
-        // 此处查询所有内容,如果
-        String queryCmd = "SELECT * FROM device_report_data"
-                // 查询指定设备下的日志信息
-                // 要指定从 RetentionPolicyName.measurement中查询指定数据,默认的策略可以不加；
-                // + 策略name + "." + measurement
-                // 添加查询条件(注意查询条件选择tag值,选择field数值会严重拖慢查询速度)
-                + queryCondition
-                // 查询结果需要按照时间排序
-                + " ORDER BY time DESC"
-                // 添加分页查询条件
-                + pageQuery;
-        return influxdbUtils.fetchResults(queryCmd, DeviceVO.class);
-        //List<Sensor> sensorList = influxdbUtils.fetchResults("*", "sensor", Sensor.class);
-    }
-
-    private Instant buildTimeParam(LocalDateTime time) {
-        ZoneId zoneId = ZoneId.systemDefault();
-        return time.atZone(zoneId).toInstant();
+        LocalDateTime endTime = LocalDateTime.now();
+        LocalDateTime startTime = endTime.minusMinutes(5);
+        Map<String, Object> bindParams = new HashMap<>();
+        String sql = "SELECT * FROM device_report_data  where time >= $startTime and time <= $endTime and device=$device and dataType = 'report' order by time asc LIMIT $pageSize OFFSET $startOffSet";
+        bindParams.put("startTime", startTime);
+        bindParams.put("endTime", endTime);
+        bindParams.put("device",device);
+        bindParams.put("pageSize", 10);
+        bindParams.put("startOffSet", (page - 1) * pageSize);
+        log.info("[InfluxdbController][query]sql is {}",sql);
+        return influxdbQueryService.query(sql,DeviceVO.class,bindParams);
     }
 
     private Point buildingPoint(Float second,Float stop){
@@ -219,7 +175,7 @@ public class InfluxdbController {
                 .addField("dataType","report")
                 .build();
     }
-    private Device buildDevice(Float value, Integer stop){
+    private Device buildDevice(Float value, Integer stop,String iotCode){
         Device device = new Device();
         Long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
         Instant instant = Instant.ofEpochSecond(second);
@@ -299,7 +255,7 @@ public class InfluxdbController {
         device.setSpeciCycleWindSpeed10(value);
         device.setCycleWindSpeed10(value);
         device.setDataType("report");
-        device.setDevice("rr");
+        device.setDevice(iotCode);
         return device ;
     }
 

@@ -2,12 +2,14 @@ package com.zw.cloud.influxdb.entity;
 
 import lombok.Data;
 import org.influxdb.annotation.Column;
+import org.influxdb.annotation.Measurement;
 import org.influxdb.annotation.TimeColumn;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
 @Data
+@Measurement(name = "device_report_data")
 public class DeviceVO {
 
     /**
@@ -379,6 +381,18 @@ public class DeviceVO {
      */
     @Column(name = "windSpeed6")
     private BigDecimal windSpeed6;
+
+    /**
+     * 排风设定转速7
+     */
+    @Column(name = "speciWindSpeed7")
+    private BigDecimal speciWindSpeed7;
+    /**
+     * 排风转速7
+     */
+    @Column(name = "windSpeed7")
+    private BigDecimal windSpeed7;
+
     /**
      * 烘房设定温度10
      */
@@ -399,4 +413,278 @@ public class DeviceVO {
      */
     @Column(name = "cycleWindSpeed10")
     private BigDecimal cycleWindSpeed10;
+
+    /**
+     * 烘房设定温度11
+     */
+    @Column(name = "dryingRoomPresetTemp11")
+    private BigDecimal dryingRoomPresetTemp11;
+    /**
+     * 烘房实际温度11
+     */
+    @Column(name = "dryingRoomActualTemp11")
+    private BigDecimal dryingRoomActualTemp11;
+    /**
+     * 烘房设定温度12
+     */
+    @Column(name = "dryingRoomPresetTemp12")
+    private BigDecimal dryingRoomPresetTemp12;
+    /**
+     * 烘房实际温度12
+     */
+    @Column(name = "dryingRoomActualTemp12")
+    private BigDecimal dryingRoomActualTemp12;
+
+    /**
+     * 循环风设定转速11
+     */
+    @Column(name = "speciCycleWindSpeed11")
+    private BigDecimal speciCycleWindSpeed11;
+    /**
+     * 循环风转速11
+     */
+    @Column(name = "cycleWindSpeed11")
+    private BigDecimal cycleWindSpeed11;
+    /**
+     * 循环风设定转速12
+     */
+    @Column(name = "speciCycleWindSpeed12")
+    private BigDecimal speciCycleWindSpeed12;
+    /**
+     * 循环风转速12
+     */
+    @Column(name = "cycleWindSpeed12")
+    private BigDecimal cycleWindSpeed12;
+
+
+    /**
+     * 一键设定循环风
+     */
+    @Column(name = "speciCycleWindSpeedSetting")
+    private BigDecimal speciCycleWindSpeedSetting;
+    /**
+     * 排风设定转速8
+     */
+    @Column(name = "speciWindSpeed8")
+    private BigDecimal speciWindSpeed8;
+    /**
+     * 排风转速8
+     */
+    @Column(name = "windSpeed8")
+    private BigDecimal windSpeed8;
+    /**
+     * 上针超喂
+     */
+    @Column(name = "needleOverfeeding")
+    private BigDecimal needleOverfeeding;
+    /**
+     * 出布辊超喂
+     */
+    @Column(name = "overfeedOfClothDeliveryRoller")
+    private BigDecimal overfeedOfClothDeliveryRoller;
+    /**
+     * 引布带超喂
+     */
+    @Column(name = "clothGuideBeltOverfeed")
+    private BigDecimal clothGuideBeltOverfeed;
+
+    /**
+     * 所有门幅设定
+     */
+    @Column(name = "allDoorWidthSetting")
+    private BigDecimal allDoorWidthSetting;
+    /**
+     * 总门幅设定
+     */
+    @Column(name = "totalDoorWidthSetting")
+    private BigDecimal totalDoorWidthSetting;
+    /**
+     * 前门幅设定
+     */
+    @Column(name = "frontDoorWidthSetting")
+    private BigDecimal frontDoorWidthSetting;
+    /**
+     * 前门幅实际
+     */
+    @Column(name = "frontDoorWidthActual")
+    private BigDecimal frontDoorWidthActual;
+    /**
+     * 后门幅设定
+     */
+    @Column(name = "rearDoorWidthSetting")
+    private BigDecimal rearDoorWidthSetting;
+    /**
+     * 后门幅实际
+     */
+    @Column(name = "rearDoorWidthActual")
+    private BigDecimal rearDoorWidthActual;
+    /**
+     * 门幅1设定
+     */
+    @Column(name = "doorWidthSetting1")
+    private BigDecimal doorWidthSetting1;
+    /**
+     * 门幅1实际
+     */
+    @Column(name = "doorWidthActual1")
+    private BigDecimal doorWidthActual1;
+    /**
+     * 门幅2设定
+     */
+    @Column(name = "doorWidthSetting2")
+    private BigDecimal doorWidthSetting2;
+    /**
+     * 门幅2实际
+     */
+    @Column(name = "doorWidthActual2")
+    private BigDecimal doorWidthActual2;
+    /**
+     * 门幅3设定
+     */
+    @Column(name = "doorWidthSetting3")
+    private BigDecimal doorWidthSetting3;
+    /**
+     * 门幅3实际
+     */
+    @Column(name = "doorWidthActual3")
+    private BigDecimal doorWidthActual3;
+    /**
+     * 门幅4设定
+     */
+    @Column(name = "doorWidthSetting4")
+    private BigDecimal doorWidthSetting4;
+    /**
+     * 门幅4实际
+     */
+    @Column(name = "doorWidthActual4")
+    private BigDecimal doorWidthActual4;
+    /**
+     * 门幅5设定
+     */
+    @Column(name = "doorWidthSetting5")
+    private BigDecimal doorWidthSetting5;
+    /**
+     * 门幅5实际
+     */
+    @Column(name = "doorWidthActual5")
+    private BigDecimal doorWidthActual5;
+    /**
+     * 门幅6设定
+     */
+    @Column(name = "doorWidthSetting6")
+    private BigDecimal doorWidthSetting6;
+    /**
+     * 门幅6实际
+     */
+    @Column(name = "doorWidthActual6")
+    private BigDecimal doorWidthActual6;
+    /**
+     * 门幅7设定
+     */
+    @Column(name = "doorWidthSetting7")
+    private BigDecimal doorWidthSetting7;
+    /**
+     * 门幅7实际
+     */
+    @Column(name = "doorWidthActual7")
+    private BigDecimal doorWidthActual7;
+
+    /**
+     * 门幅8设定
+     */
+    @Column(name = "doorWidthSetting8")
+    private BigDecimal doorWidthSetting8;
+    /**
+     * 门幅8实际
+     */
+    @Column(name = "doorWidthActual8")
+    private BigDecimal doorWidthActual8;
+    /**
+     * 门幅9设定
+     */
+    @Column(name = "doorWidthSetting9")
+    private BigDecimal doorWidthSetting9;
+    /**
+     * 门幅9实际
+     */
+    @Column(name = "doorWidthActual9")
+    private BigDecimal doorWidthActual9;
+    /**
+     * 门幅10设定
+     */
+    @Column(name = "doorWidthSetting10")
+    private BigDecimal doorWidthSetting10;
+    /**
+     * 门幅10实际
+     */
+    @Column(name = "doorWidthActual10")
+    private BigDecimal doorWidthActual10;
+    /**
+     * 门幅11设定
+     */
+    @Column(name = "doorWidthSetting11")
+    private BigDecimal doorWidthSetting11;
+    /**
+     * 门幅11实际
+     */
+    @Column(name = "doorWidthActual11")
+    private BigDecimal doorWidthActual11;
+    /**
+     * 门幅12设定
+     */
+    @Column(name = "doorWidthSetting12")
+    private BigDecimal doorWidthSetting12;
+    /**
+     * 门幅12实际
+     */
+    @Column(name = "doorWidthActual12")
+    private BigDecimal doorWidthActual12;
+
+    /**
+     * 上超速度
+     */
+    @Column(name = "upperSuperSpeed")
+    private BigDecimal upperSuperSpeed;
+    /**
+     * 上针超喂
+     */
+    @Column(name = "downSuperSpeed")
+    private BigDecimal downSuperSpeed;
+    /**
+     * 左毛刷速度
+     */
+    @Column(name = "leftBrushSpeed")
+    private BigDecimal leftBrushSpeed;
+    /**
+     * 右毛刷速度
+     */
+    @Column(name = "rightBrushSpeed")
+    private BigDecimal rightBrushSpeed;
+    /**
+     * 出布速度
+     */
+    @Column(name = "publishingSpeed")
+    private BigDecimal publishingSpeed;
+    /**
+     * 落布速度
+     */
+    @Column(name = "droppingSpeed")
+    private BigDecimal droppingSpeed;
+    /**
+     * 摆布速度
+     */
+    @Column(name = "swingSpeed")
+    private BigDecimal swingSpeed;
+    /**
+     * 引布带速度
+     */
+    @Column(name = "quickTapeSpeed")
+    private BigDecimal quickTapeSpeed;
+    /**
+     * 轧车速度
+     * 轧车运行状态
+     */
+    @Column(name = "rollingSpeed")
+    private BigDecimal rollingSpeed;
+
 }
