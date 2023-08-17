@@ -10,6 +10,7 @@ import org.springframework.util.Assert;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
@@ -80,6 +81,14 @@ public class DateTimeUtils {
         Duration between1 = Duration.between(instant, instant.plusSeconds(60));
         System.out.println("时间间隔 分钟数:" + between1.toMinutes());
         System.out.println(Duration.between(instant.plusSeconds(60), now.atZone(ZoneId.systemDefault()).toInstant()).toMinutes());
+
+        System.out.println("=====中间 1/3 时间=====");
+        LocalDateTime now1 = LocalDateTime.now();
+        long durationSeconds = ChronoUnit.SECONDS.between(now1, now1.plusMinutes(6));
+        long oneThirdDuration = durationSeconds / 3;
+        LocalDateTime oneThirdStartTime = now1.plusSeconds(oneThirdDuration);
+        LocalDateTime oneThirdEndTime = now1.plusSeconds(2 * oneThirdDuration);
+        System.out.println(oneThirdStartTime + "--" + oneThirdEndTime);
 
         between(LocalDateTime.parse("2023-04-03T18:47:00"),LocalDateTime.parse("2023-04-04T14:28:00"));
         System.out.println("时分秒 置为0:" + transferTimeToZero(LocalDateTime.now()));

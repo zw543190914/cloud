@@ -60,8 +60,20 @@ public class BigDecimalUtils {
         ArrayList<BigDecimal> bigDecimalArrayList = Lists.newArrayList(new BigDecimal(17), new BigDecimal(18),
                 new BigDecimal(17), new BigDecimal(17),
                 new BigDecimal(19), new BigDecimal(19));
-        System.out.println(filterMaxSameValueFromList(bigDecimalArrayList));
+        System.out.println("取集合中相同值最多的，存在多个取最大值:" + filterMaxSameValueFromList(bigDecimalArrayList));
         System.out.println(getAvgByList(bigDecimalArrayList));
+
+        System.out.println("====取集合中相同值最多的，存在多个取最后一个====");
+        System.out.println(filterMaxSameAndLastValueFromList(Lists.newArrayList(BigDecimal.valueOf(1),BigDecimal.valueOf(22),
+                BigDecimal.valueOf(33),BigDecimal.valueOf(33),BigDecimal.valueOf(44),BigDecimal.valueOf(44)
+                ,BigDecimal.valueOf(1),BigDecimal.valueOf(22))));
+
+        System.out.println("====连续出现2次(含)以上数值中的最大值，如有效时间段内无连续值，则取最大值；精确到整数====");
+        System.out.println("连续出现数字:" + consecutiveDigits(Lists.newArrayList(BigDecimal.valueOf(1),BigDecimal.valueOf(2),
+                BigDecimal.valueOf(1),BigDecimal.valueOf(3),BigDecimal.valueOf(3),BigDecimal.valueOf(3),BigDecimal.valueOf(4),
+                BigDecimal.valueOf(4),BigDecimal.valueOf(4),BigDecimal.valueOf(5))));
+        System.out.println("连续出现数字:" + consecutiveDigits(Lists.newArrayList(BigDecimal.valueOf(1),BigDecimal.valueOf(2),
+                BigDecimal.valueOf(7),BigDecimal.valueOf(5))));
 
         ArrayList<Integer> list = Lists.newArrayList(null, null);
         System.out.println(list.stream().filter(Objects::nonNull).max(Comparator.comparing(v -> v)).isPresent());
@@ -197,6 +209,69 @@ public class BigDecimalUtils {
             }
         }
         return temp;
+    }
+
+    /**
+     * 取集合中相同值最多的，存在多个取最后一个
+     */
+    private static BigDecimal filterMaxSameAndLastValueFromList(List<BigDecimal> valueList) {
+        if (CollectionUtils.isEmpty(valueList)) {
+            return null;
+        }
+        // k->数值，v->出现次数
+        Map<BigDecimal,Integer> map = new LinkedHashMap<>();
+        for (BigDecimal value : valueList) {
+            if (Objects.isNull(value)) {
+                continue;
+            }
+            Integer count = map.remove(value);
+            if (Objects.isNull(count)) {
+                map.put(value,1);
+            } else {
+                map.put(value,count + 1);
+            }
+        }
+        return filterMaxSameAndLastValueFromList(map);
+    }
+
+    /**
+     * 取集合中相同值最多的，存在多个取最后一个
+     */
+    private static BigDecimal filterMaxSameAndLastValueFromList(Map<BigDecimal, Integer> tempMap){
+        if (MapUtils.isEmpty(tempMap)) {
+            return null;
+        }
+        // map  k->温度，v-> 出现次数
+        BigDecimal result = null;
+        int count = 0;
+        for (Map.Entry<BigDecimal, Integer> entry : tempMap.entrySet()) {
+            Integer happenCount = entry.getValue();
+            BigDecimal actualValue = entry.getKey();
+            if (Objects.isNull(result) || happenCount >= count) {
+                result = actualValue;
+                count = happenCount;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 连续出现2次(含)以上数值中的最大值，如有效时间段内无连续值，则取最大值；精确到整数
+     */
+    private static BigDecimal consecutiveDigits(List<BigDecimal> valueList) {
+        if (CollectionUtils.isEmpty(valueList)) {
+            return null;
+        }
+        Set<BigDecimal> consecutiveDigits = new HashSet<>();
+        for (int i = 0; i < valueList.size() - 1; i++) {
+            if (valueList.get(i).compareTo(valueList.get(i + 1)) == 0) {
+                consecutiveDigits.add(valueList.get(i));
+            }
+        }
+        if (CollectionUtils.isNotEmpty(consecutiveDigits)) {
+            return consecutiveDigits.stream().max(Comparator.comparing(s -> s)).get();
+        }
+        return valueList.stream().max(Comparator.comparing(s -> s)).get();
     }
 
     /**
@@ -472,5 +547,36 @@ public class BigDecimalUtils {
     private static long doubleRound(double number){
         // Double number1 四舍五入
         return Math.round(number);
+    }
+
+    /**
+     * 获取map中第一个有值的数据
+     */
+    public static BigDecimal filterFirstValueFromMap(LinkedHashMap<String, BigDecimal> valueMap) {
+        if (MapUtils.isEmpty(valueMap)) {
+            return null;
+        }
+        for (Map.Entry<String, BigDecimal> entry : valueMap.entrySet()) {
+            if (Objects.nonNull(entry.getValue())) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取map中最后一个有值的数据
+     */
+    public static BigDecimal filterLastValueFromMap(LinkedHashMap<String, BigDecimal> valueMap) {
+        if (MapUtils.isEmpty(valueMap)) {
+            return null;
+        }
+        BigDecimal lastValue = null;
+        for (Map.Entry<String, BigDecimal> entry : valueMap.entrySet()) {
+            if (Objects.nonNull(entry.getValue())) {
+                lastValue = entry.getValue();
+            }
+        }
+        return lastValue;
     }
 }
