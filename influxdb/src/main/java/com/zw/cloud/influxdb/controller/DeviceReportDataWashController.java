@@ -32,20 +32,20 @@ public class DeviceReportDataWashController {
     @Autowired
     private DeviceReportDataWashQueryService deviceReportDataWashQueryService;
 
-    @GetMapping("/queryDeviceReportDataWashByTime/{iotCode}")
-    //http://localhost:10010/device-report-data-wash/queryDeviceReportDataWashByTime/1211-zw
-    public List<IotInfoDo> queryDeviceReportDataWashByTime(@PathVariable String iotCode) {
+    @GetMapping("/queryDeviceReportDataWashByTime/{iotCode}/{minusMinutes}")
+    //http://localhost:10010/device-report-data-wash/queryDeviceReportDataWashByTime/1211-zw/15
+    public List<IotInfoDo> queryDeviceReportDataWashByTime(@PathVariable String iotCode,@PathVariable Integer minusMinutes) {
         LocalDateTime endTime = LocalDateTime.now();
-        return deviceReportDataWashQueryService.queryDeviceReportDataWashByTime(Collections.singletonList(iotCode), endTime.minusMinutes(5), endTime);
+        return deviceReportDataWashQueryService.queryDeviceReportDataWashByTime(Collections.singletonList(iotCode), endTime.minusMinutes(minusMinutes), endTime);
     }
 
     /**
      * 插入
      */
-    @GetMapping("/insert/{iotCode}")
-    //http://localhost:10010/device-report-data-wash/insert/1211-zw
-    public void insert(@PathVariable String iotCode){
-        IotInfoDo iotInfoDo = buildIotInfoDo(BigDecimal.valueOf(22),BigDecimal.valueOf(33),
+    @GetMapping("/insert/{iotCode}/{tem}")
+    //http://localhost:10010/device-report-data-wash/insert/1211-zw/33
+    public void insert(@PathVariable String iotCode,@PathVariable Integer tem){
+        IotInfoDo iotInfoDo = buildIotInfoDo(BigDecimal.valueOf(tem),BigDecimal.valueOf(33),
                 BigDecimal.valueOf(44),BigDecimal.valueOf(55),BigDecimal.valueOf(66),
                 BigDecimal.valueOf(77),BigDecimal.valueOf(88),iotCode);
         Point point = Point.measurementByPOJO(iotInfoDo.getClass()).addFieldsFromPOJO(iotInfoDo).build();
