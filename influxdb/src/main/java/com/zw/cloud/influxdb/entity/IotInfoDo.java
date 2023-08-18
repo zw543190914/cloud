@@ -726,4 +726,15 @@ public class IotInfoDo implements Serializable {
      */
     @Column(name = "gramWeight")
     private BigDecimal gramWeight;
+
+    /**
+     * dataType
+     */
+    @Column(name = "deviceType")
+    private String deviceType;
+    /**
+     * 设备
+     */
+    @Column(name = "device")
+    private String device;
 }

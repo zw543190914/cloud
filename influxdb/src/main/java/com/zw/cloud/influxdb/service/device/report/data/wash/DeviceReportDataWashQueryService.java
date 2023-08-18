@@ -1,9 +1,9 @@
-package com.zw.cloud.influxdb.service;
+package com.zw.cloud.influxdb.service.device.report.data.wash;
 
 import com.zw.cloud.influxdb.entity.IotInfoDo;
+import com.zw.cloud.influxdb.service.InfluxdbQueryService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.influxdb.InfluxDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -17,7 +17,7 @@ import java.util.*;
  */
 @Slf4j
 @Service
-public class IotQueryService {
+public class DeviceReportDataWashQueryService {
 
     @Autowired
     private InfluxdbQueryService influxdbQueryService;
@@ -25,7 +25,7 @@ public class IotQueryService {
     /**
      * 查询influxDb实时数据
      */
-    public List<IotInfoDo> getIotInfoByTime(List<String> iotCodeList, LocalDateTime startTime, LocalDateTime endTime) {
+    public List<IotInfoDo> queryDeviceReportDataWashByTime(List<String> iotCodeList, LocalDateTime startTime, LocalDateTime endTime) {
         Assert.notNull(startTime,"startTime is null");
         Assert.notNull(endTime,"endTime is null");
 
@@ -45,7 +45,8 @@ public class IotQueryService {
         bindParams.put("startTime", startTime);
         bindParams.put("endTime", endTime);
 
-        return influxdbQueryService.query(sql, IotInfoDo.class, bindParams);
+        log.info("[DeviceReportDataWashQueryService][queryDeviceReportDataWashByTime]sql is {}",sql);
+        return influxdbQueryService.queryDeviceReportData(sql, IotInfoDo.class, bindParams);
     }
 
 }

@@ -1,7 +1,6 @@
 package com.zw.cloud.influxdb.controller;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +18,7 @@ import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/influxdb")
-public class InfluxdbController {
+public class DeviceRunningReordController {
     @Autowired
     private InfluxdbQueryService influxdbQueryService;
 
@@ -39,7 +39,8 @@ public class InfluxdbController {
     private String measurement = "device_report_data";
 
     @Autowired
-    private InfluxDB influxDB;
+    @Qualifier("deviceReportDataInfluxdb")
+    private InfluxDB deviceReportDataInfluxdb;
 
 
     /**
@@ -50,7 +51,7 @@ public class InfluxdbController {
     public void insert(){
         Device device = buildDevice(38f, 66,"dfgs");
         Point point = Point.measurementByPOJO(device.getClass()).addFieldsFromPOJO(device).build();
-        influxDB.write(point);
+        deviceReportDataInfluxdb.write(point);
     }
 
     /**
@@ -63,7 +64,7 @@ public class InfluxdbController {
         BatchPoints.Builder builder = BatchPoints.builder();
         Lists.newArrayList(device).forEach(m -> builder.point(Point.measurementByPOJO(m.getClass()).addFieldsFromPOJO(m).build()));
         //写入
-        influxDB.write(builder.build());
+        deviceReportDataInfluxdb.write(builder.build());
     }
 
     /**
@@ -76,7 +77,7 @@ public class InfluxdbController {
         /**
          * fields not supported in WHERE clause during deletion
          */
-        return influxDB.query(new Query(command, database));
+        return deviceReportDataInfluxdb.query(new Query(command, database));
     }
 
     /**
@@ -90,7 +91,7 @@ public class InfluxdbController {
         Point point = buildingPoint(Float.valueOf(second),stop);
         lines.add(point.lineProtocol());
         //写入
-        influxDB.write(lines);
+        deviceReportDataInfluxdb.write(lines);
     }
 
     /**
@@ -112,7 +113,7 @@ public class InfluxdbController {
             batchPoints.point(point);
         }
         //批量插入
-        influxDB.write(batchPoints);
+        deviceReportDataInfluxdb.write(batchPoints);
     }
 
     /**
@@ -134,7 +135,7 @@ public class InfluxdbController {
         bindParams.put("pageSize", 10);
         bindParams.put("startOffSet", (page - 1) * pageSize);
         log.info("[InfluxdbController][query]sql is {}",sql);
-        return influxdbQueryService.query(sql,DeviceVO.class,bindParams);
+        return influxdbQueryService.queryDeviceReportData(sql,DeviceVO.class,bindParams);
     }
 
     private Point buildingPoint(Float second,Float stop){
