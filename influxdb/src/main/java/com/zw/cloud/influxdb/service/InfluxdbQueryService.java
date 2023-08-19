@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import javax.annotation.PreDestroy;
 
@@ -19,15 +18,14 @@ import javax.annotation.PreDestroy;
 public class InfluxdbQueryService {
 
     @Autowired
-    @Qualifier("deviceReportDataInfluxdb")
-    private InfluxDB deviceReportDataInfluxdb;
+    private InfluxDB influxDBClient;
 
 
     @PreDestroy
     public void beforeClose() {
         try {
-            deviceReportDataInfluxdb.close();
-            log.info("deviceReportDataInfluxdb client closed");
+            influxDBClient.close();
+            log.info("influxDBClient client closed");
         } catch (Exception e) {
             log.warn("influx client close error: {}", e.getMessage());
         }
@@ -35,7 +33,7 @@ public class InfluxdbQueryService {
 
     public <M> List<M> queryDeviceReportData(String query, Class<M> clz, Map<String, Object> bindParams) {
         Query q = getQueryWithBindParams(query, bindParams);
-        QueryResult queryResult = deviceReportDataInfluxdb.query(q);
+        QueryResult queryResult = influxDBClient.query(q);
         InfluxDbExtendMapper resultMapper = new InfluxDbExtendMapper();
         return resultMapper.toPOJO(queryResult, clz);
     }

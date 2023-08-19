@@ -10,27 +10,33 @@ import org.influxdb.InfluxDB;
 import org.influxdb.dto.BatchPoints;
 import org.influxdb.dto.Point;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RestController
 @RequestMapping("/device-report-data-wash")
 public class DeviceReportDataWashController {
     @Autowired
-    @Qualifier("deviceReportDataInfluxdb")
-    private InfluxDB deviceReportDataInfluxdb;
+    private InfluxDB influxDBClient;
 
     @Autowired
     private DeviceReportDataWashQueryService deviceReportDataWashQueryService;
+
+    @Resource(name = "ioThreadPoolTaskExecutor")
+    private ThreadPoolTaskExecutor ioThreadPoolTaskExecutor;
 
     @GetMapping("/queryDeviceReportDataWashByTime/{iotCode}/{minusMinutes}")
     //http://localhost:10010/device-report-data-wash/queryDeviceReportDataWashByTime/1211-zw/15
@@ -44,12 +50,28 @@ public class DeviceReportDataWashController {
      */
     @GetMapping("/insert/{iotCode}/{tem}")
     //http://localhost:10010/device-report-data-wash/insert/1211-zw/33
-    public void insert(@PathVariable String iotCode,@PathVariable Integer tem){
-        IotInfoDo iotInfoDo = buildIotInfoDo(BigDecimal.valueOf(tem),BigDecimal.valueOf(33),
-                BigDecimal.valueOf(44),BigDecimal.valueOf(55),BigDecimal.valueOf(66),
-                BigDecimal.valueOf(77),BigDecimal.valueOf(88),iotCode);
-        Point point = Point.measurementByPOJO(iotInfoDo.getClass()).addFieldsFromPOJO(iotInfoDo).build();
-        deviceReportDataInfluxdb.write(point);
+    public void insert(@PathVariable String iotCode,@PathVariable Integer tem) throws InterruptedException {
+        CompletableFuture.supplyAsync(() -> {
+            for (int i = 10; i < 20; i++) {
+                IotInfoDo iotInfoDo = buildIotInfoDo(BigDecimal.valueOf(1),BigDecimal.valueOf(tem + 1),BigDecimal.valueOf(33 + i),
+                        BigDecimal.valueOf(44 + i),BigDecimal.valueOf(55 + i),BigDecimal.valueOf(66 + i),
+                        BigDecimal.valueOf(77 + i),BigDecimal.valueOf(88 + i),iotCode);
+                Point point = Point.measurementByPOJO(iotInfoDo.getClass()).addFieldsFromPOJO(iotInfoDo).build();
+                influxDBClient.write(point);
+                log.info("[DeviceReportDataWashController][insert] i is {}",i);
+                try {
+                    TimeUnit.MINUTES.sleep(1);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return 1;
+        },ioThreadPoolTaskExecutor).whenComplete((res,e) -> {
+            if (Objects.nonNull(e)) {
+                log.error("[DeviceReportDataWashController][insert] error is ",e);
+            }
+        });
+
     }
 
     /**
@@ -58,16 +80,16 @@ public class DeviceReportDataWashController {
     @GetMapping("/batchInsert/{iotCode}")
     //http://localhost:10010/device-report-data-wash/batchInsert/1211-zw
     public void batchInsert(@PathVariable String iotCode){
-        IotInfoDo iotInfoDo = buildIotInfoDo(BigDecimal.valueOf(22),BigDecimal.valueOf(33),
+        IotInfoDo iotInfoDo = buildIotInfoDo(BigDecimal.valueOf(11),BigDecimal.valueOf(22),BigDecimal.valueOf(33),
                 BigDecimal.valueOf(44),BigDecimal.valueOf(55),BigDecimal.valueOf(66),
                 BigDecimal.valueOf(77),BigDecimal.valueOf(88),iotCode);
         BatchPoints.Builder builder = BatchPoints.builder();
         Lists.newArrayList(iotInfoDo).forEach(m -> builder.point(Point.measurementByPOJO(m.getClass()).addFieldsFromPOJO(m).build()));
         //写入
-        deviceReportDataInfluxdb.write(builder.build());
+        influxDBClient.write(builder.build());
     }
 
-    public IotInfoDo buildIotInfoDo(BigDecimal troughPresetTemp,BigDecimal tension,
+    public IotInfoDo buildIotInfoDo(BigDecimal speed,BigDecimal troughPresetTemp,BigDecimal tension,
                                     BigDecimal inflowRate,BigDecimal waterUptake,
                                     BigDecimal assistantPreset,BigDecimal rollingPressure,
                                     BigDecimal waterRatio,String iotCode) {
@@ -79,9 +101,9 @@ public class DeviceReportDataWashController {
         iotInfoDo.setCtime(0L);
         iotInfoDo.setMessageType(0);
         iotInfoDo.setEventCode(0);
-        iotInfoDo.setSpeedSetting(new BigDecimal("0"));
-        iotInfoDo.setSpeed(new BigDecimal("0"));
-        iotInfoDo.setOutput(new BigDecimal("0"));
+        iotInfoDo.setSpeedSetting(speed);
+        iotInfoDo.setSpeed(BigDecimal.valueOf(20));
+        iotInfoDo.setOutput(new BigDecimal("10"));
         iotInfoDo.setTroughPresetTemp1(troughPresetTemp);
         iotInfoDo.setTroughActualTemp1(troughPresetTemp);
         iotInfoDo.setTroughPresetTemp2(troughPresetTemp);
@@ -114,10 +136,10 @@ public class DeviceReportDataWashController {
         iotInfoDo.setTroughActualTemp15(troughPresetTemp);
         iotInfoDo.setTroughPresetTemp16(troughPresetTemp);
         iotInfoDo.setTroughActualTemp16(troughPresetTemp);
-        iotInfoDo.setSteamerPresetTemp(new BigDecimal("0"));
-        iotInfoDo.setSteamerActualTemp(new BigDecimal("0"));
-        iotInfoDo.setFeedCenteringTensionPreset(new BigDecimal("0"));
-        iotInfoDo.setFeedCenteringTensionActual(new BigDecimal("0"));
+        iotInfoDo.setSteamerPresetTemp(new BigDecimal("10"));
+        iotInfoDo.setSteamerActualTemp(new BigDecimal("20"));
+        iotInfoDo.setFeedCenteringTensionPreset(new BigDecimal("10"));
+        iotInfoDo.setFeedCenteringTensionActual(new BigDecimal("20"));
         iotInfoDo.setTension1(tension);
         iotInfoDo.setTensionAct1(tension);
         iotInfoDo.setTension2(tension);
@@ -150,8 +172,8 @@ public class DeviceReportDataWashController {
         iotInfoDo.setTensionAct15(tension);
         iotInfoDo.setTension16(tension);
         iotInfoDo.setTensionAct16(tension);
-        iotInfoDo.setTensionOutlePositionPreset(new BigDecimal("0"));
-        iotInfoDo.setTensionOutlePositionActual(new BigDecimal("0"));
+        iotInfoDo.setTensionOutlePositionPreset(new BigDecimal("10"));
+        iotInfoDo.setTensionOutlePositionActual(new BigDecimal("20"));
         iotInfoDo.setInflowRate1(inflowRate);
         iotInfoDo.setInflowRateAct1(inflowRate);
         iotInfoDo.setInflowRate2(inflowRate);
@@ -184,8 +206,8 @@ public class DeviceReportDataWashController {
         iotInfoDo.setTotalConsumption2(new BigDecimal("0"));
         iotInfoDo.setTotalConsumption3(new BigDecimal("0"));
         iotInfoDo.setTotalConsumption4(new BigDecimal("0"));
-        iotInfoDo.setFeedRollingPressure(new BigDecimal("0"));
-        iotInfoDo.setFeedRollingPressureAct(new BigDecimal("0"));
+        iotInfoDo.setFeedRollingPressure(new BigDecimal("10"));
+        iotInfoDo.setFeedRollingPressureAct(new BigDecimal("20"));
         iotInfoDo.setRollingPressure1(rollingPressure);
         iotInfoDo.setRollingPressureAct1(rollingPressure);
         iotInfoDo.setRollingPressure2(rollingPressure);
@@ -194,12 +216,12 @@ public class DeviceReportDataWashController {
         iotInfoDo.setRollingPressureAct3(rollingPressure);
         iotInfoDo.setRollingPressure4(rollingPressure);
         iotInfoDo.setRollingPressureAct4(rollingPressure);
-        iotInfoDo.setOutRollingPressure(new BigDecimal("0"));
-        iotInfoDo.setOutRollingPressureAct(new BigDecimal("0"));
-        iotInfoDo.setPh1(new BigDecimal("0"));
-        iotInfoDo.setPhAct1(new BigDecimal("0"));
-        iotInfoDo.setPh2(new BigDecimal("0"));
-        iotInfoDo.setPhAct2(new BigDecimal("0"));
+        iotInfoDo.setOutRollingPressure(new BigDecimal("10"));
+        iotInfoDo.setOutRollingPressureAct(new BigDecimal("20"));
+        iotInfoDo.setPh1(new BigDecimal("10"));
+        iotInfoDo.setPhAct1(new BigDecimal("20"));
+        iotInfoDo.setPh2(new BigDecimal("10"));
+        iotInfoDo.setPhAct2(new BigDecimal("20"));
         iotInfoDo.setWaterRatio1(waterRatio);
         iotInfoDo.setWaterRatioAct1(waterRatio);
         iotInfoDo.setWaterRatio2(waterRatio);
@@ -208,7 +230,7 @@ public class DeviceReportDataWashController {
         iotInfoDo.setWaterRatioAct3(waterRatio);
         iotInfoDo.setWaterRatio4(waterRatio);
         iotInfoDo.setWaterRatioAct4(waterRatio);
-        iotInfoDo.setGramWeight(new BigDecimal("0"));
+        iotInfoDo.setGramWeight(new BigDecimal("10"));
         iotInfoDo.setDevice(iotCode);
         iotInfoDo.setDeviceType("wash");
         return iotInfoDo;
