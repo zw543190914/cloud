@@ -11,10 +11,6 @@ import org.springframework.util.Assert;
 import java.time.LocalDateTime;
 import java.util.*;
 
-/**
- * @author xiucong.zou
- * @date 2023-07-25
- */
 @Slf4j
 @Service
 public class DeviceReportDataWashQueryService {
