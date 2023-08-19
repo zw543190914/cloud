@@ -52,7 +52,7 @@ public class DeviceReportDataWashController {
     //http://localhost:10010/device-report-data-wash/insert/1211-zw/33
     public void insert(@PathVariable String iotCode,@PathVariable Integer tem) throws InterruptedException {
         CompletableFuture.supplyAsync(() -> {
-            for (int i = 10; i < 20; i++) {
+            for (int i = 10; i < 60; i++) {
                 IotInfoDo iotInfoDo = buildIotInfoDo(BigDecimal.valueOf(1),BigDecimal.valueOf(tem + 1),BigDecimal.valueOf(33 + i),
                         BigDecimal.valueOf(44 + i),BigDecimal.valueOf(55 + i),BigDecimal.valueOf(66 + i),
                         BigDecimal.valueOf(77 + i),BigDecimal.valueOf(88 + i),iotCode);
