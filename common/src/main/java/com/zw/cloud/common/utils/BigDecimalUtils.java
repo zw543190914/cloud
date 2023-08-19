@@ -66,7 +66,7 @@ public class BigDecimalUtils {
         System.out.println("====取集合中相同值最多的，存在多个取最后一个====");
         System.out.println(filterMaxSameAndLastValueFromList(Lists.newArrayList(BigDecimal.valueOf(1),BigDecimal.valueOf(22),
                 BigDecimal.valueOf(33),BigDecimal.valueOf(33),BigDecimal.valueOf(44),BigDecimal.valueOf(44)
-                ,BigDecimal.valueOf(1),BigDecimal.valueOf(22))));
+                ,BigDecimal.valueOf(1),BigDecimal.valueOf(22)),2));
 
         System.out.println("====连续出现2次(含)以上数值中的最大值，如有效时间段内无连续值，则取最大值；精确到整数====");
         System.out.println("连续出现数字:" + consecutiveDigits(Lists.newArrayList(BigDecimal.valueOf(1),BigDecimal.valueOf(2),
@@ -111,6 +111,14 @@ public class BigDecimalUtils {
         Map<String, Object> testMap = fillEveryOneJsonValue(jsonMap, 20, "test", 10);
         System.out.println("为JSON 中每一节赋值:" + JSON.toJSONString(testMap));
         System.out.println(JSON.toJSONString(buildJsonForRecommendCraft(testMap,BigDecimal.valueOf(40),"test",12)));
+
+        LinkedHashMap<String, BigDecimal> linkedHashMap = new LinkedHashMap<>();
+        linkedHashMap.put("k1",BigDecimal.valueOf(11));
+        linkedHashMap.put("k2",BigDecimal.valueOf(12));
+        linkedHashMap.put("k3",BigDecimal.valueOf(13));
+        linkedHashMap.put("k4",BigDecimal.valueOf(14));
+        linkedHashMap.put("k5",BigDecimal.valueOf(15));
+        System.out.println("去掉前2个点位和最后2个点位，取剩余点位最大值:" + queryMaxAfterFilterFirstSecondAndLastValue(linkedHashMap));
     }
 
     /**
@@ -212,9 +220,9 @@ public class BigDecimalUtils {
     }
 
     /**
-     * 取集合中相同值最多的，存在多个取最后一个
+     * 取集合中相同值最多的，存在多个取最后一个,排除空值
      */
-    private static BigDecimal filterMaxSameAndLastValueFromList(List<BigDecimal> valueList) {
+    public static BigDecimal filterMaxSameAndLastValueFromList(List<BigDecimal> valueList,int scale) {
         if (CollectionUtils.isEmpty(valueList)) {
             return null;
         }
@@ -231,13 +239,13 @@ public class BigDecimalUtils {
                 map.put(value,count + 1);
             }
         }
-        return filterMaxSameAndLastValueFromList(map);
+        return filterMaxSameAndLastValueFromList(map,scale);
     }
 
     /**
      * 取集合中相同值最多的，存在多个取最后一个
      */
-    private static BigDecimal filterMaxSameAndLastValueFromList(Map<BigDecimal, Integer> tempMap){
+    private static BigDecimal filterMaxSameAndLastValueFromList(Map<BigDecimal, Integer> tempMap,int scale){
         if (MapUtils.isEmpty(tempMap)) {
             return null;
         }
@@ -252,13 +260,15 @@ public class BigDecimalUtils {
                 count = happenCount;
             }
         }
-        return result;
+        return Objects.isNull(result) ? null : result.setScale(scale,RoundingMode.HALF_UP);
     }
+
+
 
     /**
      * 连续出现2次(含)以上数值中的最大值，如有效时间段内无连续值，则取最大值；精确到整数
      */
-    private static BigDecimal consecutiveDigits(List<BigDecimal> valueList) {
+    public static BigDecimal consecutiveDigits(List<BigDecimal> valueList) {
         if (CollectionUtils.isEmpty(valueList)) {
             return null;
         }
@@ -269,10 +279,30 @@ public class BigDecimalUtils {
             }
         }
         if (CollectionUtils.isNotEmpty(consecutiveDigits)) {
-            return consecutiveDigits.stream().max(Comparator.comparing(s -> s)).get();
+            Optional<BigDecimal> max = consecutiveDigits.stream().filter(Objects::nonNull).max(Comparator.comparing(s -> s));
+            return max.map(bigDecimal -> bigDecimal.setScale(0, RoundingMode.HALF_UP)).orElse(null);
         }
-        return valueList.stream().max(Comparator.comparing(s -> s)).get();
+        Optional<BigDecimal> max = valueList.stream().filter(Objects::nonNull).max(Comparator.comparing(s -> s));
+        return max.map(bigDecimal -> bigDecimal.setScale(0, RoundingMode.HALF_UP)).orElse(null);
     }
+
+    /**
+     * map截取
+     */
+    public static LinkedHashMap<String, BigDecimal> subMap(LinkedHashMap<String, BigDecimal> iotMap,String prefix,Integer count) {
+        LinkedHashMap<String, BigDecimal> resultMap = new LinkedHashMap<>();
+        if (MapUtils.isEmpty(iotMap)) {
+            return resultMap;
+        }
+        if (Objects.isNull(count)) {
+            return resultMap;
+        }
+        for (int i = 1; i <= count; i++) {
+            resultMap.put(prefix + i,iotMap.get(prefix + i));
+        }
+        return resultMap;
+    }
+
 
     /**
      * 取集合中相同值最多的，存在多个取最大值
@@ -579,4 +609,32 @@ public class BigDecimalUtils {
         }
         return lastValue;
     }
+
+    /**
+     * 去掉前2个点位和最后2个点位，取剩余点位最大值
+     * 不排除空值，固定去除对应节数
+     */
+    /**
+     * 去掉前2个点位和最后2个点位，取剩余点位最大值
+     * 不排除空值，固定去除对应节数
+     */
+    public static BigDecimal queryMaxAfterFilterFirstSecondAndLastValue(LinkedHashMap<String, BigDecimal> dryingRoomTempMap){
+        if (MapUtils.isEmpty(dryingRoomTempMap)) {
+            return null;
+        }
+        List<BigDecimal> valueList = new ArrayList<>(dryingRoomTempMap.size());
+        dryingRoomTempMap.forEach((k,v) -> valueList.add(v));
+        if (valueList.size() < 5) {
+            return null;
+        }
+        // 去掉前边2节和最后2节烘箱温度数据
+        valueList.remove(0);
+        valueList.remove(0);
+        valueList.remove(valueList.size() - 1);
+        valueList.remove(valueList.size() - 1);
+
+        Optional<BigDecimal> max = valueList.stream().filter(Objects::nonNull).max(Comparator.comparing(v -> v));
+        return max.orElse(null);
+    }
+
 }
