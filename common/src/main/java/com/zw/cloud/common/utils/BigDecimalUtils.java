@@ -410,6 +410,7 @@ public class BigDecimalUtils {
     }
 
     /**
+     * 去掉前两节和最后一节，其他节数排除值为空的
      * 求平均数
      */
     private static BigDecimal getAvgWithFilterFirstSecondAndLast(List<String> args) {
@@ -429,6 +430,25 @@ public class BigDecimalUtils {
             }
         }
         return total.divide(num, 0, RoundingMode.HALF_UP);
+    }
+
+
+    /**
+     * 去掉前2个点位和最后2个点位，取剩余点位最大值
+     * 不排除空值，固定去除对应节数
+     */
+    public static BigDecimal queryMaxAfterFilterFirstSecondAndLastValue(LinkedHashMap<String, BigDecimal> dryingRoomTempMap){
+        if (MapUtils.isEmpty(dryingRoomTempMap)) {
+            return null;
+        }
+        List<BigDecimal> valueList = new ArrayList<>(dryingRoomTempMap.size());
+        dryingRoomTempMap.forEach((k,v) -> valueList.add(v));
+        if (valueList.size() < 5) {
+            return null;
+        }
+        // 去掉前边2节和最后2节烘箱温度数据
+        Optional<BigDecimal> max = valueList.subList(2, valueList.size() - 2).stream().filter(Objects::nonNull).max(Comparator.comparing(v -> v));
+        return max.orElse(null);
     }
 
     /**
@@ -608,33 +628,6 @@ public class BigDecimalUtils {
             }
         }
         return lastValue;
-    }
-
-    /**
-     * 去掉前2个点位和最后2个点位，取剩余点位最大值
-     * 不排除空值，固定去除对应节数
-     */
-    /**
-     * 去掉前2个点位和最后2个点位，取剩余点位最大值
-     * 不排除空值，固定去除对应节数
-     */
-    public static BigDecimal queryMaxAfterFilterFirstSecondAndLastValue(LinkedHashMap<String, BigDecimal> dryingRoomTempMap){
-        if (MapUtils.isEmpty(dryingRoomTempMap)) {
-            return null;
-        }
-        List<BigDecimal> valueList = new ArrayList<>(dryingRoomTempMap.size());
-        dryingRoomTempMap.forEach((k,v) -> valueList.add(v));
-        if (valueList.size() < 5) {
-            return null;
-        }
-        // 去掉前边2节和最后2节烘箱温度数据
-        valueList.remove(0);
-        valueList.remove(0);
-        valueList.remove(valueList.size() - 1);
-        valueList.remove(valueList.size() - 1);
-
-        Optional<BigDecimal> max = valueList.stream().filter(Objects::nonNull).max(Comparator.comparing(v -> v));
-        return max.orElse(null);
     }
 
 }
