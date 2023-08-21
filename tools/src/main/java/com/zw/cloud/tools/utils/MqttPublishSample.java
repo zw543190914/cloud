@@ -20,6 +20,23 @@ public class MqttPublishSample {
     public static void main(String[] args) throws Exception{
 
         // dev
+
+        // test_定型机#cqk
+       /* String host = "tcp://axdkagn.iot.gz.baidubce.com";
+        String userName = "thingidp@axdkagn|cqk_zy|0|MD5";
+        String password = "668eeb0a7fa18dab53a805b317b45976";
+        String topic = "d/cqk_zy/report";
+        String clientId = "subscribe_test_device01";
+        boolean isStenter = true;*/
+
+        //余光茂的设备
+        String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+        String userName = "thingidp@axdkagn|dfgs|0|MD5";
+        String password = "8b2dc70dba0d790617359dfbd099a6d7";
+        String topic = "d/dfgs/report";
+        String clientId = "subscribe_test001";
+        boolean isStenter = true;
+
         // 18hao设备5
         /*String host = "tcp://axdkagn.iot.gz.baidubce.com";
         String userName = "thingidp@axdkagn|rr|0|MD5";
@@ -27,14 +44,6 @@ public class MqttPublishSample {
         String topic = "d/rr/report";
         String clientId = "subscribe_001";
         boolean isStenter = true;*/
-
-        // test_定型机#cqk
-        String host = "tcp://axdkagn.iot.gz.baidubce.com";
-        String userName = "thingidp@axdkagn|cqk_zy|0|MD5";
-        String password = "668eeb0a7fa18dab53a805b317b45976";
-        String topic = "d/cqk_zy/report";
-        String clientId = "subscribe_test_device01";
-        boolean isStenter = true;
 
         // 其他工厂 dev 大栋  321
        /* String host = "tcp://axdkagn.iot.gz.baidubce.com";
@@ -55,7 +64,7 @@ public class MqttPublishSample {
 
 
         // 定型机2
-       /* String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+        /*String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@amgjjzk|8888|0|MD5";
         String password = "bdf6a12cb4d85d36954a9759e24b12d4";
         String topic = "d/8888/report";
@@ -94,7 +103,7 @@ public class MqttPublishSample {
         sampleClient.connect(connOpts);
         //long second = 1658383250;
         int stop = 68;
-        int actValue = 75 ;
+        int actValue = 75000 ;
         long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
 
         for (int i = 0; i < 44640; i++) {
@@ -307,6 +316,7 @@ public class MqttPublishSample {
                 "        \"e01\":"+ setValue +",\n" +
                 "        \"e02\":"+ actValue +",\n" +
                 "        \"e03\":"+ actValue +",\n" +
+                //温度1#设定值
                 "        \"e04\":"+ setValue +",\n" +
                 "        \"e05\":"+ actValue +",\n" +
                 "        \"e06\":"+ setValue +",\n" +
@@ -329,12 +339,16 @@ public class MqttPublishSample {
                 "        \"e23\":"+ actValue +",\n" +
                 "        \"e24\":"+ setValue +",\n" +
                 "        \"e25\":"+ actValue +",\n" +
+                //温度12#实际值
                 "        \"e27\":"+ actValue +",\n" +
                 "        \"e28\":"+ setValue +",\n" +
                 "        \"e29\":"+ actValue +",\n" +
                 "        \"e30\":"+ actValue +",\n" +
+                //进布张力设定值
                 "        \"e31\":"+ setValue +",\n" +
+                //进布张力实际值
                 "        \"e32\":"+ actValue +",\n" +
+                //张力1#设定值
                 "        \"e33\":"+ setValue +",\n" +
                 "        \"e34\":"+ actValue +",\n" +
                 "        \"e35\":"+ setValue +",\n" +
@@ -354,20 +368,118 @@ public class MqttPublishSample {
                 "        \"e49\":"+ setValue +",\n" +
                 "        \"e50\":"+ actValue +",\n" +
                 "        \"e51\":"+ setValue +",\n" +
+                //张力10#实际值
                 "        \"e52\":"+ actValue +",\n" +
+                //出布张力设定值
                 "        \"e53\":"+ setValue +",\n" +
                 "        \"e54\":"+ actValue +",\n" +
-                "        \"e55\":"+ actValue +",\n" +
+                //补水量1#设定值
+                "        \"e55\":"+ setValue +",\n" +
+                //补水量2#设定值
                 "        \"e56\":"+ setValue +",\n" +
-                "        \"e57\":"+ actValue +",\n" +
+                //补水量3#设定值
+                "        \"e57\":"+ setValue +",\n" +
                 "        \"e58\":"+ setValue +",\n" +
+                //真空抽吸/频率1#设定值
                 "        \"e59\":"+ actValue +",\n" +
+                //助剂配比1#设定值
                 "        \"e60\":"+ setValue +",\n" +
-                "        \"e61\":"+ actValue +",\n" +
-                "        \"e62\":"+ setValue +",\n" +
+                //助剂配比2#设定值
+                "        \"e61\":"+ setValue +",\n" +
+                //批次助剂耗量1#实际值
+                "        \"e62\":"+ actValue +",\n" +
+                //批次助剂耗量2#实际值
                 "        \"e63\":"+ actValue +",\n" +
-                "        \"e64\":"+ setValue +",\n" +
-                "        \"e65\":"+ actValue +"\n" +
+                //总助剂耗量1#实际值
+                "        \"e64\":"+ actValue +",\n" +
+                // 总助剂耗量2#实际值
+                "        \"e65\":"+ actValue +",\n" +
+                // 温度13#设定值
+                "        \"e76\":"+ setValue +",\n" +
+                "        \"e77\":"+ actValue +",\n" +
+                "        \"e78\":"+ setValue +",\n" +
+                "        \"e79\":"+ actValue +",\n" +
+                "        \"e80\":"+ setValue +",\n" +
+                "        \"e81\":"+ actValue +",\n" +
+                "        \"e82\":"+ setValue +",\n" +
+                // 温度16#实际值
+                "        \"e83\":"+ actValue +",\n" +
+                // 张力11#设定值
+                "        \"e84\":"+ setValue +",\n" +
+                "        \"e85\":"+ actValue +",\n" +
+                "        \"e86\":"+ setValue +",\n" +
+                "        \"e87\":"+ actValue +",\n" +
+                "        \"e88\":"+ setValue +",\n" +
+                "        \"e89\":"+ actValue +",\n" +
+                "        \"e90\":"+ setValue +",\n" +
+                "        \"e91\":"+ actValue +",\n" +
+                "        \"e92\":"+ setValue +",\n" +
+                "        \"e93\":"+ actValue +",\n" +
+                "        \"e94\":"+ setValue +",\n" +
+                //张力16#实际值
+                "        \"e95\":"+ actValue +",\n" +
+                // 补水量1#实际值
+                "        \"e96\":"+ actValue +",\n" +
+                "        \"e97\":"+ actValue +",\n" +
+                "        \"e98\":"+ actValue +",\n" +
+                //补水量4#设定值
+                "        \"e99\":"+ actValue +",\n" +
+                "        \"e100\":"+ setValue +",\n" +
+                // 真空抽吸/频率1#实际值
+                "        \"e101\":"+ actValue +",\n" +
+                "        \"e102\":"+ setValue +",\n" +
+                "        \"e103\":"+ actValue +",\n" +
+                "        \"e104\":"+ setValue +",\n" +
+                "        \"e105\":"+ actValue +",\n" +
+                "        \"e106\":"+ setValue +",\n" +
+                "        \"e107\":"+ actValue +",\n" +
+                //助剂配比1#实际值
+                "        \"e108\":"+ actValue +",\n" +
+                // 助剂配比2#实际值
+                "        \"e109\":"+ actValue +",\n" +
+                //助剂配比3#设定值
+                "        \"e110\":"+ setValue +",\n" +
+                "        \"e111\":"+ actValue +",\n" +
+                "        \"e112\":"+ setValue +",\n" +
+                // 助剂配比4#实际值
+                "        \"e113\":"+ actValue +",\n" +
+                //批次助剂耗量3#实际值
+                "        \"e114\":"+ actValue +",\n" +
+                //批次助剂耗量4#实际值
+                "        \"e115\":"+ actValue +",\n" +
+                //总助剂耗量3#实际值
+                "        \"e116\":"+ actValue +",\n" +
+                //总助剂耗量4#实际值
+                "        \"e117\":"+ actValue +",\n" +
+                //进布轧车压力实际值
+                "        \"e118\":"+ actValue +",\n" +
+                //轧车压力1#设定值
+                "        \"e119\":"+ setValue +",\n" +
+                "        \"e120\":"+ actValue +",\n" +
+                "        \"e121\":"+ setValue +",\n" +
+                "        \"e122\":"+ actValue +",\n" +
+                "        \"e123\":"+ setValue +",\n" +
+                "        \"e124\":"+ actValue +",\n" +
+                "        \"e125\":"+ setValue +",\n" +
+                //轧车压力4#实际值
+                "        \"e126\":"+ actValue +",\n" +
+                //出布轧车压力实际值
+                "        \"e127\":"+ actValue +",\n" +
+                //PH值2#设定值
+                "        \"e128\":"+ setValue +",\n" +
+                "        \"e129\":"+ actValue +",\n" +
+                // 含水量1#实际值
+                "        \"e130\":"+ actValue +",\n" +
+                //含水量2#实际值
+                "        \"e131\":"+ actValue +",\n" +
+                //含水量3#实际值
+                "        \"e132\":"+ actValue +",\n" +
+                //含水量4#设定值
+                "        \"e133\":"+ setValue +",\n" +
+                //含水量4#实际值
+                "        \"e134\":"+ actValue +",\n" +
+                //克重设定值
+                "        \"e135\":"+ setValue +"\n" +
                 "    }\n" +
                 "}";
 
