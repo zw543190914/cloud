@@ -246,8 +246,8 @@ public class GeneralProductRecordPlanCraft implements Serializable {
                     continue;
                 }
                 if (jsonFieldNameSet.contains(field.getName())) {
-                    Map valueMap = JSON.parseObject(JSON.toJSONString(value), Map.class);
-                    if (MapUtils.isNotEmpty(valueMap)) {
+                    boolean hasNonNullValue = hasNonNullValue(value);
+                    if (hasNonNullValue) {
                         return true;
                     }
                     continue;
@@ -267,11 +267,25 @@ public class GeneralProductRecordPlanCraft implements Serializable {
         return hasCraft;
     }
 
+    private boolean hasNonNullValue(Object value) {
+        if (Objects.isNull(value)) {
+            return false;
+        }
+        Map<String,Object> valueMap = JSON.parseObject(JSON.toJSONString(value), Map.class);
+        if (MapUtils.isEmpty(valueMap)) {
+            return false;
+        }
+        Optional<Object> nonNullValue = valueMap.values().stream().filter(Objects::nonNull).findAny();
+        return nonNullValue.isPresent();
+    }
+
     public static void main(String[] args) {
         GeneralProductRecordPlanCraft generalProductRecordPlanCraft = new GeneralProductRecordPlanCraft();
         generalProductRecordPlanCraft.setId(1L);
         System.out.println(generalProductRecordPlanCraft.checkHasCraft());
-        generalProductRecordPlanCraft.setAssistant(Lists.newArrayList(new GeneralProductRecordPlanCraft()));
+        HashMap<String, BigDecimal> phJson = new HashMap<>();
+        phJson.put("ph1",BigDecimal.ZERO);
+        generalProductRecordPlanCraft.setPhJson(phJson);
         System.out.println(generalProductRecordPlanCraft.checkHasCraft());
     }
 }
