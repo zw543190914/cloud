@@ -286,19 +286,50 @@ public class BigDecimalUtils {
         return max.map(bigDecimal -> bigDecimal.setScale(0, RoundingMode.HALF_UP)).orElse(null);
     }
 
+
     /**
      * map截取
      */
     public static LinkedHashMap<String, BigDecimal> subMap(LinkedHashMap<String, BigDecimal> iotMap,String prefix,Integer count) {
-        LinkedHashMap<String, BigDecimal> resultMap = new LinkedHashMap<>();
         if (MapUtils.isEmpty(iotMap)) {
-            return resultMap;
+            return null;
         }
-        if (Objects.isNull(count)) {
-            return resultMap;
+        if (Objects.isNull(count) || Objects.equals(0,count)) {
+            return null;
         }
+        LinkedHashMap<String, BigDecimal> resultMap = new LinkedHashMap<>();
         for (int i = 1; i <= count; i++) {
-            resultMap.put(prefix + i,iotMap.get(prefix + i));
+            BigDecimal value = iotMap.get(prefix + i);
+            if (Objects.nonNull(value)) {
+                resultMap.put(prefix + i, value);
+            }
+        }
+        if (MapUtils.isEmpty(resultMap)) {
+            return null;
+        }
+        return resultMap;
+    }
+
+    /**
+     * map截取
+     */
+    public static LinkedHashMap<String, Object> subMap(Object obj,Integer count,String prefix) {
+        if (Objects.isNull(obj)) {
+            return null;
+        }
+        if (Objects.isNull(count) || Objects.equals(0,count)) {
+            return null;
+        }
+        Map<String, Object> map = JSON.parseObject(com.alibaba.fastjson.JSON.toJSONString(obj), Map.class);
+        LinkedHashMap<String, Object> resultMap = new LinkedHashMap<>();
+        for (int i = 1; i <= count; i++) {
+            Object value = map.get(prefix + i);
+            if (Objects.nonNull(value)) {
+                resultMap.put(prefix + i, value);
+            }
+        }
+        if (MapUtils.isEmpty(resultMap)) {
+            return null;
         }
         return resultMap;
     }
