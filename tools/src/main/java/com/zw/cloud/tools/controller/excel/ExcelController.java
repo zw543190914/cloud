@@ -77,17 +77,14 @@ public class ExcelController {
                     userList.add(user);*/
                     String fieldName = hssfRow.getCell(1).getStringCellValue();
 
-                    String desc = hssfRow.getCell(2).getStringCellValue();
-                    if (desc.contains("水槽温度实际温度") || fieldName.equals("e32") || fieldName.contains("e54")) {
-                        String targetName = hssfRow.getCell(6).getStringCellValue();
-                        // SPEED("d01", "车速", "speed", "车速"),
-                        System.out.println(targetName.toUpperCase() + "(\"" + fieldName + "\", \"" + desc + "\", \""+ targetName +"\", \"" + desc + "\"),");
-//                        System.out.println("  /**\n" +
-//                                "     * "+ desc +"\n" +
-//                                "     */\n" +
-//                                "    private RedisDeviceAlertBaseModel " + targetName + ";");
-                    }
-
+                    String desc = hssfRow.getCell(3).getStringCellValue();
+                    String targetName = hssfRow.getCell(8).getStringCellValue();
+                    String s = " /**\n" +
+                            "     * "+ desc +"\n" +
+                            "     */\n" +
+                            "    @CopyField(targetName = \""+ targetName +"\")\n" +
+                            "    private BigDecimal "+ fieldName +";";
+                    System.out.println(s);
                 }
             }
         }

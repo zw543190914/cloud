@@ -110,3 +110,18 @@ set A.avg_wind_speed = c.result;
 SELECT device_name FROM `base_product_record` ORDER BY
     FIELD(device_name,'12','1','阿巴吧','测试-prod','test_定型机#3',
           'test设备008','嘎嘎嘎1234','test_定型机#1','hj','设备名称','test_定型机#2'),id;
+
+
+--mysql数据库有一个字段 craft_code，类型为varchar,数据有如下内容
+/*221
+33d
+1112
+工艺编码
+zw
+1122
+3331
+test001
+01692438839416
+查询数据为纯数字的最大值 即  1692438839416*/
+SELECT MAX(cast(craft_code AS unsigned)) FROM `base_common_tenter_craft` WHERE craft_code REGEXP '^[0-9]+$';
+
