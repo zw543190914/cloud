@@ -118,10 +118,10 @@ public class ReverseAlgorithmService {
      * 根据 influxDB 数据，计算工艺
      */
     private CommonTenterCraftDTO buildCommonTenterCraftDTO(List<IotInfoDo> iotInfoDoList) {
+        CommonTenterCraftDTO tenterCraft = new CommonTenterCraftDTO();
         List<String> fieldNameList = ReverseAlgorithmIotPointEnum.buildFieldNameList();
         LinkedHashMap<String, List<BigDecimal>> iotMap = IotInfoUtils.buildValueByEachSection(iotInfoDoList, fieldNameList);
 
-        CommonTenterCraftDTO tenterCraft = new CommonTenterCraftDTO();
         // 车速 连续出现2次(含)以上数值中的最大值，如有效时间段内无连续值，则取最大值；
         List<BigDecimal> speedList = iotMap.get(ReverseAlgorithmIotPointEnum.SPEED.getFieldName());
         tenterCraft.setSpeed(BigDecimalUtils.consecutiveDigits(speedList));
@@ -129,24 +129,24 @@ public class ReverseAlgorithmService {
         // 温度 精确到整数
         // 取相同数量最多的值，如有多个，取最后值；
         LinkedHashMap<String, BigDecimal> troughPresetTempMap = new LinkedHashMap<>();
-        for (int i = 1; i <= 16; i++) {
+        for (int i = 1; i <= TROUGH_PRESET_TEMP.getMaxCount(); i++) {
             List<BigDecimal> troughPresetTempList = iotMap.get(TROUGH_PRESET_TEMP.getFieldName() + i);
-            troughPresetTempMap.put("temperature" + i, BigDecimalUtils.filterMaxSameAndLastValueFromList(troughPresetTempList, 0));
+            troughPresetTempMap.put("temperature" + i,BigDecimalUtils.filterMaxSameAndLastValueFromList(troughPresetTempList,0));
         }
-        tenterCraft.setTemperatureJson(BigDecimalUtils.subMap(troughPresetTempMap, "temperature", 12));
+        tenterCraft.setTemperatureJson(BigDecimalUtils.subMap(troughPresetTempMap,"temperature",14));
         // 总值：去掉前2个点位和最后2个点位，取剩余点位最大值
         tenterCraft.setTemperature(BigDecimalUtils.queryMaxAfterFilterFirstSecondAndLastValue(troughPresetTempMap));
 
         // 张力 精确到整数
         LinkedHashMap<String, BigDecimal> tensionMap = new LinkedHashMap<>();
-        for (int i = 1; i <= 16; i++) {
+        for (int i = 1; i <= TENSION.getMaxCount(); i++) {
             List<BigDecimal> troughPresetTempList = iotMap.get(TENSION.getFieldName() + i);
-            tensionMap.put(TENSION.getFieldName() + i, BigDecimalUtils.filterMaxSameAndLastValueFromList(troughPresetTempList, 0));
+            tensionMap.put(TENSION.getFieldName() + i,BigDecimalUtils.filterMaxSameAndLastValueFromList(troughPresetTempList,0));
         }
-        tenterCraft.setTensionJson(BigDecimalUtils.subMap(tensionMap, TENSION.getFieldName(), 14));
+        tenterCraft.setTensionJson(BigDecimalUtils.subMap(tensionMap,TENSION.getFieldName(),12));
 
         // 进布张力
-        BigDecimal feedCenteringTensionPreset = BigDecimalUtils.filterMaxSameAndLastValueFromList(iotMap.get(FEED_CENTERING_TENSIONPRESET.getFieldName()), 0);
+        BigDecimal feedCenteringTensionPreset = BigDecimalUtils.filterMaxSameAndLastValueFromList(iotMap.get(FEED_CENTERING_TENSIONPRESET.getFieldName()),0);
         // 如无进布张力点位采集数据值，则取第1个张力点位「设定值」；
         if (Objects.isNull(feedCenteringTensionPreset)) {
             feedCenteringTensionPreset = tensionMap.get("tension1");
@@ -154,7 +154,7 @@ public class ReverseAlgorithmService {
         tenterCraft.setFeedTension(feedCenteringTensionPreset);
 
         // 出布张力
-        BigDecimal tensionOutlePositionPreset = BigDecimalUtils.filterMaxSameAndLastValueFromList(iotMap.get(TENSION_OUTLE_POSITION_PRESET.getFieldName()), 0);
+        BigDecimal tensionOutlePositionPreset = BigDecimalUtils.filterMaxSameAndLastValueFromList(iotMap.get(TENSION_OUTLE_POSITION_PRESET.getFieldName()),0);
         if (Objects.isNull(tensionOutlePositionPreset)) {
             tensionOutlePositionPreset = tensionMap.get("tension16");
         }
@@ -165,21 +165,21 @@ public class ReverseAlgorithmService {
 
         // PH 保留2位小数
         LinkedHashMap<String, BigDecimal> phMap = new LinkedHashMap<>();
-        for (int i = 1; i <= 2; i++) {
+        for (int i = 1; i <= PH.getMaxCount(); i++) {
             List<BigDecimal> phList = iotMap.get(PH.getFieldName() + i);
-            phMap.put(PH.getFieldName() + i, BigDecimalUtils.filterMaxSameAndLastValueFromList(phList, 2));
+            phMap.put(PH.getFieldName() + i,BigDecimalUtils.filterMaxSameAndLastValueFromList(phList,2));
         }
-        tenterCraft.setPhJson(BigDecimalUtils.subMap(phMap, PH.getFieldName(), 2));
+        tenterCraft.setPhJson(BigDecimalUtils.subMap(phMap,PH.getFieldName(),2));
         // 总：取最后1个PH点位的计算结果；
         tenterCraft.setPh(phMap.get("ph2"));
 
         // 轧车压力 保留1位小数
         LinkedHashMap<String, BigDecimal> rollingPressureMap = new LinkedHashMap<>();
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= ROLLING_PRESSURE.getMaxCount(); i++) {
             List<BigDecimal> rollingPressureList = iotMap.get(ROLLING_PRESSURE.getFieldName() + i);
-            rollingPressureMap.put(ROLLING_PRESSURE.getFieldName() + i, BigDecimalUtils.filterMaxSameAndLastValueFromList(rollingPressureList, 1));
+            rollingPressureMap.put(ROLLING_PRESSURE.getFieldName() + i,BigDecimalUtils.filterMaxSameAndLastValueFromList(rollingPressureList,1));
         }
-        tenterCraft.setCarTensionJson(BigDecimalUtils.subMap(rollingPressureMap, ROLLING_PRESSURE.getFieldName(), 2));
+        tenterCraft.setCarTensionJson(BigDecimalUtils.subMap(rollingPressureMap,ROLLING_PRESSURE.getFieldName(),4));
 
         // 进布轧车压力 --不用算
         //tenterCraft.setFeedRollingPressure();
@@ -193,41 +193,45 @@ public class ReverseAlgorithmService {
 
         // 真空吸水/真空频率 保留一位小数
         LinkedHashMap<String, BigDecimal> waterUptakeMap = new LinkedHashMap<>();
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= WATER_UPTAKE.getMaxCount(); i++) {
             List<BigDecimal> waterUptakeList = iotMap.get(WATER_UPTAKE.getFieldName() + i);
-            waterUptakeMap.put(WATER_UPTAKE.getFieldName() + i, BigDecimalUtils.filterMaxSameAndLastValueFromList(waterUptakeList, 1));
+            waterUptakeMap.put(WATER_UPTAKE.getFieldName() + i,BigDecimalUtils.filterMaxSameAndLastValueFromList(waterUptakeList,1));
         }
-        tenterCraft.setVacuumFrequencyJson(BigDecimalUtils.subMap(rollingPressureMap, WATER_UPTAKE.getFieldName(), 4));
+        tenterCraft.setVacuumFrequencyJson(BigDecimalUtils.subMap(waterUptakeMap,WATER_UPTAKE.getFieldName(),3));
         tenterCraft.setVacuumFrequency(waterUptakeMap.get("waterUptake4"));
 
         // 助剂配比 保留一位小数
         LinkedHashMap<String, BigDecimal> assistantPresetMap = new LinkedHashMap<>();
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= ASSISTANT_PRESET.getMaxCount(); i++) {
             List<BigDecimal> assistantPresetList = iotMap.get(ASSISTANT_PRESET.getFieldName() + i);
-            assistantPresetMap.put(ASSISTANT_PRESET.getFieldName() + i, BigDecimalUtils.filterMaxSameAndLastValueFromList(assistantPresetList, 1));
+            assistantPresetMap.put(ASSISTANT_PRESET.getFieldName() + i,BigDecimalUtils.filterMaxSameAndLastValueFromList(assistantPresetList,1));
         }
         tenterCraft.setAssistantRate(assistantPresetMap.get("assistantPreset4"));
-        tenterCraft.setAssistantRateJson(BigDecimalUtils.subMap(rollingPressureMap, ASSISTANT_PRESET.getFieldName(), 3));
+        tenterCraft.setAssistantRateJson(BigDecimalUtils.subMap(assistantPresetMap,ASSISTANT_PRESET.getFieldName(),2));
 
         // 补水量 保留一位小数
         LinkedHashMap<String, BigDecimal> inflowRateMap = new LinkedHashMap<>();
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= INFLOW_RATE.getMaxCount(); i++) {
             List<BigDecimal> inflowRateList = iotMap.get(INFLOW_RATE.getFieldName() + i);
-            inflowRateMap.put(INFLOW_RATE.getFieldName() + i, BigDecimalUtils.filterMaxSameAndLastValueFromList(inflowRateList, 1));
+            inflowRateMap.put(INFLOW_RATE.getFieldName() + i,BigDecimalUtils.filterMaxSameAndLastValueFromList(inflowRateList,1));
         }
         tenterCraft.setSupplyWaterQuantity(assistantPresetMap.get("inflowRate4"));
-        tenterCraft.setSupplyWaterQuantityJson(BigDecimalUtils.subMap(rollingPressureMap, INFLOW_RATE.getFieldName(), 3));
+        tenterCraft.setSupplyWaterQuantityJson(BigDecimalUtils.subMap(inflowRateMap,INFLOW_RATE.getFieldName(),1));
 
         // 含水量 保留一位小数
         LinkedHashMap<String, BigDecimal> waterRatioMap = new LinkedHashMap<>();
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= WATER_RATIO.getMaxCount(); i++) {
             List<BigDecimal> waterRatioList = iotMap.get(WATER_RATIO.getFieldName() + i);
-            waterRatioMap.put(WATER_RATIO.getFieldName() + i, BigDecimalUtils.filterMaxSameAndLastValueFromList(waterRatioList, 1));
+            waterRatioMap.put(WATER_RATIO.getFieldName() + i,BigDecimalUtils.filterMaxSameAndLastValueFromList(waterRatioList,1));
         }
         tenterCraft.setWaterContent(assistantPresetMap.get("waterRatio4"));
-        tenterCraft.setWaterContentJson(BigDecimalUtils.subMap(rollingPressureMap, WATER_RATIO.getFieldName(), 4));
+        tenterCraft.setWaterContentJson(BigDecimalUtils.subMap(waterRatioMap,WATER_RATIO.getFieldName(),0));
 
-        tenterCraft.setCraftSource(1);
+        tenterCraft.setCreateTime(LocalDateTime.now());
+        tenterCraft.setUpdateTime(LocalDateTime.now());
+        tenterCraft.setCreateSystem(null);
+        tenterCraft.setUpdateSystem(null);
+
         return tenterCraft;
     }
 }
