@@ -394,6 +394,22 @@ public class MqttPublishSample {
                 "        \"e64\":"+ actValue +",\n" +
                 // 总助剂耗量2#实际值
                 "        \"e65\":"+ actValue +",\n" +
+                //进布轧车压力设定值
+                "        \"e66\":"+ setValue +",\n" +
+                //出布轧车压力设定值
+                "        \"e67\":"+ actValue +",\n" +
+                "        \"e68\":"+ actValue +",\n" +
+                //PH值1#设定值
+                "        \"e69\":"+ setValue +",\n" +
+                //PH值1#实际值
+                "        \"e70\":"+ actValue +",\n" +
+                //含水量1#设定值
+                "        \"e73\":"+ setValue +",\n" +
+                //含水量2#设定值
+                "        \"e74\":"+ actValue +",\n" +
+                //含水量3#设定值
+                "        \"e75\":"+ actValue +",\n" +
+
                 // 温度13#设定值
                 "        \"e76\":"+ setValue +",\n" +
                 "        \"e77\":"+ actValue +",\n" +
