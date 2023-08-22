@@ -19,10 +19,7 @@ import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -117,10 +114,9 @@ public class DeviceRunningReordController {
     /**
      * 获取数据
      */
-    @GetMapping("/query")
-    //http://localhost:10010/influxdb/query?page=1&device=dfgs
-    public List<DeviceVO> query(@RequestParam Integer page,@RequestParam String device){
-        int pageSize = 10;
+    @GetMapping("/query/{page}/{pageSize}/{device}")
+    //http://localhost:10010/influxdb/query/1/2/dfgs
+    public List<DeviceVO> query(@PathVariable Integer page, @PathVariable Integer pageSize, @PathVariable String device){
         // InfluxDB支持分页查询,因此可以设置分页查询条件
 
         LocalDateTime endTime = LocalDateTime.now();

@@ -55,7 +55,7 @@ public class InfluxdbConfig {
             influxDBClient.close();
             log.info("[influxDBClient][beforeClose] influx client closed");
         } catch (Exception e) {
-            log.warn("[influxDBClient][beforeClose] influx client close error: {}", e.getMessage());
+            log.error("[influxDBClient][beforeClose] influx client close error ", e);
         }
     }
 

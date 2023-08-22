@@ -20,17 +20,6 @@ public class InfluxdbQueryService {
     @Autowired
     private InfluxDB influxDBClient;
 
-
-    @PreDestroy
-    public void beforeClose() {
-        try {
-            influxDBClient.close();
-            log.info("influxDBClient client closed");
-        } catch (Exception e) {
-            log.warn("influx client close error: {}", e.getMessage());
-        }
-    }
-
     public <M> List<M> queryDeviceReportData(String query, Class<M> clz, Map<String, Object> bindParams) {
         Query q = getQueryWithBindParams(query, bindParams);
         QueryResult queryResult = influxDBClient.query(q);
