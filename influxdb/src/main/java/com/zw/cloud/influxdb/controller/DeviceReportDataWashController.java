@@ -50,9 +50,9 @@ public class DeviceReportDataWashController {
      */
     @GetMapping("/insert/{iotCode}/{tem}")
     //http://localhost:10010/device-report-data-wash/insert/1211-zw/33
-    public void insert(@PathVariable String iotCode,@PathVariable Integer tem) throws InterruptedException {
+    public void insert(@PathVariable String iotCode,@PathVariable Integer tem) {
         CompletableFuture.supplyAsync(() -> {
-            for (int i = 10; i < 60; i++) {
+            for (int i = 10; i < 30; i++) {
                 IotInfoDo iotInfoDo = buildIotInfoDo(BigDecimal.valueOf(1),BigDecimal.valueOf(tem + 1),BigDecimal.valueOf(33 + i),
                         BigDecimal.valueOf(44 + i),BigDecimal.valueOf(55 + i),BigDecimal.valueOf(66 + i),
                         BigDecimal.valueOf(77 + i),BigDecimal.valueOf(88 + i),iotCode);
