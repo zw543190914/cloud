@@ -79,7 +79,7 @@ public class MqttPublishSample {
         String clientId = "subscribe_test";
         boolean isStenter = true;*/
 
-        // dev通用 1211-zw
+        // dev通用 企鹅 1211-zw
          String host = "tcp://axdkagn.iot.gz.baidubce.com";
         String userName = "thingidp@axdkagn|1211-zw|0|MD5";
         String password = "269b7284df9b6970c4455297ca41d789";
