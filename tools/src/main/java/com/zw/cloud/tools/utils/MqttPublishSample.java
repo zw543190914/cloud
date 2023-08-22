@@ -30,12 +30,12 @@ public class MqttPublishSample {
         boolean isStenter = true;*/
 
         //余光茂的设备
-        String host = "tcp://amgjjzk.iot.gz.baidubce.com";
+       /* String host = "tcp://amgjjzk.iot.gz.baidubce.com";
         String userName = "thingidp@axdkagn|dfgs|0|MD5";
         String password = "8b2dc70dba0d790617359dfbd099a6d7";
         String topic = "d/dfgs/report";
         String clientId = "subscribe_test001";
-        boolean isStenter = true;
+        boolean isStenter = true;*/
 
         // 18hao设备5
         /*String host = "tcp://axdkagn.iot.gz.baidubce.com";
@@ -78,6 +78,14 @@ public class MqttPublishSample {
         String topic = "d/xnbh06/report";
         String clientId = "subscribe_test";
         boolean isStenter = true;*/
+
+        // dev通用 1211-zw
+         String host = "tcp://axdkagn.iot.gz.baidubce.com";
+        String userName = "thingidp@axdkagn|1211-zw|0|MD5";
+        String password = "269b7284df9b6970c4455297ca41d789";
+        String topic = "d/1211-zw/report";
+        String clientId = "subscribe_test_device01";
+        boolean isStenter = false;
 
         // qa通用设备 device1651719933  2342701
        /* String host = "tcp://amgjjzk.iot.gz.baidubce.com";
