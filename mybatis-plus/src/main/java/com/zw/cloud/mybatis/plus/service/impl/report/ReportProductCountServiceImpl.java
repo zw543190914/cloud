@@ -372,7 +372,7 @@ public class ReportProductCountServiceImpl extends ServiceImpl<ReportProductCoun
                 blackProductQuantity = blackProductQuantity.add(Optional.ofNullable(productCount.getBlackProductQuantity()).orElse(BigDecimal.ZERO));
 
                 // 工序类型计算
-                Object craftProductInfo = caleType == 1 ? reportProductCount.getCraftProductInfo() : reportProductCount.getProductLevelInfo();
+                Object craftProductInfo = caleType == 1 ? productCount.getCraftProductInfo() : productCount.getProductLevelInfo();
                 if (Objects.nonNull(craftProductInfo)) {
                     Map<String, ProductReportCraftCountDTO> craftMap = JSON.parseObject(JSON.toJSONString(craftProductInfo),new TypeReference<Map<String, ProductReportCraftCountDTO>>() {});
 
