@@ -1,5 +1,7 @@
 package com.zw.cloud.tools.entity;
 
+import com.zw.cloud.common.enums.DesensitizationTypeEnum;
+import com.zw.cloud.common.annotation.Desensitization;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -25,16 +27,19 @@ public class PostCard implements Serializable {
     /**
      * 姓名
      */
+    @Desensitization(type = DesensitizationTypeEnum.CHINESE_NAME)
     private String name;
 
     /**
      * 手机号
      */
+    @Desensitization(type = DesensitizationTypeEnum.MOBILE_PHONE)
     private String tel;
 
     /**
      * 公司职位
      */
+    @Desensitization(type = DesensitizationTypeEnum.MY_RULE,startInclude = 2,endExclude = 4)
     private String title;
 
     /**
@@ -50,11 +55,13 @@ public class PostCard implements Serializable {
     /**
      * 公司地址
      */
+    @Desensitization(type = DesensitizationTypeEnum.ADDRESS)
     private String address;
 
     /**
      * 邮箱
      */
+    @Desensitization(type = DesensitizationTypeEnum.EMAIL)
     private String email;
 
     /**
